@@ -168,6 +168,9 @@
       <WppKernelMode>true</WppKernelMode>
     </ClCompile>
     <Link>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug|Win32'">%(AdditionalDependencies);$(DDK_LIB_PATH)\hidclass.lib;$(DDK_LIB_PATH)\ntstrsafe.lib</AdditionalDependencies>
+    </Link>
+    <Link>
       <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Win8 Debug|Win32'">%(AdditionalDependencies);$(DDK_LIB_PATH)\hidclass.lib;$(DDK_LIB_PATH)\ntstrsafe.lib</AdditionalDependencies>
     </Link>
     <Link>
@@ -183,10 +186,16 @@
       <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Win7 Release|Win32'">%(AdditionalDependencies);$(DDK_LIB_PATH)\hidclass.lib;$(DDK_LIB_PATH)\ntstrsafe.lib</AdditionalDependencies>
     </Link>
     <Link>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Win8.1 Release|Win32'">%(AdditionalDependencies);$(DDK_LIB_PATH)\hidclass.lib;$(DDK_LIB_PATH)\ntstrsafe.lib</AdditionalDependencies>
+    </Link>
+    <Link>
       <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Win8 Release|Win32'">%(AdditionalDependencies);$(DDK_LIB_PATH)\hidclass.lib;$(DDK_LIB_PATH)\ntstrsafe.lib</AdditionalDependencies>
     </Link>
     <Link>
       <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Vista Debug|x64'">%(AdditionalDependencies);$(DDK_LIB_PATH)\hidclass.lib;$(DDK_LIB_PATH)\ntstrsafe.lib</AdditionalDependencies>
+    </Link>
+    <Link>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug|x64'">%(AdditionalDependencies);$(DDK_LIB_PATH)\hidclass.lib;$(DDK_LIB_PATH)\ntstrsafe.lib</AdditionalDependencies>
     </Link>
     <Link>
       <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Win8 Debug|x64'">%(AdditionalDependencies);$(DDK_LIB_PATH)\hidclass.lib;$(DDK_LIB_PATH)\ntstrsafe.lib</AdditionalDependencies>
@@ -202,7 +211,9 @@
     </Link>
     <Link>
       <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Win8 Release|x64'">%(AdditionalDependencies);$(DDK_LIB_PATH)\hidclass.lib;$(DDK_LIB_PATH)\ntstrsafe.lib</AdditionalDependencies>
-      <ShowProgress Condition="'$(Configuration)|$(Platform)'=='Win8 Release|x64'">NotSet</ShowProgress>
+    </Link>
+    <Link>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Win8.1 Release|x64'">%(AdditionalDependencies);$(DDK_LIB_PATH)\hidclass.lib;$(DDK_LIB_PATH)\ntstrsafe.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
