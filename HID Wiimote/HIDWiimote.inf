@@ -1,0 +1,119 @@
+;
+; Copyright (C) 2013 Julian Löhr
+; All rights reserved
+;
+; File Name:
+;	HIDWiimote.inf
+;
+; Abstact:
+;	INF file to install a Kernel Mode driver for the 
+;	Nintendo Wii Remote to use it as a game controller.
+;
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=HIDClass
+ClassGuid={745a17a0-74d3-11d0-b6fe-00a0c90f57da}
+Provider=%ManufacturerName%
+LayoutFile=layout.inf
+CatalogFile=HIDWiimote.cat
+DriverVer= ; TODO: set DriverVer in stampinf property pages
+
+
+; ================= File section =====================
+
+[DestinationDirs]
+DefaultDestDir = 12
+
+[SourceDisksNames]
+99 = %DiskName%,,,""
+
+[SourceDisksFiles]
+HIDWiimote.sys  = 99,,
+HIDMiniport.sys = 99,,
+
+
+; ================= Device section =====================
+
+[Manufacturer]
+%ManufacturerName%=Standard,NT$ARCH$
+
+[Standard.NT$ARCH$]
+%HIDWiimote.DeviceDesc%=HIDWiimote_Device, BTHENUM\{00001124-0000-1000-8000-00805f9b34fb}_VID&0002057e_PID&0306
+%HIDWiimote.DeviceDesc%=HIDWiimote_Device, BTHENUM\{00001124-0000-1000-8000-00805f9b34fb}_VID&0002057e_PID&0330
+
+; ================= HIDWiimote section =====================
+
+[HIDWiimote_Device.NT]
+CopyFiles=CopyFilterDriver, CopyFunctionDriver
+
+[CopyFilterDriver]
+HIDWiimote.sys
+
+[CopyFunctionDriver]
+HIDMiniport.sys
+
+[HIDWiimote_Device.NT.HW]
+AddReg = HIDWiimote_Device.AddReg 
+
+[HIDWiimote_Device.AddReg]
+HKR,,"LowerFilters",0x00010000,"HIDWiimote"
+
+[HIDWiimote_Device.NT.Services]
+AddService = HIDWiimote,, HIDWiimote_Service_Inst
+AddService = HIDMiniport, 0x00000002, HIDMiniport_Service_Inst
+
+
+; ================= HIDWiimote Inst section =====================
+
+[HIDWiimote_Service_Inst]
+DisplayName    = %HIDWiimote.SVCDESC%
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+StartType      = 3               ; SERVICE_DEMAND_START
+ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\HIDWiimote.sys
+LoadOrderGroup = Extended Base
+
+
+; ================= HIDMiniport Inst section =====================
+
+[HIDMiniport_Service_Inst]
+DisplayName    = %HIDMinitport.SVCDESC%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\HIDMiniport.sys
+LoadOrderGroup = PNP Filter
+
+; ================= Coinstaller section =====================
+
+[DestinationDirs]
+HIDWiimote_Device_CoInstaller_CopyFiles = 11
+
+[HIDWiimote_Device.NT.CoInstallers]
+AddReg=HIDWiimote_Device_CoInstaller_AddReg
+CopyFiles=HIDWiimote_Device_CoInstaller_CopyFiles
+
+[HIDWiimote_Device_CoInstaller_AddReg]
+HKR,,CoInstallers32,0x00010000, "WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll,WdfCoInstaller"
+
+[HIDWiimote_Device_CoInstaller_CopyFiles]
+WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll
+
+[SourceDisksFiles]
+WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll=99 ; make sure the number matches with SourceDisksNames
+
+[HIDWiimote_Device.NT.Wdf]
+KmdfService =  HIDWiimote, HIDWiimote_wdfsect
+[HIDWiimote_wdfsect]
+KmdfLibraryVersion = $KMDFVERSION$
+
+;---------------------------------------------------------------;
+
+[Strings]
+ManufacturerName="Julian Löhr" ; TODO: add ManufacturerName
+DiskName = "Wiimote Installation Disk"
+HIDWiimote.DeviceDesc = "Wiimote Device"
+HIDWiimote.SVCDESC = "Wiimote Service"
+HIDMiniport.DeviceDesc = "Miniport Device"
+HIDMiniport.SVCDESC = "Miniport Service"
