@@ -145,6 +145,92 @@ RequestStatusInformation(
 	return Status;
 }
 
+NTSTATUS
+ReadFromRegister(
+_In_ PDEVICE_CONTEXT DeviceContext,
+_In_ INT32 Address,
+_In_ BYTE Size
+)
+{
+	CONST size_t BufferSize = 8;
+	NTSTATUS Status = STATUS_SUCCESS;
+	WDFREQUEST Request;
+	WDFMEMORY Memory;
+	BYTE * Data;
+
+	// Get Resources
+	Status = CreateRequestAndBuffer(DeviceContext->Device, DeviceContext->IoTarget, BufferSize, &Request, &Memory, (PVOID *)&Data);
+	if (!NT_SUCCESS(Status))
+	{
+		return Status;
+	}
+
+	// Fill Buffer	
+	Data[0] = 0xA2;	//HID Output Report
+	Data[1] = 0x17;	//Status Information Request
+	Data[2] = 0x04;	//Rumble Off but write to Registers
+
+	//Offset
+	Data[3] = 0xFF & (Address >> 16);
+	Data[4] = 0xFF & (Address >> 8);
+	Data[5] = 0xFF & (Address);
+
+	Data[6] = 0x00; //Size
+	Data[7] = Size; //Size
+
+	Status = TransferToDevice(DeviceContext, Request, Memory, FALSE);
+	if (!NT_SUCCESS(Status))
+	{
+		return Status;
+	}
+
+	return Status;
+}
+
+NTSTATUS
+WriteToRegister(
+	_In_ PDEVICE_CONTEXT DeviceContext,
+	_In_ INT32 Address,
+	_In_ BYTE Value
+)
+{
+	CONST size_t BufferSize = 23;
+	NTSTATUS Status = STATUS_SUCCESS;
+	WDFREQUEST Request;
+	WDFMEMORY Memory;
+	BYTE * Data;
+
+	// Get Resources
+	Status = CreateRequestAndBuffer(DeviceContext->Device, DeviceContext->IoTarget, BufferSize, &Request, &Memory, (PVOID *)&Data);
+	if (!NT_SUCCESS(Status))
+	{
+		return Status;
+	}
+
+	// Fill Buffer	
+	Data[0] = 0xA2;	//HID Output Report
+	Data[1] = 0x16;	//Status Information Request
+	Data[2] = 0x04;	//Rumble Off but write to Registers
+	
+	//Offset
+	Data[3] = 0xFF & (Address >> 16);
+	Data[4] = 0xFF & (Address >> 8);
+	Data[5] = 0xFF & (Address     );
+
+	Data[6] = 0x01; //Size
+
+	RtlSecureZeroMemory(Data + 7, 16);
+	Data[7] = Value;
+
+	Status = TransferToDevice(DeviceContext, Request, Memory, FALSE);
+	if (!NT_SUCCESS(Status))
+	{
+		return Status;
+	}
+
+	return Status;
+}
+
 NTSTATUS 
 StartWiimote(
 	_In_ PDEVICE_CONTEXT DeviceContext
@@ -320,8 +406,34 @@ ProcessStatusInformation(
 	UNREFERENCED_PARAMETER(ReadBufferSize);
 	
 	Trace("ProcessStatusInformation");
-	
+
+	BOOLEAN Extension = (ReadBuffer[3] & 0x02);
 	Trace("Extension Flag: %d", (ReadBuffer[3] & 0x02)); 
+
+	if (Extension)
+	{
+		Status = WriteToRegister(DeviceContext, 0xA400F0, 0x55); 
+		if (!NT_SUCCESS(Status))
+		{
+			return Status;
+		}
+
+		Status = WriteToRegister(DeviceContext, 0xA400FB, 0x00); 
+		if (!NT_SUCCESS(Status))
+		{
+			return Status;
+		}
+
+		Status = ReadFromRegister(DeviceContext, 0xA400FA, 0x06);
+		if (!NT_SUCCESS(Status))
+		{
+			return Status;
+		}
+	}
+	else
+	{
+		DeviceContext->WiimoteContext.CurrentReportMode = 0x31;
+	}
 
 	//Process the Battery Level to set the LEDS
 	Status = ProcessBatteryLevel(DeviceContext, ReadBuffer[6]);
@@ -353,7 +465,23 @@ ProcessInputReport(
 
 	UNREFERENCED_PARAMETER(ReadBufferSize);
 
+	CHAR * Message;
+	CHAR * WritePointer;
+	size_t i;
+
 	//Trace("ProcessInputReport");
+	/*Trace("ProcessReport - ReportID: 0x%x - ReportSize: %d", ReportID, ReadBufferSize); */
+
+	Message = (CHAR * )ExAllocatePool(NonPagedPool, (10*ReadBufferSize));
+	WritePointer = Message;
+
+	for(i = 0; i < ReadBufferSize; ++i)
+	{
+		WritePointer += sprintf(WritePointer, "%#02x ", ((BYTE *)ReadBuffer)[i]);
+	}
+	(*WritePointer) = 0;
+	Trace("ReadBuffer: %s", Message);
+	
 
 	//Every Report but 0x3d has Core Buttons
 	if(ReportID != 0x3d)
@@ -372,6 +500,57 @@ ProcessInputReport(
 	if(!NT_SUCCESS(Status))
 	{
 		return Status;
+	}
+
+	return Status;
+}
+
+NTSTATUS
+ProcessRegisterReadReport(
+_In_ PDEVICE_CONTEXT DeviceContext,
+_In_ BYTE * ReadBuffer,
+_In_ size_t ReadBufferSize
+)
+{
+	NTSTATUS Status = STATUS_SUCCESS;
+	BYTE ReportID = ReadBuffer[0];
+
+	UNREFERENCED_PARAMETER(ReadBufferSize);
+
+	CHAR * Message;
+	CHAR * WritePointer;
+	size_t i;
+
+	Trace("ProcessRegisterReadReport");
+	/*Trace("ProcessReport - ReportID: 0x%x - ReportSize: %d", ReportID, ReadBufferSize); */
+
+	Message = (CHAR *)ExAllocatePool(NonPagedPool, (10 * ReadBufferSize));
+	WritePointer = Message;
+
+	for (i = 0; i < ReadBufferSize; ++i)
+	{
+		WritePointer += sprintf(WritePointer, "%#02x ", ((BYTE *)ReadBuffer)[i]);
+	}
+	(*WritePointer) = 0;
+	Trace("ReadBuffer: %s", Message);
+
+	BYTE Error = 0x0F & (ReadBuffer[4]);
+	Trace("Error Flag: %x", Error);
+
+	if (Error == 0x00)
+	{
+		DeviceContext->WiimoteContext.CurrentReportMode = 0x32;
+
+		Status = SetReportMode(DeviceContext, DeviceContext->WiimoteContext.CurrentReportMode);
+		if (!NT_SUCCESS(Status))
+		{
+			return Status;
+		}
+	}
+
+	if (ReportID != 0x3d)
+	{
+		ExtractCoreButtons(DeviceContext, ReadBuffer + 1);
 	}
 
 	return Status;
@@ -415,8 +594,14 @@ ProcessReport(
 		Status = ProcessStatusInformation(DeviceContext,(((BYTE *)ReadBuffer) + 1), (ReadBufferSize - 1));
 		break;
 
+	case 0x21:
+		Status = ProcessRegisterReadReport(DeviceContext, (((BYTE *)ReadBuffer) + 1), (ReadBufferSize - 1));
+		break;
+
 	case 0x30:
 	case 0x31:
+	case 0x32:
+	case 0x35:
 		Status = ProcessInputReport(DeviceContext,(((BYTE *)ReadBuffer) + 1), (ReadBufferSize - 1));
 		break;
 	default:
