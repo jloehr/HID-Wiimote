@@ -95,7 +95,7 @@ ParseAccelerometer(
 VOID
 ParseWiimoteStateAsStandaloneWiiremote(
 	_In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext,
-	_Out_ BYTE RequestBuffer[4]
+	_Out_ BYTE RequestBuffer[5]
 	)
 {
 	//Axis
@@ -103,17 +103,17 @@ ParseWiimoteStateAsStandaloneWiiremote(
 	ParseBooleanAxis(WiimoteContext->State.CoreButtons.DPad.Right, WiimoteContext->State.CoreButtons.DPad.Left, RequestBuffer + 1, 0, 8);
 
 	//Buttons
-	ParseButton(WiimoteContext->State.CoreButtons.One, RequestBuffer + 1, 0);
-	ParseButton(WiimoteContext->State.CoreButtons.Two, RequestBuffer + 1, 1);
-	ParseButton(WiimoteContext->State.CoreButtons.A, RequestBuffer + 1, 2);
-	ParseButton(WiimoteContext->State.CoreButtons.B, RequestBuffer + 1, 3);
-	ParseButton(WiimoteContext->State.CoreButtons.Plus, RequestBuffer + 1, 4);
-	ParseButton(WiimoteContext->State.CoreButtons.Minus, RequestBuffer + 1, 5);
-	ParseButton(WiimoteContext->State.CoreButtons.Home, RequestBuffer + 1, 6);
-
+	ParseButton(WiimoteContext->State.CoreButtons.One, RequestBuffer + 2, 0);
+	ParseButton(WiimoteContext->State.CoreButtons.Two, RequestBuffer + 2, 1);
+	ParseButton(WiimoteContext->State.CoreButtons.A, RequestBuffer + 2, 2);
+	ParseButton(WiimoteContext->State.CoreButtons.B, RequestBuffer + 2, 3);
+	ParseButton(WiimoteContext->State.CoreButtons.Plus, RequestBuffer + 2, 4);
+	ParseButton(WiimoteContext->State.CoreButtons.Minus, RequestBuffer + 2, 5);
+	ParseButton(WiimoteContext->State.CoreButtons.Home, RequestBuffer + 2, 6);
+	
 	//Accelerometer
-	ParseAccelerometer(WiimoteContext->State.Accelerometer.X, RequestBuffer + 2, 0, TRUE);
-	ParseAccelerometer(WiimoteContext->State.Accelerometer.Y, RequestBuffer + 2, 6, TRUE);
+	ParseAccelerometer(WiimoteContext->State.Accelerometer.X, RequestBuffer + 3, 0, TRUE);
+	ParseAccelerometer(WiimoteContext->State.Accelerometer.Y, RequestBuffer + 3, 6, TRUE);
 	//ParseAccelerometer(WiimoteContext->State.Accelerometer.Z, RequestBuffer + 3, 4);
 	
 	//RtlCopyMemory(RequestBuffer + 2, WiimoteContext->State.AccelerometerRaw, 3);
@@ -123,7 +123,7 @@ ParseWiimoteStateAsStandaloneWiiremote(
 VOID
 ParseWiimoteStateAsNunchuckExtension(
 	_In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext,
-	_Out_ BYTE RequestBuffer[4]
+	_Out_ BYTE RequestBuffer[5]
 	)
 {	
 	//AnalogStick as Axis
@@ -131,23 +131,23 @@ ParseWiimoteStateAsNunchuckExtension(
 	ParseAnalogAxis(WiimoteContext->NunchuckState.AnalogStick.Y, RequestBuffer + 1, 8);
 
 	//Accelerometer
-	ParseAccelerometer(WiimoteContext->State.Accelerometer.Y, RequestBuffer + 2, 0, TRUE);
-	ParseAccelerometer(WiimoteContext->State.Accelerometer.Z, RequestBuffer + 2, 6, TRUE);
+	ParseAccelerometer(WiimoteContext->State.Accelerometer.Y, RequestBuffer + 3, 0, TRUE);
+	ParseAccelerometer(WiimoteContext->State.Accelerometer.Z, RequestBuffer + 3, 6, TRUE);
 
 	//Buttons
-	ParseButton(WiimoteContext->State.CoreButtons.A, RequestBuffer + 1, 0);
-	ParseButton(WiimoteContext->State.CoreButtons.B, RequestBuffer + 1, 1);
-	ParseButton(WiimoteContext->NunchuckState.Buttons.C, RequestBuffer + 1, 2);
-	ParseButton(WiimoteContext->NunchuckState.Buttons.Z, RequestBuffer + 1, 3);
-	ParseButton(WiimoteContext->State.CoreButtons.Plus, RequestBuffer + 1, 4);
-	ParseButton(WiimoteContext->State.CoreButtons.Minus, RequestBuffer + 1, 5);
-	ParseButton(WiimoteContext->State.CoreButtons.Home, RequestBuffer + 1, 6);
+	ParseButton(WiimoteContext->State.CoreButtons.A, RequestBuffer + 2, 0);
+	ParseButton(WiimoteContext->State.CoreButtons.B, RequestBuffer + 2, 1);
+	ParseButton(WiimoteContext->NunchuckState.Buttons.C, RequestBuffer + 2, 2);
+	ParseButton(WiimoteContext->NunchuckState.Buttons.Z, RequestBuffer + 2, 3);
+	ParseButton(WiimoteContext->State.CoreButtons.Plus, RequestBuffer + 2, 4);
+	ParseButton(WiimoteContext->State.CoreButtons.Minus, RequestBuffer + 2, 5);
+	ParseButton(WiimoteContext->State.CoreButtons.Home, RequestBuffer + 2, 6);
 }
 
 VOID
 ParseWiimoteState(
 _In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext,
-_Out_ BYTE RequestBuffer[4]
+_Out_ BYTE RequestBuffer[5]
 )
 {
 	RtlSecureZeroMemory(RequestBuffer, 4);
