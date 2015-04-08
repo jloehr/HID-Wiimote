@@ -23,8 +23,10 @@ ParseBooleanAxis(
 	_In_ BYTE Bits
 	)
 {
-	BYTE MinValue = (0x80 >> (8 - Bits)) + 0x01;
-	BYTE MaxValue = 0x7F >> (8 - Bits);
+	UNREFERENCED_PARAMETER(Bits);
+
+	BYTE MinValue = 0; //(0x80 >> (8 - Bits)) + 0x01;
+	BYTE MaxValue = 0xFF; //0x7F >> (8 - Bits);
 
 	if(MinimumValue)
 	{
@@ -47,6 +49,16 @@ ParseButton(
 	{
 		(*ReportByte) |= (0x01 << LeastSignificantBitPosition);
 	}
+}
+
+VOID
+ParseAnalogAxis(
+	_In_ BYTE RawValue,
+	_Out_ BYTE ReportByte[1],
+	_In_ BYTE UsedBits
+)
+{
+	ReportByte[0] = RawValue << (8 - UsedBits);
 }
 
 VOID
@@ -81,16 +93,14 @@ ParseAccelerometer(
 }
 
 VOID
-ParseWiimoteState(
+ParseWiimoteStateAsStandaloneWiiremote(
 	_In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext,
 	_Out_ BYTE RequestBuffer[4]
 	)
 {
-	RtlSecureZeroMemory(RequestBuffer, 4);
-
 	//Axis
-	ParseBooleanAxis(WiimoteContext->State.CoreButtons.DPad.Up, WiimoteContext->State.CoreButtons.DPad.Down, RequestBuffer, 0, 2);
-	ParseBooleanAxis(WiimoteContext->State.CoreButtons.DPad.Right, WiimoteContext->State.CoreButtons.DPad.Left, RequestBuffer, 2, 2);
+	ParseBooleanAxis(WiimoteContext->State.CoreButtons.DPad.Up, WiimoteContext->State.CoreButtons.DPad.Down, RequestBuffer, 0, 8);
+	ParseBooleanAxis(WiimoteContext->State.CoreButtons.DPad.Right, WiimoteContext->State.CoreButtons.DPad.Left, RequestBuffer + 1, 0, 8);
 
 	//Buttons
 	ParseButton(WiimoteContext->State.CoreButtons.One, RequestBuffer + 1, 0);
@@ -109,6 +119,58 @@ ParseWiimoteState(
 	//RtlCopyMemory(RequestBuffer + 2, WiimoteContext->State.AccelerometerRaw, 3);
 
 }
+
+VOID
+ParseWiimoteStateAsNunchuckExtension(
+	_In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext,
+	_Out_ BYTE RequestBuffer[4]
+	)
+{	
+	//AnalogStick as Axis
+	ParseAnalogAxis(WiimoteContext->NunchuckState.AnalogStick.X, RequestBuffer, 8);
+	ParseAnalogAxis(WiimoteContext->NunchuckState.AnalogStick.Y, RequestBuffer + 1, 8);
+
+	//Accelerometer
+	ParseAccelerometer(WiimoteContext->State.Accelerometer.Y, RequestBuffer + 2, 0, TRUE);
+	ParseAccelerometer(WiimoteContext->State.Accelerometer.Z, RequestBuffer + 2, 6, TRUE);
+
+	//Buttons
+	ParseButton(WiimoteContext->State.CoreButtons.A, RequestBuffer + 1, 0);
+	ParseButton(WiimoteContext->State.CoreButtons.B, RequestBuffer + 1, 1);
+	ParseButton(WiimoteContext->NunchuckState.Buttons.C, RequestBuffer + 1, 2);
+	ParseButton(WiimoteContext->NunchuckState.Buttons.Z, RequestBuffer + 1, 3);
+	ParseButton(WiimoteContext->State.CoreButtons.Plus, RequestBuffer + 1, 4);
+	ParseButton(WiimoteContext->State.CoreButtons.Minus, RequestBuffer + 1, 5);
+	ParseButton(WiimoteContext->State.CoreButtons.Home, RequestBuffer + 1, 6);
+}
+
+VOID
+ParseWiimoteState(
+_In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext,
+_Out_ BYTE RequestBuffer[4]
+)
+{
+	RtlSecureZeroMemory(RequestBuffer, 4);
+
+	ParseWiimoteStateAsStandaloneWiiremote(WiimoteContext, RequestBuffer);
+
+	switch (WiimoteContext->Extension)
+	{
+	case None:
+		ParseWiimoteStateAsStandaloneWiiremote(WiimoteContext, RequestBuffer);
+		break;
+	case Nunchuck:
+		ParseWiimoteStateAsNunchuckExtension(WiimoteContext, RequestBuffer);
+		break;
+	case ClassicController:
+		break;
+
+	default:
+		break;
+	}
+
+}
+
 VOID ParseWiimoteStateAsDPadMouse( 
 	_In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext, 
 	_Out_ BYTE RequestBuffer[4])
