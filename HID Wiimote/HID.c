@@ -287,7 +287,7 @@ CompletePendingReadReportRequest(
 	PHID_DEVICE_CONTEXT HIDContext = &(DeviceContext->HIDContext);
 	PWIIMOTE_DEVICE_CONTEXT WiimoteContext = &(DeviceContext->WiimoteContext);
 	BYTE * RequestBuffer;
-	CONST size_t ReportSize = 5;
+	CONST size_t ReportSize = HIDReportSize;
 
 	HIDContext->PerformReadReportInstant = FALSE;
 
