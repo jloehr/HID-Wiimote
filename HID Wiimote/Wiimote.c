@@ -394,6 +394,67 @@ ExtractAccelerometer(
 	WiimoteState->Accelerometer.Z = RawAccelerometer[2];
 }
 
+VOID
+ExtractNunchuck(
+	_In_ PDEVICE_CONTEXT DeviceContext,
+	_In_ BYTE RawInputData[6]
+	)
+{
+	//Buttons
+	DeviceContext->WiimoteContext.NunchuckState.Buttons.Z = RawInputData[5] && 0x01;
+	DeviceContext->WiimoteContext.NunchuckState.Buttons.C = RawInputData[5] && 0x02;
+
+	//Analog Stick
+	DeviceContext->WiimoteContext.NunchuckState.AnalogStick.X = RawInputData[0];
+	DeviceContext->WiimoteContext.NunchuckState.AnalogStick.Y = RawInputData[1];
+
+	//Accelerometer
+	DeviceContext->WiimoteContext.NunchuckState.Accelerometer.X = RawInputData[2];
+	DeviceContext->WiimoteContext.NunchuckState.Accelerometer.Y = RawInputData[3];
+	DeviceContext->WiimoteContext.NunchuckState.Accelerometer.Z = RawInputData[4];
+}
+
+VOID
+ExtractClassicController(
+	_In_ PDEVICE_CONTEXT DeviceContext,
+	_In_ BYTE RawInputData[6]
+	)
+{
+	//Buttons
+	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.A = RawInputData[6] && 0x10;
+	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.B = RawInputData[6] && 0x40;
+	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.Y = RawInputData[4] && 0x20;
+	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.X = RawInputData[4] && 0x08;
+	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.Home = RawInputData[3] && 0x08;
+	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.Plus = RawInputData[3] && 0x10;
+	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.Minus = RawInputData[3] && 0x04;
+
+	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.DPad.Up = RawInputData[4] && 0x01;
+	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.DPad.Right = RawInputData[3] && 0x80;
+	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.DPad.Down = RawInputData[3] && 0x40;
+	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.DPad.Left = RawInputData[4] && 0x02;
+
+	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.L = RawInputData[4] && 0x80;
+	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.ZL = RawInputData[3] && 0x02;
+	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.R = RawInputData[4] && 0x04;
+	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.ZR = RawInputData[3] && 0x02;
+
+	//Analog Sticks
+	DeviceContext->WiimoteContext.ClassicControllerState.LeftAnalogStick.X = (0x3F & RawInputData[0]);
+	DeviceContext->WiimoteContext.ClassicControllerState.LeftAnalogStick.Y = (0x3F & RawInputData[1]);
+
+	DeviceContext->WiimoteContext.ClassicControllerState.RightAnalogStick.X = (0xC0 & RawInputData[0]) << 3;
+	DeviceContext->WiimoteContext.ClassicControllerState.RightAnalogStick.X &= (0xC0 & RawInputData[1]) << 1;
+	DeviceContext->WiimoteContext.ClassicControllerState.RightAnalogStick.X &= (0x80 & RawInputData[2]);
+	DeviceContext->WiimoteContext.ClassicControllerState.RightAnalogStick.Y = (0x1F & RawInputData[3]);
+
+
+	//Trigger
+	DeviceContext->WiimoteContext.ClassicControllerState.LeftTrigger = (0xE0 & RawInputData[3]);
+	DeviceContext->WiimoteContext.ClassicControllerState.LeftTrigger &= (0x60 & RawInputData[2]) << 3;
+	DeviceContext->WiimoteContext.ClassicControllerState.RightTrigger &= (0x1F & RawInputData[4]);
+}
+
 NTSTATUS
 ProcessStatusInformation(
 	_In_ PDEVICE_CONTEXT DeviceContext,
@@ -432,6 +493,7 @@ ProcessStatusInformation(
 	}
 	else
 	{
+		DeviceContext->WiimoteContext.Extension = None;
 		DeviceContext->WiimoteContext.CurrentReportMode = 0x31;
 	}
 
@@ -465,14 +527,14 @@ ProcessInputReport(
 
 	UNREFERENCED_PARAMETER(ReadBufferSize);
 
-	CHAR * Message;
-	CHAR * WritePointer;
-	size_t i;
+	//CHAR * Message;
+	//CHAR * WritePointer;
+	//size_t i;
 
 	//Trace("ProcessInputReport");
 	/*Trace("ProcessReport - ReportID: 0x%x - ReportSize: %d", ReportID, ReadBufferSize); */
 
-	Message = (CHAR * )ExAllocatePool(NonPagedPool, (10*ReadBufferSize));
+	/*Message = (CHAR * )ExAllocatePool(NonPagedPool, (10*ReadBufferSize));
 	WritePointer = Message;
 
 	for(i = 0; i < ReadBufferSize; ++i)
@@ -481,7 +543,7 @@ ProcessInputReport(
 	}
 	(*WritePointer) = 0;
 	Trace("ReadBuffer: %s", Message);
-	
+	*/
 
 	//Every Report but 0x3d has Core Buttons
 	if(ReportID != 0x3d)
@@ -492,6 +554,21 @@ ProcessInputReport(
 	if(ReportID == 0x31)
 	{
 		ExtractAccelerometer(DeviceContext, ReadBuffer + 1, ReadBuffer + 3);
+	}
+
+	if (ReportID == 0x32)
+	{
+		switch (DeviceContext->WiimoteContext.Extension)
+		{
+		case Nunchuck:
+			ExtractNunchuck(DeviceContext, ReadBuffer + 3);
+			break;
+		case ClassicController:
+			ExtractClassicController(DeviceContext, ReadBuffer + 3);
+			break;
+		default:
+			break;
+		}
 	}
 
 	//Trace("Acceleometer: X => %d; Y => %d; Z => %d", (DeviceContext->WiimoteContext.State.Accelerometer.X - 0x80), (DeviceContext->WiimoteContext.State.Accelerometer.Y - 0x80), (DeviceContext->WiimoteContext.State.Accelerometer.Z - 0x80));
@@ -513,18 +590,18 @@ _In_ size_t ReadBufferSize
 )
 {
 	NTSTATUS Status = STATUS_SUCCESS;
-	BYTE ReportID = ReadBuffer[0];
+	//BYTE ReportID = ReadBuffer[0];
 
 	UNREFERENCED_PARAMETER(ReadBufferSize);
 
-	CHAR * Message;
-	CHAR * WritePointer;
-	size_t i;
+	//CHAR * Message;
+	//CHAR * WritePointer;
+	//size_t i;
 
 	Trace("ProcessRegisterReadReport");
 	/*Trace("ProcessReport - ReportID: 0x%x - ReportSize: %d", ReportID, ReadBufferSize); */
 
-	Message = (CHAR *)ExAllocatePool(NonPagedPool, (10 * ReadBufferSize));
+	/*Message = (CHAR *)ExAllocatePool(NonPagedPool, (10 * ReadBufferSize));
 	WritePointer = Message;
 
 	for (i = 0; i < ReadBufferSize; ++i)
@@ -533,24 +610,42 @@ _In_ size_t ReadBufferSize
 	}
 	(*WritePointer) = 0;
 	Trace("ReadBuffer: %s", Message);
+	*/
 
 	BYTE Error = 0x0F & (ReadBuffer[4]);
 	Trace("Error Flag: %x", Error);
 
-	if (Error == 0x00)
-	{
-		DeviceContext->WiimoteContext.CurrentReportMode = 0x32;
+	ExtractCoreButtons(DeviceContext, ReadBuffer + 1);
 
-		Status = SetReportMode(DeviceContext, DeviceContext->WiimoteContext.CurrentReportMode);
-		if (!NT_SUCCESS(Status))
-		{
-			return Status;
-		}
+	if (Error != 0x00)
+	{
+		return Status;
 	}
 
-	if (ReportID != 0x3d)
+	SHORT ExtensionType = 0;
+	ExtensionType &= ReadBuffer[7];
+	ExtensionType &= ReadBuffer[8] << 16;
+
+	switch (ExtensionType)
 	{
-		ExtractCoreButtons(DeviceContext, ReadBuffer + 1);
+	case 0x0000: //Nunchuck
+		DeviceContext->WiimoteContext.Extension = Nunchuck;
+		break;
+	case 0x0101: //CLassic Controler (Pro)
+		DeviceContext->WiimoteContext.Extension = ClassicController;
+		break;
+
+	default:
+		Trace("No supported Extension!");
+		return Status;
+	}
+
+	DeviceContext->WiimoteContext.CurrentReportMode = 0x32;
+
+	Status = SetReportMode(DeviceContext, DeviceContext->WiimoteContext.CurrentReportMode);
+	if (!NT_SUCCESS(Status))
+	{
+		return Status;
 	}
 
 	return Status;
