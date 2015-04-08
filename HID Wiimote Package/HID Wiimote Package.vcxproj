@@ -390,10 +390,6 @@ move /y "$(TargetDir)$(SolutionName.replace(' ','-'))-$(TargetVersion.replace('d
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <FilesToPackage Include="..\foo.txt" Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug|x64'">
-      <PackageRelativeDirectory>
-      </PackageRelativeDirectory>
-    </FilesToPackage>
     <FilesToPackage Include="@(Inf->'%(CopyOutput)')" Condition="'@(Inf)'!=''" />
     <FilesToPackage Include="C:\Program Files (x86)\Windows Kits\8.1\Redist\DIFx\dpinst\MultiLin\x64\dpinst.exe" Condition="'$(Configuration)|$(Platform)'=='Win8.1 Release|x64'">
       <PackageRelativeDirectory>
