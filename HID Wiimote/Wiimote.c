@@ -633,7 +633,7 @@ _In_ size_t ReadBufferSize
 	case 0x0000: //Nunchuck
 		Trace("Nunchuck Extension");
 		DeviceContext->WiimoteContext.Extension = Nunchuck;
-		DeviceContext->WiimoteContext.CurrentReportMode = 0x32;
+		DeviceContext->WiimoteContext.CurrentReportMode = 0x35;
 		break;
 	case 0x0101: //CLassic Controler (Pro)
 		Trace("Classic Controller (Pro) Extension");
@@ -643,7 +643,7 @@ _In_ size_t ReadBufferSize
 	case 0x0120: //Wii U Pro Controller
 		Trace("Classic Controller (Pro) Extension");
 		DeviceContext->WiimoteContext.Extension = WiiUProController;
-		DeviceContext->WiimoteContext.CurrentReportMode = 0x3D;
+		DeviceContext->WiimoteContext.CurrentReportMode = 0x34;
 		break;
 	default:
 		Trace("No supported Extension!");
