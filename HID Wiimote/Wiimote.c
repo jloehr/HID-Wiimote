@@ -351,7 +351,20 @@ ProcessBatteryLevel(
 }
 
 VOID
-ExtractCoreButtons (
+XorData(
+	_In_ BYTE * Source,
+	_Inout_ BYTE * Dst,
+	_In_ SIZE_T Length
+	)
+{
+	for (SIZE_T i = 0; i < Length; i++)
+	{
+		Dst[i] = Source[i] ^ 0xFF;
+	}
+}
+
+VOID
+ExtractCoreButtons(
 	_In_ PDEVICE_CONTEXT DeviceContext,
 	_In_ BYTE RawCoreButtons[2]
 	)
@@ -400,9 +413,12 @@ ExtractNunchuck(
 	_In_ BYTE RawInputData[6]
 	)
 {
+	BYTE DecodedInputData[1];
+	XorData(RawInputData + 5, DecodedInputData, 1);
+
 	//Buttons
-	DeviceContext->WiimoteContext.NunchuckState.Buttons.Z = RawInputData[5] && 0x01;
-	DeviceContext->WiimoteContext.NunchuckState.Buttons.C = RawInputData[5] && 0x02;
+	DeviceContext->WiimoteContext.NunchuckState.Buttons.Z = DecodedInputData[0] & 0x01;
+	DeviceContext->WiimoteContext.NunchuckState.Buttons.C = DecodedInputData[0] & 0x02;
 
 	//Analog Stick
 	DeviceContext->WiimoteContext.NunchuckState.AnalogStick.X = RawInputData[0];
@@ -420,24 +436,27 @@ ExtractClassicController(
 	_In_ BYTE RawInputData[6]
 	)
 {
+	BYTE DecodedInputData[2];
+	XorData(RawInputData + 4, DecodedInputData, 2);
+
 	//Buttons
-	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.A = RawInputData[6] && 0x10;
-	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.B = RawInputData[6] && 0x40;
-	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.Y = RawInputData[4] && 0x20;
-	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.X = RawInputData[4] && 0x08;
-	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.Home = RawInputData[3] && 0x08;
-	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.Plus = RawInputData[3] && 0x10;
-	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.Minus = RawInputData[3] && 0x04;
+	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.A = DecodedInputData[1] & 0x10;
+	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.B = DecodedInputData[1] & 0x40;
+	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.Y = DecodedInputData[1] & 0x20;
+	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.X = DecodedInputData[1] & 0x08;
+	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.Home = DecodedInputData[0] & 0x08;
+	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.Plus = DecodedInputData[0] & 0x10;
+	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.Minus = DecodedInputData[0] & 0x04;
 
-	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.DPad.Up = RawInputData[4] && 0x01;
-	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.DPad.Right = RawInputData[3] && 0x80;
-	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.DPad.Down = RawInputData[3] && 0x40;
-	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.DPad.Left = RawInputData[4] && 0x02;
+	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.DPad.Up = DecodedInputData[1] & 0x01;
+	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.DPad.Right = DecodedInputData[0] & 0x80;
+	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.DPad.Down = DecodedInputData[0] & 0x40;
+	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.DPad.Left = DecodedInputData[1] & 0x02;
 
-	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.L = RawInputData[4] && 0x80;
-	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.ZL = RawInputData[3] && 0x02;
-	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.R = RawInputData[4] && 0x04;
-	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.ZR = RawInputData[3] && 0x02;
+	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.L = DecodedInputData[1] & 0x80;
+	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.ZL = DecodedInputData[0] & 0x02;
+	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.R = DecodedInputData[1] & 0x04;
+	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.ZR = DecodedInputData[0] & 0x02;
 
 	//Analog Sticks
 	DeviceContext->WiimoteContext.ClassicControllerState.LeftAnalogStick.X = (0x3F & RawInputData[0]);
