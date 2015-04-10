@@ -626,22 +626,30 @@ _In_ size_t ReadBufferSize
 	ExtensionType |= ReadBuffer[10] << 8;
 	ExtensionType |= ReadBuffer[11];
 
+	Trace("Extension Type: %#06x", ExtensionType);
 
 	switch (ExtensionType)
 	{
 	case 0x0000: //Nunchuck
+		Trace("Nunchuck Extension");
 		DeviceContext->WiimoteContext.Extension = Nunchuck;
+		DeviceContext->WiimoteContext.CurrentReportMode = 0x32;
 		break;
 	case 0x0101: //CLassic Controler (Pro)
+		Trace("Classic Controller (Pro) Extension");
 		DeviceContext->WiimoteContext.Extension = ClassicController;
+		DeviceContext->WiimoteContext.CurrentReportMode = 0x32;
 		break;
-
+	case 0x0120: //Wii U Pro Controller
+		Trace("Classic Controller (Pro) Extension");
+		DeviceContext->WiimoteContext.Extension = WiiUProController;
+		DeviceContext->WiimoteContext.CurrentReportMode = 0x3D;
+		break;
 	default:
 		Trace("No supported Extension!");
 		return Status;
 	}
 
-	DeviceContext->WiimoteContext.CurrentReportMode = 0x32;
 
 	Status = SetReportMode(DeviceContext, DeviceContext->WiimoteContext.CurrentReportMode);
 	if (!NT_SUCCESS(Status))
@@ -697,7 +705,9 @@ ProcessReport(
 	case 0x30:
 	case 0x31:
 	case 0x32:
+	case 0x34:
 	case 0x35:
+	case 0x3D:
 		Status = ProcessInputReport(DeviceContext,(((BYTE *)ReadBuffer) + 1), (ReadBufferSize - 1));
 		break;
 	default:

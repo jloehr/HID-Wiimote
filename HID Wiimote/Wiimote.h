@@ -170,7 +170,7 @@ typedef struct _WIIMOTE_STATE
 
 typedef struct _WIIMOTE_DEVICE_CONTEXT
 {
-	enum WIIMOTE_EXTENSION_TYPE { None, Nunchuck, ClassicController } Extension;
+	enum WIIMOTE_EXTENSION_TYPE { None, Nunchuck, ClassicController, WiiUProController } Extension;
 	WIIMTOE_STATE State;
 	BYTE CurrentReportMode;
 
