@@ -456,6 +456,32 @@ ExtractClassicController(
 }
 
 NTSTATUS
+ProcessExtensionData(
+	_In_ PDEVICE_CONTEXT DeviceContext,
+	_In_ BYTE * ReadBuffer,
+	_In_ BYTE ReportID
+	)
+{
+	UNREFERENCED_PARAMETER(ReportID);
+
+	switch (DeviceContext->WiimoteContext.Extension)
+	{
+	case Nunchuck:
+		ExtractNunchuck(DeviceContext, ReadBuffer);
+		break;
+	case ClassicController:
+		ExtractClassicController(DeviceContext, ReadBuffer);
+		break;
+	case WiiUProController:
+		break;
+	default:
+		break;
+	}
+
+	return STATUS_SUCCESS;
+}
+
+NTSTATUS
 ProcessStatusInformation(
 	_In_ PDEVICE_CONTEXT DeviceContext,
 	_In_ BYTE * ReadBuffer, 
@@ -551,28 +577,23 @@ ProcessInputReport(
 		ExtractCoreButtons(DeviceContext, ReadBuffer + 1);
 	}
 
-	if(ReportID == 0x31)
+	switch (ReportID)
 	{
+	case 0x31: //Accelerometer
 		ExtractAccelerometer(DeviceContext, ReadBuffer + 1, ReadBuffer + 3);
+		break;
+	case 0x32: //8 Byte Extension
+	case 0x34: //19 Byte Extension
+		ProcessExtensionData(DeviceContext, ReadBuffer + 3, ReportID);
+		break;
+	case 0x35:
+		//Accelerometer & 16 Byte Extension
+		ExtractAccelerometer(DeviceContext, ReadBuffer + 1, ReadBuffer + 3);
+		ProcessExtensionData(DeviceContext, ReadBuffer + 6, ReportID);
+	default:
+		break;
 	}
 
-	if (ReportID == 0x32)
-	{
-		switch (DeviceContext->WiimoteContext.Extension)
-		{
-		case Nunchuck:
-			ExtractNunchuck(DeviceContext, ReadBuffer + 3);
-			break;
-		case ClassicController:
-			ExtractClassicController(DeviceContext, ReadBuffer + 3);
-			break;
-		default:
-			break;
-		}
-	}
-
-	//Trace("Acceleometer: X => %d; Y => %d; Z => %d", (DeviceContext->WiimoteContext.State.Accelerometer.X - 0x80), (DeviceContext->WiimoteContext.State.Accelerometer.Y - 0x80), (DeviceContext->WiimoteContext.State.Accelerometer.Z - 0x80));
-	
 	Status = WiimoteStateUpdated(DeviceContext);
 	if(!NT_SUCCESS(Status))
 	{
