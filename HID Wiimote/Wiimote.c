@@ -336,26 +336,26 @@ ProcessBatteryLevel(
 	
 	Trace("BatteryFlag: 0x%x", BatteryFlag);
 
-	Status = SetLEDs(DeviceContext, BatteryFlag);
-	if(!NT_SUCCESS(Status))
-	{
-		return Status;
-	}
-
-	if(BatteryFlag == WIIMOTE_LEDS_ONE)
-	{
-		WdfTimerStop(WiimoteContext->StatusInformationTimer, FALSE);
-	}
-
+Status = SetLEDs(DeviceContext, BatteryFlag);
+if (!NT_SUCCESS(Status))
+{
 	return Status;
+}
+
+if (BatteryFlag == WIIMOTE_LEDS_ONE)
+{
+	WdfTimerStop(WiimoteContext->StatusInformationTimer, FALSE);
+}
+
+return Status;
 }
 
 VOID
 XorData(
-	_In_ BYTE * Source,
-	_Inout_ BYTE * Dst,
-	_In_ SIZE_T Length
-	)
+_In_ BYTE * Source,
+_Inout_ BYTE * Dst,
+_In_ SIZE_T Length
+)
 {
 	for (SIZE_T i = 0; i < Length; i++)
 	{
@@ -365,9 +365,9 @@ XorData(
 
 VOID
 ExtractCoreButtons(
-	_In_ PDEVICE_CONTEXT DeviceContext,
-	_In_ BYTE RawCoreButtons[2]
-	)
+_In_ PDEVICE_CONTEXT DeviceContext,
+_In_ BYTE RawCoreButtons[2]
+)
 {
 	PWIIMOTE_STATE WiimoteState = &(DeviceContext->WiimoteContext.State);
 
@@ -378,7 +378,7 @@ ExtractCoreButtons(
 	WiimoteState->CoreButtons.Minus = (RawCoreButtons[1] & 0x10);
 	WiimoteState->CoreButtons.Plus = (RawCoreButtons[0] & 0x10);
 	WiimoteState->CoreButtons.Home = (RawCoreButtons[1] & 0x80);
-	
+
 	WiimoteState->CoreButtons.DPad.Left = (RawCoreButtons[0] & 0x01);
 	WiimoteState->CoreButtons.DPad.Right = (RawCoreButtons[0] & 0x02);
 	WiimoteState->CoreButtons.DPad.Down = (RawCoreButtons[0] & 0x04);
@@ -387,10 +387,10 @@ ExtractCoreButtons(
 
 VOID
 ExtractAccelerometer(
-	_In_ PDEVICE_CONTEXT DeviceContext,
-	_In_ BYTE RawCoreButtons[2],
-	_In_ BYTE RawAccelerometer[3]
-	)
+_In_ PDEVICE_CONTEXT DeviceContext,
+_In_ BYTE RawCoreButtons[2],
+_In_ BYTE RawAccelerometer[3]
+)
 {
 	PWIIMOTE_STATE WiimoteState = &(DeviceContext->WiimoteContext.State);
 
@@ -409,9 +409,9 @@ ExtractAccelerometer(
 
 VOID
 ExtractNunchuck(
-	_In_ PDEVICE_CONTEXT DeviceContext,
-	_In_ BYTE RawInputData[6]
-	)
+_In_ PDEVICE_CONTEXT DeviceContext,
+_In_ BYTE RawInputData[6]
+)
 {
 	BYTE DecodedInputData[1];
 	XorData(RawInputData + 5, DecodedInputData, 1);
@@ -431,15 +431,11 @@ ExtractNunchuck(
 }
 
 VOID
-ExtractClassicController(
+ExtractClassicControllerButtons(
 	_In_ PDEVICE_CONTEXT DeviceContext,
-	_In_ BYTE RawInputData[6]
+	_In_ BYTE DecodedInputData[2]
 	)
 {
-	BYTE DecodedInputData[2];
-	XorData(RawInputData + 4, DecodedInputData, 2);
-
-	//Buttons
 	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.A = DecodedInputData[1] & 0x10;
 	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.B = DecodedInputData[1] & 0x40;
 	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.Y = DecodedInputData[1] & 0x20;
@@ -457,6 +453,19 @@ ExtractClassicController(
 	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.ZL = DecodedInputData[0] & 0x02;
 	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.R = DecodedInputData[1] & 0x04;
 	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.ZR = DecodedInputData[0] & 0x02;
+}
+
+VOID
+ExtractClassicController(
+	_In_ PDEVICE_CONTEXT DeviceContext,
+	_In_ BYTE RawInputData[6]
+	)
+{
+	BYTE DecodedInputData[2];
+	XorData(RawInputData + 4, DecodedInputData, 2);
+
+	//Buttons
+	ExtractClassicControllerButtons(DeviceContext, DecodedInputData);
 
 	//Analog Sticks
 	DeviceContext->WiimoteContext.ClassicControllerState.LeftAnalogStick.X = (0x3F & RawInputData[0]);
@@ -467,11 +476,33 @@ ExtractClassicController(
 	DeviceContext->WiimoteContext.ClassicControllerState.RightAnalogStick.X &= (0x80 & RawInputData[2]);
 	DeviceContext->WiimoteContext.ClassicControllerState.RightAnalogStick.Y = (0x1F & RawInputData[3]);
 
-
 	//Trigger
 	DeviceContext->WiimoteContext.ClassicControllerState.LeftTrigger = (0xE0 & RawInputData[3]);
 	DeviceContext->WiimoteContext.ClassicControllerState.LeftTrigger &= (0x60 & RawInputData[2]) << 3;
-	DeviceContext->WiimoteContext.ClassicControllerState.RightTrigger = (0x1F & RawInputData[4]);
+	DeviceContext->WiimoteContext.ClassicControllerState.RightTrigger = (0x1F & RawInputData[3]);
+}
+
+VOID
+ExtractWiiUProController(
+_In_ PDEVICE_CONTEXT DeviceContext,
+_In_ BYTE RawInputData[11]
+)
+{
+	BYTE DecodedInputData[3];
+	XorData(RawInputData + 8, DecodedInputData, 3);
+
+	//Buttons
+	ExtractClassicControllerButtons(DeviceContext, DecodedInputData);
+
+	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.LH = DecodedInputData[2] & 0x02;
+	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.RH = DecodedInputData[2] & 0x01;
+
+	//AnalogSticks
+	DeviceContext->WiimoteContext.ClassicControllerState.LeftAnalogStick.X = RawInputData[0] >> 4;
+	DeviceContext->WiimoteContext.ClassicControllerState.LeftAnalogStick.Y = RawInputData[2] >> 4;
+
+	DeviceContext->WiimoteContext.ClassicControllerState.RightAnalogStick.X = RawInputData[1] >> 4;
+	DeviceContext->WiimoteContext.ClassicControllerState.RightAnalogStick.Y = RawInputData[3] >> 4;
 }
 
 NTSTATUS
@@ -492,6 +523,7 @@ ProcessExtensionData(
 		ExtractClassicController(DeviceContext, ReadBuffer);
 		break;
 	case WiiUProController:
+		ExtractWiiUProController(DeviceContext, ReadBuffer);
 		break;
 	default:
 		break;
