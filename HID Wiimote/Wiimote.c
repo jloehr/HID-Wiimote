@@ -452,7 +452,7 @@ ExtractClassicController(
 	//Trigger
 	DeviceContext->WiimoteContext.ClassicControllerState.LeftTrigger = (0xE0 & RawInputData[3]);
 	DeviceContext->WiimoteContext.ClassicControllerState.LeftTrigger &= (0x60 & RawInputData[2]) << 3;
-	DeviceContext->WiimoteContext.ClassicControllerState.RightTrigger &= (0x1F & RawInputData[4]);
+	DeviceContext->WiimoteContext.ClassicControllerState.RightTrigger = (0x1F & RawInputData[4]);
 }
 
 NTSTATUS
