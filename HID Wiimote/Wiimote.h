@@ -73,6 +73,8 @@ typedef struct _WIIMOTE_CLASSIC_CONTROLLER_STATE
 			BOOLEAN R;
 			BOOLEAN ZL;
 			BOOLEAN ZR;
+			BOOLEAN LH;
+			BOOLEAN RH;
 			BOOLEAN A;
 			BOOLEAN B;
 			BOOLEAN Y;
@@ -97,6 +99,9 @@ typedef struct _WIIMOTE_CLASSIC_CONTROLLER_STATE
 		BOOLEAN ButtonsRaw[15];
 	};
 
+	BYTE LeftTrigger;
+	BYTE RightTrigger;
+
 	union
 	{
 		struct
@@ -118,9 +123,6 @@ typedef struct _WIIMOTE_CLASSIC_CONTROLLER_STATE
 
 		BYTE RightAnalogStickRaw[2];
 	};
-
-	BYTE LeftTrigger;
-	BYTE RightTrigger;
 
 } WIIMOTE_CLASSIC_CONTROLLER_STATE, *PWIIMOTE_CLASSIC_CONTROLLER_STATE;
 
