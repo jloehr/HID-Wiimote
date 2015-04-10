@@ -623,8 +623,9 @@ _In_ size_t ReadBufferSize
 	}
 
 	SHORT ExtensionType = 0;
-	ExtensionType &= ReadBuffer[7];
-	ExtensionType &= ReadBuffer[8] << 16;
+	ExtensionType |= ReadBuffer[10] << 8;
+	ExtensionType |= ReadBuffer[11];
+
 
 	switch (ExtensionType)
 	{
