@@ -507,6 +507,10 @@ _In_ BYTE RawInputData[11]
 
 	DeviceContext->WiimoteContext.ClassicControllerState.RightAnalogStick.X = 0xFF & ((RawInputData[2] >> 4) | (RawInputData[3] << 4));
 	DeviceContext->WiimoteContext.ClassicControllerState.RightAnalogStick.Y = 0xFF & ((RawInputData[6] >> 4) | (RawInputData[7] << 4));
+
+	//Not Supported Input
+	DeviceContext->WiimoteContext.ClassicControllerState.LeftTrigger = DeviceContext->WiimoteContext.ClassicControllerState.Buttons.ZL ? 0x7F : 0x00;
+	DeviceContext->WiimoteContext.ClassicControllerState.RightTrigger = DeviceContext->WiimoteContext.ClassicControllerState.Buttons.ZR ? 0x7F : 0x00;
 }
 
 NTSTATUS
