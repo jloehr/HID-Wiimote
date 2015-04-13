@@ -713,7 +713,7 @@ _In_ size_t ReadBufferSize
 		DeviceContext->WiimoteContext.CurrentReportMode = 0x32;
 		break;
 	case 0x0120: //Wii U Pro Controller
-		Trace("Classic Controller (Pro) Extension");
+		Trace("Wii U Pro Controller");
 		DeviceContext->WiimoteContext.Extension = WiiUProController;
 		DeviceContext->WiimoteContext.CurrentReportMode = 0x34;
 		break;
