@@ -468,18 +468,22 @@ ExtractClassicController(
 	ExtractClassicControllerButtons(DeviceContext, DecodedInputData);
 
 	//Analog Sticks
-	DeviceContext->WiimoteContext.ClassicControllerState.LeftAnalogStick.X = (0x3F & RawInputData[0]);
-	DeviceContext->WiimoteContext.ClassicControllerState.LeftAnalogStick.Y = (0x3F & RawInputData[1]);
+	DeviceContext->WiimoteContext.ClassicControllerState.LeftAnalogStick.X = 0xFF & ((0x3F & RawInputData[0]) << 2);
+	DeviceContext->WiimoteContext.ClassicControllerState.LeftAnalogStick.Y = 0xFF & ((0x3F & RawInputData[1]) << 2);
 
-	DeviceContext->WiimoteContext.ClassicControllerState.RightAnalogStick.X = (0xC0 & RawInputData[0]) << 3;
-	DeviceContext->WiimoteContext.ClassicControllerState.RightAnalogStick.X &= (0xC0 & RawInputData[1]) << 1;
-	DeviceContext->WiimoteContext.ClassicControllerState.RightAnalogStick.X &= (0x80 & RawInputData[2]);
-	DeviceContext->WiimoteContext.ClassicControllerState.RightAnalogStick.Y = (0x1F & RawInputData[3]);
+	DeviceContext->WiimoteContext.ClassicControllerState.RightAnalogStick.X = 0xFF & ((0xC0 & RawInputData[0]));
+	DeviceContext->WiimoteContext.ClassicControllerState.RightAnalogStick.X |= 0xFF & ((0xC0 & RawInputData[1]) >> 2);
+	DeviceContext->WiimoteContext.ClassicControllerState.RightAnalogStick.X |= 0xFF & ((0x80 & RawInputData[2]) >> 4);
+	DeviceContext->WiimoteContext.ClassicControllerState.RightAnalogStick.Y = 0xFF & ((0x1F & RawInputData[2]) << 3);
 
 	//Trigger
-	DeviceContext->WiimoteContext.ClassicControllerState.LeftTrigger = (0xE0 & RawInputData[3]);
-	DeviceContext->WiimoteContext.ClassicControllerState.LeftTrigger &= (0x60 & RawInputData[2]) << 3;
-	DeviceContext->WiimoteContext.ClassicControllerState.RightTrigger = (0x1F & RawInputData[3]);
+	DeviceContext->WiimoteContext.ClassicControllerState.LeftTrigger = 0xFF & ((0x60 & RawInputData[2]));
+	DeviceContext->WiimoteContext.ClassicControllerState.LeftTrigger |= 0xFF & ((0xE0 & RawInputData[3]) >> 3);
+	DeviceContext->WiimoteContext.ClassicControllerState.RightTrigger = 0xFF & ((0x1F & RawInputData[3]) << 2);
+
+	//Not Supported Input
+	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.LH = FALSE;
+	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.RH = FALSE;
 }
 
 VOID
