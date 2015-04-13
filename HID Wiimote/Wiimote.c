@@ -449,10 +449,10 @@ ExtractClassicControllerButtons(
 	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.DPad.Down = DecodedInputData[0] & 0x40;
 	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.DPad.Left = DecodedInputData[1] & 0x02;
 
-	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.L = DecodedInputData[1] & 0x80;
-	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.ZL = DecodedInputData[0] & 0x02;
-	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.R = DecodedInputData[1] & 0x04;
-	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.ZR = DecodedInputData[0] & 0x02;
+	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.L = DecodedInputData[0] & 0x20;
+	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.ZL = DecodedInputData[1] & 0x80;
+	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.R = DecodedInputData[0] & 0x02;
+	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.ZR = DecodedInputData[1] & 0x04;
 }
 
 VOID
