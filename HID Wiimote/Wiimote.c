@@ -502,11 +502,11 @@ _In_ BYTE RawInputData[11]
 	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.RH = DecodedInputData[2] & 0x01;
 
 	//AnalogSticks
-	DeviceContext->WiimoteContext.ClassicControllerState.LeftAnalogStick.X = RawInputData[0] >> 4;
-	DeviceContext->WiimoteContext.ClassicControllerState.LeftAnalogStick.Y = RawInputData[2] >> 4;
+	DeviceContext->WiimoteContext.ClassicControllerState.LeftAnalogStick.X = 0xFF & ((RawInputData[0] >> 4) | (RawInputData[1] << 4));
+	DeviceContext->WiimoteContext.ClassicControllerState.LeftAnalogStick.Y = 0xFF & ((RawInputData[4] >> 4) | (RawInputData[5] << 4));
 
-	DeviceContext->WiimoteContext.ClassicControllerState.RightAnalogStick.X = RawInputData[1] >> 4;
-	DeviceContext->WiimoteContext.ClassicControllerState.RightAnalogStick.Y = RawInputData[3] >> 4;
+	DeviceContext->WiimoteContext.ClassicControllerState.RightAnalogStick.X = 0xFF & ((RawInputData[2] >> 4) | (RawInputData[3] << 4));
+	DeviceContext->WiimoteContext.ClassicControllerState.RightAnalogStick.Y = 0xFF & ((RawInputData[6] >> 4) | (RawInputData[7] << 4));
 }
 
 NTSTATUS
