@@ -149,25 +149,17 @@ CONST HID_REPORT_DESCRIPTOR HIDReportDescriptor[] = {
     0x75, 0x08,                    //	  REPORT_SIZE (8)
     0x95, 0x03,                    //	  REPORT_COUNT (3)
     0x81, 0x02,                    //	  INPUT (Data,Var,Abs)
-	0x05, 0x01,                    //     USAGE_PAGE (Generic Desktop)
+	0x05, 0x01,                    //	  USAGE_PAGE (Generic Desktop)
 	0x09, 0x39,                    //     USAGE (Hat Swtich)
-	0xa1, 0x00,                    //     COLLECTION (Physical)
-	0x75, 0x01,                    //       REPORT_SIZE (1)
-	0x15, 0x00,                    //       LOGICAL_MINIMUM (0)
-	0x25, 0x01,                    //       LOGICAL_MAXIMUM (1)
-	0x35, 0x00,                    //       PHYSICAL_MINIMUM (0)
-	0x45, 0x01,                    //       PHYSICAL_MAXIMUM (1)
-	0x95, 0x04,                    //       REPORT_COUNT (4)
-	0x05, 0x01,                    //       USAGE_PAGE (Generic Desktop)
-	0x09, 0x90,                    //       USAGE (Undefined)
-	0x09, 0x91,                    //       USAGE (Undefined)
-	0x09, 0x93,                    //       USAGE (Undefined)
-	0x09, 0x92,                    //       USAGE (Undefined)
-	0x81, 0x02,                    //       INPUT (Data,Var,Abs)
-	0xc0,                          //     END_COLLECTION
-    0x95, 0x01,                    //     REPORT_COUNT (1)
-    0x75, 0x04,                    //     REPORT_SIZE (4)
-    0x81, 0x03,                    //     INPUT (Cnst,Var,Abs)
+	0x15, 0x01,                    //     LOGICAL_MINIMUM (1)
+	0x25, 0x08,                    //     LOGICAL_MAXIMUM (8)
+	0x35, 0x00,                    //     PHYSICAL_MINIMUM (0)
+	0x46, 0x3b, 0x01,              //     PHYSICAL_MAXIMUM (315)
+	0x55, 0x00,                    //     UNIT_EXPONENT (0)
+	0x65, 0x12,                    //     UNIT (SI Rot:Angular Pos)
+	0x75, 0x08,                    //     REPORT_SIZE (8)
+	0x95, 0x01,                    //     REPORT_COUNT (1)
+	0x81, 0x4a,                    //     INPUT (Data,Var,Abs,Wrap,Null)
     0xc0,                          //   END_COLLECTION
     0xc0                           // END_COLLECTION
 };
@@ -192,7 +184,7 @@ CONST BYTE HIDReportSize = 9;
 |--------|-------|--------|-------|--------|-------|--------|-------|
 |								RZ-Axis								|
 |--------|-------|--------|-------|--------|-------|--------|-------|
-|			  Hat Switch		  |xxxxxxxxxxxx Padding xxxxxxxxxxxx|
+|							  Hat Switch						    |
 */
 
 

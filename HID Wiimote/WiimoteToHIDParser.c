@@ -118,6 +118,80 @@ ParseTrigger(
 	ReportByte[0] = (0x80 - LeftValue + RightValue);
 }
 
+
+VOID
+ParseDPad(
+_In_ BOOLEAN Up,
+_In_ BOOLEAN Right,
+_In_ BOOLEAN Down,
+_In_ BOOLEAN Left,
+_Out_ BYTE ReportByte[1]
+)
+{
+	/*
+		Up			1		0000 0001			0000 0000			
+		Up-Right	2		0000 0010			0000 0001
+		Right		3		0000 0011			0000 0010
+		Down-Right	4		0000 0100			0000 0011
+		Down		5		0000 0101			0000 0100
+		Down-Left	6		0000 0110			0000 0101
+		Left		7		0000 0111			0000 0110
+		Up-Left		8		0000 1000			0000 0111
+	*/
+
+	if (Up && Down)
+	{
+		Up = FALSE;
+		Down = FALSE;
+	}
+
+	if (Left && Right)
+	{
+		Left = FALSE;
+		Right = FALSE;
+	}
+
+	if (Left)
+	{
+		ReportByte[0] = 0x07;
+	}
+	else if (Right)
+	{
+		ReportByte[0] = 0x03;
+	}
+
+	if (Up)
+	{
+		if (Right)
+		{
+			ReportByte[0] = 0x02;
+		}
+		else if (Left)
+		{
+			ReportByte[0] = 0x08;
+		}
+		else
+		{
+			ReportByte[0] = 0x01;
+		}
+	}
+	else if (Down)
+	{
+		if (Right)
+		{
+			ReportByte[0] = 0x04;
+		}
+		else if (Left)
+		{
+			ReportByte[0] = 0x06;
+		}
+		else
+		{
+			ReportByte[0] = 0x05;
+		}
+	}
+}
+
 VOID
 ParseWiimoteStateAsStandaloneWiiremote(
 	_In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext,
@@ -172,10 +246,12 @@ ParseWiimoteStateAsNunchuckExtension(
 	ParseAccelerometer(WiimoteContext->State.Accelerometer.Y, RequestBuffer + 5, TRUE);
 
 	//DPad
-	ParseButton(WiimoteContext->State.CoreButtons.DPad.Up, RequestBuffer + 7, 0);
-	ParseButton(WiimoteContext->State.CoreButtons.DPad.Right, RequestBuffer + 7, 1);
-	ParseButton(WiimoteContext->State.CoreButtons.DPad.Down, RequestBuffer + 7, 2);
-	ParseButton(WiimoteContext->State.CoreButtons.DPad.Left, RequestBuffer + 7, 3);
+	ParseDPad(
+		WiimoteContext->State.CoreButtons.DPad.Up, 
+		WiimoteContext->State.CoreButtons.DPad.Right, 
+		WiimoteContext->State.CoreButtons.DPad.Down, 
+		WiimoteContext->State.CoreButtons.DPad.Left, 
+		RequestBuffer + 7);
 }
 
 VOID
@@ -209,10 +285,13 @@ _Out_ BYTE RequestBuffer[8]
 	ParseTrigger(WiimoteContext->ClassicControllerState.LeftTrigger, WiimoteContext->ClassicControllerState.RightTrigger, RequestBuffer + 6);
 
 	//DPad
-	ParseButton(WiimoteContext->State.CoreButtons.DPad.Up || WiimoteContext->ClassicControllerState.Buttons.DPad.Up, RequestBuffer + 7, 0);
-	ParseButton(WiimoteContext->State.CoreButtons.DPad.Right || WiimoteContext->ClassicControllerState.Buttons.DPad.Right, RequestBuffer + 7, 1);
-	ParseButton(WiimoteContext->State.CoreButtons.DPad.Down || WiimoteContext->ClassicControllerState.Buttons.DPad.Down, RequestBuffer + 7, 2);
-	ParseButton(WiimoteContext->State.CoreButtons.DPad.Left || WiimoteContext->ClassicControllerState.Buttons.DPad.Left, RequestBuffer + 7, 3);
+
+	ParseDPad(
+		WiimoteContext->State.CoreButtons.DPad.Up || WiimoteContext->ClassicControllerState.Buttons.DPad.Up,
+		WiimoteContext->State.CoreButtons.DPad.Right || WiimoteContext->ClassicControllerState.Buttons.DPad.Right,
+		WiimoteContext->State.CoreButtons.DPad.Down || WiimoteContext->ClassicControllerState.Buttons.DPad.Down,
+		WiimoteContext->State.CoreButtons.DPad.Left || WiimoteContext->ClassicControllerState.Buttons.DPad.Left,
+		RequestBuffer + 7);
 }
 
 VOID
