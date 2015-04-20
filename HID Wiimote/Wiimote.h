@@ -24,6 +24,108 @@ Abstract:
 #define WIIMOTE_LEDS_TWO (0xC0)
 #define WIIMOTE_LEDS_ONE (0x80)
 
+
+typedef struct _WIIMOTE_NUNCHUCK_STATE
+{
+	union
+	{
+		struct
+		{
+			BOOLEAN C;
+			BOOLEAN Z;
+		} Buttons;
+
+		BOOLEAN BottonsRaw[2];
+	};
+
+	union
+	{
+		struct
+		{
+			BYTE X;
+			BYTE Y;
+		} AnalogStick;
+
+		BYTE AnalogStickRaw[2];
+	};
+
+	union {
+		struct
+		{
+			BYTE X;
+			BYTE Y;
+			BYTE Z;
+		} Accelerometer;
+
+		BYTE AccelerometerRaw[3];
+	};
+
+} WIIMOTE_NUNCHUCK_STATE, * PWIIMOTE_NUNCHUCK_STATE;
+
+
+typedef struct _WIIMOTE_CLASSIC_CONTROLLER_STATE
+{
+	union
+	{
+		struct
+		{
+			BOOLEAN L;
+			BOOLEAN R;
+			BOOLEAN ZL;
+			BOOLEAN ZR;
+			BOOLEAN LH;
+			BOOLEAN RH;
+			BOOLEAN A;
+			BOOLEAN B;
+			BOOLEAN Y;
+			BOOLEAN X;
+			BOOLEAN Plus;
+			BOOLEAN Minus;
+			BOOLEAN Home;
+
+			union {
+				struct
+				{
+					BOOLEAN Up;
+					BOOLEAN Down;
+					BOOLEAN Left;
+					BOOLEAN Right;
+				} DPad;
+				BOOLEAN DPadRaw[4];
+			};
+
+		} Buttons;
+
+		BOOLEAN ButtonsRaw[15];
+	};
+
+	BYTE LeftTrigger;
+	BYTE RightTrigger;
+
+	union
+	{
+		struct
+		{
+			BYTE X;
+			BYTE Y;
+		} LeftAnalogStick;
+
+		BYTE LeftAnalogStickRaw[2];
+	};
+
+	union
+	{
+		struct
+		{
+			BYTE X;
+			BYTE Y;
+		} RightAnalogStick;
+
+		BYTE RightAnalogStickRaw[2];
+	};
+
+} WIIMOTE_CLASSIC_CONTROLLER_STATE, *PWIIMOTE_CLASSIC_CONTROLLER_STATE;
+
 typedef struct _WIIMOTE_STATE
 {
 	union 
@@ -67,10 +169,18 @@ typedef struct _WIIMOTE_STATE
 
 } WIIMTOE_STATE, *PWIIMOTE_STATE;
 
+
 typedef struct _WIIMOTE_DEVICE_CONTEXT
 {
+	enum WIIMOTE_EXTENSION_TYPE { None, Nunchuck, ClassicController, WiiUProController } Extension;
 	WIIMTOE_STATE State;
 	BYTE CurrentReportMode;
+
+	union
+	{
+		WIIMOTE_NUNCHUCK_STATE NunchuckState;
+		WIIMOTE_CLASSIC_CONTROLLER_STATE ClassicControllerState;
+	};
 
 	WDFTIMER StatusInformationTimer;
 

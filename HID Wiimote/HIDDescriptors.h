@@ -25,5 +25,6 @@ Abstract:
 extern CONST HID_REPORT_DESCRIPTOR HIDReportDescriptor[];
 extern CONST HID_DESCRIPTOR HIDDescriptor;
 extern CONST BYTE HIDReportDescriptorSize;
+extern CONST BYTE HIDReportSize;
 
 #endif
