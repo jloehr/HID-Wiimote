@@ -169,6 +169,20 @@ typedef struct _WIIMOTE_STATE
 
 } WIIMTOE_STATE, *PWIIMOTE_STATE;
 
+typedef struct _WIIMOTE_IR_POINT
+{
+	SHORT X;
+	SHORT Y;
+	
+} WIIMOTE_IR_POINT, *PWIIMOTE_IR_POINT;
+
+
+typedef struct _WIIMOTE_IR_STATE
+{
+	WIIMOTE_IR_POINT Point1;
+	WIIMOTE_IR_POINT Point2;
+
+} WIIMOTE_IR_STATE, *PWIIMOTE_IR_STATE;
 
 typedef struct _WIIMOTE_DEVICE_CONTEXT
 {
@@ -181,6 +195,10 @@ typedef struct _WIIMOTE_DEVICE_CONTEXT
 		WIIMOTE_NUNCHUCK_STATE NunchuckState;
 		WIIMOTE_CLASSIC_CONTROLLER_STATE ClassicControllerState;
 	};
+
+#ifdef MOUSE_IR
+	WIIMOTE_IR_STATE IRState;
+#endif
 
 	WDFTIMER StatusInformationTimer;
 
