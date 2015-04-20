@@ -20,7 +20,9 @@ Abstract:
 
 #include "Trace.h"
 
-#define MOUSEDPAD
+//#define MOUSE_DPAD
+#define MOUSE_IR
+
 
 //Forward Declarations
 typedef struct _DEVICE_CONTEXT DEVICE_CONTEXT, * PDEVICE_CONTEXT;
