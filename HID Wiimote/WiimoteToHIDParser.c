@@ -338,3 +338,14 @@ VOID ParseWiimoteStateAsDPadMouse(
 	ParseBooleanAxis(WiimoteContext->State.CoreButtons.DPad.Up, WiimoteContext->State.CoreButtons.DPad.Down, RequestBuffer + 1, 6, 2);
 	ParseBooleanAxis(WiimoteContext->State.CoreButtons.DPad.Right, WiimoteContext->State.CoreButtons.DPad.Left, RequestBuffer + 2, 6, 2);
 }
+
+VOID ParseWiimoteStateAsIRMouse(
+	_In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext,
+	_Out_ BYTE RequestBuffer[3])
+{
+	UNREFERENCED_PARAMETER(WiimoteContext);
+
+	RtlSecureZeroMemory(RequestBuffer, 3);
+
+
+}
