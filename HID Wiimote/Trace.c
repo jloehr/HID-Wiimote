@@ -43,3 +43,37 @@ Trace(
 
 #endif
 }
+
+
+VOID 
+PrintBytes(
+	_In_ PCCHAR Data,
+	_In_ INT Size 
+	)
+{
+#ifndef DBG
+	UNREFERENCED_PARAMETER(Data);
+	UNREFERENCED_PARAMETER(Size);
+#else
+
+	CHAR * Message;
+	CHAR * WritePointer;
+	CCHAR * ReadPointer;
+	size_t i;
+
+	Message = (CHAR *)ExAllocatePoolWithTag(NonPagedPool, (10 * Size), PRINTBYTE_POOL_TAG);
+	WritePointer = Message;
+	ReadPointer = Data;
+
+	for (i = 0; i < Size; ++i)
+	{
+		WritePointer += sprintf(WritePointer, "%#02x ", *ReadPointer);
+		ReadPointer++;
+	}
+
+	(*WritePointer) = 0;
+	Trace("Byte Print: %s", Message);
+	ExFreePool(Message);
+
+#endif
+}

@@ -727,23 +727,10 @@ ProcessInputReport(
 
 	UNREFERENCED_PARAMETER(ReadBufferSize);
 
-	CHAR * Message;
-	CHAR * WritePointer;
-	size_t i;
-
 	//Trace("ProcessInputReport");
 	/*Trace("ProcessReport - ReportID: 0x%x - ReportSize: %d", ReportID, ReadBufferSize); */
 
-	Message = (CHAR * )ExAllocatePool(NonPagedPool, (10*ReadBufferSize));
-	WritePointer = Message;
-
-	for(i = 0; i < ReadBufferSize; ++i)
-	{
-		WritePointer += sprintf(WritePointer, "%#02x ", ((BYTE *)ReadBuffer)[i]);
-	}
-	(*WritePointer) = 0;
-	Trace("ReadBuffer: %s", Message);
-	
+	//PrintBytes(ReadBuffer, ReadBufferSize);
 
 	//Every Report but 0x3d has Core Buttons
 	if(ReportID != 0x3d)
@@ -792,23 +779,9 @@ _In_ size_t ReadBufferSize
 
 	UNREFERENCED_PARAMETER(ReadBufferSize);
 
-	//CHAR * Message;
-	//CHAR * WritePointer;
-	//size_t i;
-
 	Trace("ProcessRegisterReadReport");
 	/*Trace("ProcessReport - ReportID: 0x%x - ReportSize: %d", ReportID, ReadBufferSize); */
-
-	/*Message = (CHAR *)ExAllocatePool(NonPagedPool, (10 * ReadBufferSize));
-	WritePointer = Message;
-
-	for (i = 0; i < ReadBufferSize; ++i)
-	{
-		WritePointer += sprintf(WritePointer, "%#02x ", ((BYTE *)ReadBuffer)[i]);
-	}
-	(*WritePointer) = 0;
-	Trace("ReadBuffer: %s", Message);
-	*/
+	//PrintBytes(ReadBuffer, ReadBufferSize);
 
 	BYTE Error = 0x0F & (ReadBuffer[4]);
 	Trace("Error Flag: %x", Error);
@@ -908,27 +881,13 @@ ProcessReport(
 {
 	NTSTATUS Status = STATUS_SUCCESS;
 	BYTE ReportID = 0x00;
-	//CHAR * Message;
-	//CHAR * WritePointer;
-	//size_t i;
-
+	
 	if(ReadBufferSize >= 2)
 	{
 		ReportID = ((BYTE *)ReadBuffer)[1];
 	}
 
-	/*Trace("ProcessReport - ReportID: 0x%x - ReportSize: %d", ReportID, ReadBufferSize); 
-
-	Message = (CHAR * )ExAllocatePool(NonPagedPool, (10*ReadBufferSize));
-	WritePointer = Message;
-
-	for(i = 0; i < ReadBufferSize; ++i)
-	{
-		WritePointer += sprintf(WritePointer, "%#02x ", ((BYTE *)ReadBuffer)[i]);
-	}
-	(*WritePointer) = 0;
-	Trace("ReadBuffer: %s", Message);
-	*/
+	//PrintBytes(ReadBuffer, ReadBufferSize);
 
 	switch(ReportID)
 	{
