@@ -626,6 +626,46 @@ _In_ BYTE RawInputData[11]
 	DeviceContext->WiimoteContext.ClassicControllerState.RightTrigger = DeviceContext->WiimoteContext.ClassicControllerState.Buttons.ZR ? 0x7F : 0x00;
 }
 
+
+VOID
+ExtractIRCameraPoint(
+_In_ PWIIMOTE_IR_POINT IRPointData1,
+_In_ PWIIMOTE_IR_POINT IRPointData2,
+_In_ BYTE InputData[5]
+)
+{
+	USHORT X1 = InputData[0];
+	USHORT Y1 = InputData[1];
+	USHORT X2 = InputData[3];
+	USHORT Y2 = InputData[4];
+
+	X1 |= (0x30 & InputData[2]) << 4;
+	Y1 |= (0xC0 & InputData[2]) << 2;
+	X2 |= (0x03 & InputData[2]) << 8;
+	Y2 |= (0x0C & InputData[2]) << 6;
+
+	IRPointData1->X = X1;
+	IRPointData1->Y = Y1;
+	IRPointData2->X = X2;
+	IRPointData2->Y = Y2;
+}
+
+VOID
+ExtractIRCamera(
+_In_ PDEVICE_CONTEXT DeviceContext,
+_In_ BYTE RawInputData[10]
+)
+{
+	ExtractIRCameraPoint(&(DeviceContext->WiimoteContext.IRState.Point1), &(DeviceContext->WiimoteContext.IRState.Point2), RawInputData);
+	ExtractIRCameraPoint(&(DeviceContext->WiimoteContext.IRState.Point3), &(DeviceContext->WiimoteContext.IRState.Point4), RawInputData + 5);
+	/*
+	Trace("Point1: %d - %d", DeviceContext->WiimoteContext.IRState.Point1.X, DeviceContext->WiimoteContext.IRState.Point1.Y);
+	Trace("Point2: %d - %d", DeviceContext->WiimoteContext.IRState.Point2.X, DeviceContext->WiimoteContext.IRState.Point2.Y);
+	Trace("Point3: %d - %d", DeviceContext->WiimoteContext.IRState.Point3.X, DeviceContext->WiimoteContext.IRState.Point3.Y);
+	Trace("Point4: %d - %d", DeviceContext->WiimoteContext.IRState.Point4.X, DeviceContext->WiimoteContext.IRState.Point4.Y);
+	*/
+}
+
 NTSTATUS
 ProcessExtensionData(
 	_In_ PDEVICE_CONTEXT DeviceContext,
@@ -753,6 +793,7 @@ ProcessInputReport(
 		ProcessExtensionData(DeviceContext, ReadBuffer + 6, ReportID);
 	case 0x36:
 		//10 Byte IR & 9 Byte Extension
+		ExtractIRCamera(DeviceContext, ReadBuffer + 3);
 		break;
 	default:
 		break;
