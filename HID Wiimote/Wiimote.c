@@ -658,12 +658,6 @@ _In_ BYTE RawInputData[10]
 {
 	ExtractIRCameraPoint(&(DeviceContext->WiimoteContext.IRState.Point1), &(DeviceContext->WiimoteContext.IRState.Point2), RawInputData);
 	ExtractIRCameraPoint(&(DeviceContext->WiimoteContext.IRState.Point3), &(DeviceContext->WiimoteContext.IRState.Point4), RawInputData + 5);
-	/*
-	Trace("Point1: %d - %d", DeviceContext->WiimoteContext.IRState.Point1.X, DeviceContext->WiimoteContext.IRState.Point1.Y);
-	Trace("Point2: %d - %d", DeviceContext->WiimoteContext.IRState.Point2.X, DeviceContext->WiimoteContext.IRState.Point2.Y);
-	Trace("Point3: %d - %d", DeviceContext->WiimoteContext.IRState.Point3.X, DeviceContext->WiimoteContext.IRState.Point3.Y);
-	Trace("Point4: %d - %d", DeviceContext->WiimoteContext.IRState.Point4.X, DeviceContext->WiimoteContext.IRState.Point4.Y);
-	*/
 }
 
 NTSTATUS
