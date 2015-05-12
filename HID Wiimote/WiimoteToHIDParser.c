@@ -192,6 +192,62 @@ _Out_ BYTE ReportByte[1]
 	}
 }
 
+VOID AccumulateIRPoint(
+	_In_ PWIIMOTE_IR_POINT Point,
+	_Inout_ PINT32 X,
+	_Inout_ BYTE * XValueCount,
+	_Inout_ PINT32 Y,
+	_Inout_ BYTE * YValueCount
+	)
+{
+	if (Point->X != 0x3FF)
+	{
+		(*X) += Point->X;
+		(*XValueCount)++;
+	}
+
+	if (Point->Y != 0x3FF)
+	{
+		(*Y) += Point->Y;
+		(*YValueCount)++;
+	}
+}
+
+VOID ParseIRCamera(
+	_In_ PWIIMOTE_IR_POINT Point1,
+	_In_ PWIIMOTE_IR_POINT Point2,
+	_In_ PWIIMOTE_IR_POINT Point3,
+	_In_ PWIIMOTE_IR_POINT Point4,
+	_Out_ BYTE ReportByte[2],
+	_In_ BYTE MaximumValue
+	)
+{
+	INT32 X = 0;
+	BYTE XValueCount = 0;
+	INT32 Y = 0;
+	BYTE YValueCount = 0;
+
+	AccumulateIRPoint(Point1, &X, &XValueCount, &Y, &YValueCount);
+	AccumulateIRPoint(Point2, &X, &XValueCount, &Y, &YValueCount);
+	AccumulateIRPoint(Point3, &X, &XValueCount, &Y, &YValueCount);
+	AccumulateIRPoint(Point4, &X, &XValueCount, &Y, &YValueCount);
+
+	INT32 XValueDownScale = ((0x3FF * XValueCount) / MaximumValue);
+	INT32 YValueDownScale = ((0x17F * YValueCount) / MaximumValue);
+
+
+
+ 	if (XValueDownScale > 0)
+	{
+		ReportByte[0] = (BYTE)(X / XValueDownScale);
+	}
+
+	if (XValueDownScale > 0)
+	{
+		ReportByte[1] = (BYTE)(Y / YValueDownScale);
+	}
+}
+
 VOID
 ParseWiimoteStateAsStandaloneWiiremote(
 	_In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext,
@@ -352,5 +408,7 @@ VOID ParseWiimoteStateAsIRMouse(
 	ParseButton(WiimoteContext->State.CoreButtons.B, RequestBuffer, 1);
 	ParseButton(WiimoteContext->State.CoreButtons.Home, RequestBuffer, 2);
 
+	//Axis
+	ParseIRCamera(&WiimoteContext->IRState.Point1, &WiimoteContext->IRState.Point2, &WiimoteContext->IRState.Point3, &WiimoteContext->IRState.Point4, RequestBuffer + 1, 255);
 
 }
