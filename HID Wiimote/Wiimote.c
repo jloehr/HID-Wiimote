@@ -319,6 +319,24 @@ StopWiimote(
 	return Status;
 }
 
+NTSTATUS 
+ResetToNullState(
+	_In_ PDEVICE_CONTEXT DeviceContext
+	)
+{
+	NTSTATUS Status = STATUS_SUCCESS;
+
+	DeviceContext->WiimoteContext.Extension = None;
+	RtlSecureZeroMemory(&DeviceContext->WiimoteContext.State, sizeof(WIIMTOE_STATE));
+
+	Status = WiimoteStateUpdated(DeviceContext);
+	if (!NT_SUCCESS(Status))
+	{
+		return Status;
+	}
+
+	return Status;
+}
 
 NTSTATUS
 ProcessBatteryLevel(

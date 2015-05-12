@@ -189,6 +189,7 @@ typedef struct _WIIMOTE_DEVICE_CONTEXT
 NTSTATUS PrepareWiimote(_In_ PDEVICE_CONTEXT DeviceContext);
 NTSTATUS StartWiimote(_In_ PDEVICE_CONTEXT DeviceContext);
 NTSTATUS StopWiimote(_In_ PDEVICE_CONTEXT DeviceContext);
+NTSTATUS ResetToNullState(_In_ PDEVICE_CONTEXT DeviceContext);
 
 NTSTATUS ProcessReport(_In_ PDEVICE_CONTEXT DeviceContext, _In_ PVOID ReadBuffer, _In_ size_t ReadBufferSize);
 

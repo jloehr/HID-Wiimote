@@ -376,6 +376,7 @@ L2CAPCallback(
 		Trace("Disconnect");
 		Trace("Parameter: %u; %u", Parameters->Parameters.Disconnect.Reason, Parameters->Parameters.Disconnect.CloseNow);
 	
+		ResetToNullState(DeviceContext);
 		SignalDeviceIsGone(DeviceContext);
 
 		//WDF_DEVICE_STATE_INIT (&NewDeviceState);
