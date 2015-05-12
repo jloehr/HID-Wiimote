@@ -346,6 +346,11 @@ VOID ParseWiimoteStateAsIRMouse(
 	UNREFERENCED_PARAMETER(WiimoteContext);
 
 	RtlSecureZeroMemory(RequestBuffer, 3);
+	
+	//Buttons
+	ParseButton(WiimoteContext->State.CoreButtons.A, RequestBuffer, 0);
+	ParseButton(WiimoteContext->State.CoreButtons.B, RequestBuffer, 1);
+	ParseButton(WiimoteContext->State.CoreButtons.Home, RequestBuffer, 2);
 
 
 }
