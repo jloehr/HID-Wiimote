@@ -267,6 +267,9 @@ VOID ParseIRCamera(
 	X /= ValidBufferCount;
 	Y /= ValidBufferCount;
 
+	//Invert X
+	X = WIIMOTE_IR_POINT_X_MAX - X;
+
 	X = (X >= (WIIMOTE_IR_POINT_X_MAX - XPadding)) ? WIIMOTE_IR_POINT_X_MAX - XPadding : X;
 	X = (X <= XPadding) ? 0 : X - XPadding;
 
