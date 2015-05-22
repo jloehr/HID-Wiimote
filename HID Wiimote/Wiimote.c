@@ -656,8 +656,11 @@ _In_ PDEVICE_CONTEXT DeviceContext,
 _In_ BYTE RawInputData[10]
 )
 {
-	ExtractIRCameraPoint(&(DeviceContext->WiimoteContext.IRState.Point1), &(DeviceContext->WiimoteContext.IRState.Point2), RawInputData);
-	ExtractIRCameraPoint(&(DeviceContext->WiimoteContext.IRState.Point3), &(DeviceContext->WiimoteContext.IRState.Point4), RawInputData + 5);
+	BYTE BufferIndex = DeviceContext->WiimoteContext.IRState.PointsBufferPointer++;
+	DeviceContext->WiimoteContext.IRState.PointsBufferPointer %= WIIMOTE_IR_POINTS_BUFFER_SIZE;
+
+	ExtractIRCameraPoint(&(DeviceContext->WiimoteContext.IRState.Points[BufferIndex][0]), &(DeviceContext->WiimoteContext.IRState.Points[BufferIndex][1]), RawInputData);
+	ExtractIRCameraPoint(&(DeviceContext->WiimoteContext.IRState.Points[BufferIndex][2]), &(DeviceContext->WiimoteContext.IRState.Points[BufferIndex][3]), RawInputData + 5);
 }
 
 NTSTATUS
