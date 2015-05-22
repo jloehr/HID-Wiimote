@@ -216,12 +216,12 @@ BOOLEAN ParseIRPoints(
 	)
 {
 	BYTE ValidPointCount = 0;
-	(*X) = 0;
-	(*Y) = 0;
+	UINT16 GroupX = 0;
+	UINT16 GroupY = 0;
 
 	for (BYTE i = 0; i < WIIMOTE_IR_POINTS; i++)
 	{
-		if(AccumulateIRPoint(&Points[i], X, Y))
+		if (AccumulateIRPoint(&Points[i], &GroupX, &GroupY))
 		{
 			ValidPointCount++;
 		}
@@ -229,8 +229,8 @@ BOOLEAN ParseIRPoints(
 
 	if (ValidPointCount > 0)
 	{
-		(*X) /= ValidPointCount;
-		(*Y) /= ValidPointCount;
+		(*X) += GroupX / ValidPointCount;
+		(*Y) += GroupY / ValidPointCount;
 
 		return TRUE;
 	}
