@@ -210,7 +210,7 @@ BOOLEAN AccumulateIRPoint(
 }
 
 BOOLEAN ParseIRPoints(
-	_In_ PWIIMOTE_IR_POINT Points[WIIMOTE_IR_POINTS],
+	_In_ WIIMOTE_IR_POINT Points[WIIMOTE_IR_POINTS],
 	_Out_ PUINT16 X,
 	_Out_ PUINT16 Y
 	)
@@ -221,7 +221,7 @@ BOOLEAN ParseIRPoints(
 
 	for (BYTE i = 0; i < WIIMOTE_IR_POINTS; i++)
 	{
-		if(AccumulateIRPoint(Points[0], X, Y))
+		if(AccumulateIRPoint(&Points[i], X, Y))
 		{
 			ValidPointCount++;
 		}
@@ -239,7 +239,7 @@ BOOLEAN ParseIRPoints(
 }
 
 VOID ParseIRCamera(
-	_In_ PWIIMOTE_IR_POINT Points[WIIMOTE_IR_POINTS_BUFFER_SIZE][WIIMOTE_IR_POINTS],
+	_In_ WIIMOTE_IR_POINT Points[WIIMOTE_IR_POINTS_BUFFER_SIZE][WIIMOTE_IR_POINTS],
 	_Out_ BYTE ReportByte[4],
 	_In_ BYTE XPadding,
 	_In_ BYTE YPadding
@@ -273,11 +273,11 @@ VOID ParseIRCamera(
 	Y = (Y > (WIIMOTE_IR_POINT_Y_MAX - YPadding)) ? WIIMOTE_IR_POINT_Y_MAX - YPadding : X;
 	Y = (Y <= YPadding) ? 0 : X - YPadding;
 
-	ReportByte[0] = X;
-	ReportByte[1] = X >> 8;
+	ReportByte[0] = (0xFF & X);
+	ReportByte[1] = (0xFF & (X >> 8));
 
-	ReportByte[2] = Y;
-	ReportByte[3] = Y >> 8;
+	ReportByte[2] = (0xFF & Y);
+	ReportByte[3] = (0xFF & (Y >> 8));
 }
 
 VOID
@@ -441,7 +441,7 @@ VOID ParseWiimoteStateAsIRMouse(
 	ParseButton(WiimoteContext->State.CoreButtons.Home, RequestBuffer, 2);
 
 	//Axis
-	ParseIRCamera(&WiimoteContext->IRState.Points, RequestBuffer + 1, 128, 121);
+	ParseIRCamera(WiimoteContext->IRState.Points, RequestBuffer + 1, 128, 121);
 
 
 }
