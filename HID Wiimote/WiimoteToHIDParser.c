@@ -267,11 +267,11 @@ VOID ParseIRCamera(
 	X /= ValidBufferCount;
 	Y /= ValidBufferCount;
 
-	X = (X > (WIIMOTE_IR_POINT_X_MAX - XPadding)) ? WIIMOTE_IR_POINT_X_MAX - XPadding : X;
+	X = (X >= (WIIMOTE_IR_POINT_X_MAX - XPadding)) ? WIIMOTE_IR_POINT_X_MAX - XPadding : X;
 	X = (X <= XPadding) ? 0 : X - XPadding;
 
-	Y = (Y > (WIIMOTE_IR_POINT_Y_MAX - YPadding)) ? WIIMOTE_IR_POINT_Y_MAX - YPadding : X;
-	Y = (Y <= YPadding) ? 0 : X - YPadding;
+	Y = (Y >= (WIIMOTE_IR_POINT_Y_MAX - YPadding)) ? WIIMOTE_IR_POINT_Y_MAX - YPadding : Y;
+	Y = (Y <= YPadding) ? 0 : Y - YPadding;
 
 	ReportByte[0] = (0xFF & X);
 	ReportByte[1] = (0xFF & (X >> 8));
