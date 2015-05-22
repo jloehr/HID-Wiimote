@@ -92,17 +92,28 @@ CONST HID_REPORT_DESCRIPTOR HIDReportDescriptor[] = {
 	0x81, 0x03,                    //     INPUT (Cnst,Var,Abs)
 	0x05, 0x01,                    //     USAGE_PAGE (Generic Desktop)
 	0x09, 0x30,                    //     USAGE (X)
+	0x15, 0x00,                    //     LOGICAL_MINIMUM (0)
+	0x26, 0xFF, 0x02,              //     LOGICAL_MAXIMUM (767)
+	0x75, 0x0A,                    //     REPORT_SIZE (10)
+	0x95, 0x01,                    //     REPORT_COUNT (1)
+	0x81, 0x02,                    //     INPUT (Data,Var,Abs)
+	0x95, 0x01,                    //     REPORT_COUNT (1)
+	0x75, 0x06,                    //     REPORT_SIZE (6)
+	0x81, 0x03,                    //     INPUT (Cnst,Var,Abs)
 	0x09, 0x31,                    //     USAGE (Y)
 	0x15, 0x00,                    //     LOGICAL_MINIMUM (0)
-	0x25, 0xFF, 0x00,              //     LOGICAL_MAXIMUM (255)
-	0x75, 0x08,                    //     REPORT_SIZE (8)
-	0x95, 0x02,                    //     REPORT_COUNT (2)
+	0x26, 0x3F, 0x02,              //     LOGICAL_MAXIMUM (525)
+	0x75, 0x0A,                    //     REPORT_SIZE (10)
+	0x95, 0x01,                    //     REPORT_COUNT (1)
 	0x81, 0x02,                    //     INPUT (Data,Var,Abs)
+	0x95, 0x01,                    //     REPORT_COUNT (1)
+	0x75, 0x06,                    //     REPORT_SIZE (6)
+	0x81, 0x03,                    //     INPUT (Cnst,Var,Abs)
 	0xc0,                          //   END_COLLECTION
 	0xc0                           // END_COLLECTION
 };
 
-CONST BYTE HIDReportSize = 4;
+CONST BYTE HIDReportSize = 6;
 
 /*
 |--------|-------|--------|-------|--------|-------|--------|-------|
@@ -111,6 +122,10 @@ CONST BYTE HIDReportSize = 4;
 |		Button 1-3		  |xxxxxxxxxxxxxxxx Padding	xxxxxxxxxxxxxxxx|
 |--------|-------|--------|-------|--------|-------|--------|-------|
 |								X-Axis								|
+|--------|-------|--------|-------|--------|-------|--------|-------|
+|								X-Axis								|
+|--------|-------|--------|-------|--------|-------|--------|-------|
+|								Y-Axis								|
 |--------|-------|--------|-------|--------|-------|--------|-------|
 |								Y-Axis								|
 */
