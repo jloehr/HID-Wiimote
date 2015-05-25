@@ -139,57 +139,27 @@ _Out_ BYTE ReportByte[1]
 		Up-Left		8		0000 1000			0000 0111
 	*/
 
-	if (Up && Down)
-	{
-		Up = FALSE;
-		Down = FALSE;
-	}
+	//Thanks to Waterlimon for this solution
+	//See http://www.gamedev.net/topic/667868-direction-booleans-into-single-integer/ for more solutions.
+	//
+	// Branchless polynomial version (just for fun):
+	//int64_t x = 3 * (up - down) + left - right;
+	// return x * (x * (x * (x * (x * (x * (x * (x * (-31) - 28) + 938) + 840) - 8519) - 6972) + 24412) + 12880) / 3360;
+	//
+	const BYTE ValueLookUpTable[3][3] = {
+			{ 8, 1, 2 },
+			{ 7, 0, 3 },
+			{ 6, 5, 4 },
+		};
 
-	if (Left && Right)
-	{
-		Left = FALSE;
-		Right = FALSE;
-	}
+	//BOOLEAN is a UCHAR in C
+	//so make sure its numerical value is 1, some may have other values due to bit operations.
+	Up = Up ? 1 : 0;
+	Down = Down ? 1 : 0;
+	Left = Left ? 1 : 0;
+	Right = Right ? 1 : 0;
 
-	if (Left)
-	{
-		ReportByte[0] = 0x07;
-	}
-	else if (Right)
-	{
-		ReportByte[0] = 0x03;
-	}
-
-	if (Up)
-	{
-		if (Right)
-		{
-			ReportByte[0] = 0x02;
-		}
-		else if (Left)
-		{
-			ReportByte[0] = 0x08;
-		}
-		else
-		{
-			ReportByte[0] = 0x01;
-		}
-	}
-	else if (Down)
-	{
-		if (Right)
-		{
-			ReportByte[0] = 0x04;
-		}
-		else if (Left)
-		{
-			ReportByte[0] = 0x06;
-		}
-		else
-		{
-			ReportByte[0] = 0x05;
-		}
-	}
+	ReportByte[0] = ValueLookUpTable[Down + 1 - Up][Right + 1 - Left];
 }
 
 BOOLEAN AccumulateIRPoint(
