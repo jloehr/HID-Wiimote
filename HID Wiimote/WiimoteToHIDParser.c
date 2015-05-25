@@ -211,8 +211,8 @@ BOOLEAN AccumulateIRPoint(
 
 BOOLEAN ParseIRPoints(
 	_In_ WIIMOTE_IR_POINT Points[WIIMOTE_IR_POINTS],
-	_Out_ PUINT16 X,
-	_Out_ PUINT16 Y
+	_Out_ PUINT32 X,
+	_Out_ PUINT32 Y
 	)
 {
 	BYTE ValidPointCount = 0;
@@ -248,8 +248,8 @@ VOID ParseIRCamera(
 	UNREFERENCED_PARAMETER(ReportByte);
 
 	BYTE ValidBufferCount = 0;
-	UINT16 X = 0;
-	UINT16 Y = 0;
+	UINT32 X = 0;
+	UINT32 Y = 0;
 
 	for (BYTE i = 0; i < WIIMOTE_IR_POINTS_BUFFER_SIZE; i++)
 	{
@@ -270,11 +270,20 @@ VOID ParseIRCamera(
 	//Invert X
 	X = WIIMOTE_IR_POINT_X_MAX - X;
 
-	X = (X >= (WIIMOTE_IR_POINT_X_MAX - XPadding)) ? WIIMOTE_IR_POINT_X_MAX - XPadding : X;
+	X = (X >= (UINT32)(WIIMOTE_IR_POINT_X_MAX - XPadding)) ? WIIMOTE_IR_POINT_X_MAX - XPadding : X;
 	X = (X <= XPadding) ? 0 : X - XPadding;
 
-	Y = (Y >= (WIIMOTE_IR_POINT_Y_MAX - YPadding)) ? WIIMOTE_IR_POINT_Y_MAX - YPadding : Y;
+	Y = (Y >= (UINT32)(WIIMOTE_IR_POINT_Y_MAX - YPadding)) ? WIIMOTE_IR_POINT_Y_MAX - YPadding : Y;
 	Y = (Y <= YPadding) ? 0 : Y - YPadding;
+
+	// Value = OldValue * NewMax / OldMax
+	// Bug or Feature in at least Windows 8.1 HID Class, LOGCIAL_MAXIMUM musst be power of 2 - 1
+	X *= 1023;
+	X /= WIIMOTE_IR_POINT_X_MAX - 2 * XPadding;
+
+	Y *= 1023;
+	Y /= WIIMOTE_IR_POINT_Y_MAX - 2 * YPadding;
+	
 
 	ReportByte[0] = (0xFF & X);
 	ReportByte[1] = (0xFF & (X >> 8));
