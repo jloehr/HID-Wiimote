@@ -200,9 +200,7 @@ typedef struct _WIIMOTE_DEVICE_CONTEXT
 		WIIMOTE_CLASSIC_CONTROLLER_STATE ClassicControllerState;
 	};
 
-#ifdef MOUSE_IR
 	WIIMOTE_IR_STATE IRState;
-#endif
 
 	WDFTIMER StatusInformationTimer;
 
