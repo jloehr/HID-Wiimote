@@ -645,7 +645,7 @@ _In_ BYTE RawInputData[11]
 }
 
 
-VOID
+BOOLEAN
 ExtractIRCameraPoint(
 _In_ PWIIMOTE_IR_POINT IRPointData1,
 _In_ PWIIMOTE_IR_POINT IRPointData2,
@@ -666,19 +666,25 @@ _In_ BYTE InputData[5]
 	IRPointData1->Y = Y1;
 	IRPointData2->X = X2;
 	IRPointData2->Y = Y2;
+
+	// Max for Y is 767, so 0x3FF Value means no Data
+	return ((Y1 != 0x3FF) || (Y2 != 0x3FF));
 }
 
-VOID
+BOOLEAN
 ExtractIRCamera(
 _In_ PDEVICE_CONTEXT DeviceContext,
 _In_ BYTE RawInputData[10]
 )
 {
+	BOOLEAN ValidPointData = FALSE;
 	BYTE BufferIndex = DeviceContext->WiimoteContext.IRState.PointsBufferPointer++;
 	DeviceContext->WiimoteContext.IRState.PointsBufferPointer %= WIIMOTE_IR_POINTS_BUFFER_SIZE;
 
-	ExtractIRCameraPoint(&(DeviceContext->WiimoteContext.IRState.Points[BufferIndex][0]), &(DeviceContext->WiimoteContext.IRState.Points[BufferIndex][1]), RawInputData);
-	ExtractIRCameraPoint(&(DeviceContext->WiimoteContext.IRState.Points[BufferIndex][2]), &(DeviceContext->WiimoteContext.IRState.Points[BufferIndex][3]), RawInputData + 5);
+	ValidPointData |= ExtractIRCameraPoint(&(DeviceContext->WiimoteContext.IRState.Points[BufferIndex][0]), &(DeviceContext->WiimoteContext.IRState.Points[BufferIndex][1]), RawInputData);
+	ValidPointData |= ExtractIRCameraPoint(&(DeviceContext->WiimoteContext.IRState.Points[BufferIndex][2]), &(DeviceContext->WiimoteContext.IRState.Points[BufferIndex][3]), RawInputData + 5);
+
+	return ValidPointData;
 }
 
 NTSTATUS
@@ -779,6 +785,7 @@ ProcessInputReport(
 {
 	NTSTATUS Status = STATUS_SUCCESS;
 	BYTE ReportID = ReadBuffer[0];
+	BOOLEAN UpdateHIDState = TRUE;
 
 	UNREFERENCED_PARAMETER(ReadBufferSize);
 
@@ -808,16 +815,19 @@ ProcessInputReport(
 		ProcessExtensionData(DeviceContext, ReadBuffer + 6, ReportID);
 	case 0x36:
 		//10 Byte IR & 9 Byte Extension
-		ExtractIRCamera(DeviceContext, ReadBuffer + 3);
+		UpdateHIDState = ExtractIRCamera(DeviceContext, ReadBuffer + 3);
 		break;
 	default:
 		break;
 	}
 
-	Status = WiimoteStateUpdated(DeviceContext);
-	if(!NT_SUCCESS(Status))
+	if (UpdateHIDState)
 	{
-		return Status;
+		Status = WiimoteStateUpdated(DeviceContext);
+		if (!NT_SUCCESS(Status))
+		{
+			return Status;
+		}
 	}
 
 	return Status;
