@@ -189,12 +189,67 @@ _In_ BYTE Size
 
 NTSTATUS
 WriteToRegister(
-	_In_ PDEVICE_CONTEXT DeviceContext,
-	_In_ INT32 Address,
-	_In_ BYTE Value
+_In_ PDEVICE_CONTEXT DeviceContext,
+_In_ const INT32 Address,
+_In_ const BYTE * Data,
+_In_ const BYTE DataSize
 )
 {
 	CONST size_t BufferSize = 23;
+	NTSTATUS Status = STATUS_SUCCESS;
+	WDFREQUEST Request;
+	WDFMEMORY Memory;
+	BYTE * Report;
+
+	// Get Resources
+	Status = CreateRequestAndBuffer(DeviceContext->Device, DeviceContext->IoTarget, BufferSize, &Request, &Memory, (PVOID *)&Report);
+	if (!NT_SUCCESS(Status))
+	{
+		return Status;
+	}
+
+	// Fill Buffer	
+	Report[0] = 0xA2;	//HID Output Report
+	Report[1] = 0x16;	//Status Information Request
+	Report[2] = 0x04;	//Rumble Off but write to Registers
+	
+	//Offset
+	Report[3] = 0xFF & (Address >> 16);
+	Report[4] = 0xFF & (Address >> 8);
+	Report[5] = 0xFF & (Address);
+
+	Report[6] = DataSize; //Size
+
+	RtlSecureZeroMemory(Report + 7, 16);
+	RtlCopyBytes(Report + 7, Data, DataSize);
+
+	Status = TransferToDevice(DeviceContext, Request, Memory, FALSE);
+	if (!NT_SUCCESS(Status))
+	{
+		return Status;
+	}
+
+	return Status;
+}
+
+NTSTATUS
+WriteSingeByteToRegister(
+_In_ PDEVICE_CONTEXT DeviceContext,
+_In_ const INT32 Address,
+_In_ const BYTE Data
+)
+{
+	return WriteToRegister(DeviceContext, Address, &Data, 1);
+}
+
+NTSTATUS
+SendSingleByteReport(
+_In_ PDEVICE_CONTEXT DeviceContext,
+_In_ BYTE ReportID,
+_In_ BYTE Byte
+)
+{
+	CONST size_t BufferSize = 3;
 	NTSTATUS Status = STATUS_SUCCESS;
 	WDFREQUEST Request;
 	WDFMEMORY Memory;
@@ -209,18 +264,9 @@ WriteToRegister(
 
 	// Fill Buffer	
 	Data[0] = 0xA2;	//HID Output Report
-	Data[1] = 0x16;	//Status Information Request
-	Data[2] = 0x04;	//Rumble Off but write to Registers
-	
-	//Offset
-	Data[3] = 0xFF & (Address >> 16);
-	Data[4] = 0xFF & (Address >> 8);
-	Data[5] = 0xFF & (Address     );
+	Data[1] = ReportID;	// Enable IR 
+	Data[2] = Byte; // Get acknowledgement 
 
-	Data[6] = 0x01; //Size
-
-	RtlSecureZeroMemory(Data + 7, 16);
-	Data[7] = Value;
 
 	Status = TransferToDevice(DeviceContext, Request, Memory, FALSE);
 	if (!NT_SUCCESS(Status))
@@ -238,6 +284,8 @@ StartWiimote(
 {
 	NTSTATUS Status = STATUS_SUCCESS;
 
+	DeviceContext->WiimoteContext.Extension = None;
+
 	//Set LEDs
 	Status = SetLEDs(DeviceContext, WIIMOTE_LEDS_FOUR);
 	if(!NT_SUCCESS(Status))
@@ -245,6 +293,15 @@ StartWiimote(
 		return Status;
 	}
 
+#ifdef MOUSE_IR
+	//Enable IR
+	Status = SendSingleByteReport(DeviceContext, 0x13, 0x06);
+	if(!NT_SUCCESS(Status))
+	{
+		Trace("EnableIR Failed: 0x%x", Status);
+		return Status;
+	}
+#else
 	//Set Report Mode
 	Status = SetReportMode(DeviceContext, 0x31);
 	if(!NT_SUCCESS(Status))
@@ -252,6 +309,7 @@ StartWiimote(
 		Trace("SetReportMode Failed: 0x%x", Status);
 		return Status;
 	}
+#endif
 
 	//Start Continious Reader
 	Status = StartContiniousReader(DeviceContext);
@@ -263,6 +321,61 @@ StartWiimote(
 
 	//Start Timer
 	WdfTimerStart(DeviceContext->WiimoteContext.StatusInformationTimer, WDF_REL_TIMEOUT_IN_SEC(1));
+
+	return Status;
+}
+
+NTSTATUS
+EnableIR(
+_In_ PDEVICE_CONTEXT DeviceContext
+)
+{
+	NTSTATUS Status = STATUS_SUCCESS;
+
+	const BYTE SensivityBlock1[] = { 0x02, 0x00, 0x00, 0x71, 0x01, 0x00, 0xaa, 0x00, 0x64 };
+	const BYTE SensivityBlock2[] = { 0x63, 0x03 };
+
+	//Write 0x08 to register 0xb00030
+	Status = WriteSingeByteToRegister(DeviceContext, 0xb00030, 0x08);
+	if (!NT_SUCCESS(Status))
+	{
+		return Status;
+	}
+
+	//Write Sensitivity Block 1 to registers at 0xb00000
+	Status = WriteToRegister(DeviceContext, 0xb00000, SensivityBlock1, sizeof(SensivityBlock1));
+	if (!NT_SUCCESS(Status))
+	{
+		return Status;
+	}
+
+	//Write Sensitivity Block 2 to registers at 0xb0001a
+	Status = WriteToRegister(DeviceContext, 0xb0001a, SensivityBlock2, sizeof(SensivityBlock2));
+	if (!NT_SUCCESS(Status))
+	{
+		return Status;
+	}
+
+	//Write Mode Number to register 0xb00033
+	//0x01 Basic Mode 10 Byte
+	Status = WriteSingeByteToRegister(DeviceContext, 0xb00030, 0x01);
+	if (!NT_SUCCESS(Status))
+	{
+		return Status;
+	}
+	//Write 0x08 to register 0xb00030 (again)
+	Status = WriteSingeByteToRegister(DeviceContext, 0xb00030, 0x08);
+	if (!NT_SUCCESS(Status))
+	{
+		return Status;
+	}
+
+	//Set Report Mode
+	Status = SetReportMode(DeviceContext, 0x36);
+	if (!NT_SUCCESS(Status))
+	{
+		return Status;
+	}
 
 	return Status;
 }
@@ -531,6 +644,49 @@ _In_ BYTE RawInputData[11]
 	DeviceContext->WiimoteContext.ClassicControllerState.RightTrigger = DeviceContext->WiimoteContext.ClassicControllerState.Buttons.ZR ? 0x7F : 0x00;
 }
 
+
+BOOLEAN
+ExtractIRCameraPoint(
+_In_ PWIIMOTE_IR_POINT IRPointData1,
+_In_ PWIIMOTE_IR_POINT IRPointData2,
+_In_ BYTE InputData[5]
+)
+{
+	USHORT X1 = InputData[0];
+	USHORT Y1 = InputData[1];
+	USHORT X2 = InputData[3];
+	USHORT Y2 = InputData[4];
+
+	X1 |= (0x30 & InputData[2]) << 4;
+	Y1 |= (0xC0 & InputData[2]) << 2;
+	X2 |= (0x03 & InputData[2]) << 8;
+	Y2 |= (0x0C & InputData[2]) << 6;
+
+	IRPointData1->X = X1;
+	IRPointData1->Y = Y1;
+	IRPointData2->X = X2;
+	IRPointData2->Y = Y2;
+
+	// Max for Y is 767, so 0x3FF Value means no Data
+	return ((Y1 != 0x3FF) || (Y2 != 0x3FF));
+}
+
+BOOLEAN
+ExtractIRCamera(
+_In_ PDEVICE_CONTEXT DeviceContext,
+_In_ BYTE RawInputData[10]
+)
+{
+	BOOLEAN ValidPointData = FALSE;
+	BYTE BufferIndex = DeviceContext->WiimoteContext.IRState.PointsBufferPointer++;
+	DeviceContext->WiimoteContext.IRState.PointsBufferPointer %= WIIMOTE_IR_POINTS_BUFFER_SIZE;
+
+	ValidPointData |= ExtractIRCameraPoint(&(DeviceContext->WiimoteContext.IRState.Points[BufferIndex][0]), &(DeviceContext->WiimoteContext.IRState.Points[BufferIndex][1]), RawInputData);
+	ValidPointData |= ExtractIRCameraPoint(&(DeviceContext->WiimoteContext.IRState.Points[BufferIndex][2]), &(DeviceContext->WiimoteContext.IRState.Points[BufferIndex][3]), RawInputData + 5);
+
+	return ValidPointData;
+}
+
 NTSTATUS
 ProcessExtensionData(
 	_In_ PDEVICE_CONTEXT DeviceContext,
@@ -571,18 +727,19 @@ ProcessStatusInformation(
 	
 	Trace("ProcessStatusInformation");
 
+#ifndef MOUSE_IR
 	BOOLEAN Extension = (ReadBuffer[3] & 0x02);
 	Trace("Extension Flag: %d", (ReadBuffer[3] & 0x02)); 
 
 	if (Extension)
 	{
-		Status = WriteToRegister(DeviceContext, 0xA400F0, 0x55); 
+		Status = WriteSingeByteToRegister(DeviceContext, 0xA400F0, 0x55);
 		if (!NT_SUCCESS(Status))
 		{
 			return Status;
 		}
 
-		Status = WriteToRegister(DeviceContext, 0xA400FB, 0x00); 
+		Status = WriteSingeByteToRegister(DeviceContext, 0xA400FB, 0x00);
 		if (!NT_SUCCESS(Status))
 		{
 			return Status;
@@ -599,6 +756,7 @@ ProcessStatusInformation(
 		DeviceContext->WiimoteContext.Extension = None;
 		DeviceContext->WiimoteContext.CurrentReportMode = 0x31;
 	}
+#endif
 
 	//Process the Battery Level to set the LEDS
 	Status = ProcessBatteryLevel(DeviceContext, ReadBuffer[6]);
@@ -627,26 +785,14 @@ ProcessInputReport(
 {
 	NTSTATUS Status = STATUS_SUCCESS;
 	BYTE ReportID = ReadBuffer[0];
+	BOOLEAN UpdateHIDState = TRUE;
 
 	UNREFERENCED_PARAMETER(ReadBufferSize);
-
-	//CHAR * Message;
-	//CHAR * WritePointer;
-	//size_t i;
 
 	//Trace("ProcessInputReport");
 	/*Trace("ProcessReport - ReportID: 0x%x - ReportSize: %d", ReportID, ReadBufferSize); */
 
-	/*Message = (CHAR * )ExAllocatePool(NonPagedPool, (10*ReadBufferSize));
-	WritePointer = Message;
-
-	for(i = 0; i < ReadBufferSize; ++i)
-	{
-		WritePointer += sprintf(WritePointer, "%#02x ", ((BYTE *)ReadBuffer)[i]);
-	}
-	(*WritePointer) = 0;
-	Trace("ReadBuffer: %s", Message);
-	*/
+	//PrintBytes(ReadBuffer, ReadBufferSize);
 
 	//Every Report but 0x3d has Core Buttons
 	if(ReportID != 0x3d)
@@ -667,14 +813,21 @@ ProcessInputReport(
 		//Accelerometer & 16 Byte Extension
 		ExtractAccelerometer(DeviceContext, ReadBuffer + 1, ReadBuffer + 3);
 		ProcessExtensionData(DeviceContext, ReadBuffer + 6, ReportID);
+	case 0x36:
+		//10 Byte IR & 9 Byte Extension
+		UpdateHIDState = ExtractIRCamera(DeviceContext, ReadBuffer + 3);
+		break;
 	default:
 		break;
 	}
 
-	Status = WiimoteStateUpdated(DeviceContext);
-	if(!NT_SUCCESS(Status))
+	if (UpdateHIDState)
 	{
-		return Status;
+		Status = WiimoteStateUpdated(DeviceContext);
+		if (!NT_SUCCESS(Status))
+		{
+			return Status;
+		}
 	}
 
 	return Status;
@@ -692,23 +845,9 @@ _In_ size_t ReadBufferSize
 
 	UNREFERENCED_PARAMETER(ReadBufferSize);
 
-	//CHAR * Message;
-	//CHAR * WritePointer;
-	//size_t i;
-
 	Trace("ProcessRegisterReadReport");
 	/*Trace("ProcessReport - ReportID: 0x%x - ReportSize: %d", ReportID, ReadBufferSize); */
-
-	/*Message = (CHAR *)ExAllocatePool(NonPagedPool, (10 * ReadBufferSize));
-	WritePointer = Message;
-
-	for (i = 0; i < ReadBufferSize; ++i)
-	{
-		WritePointer += sprintf(WritePointer, "%#02x ", ((BYTE *)ReadBuffer)[i]);
-	}
-	(*WritePointer) = 0;
-	Trace("ReadBuffer: %s", Message);
-	*/
+	//PrintBytes(ReadBuffer, ReadBufferSize);
 
 	BYTE Error = 0x0F & (ReadBuffer[4]);
 	Trace("Error Flag: %x", Error);
@@ -759,6 +898,47 @@ _In_ size_t ReadBufferSize
 }
 
 NTSTATUS
+ProcessAcknowledgementReport(
+_In_ PDEVICE_CONTEXT DeviceContext,
+_In_ BYTE * ReadBuffer,
+_In_ size_t ReadBufferSize
+)
+{
+	NTSTATUS Status = STATUS_SUCCESS;
+
+	UNREFERENCED_PARAMETER(ReadBufferSize);
+
+	ExtractCoreButtons(DeviceContext, ReadBuffer + 1);
+
+	BYTE Report = ReadBuffer[3];
+	BYTE Result = ReadBuffer[4];
+
+	Trace("Error Flag: %x", Result);
+
+	if (Result == 0x03)
+	{
+		return STATUS_SUCCESS;
+	}
+
+	switch (Report)
+	{
+	case 0x13:
+		Status = SendSingleByteReport(DeviceContext, 0x1A, 0x06);
+		break;
+	case 0x1A:
+		Status = EnableIR(DeviceContext);
+		break;
+	}
+
+	if (!NT_SUCCESS(Status))
+	{
+		return Status;
+	}
+
+	return Status;
+}
+
+NTSTATUS
 ProcessReport(
 	_In_ PDEVICE_CONTEXT DeviceContext,
 	_In_ PVOID ReadBuffer, 
@@ -767,27 +947,13 @@ ProcessReport(
 {
 	NTSTATUS Status = STATUS_SUCCESS;
 	BYTE ReportID = 0x00;
-	//CHAR * Message;
-	//CHAR * WritePointer;
-	//size_t i;
-
+	
 	if(ReadBufferSize >= 2)
 	{
 		ReportID = ((BYTE *)ReadBuffer)[1];
 	}
 
-	/*Trace("ProcessReport - ReportID: 0x%x - ReportSize: %d", ReportID, ReadBufferSize); 
-
-	Message = (CHAR * )ExAllocatePool(NonPagedPool, (10*ReadBufferSize));
-	WritePointer = Message;
-
-	for(i = 0; i < ReadBufferSize; ++i)
-	{
-		WritePointer += sprintf(WritePointer, "%#02x ", ((BYTE *)ReadBuffer)[i]);
-	}
-	(*WritePointer) = 0;
-	Trace("ReadBuffer: %s", Message);
-	*/
+	//PrintBytes(ReadBuffer, ReadBufferSize);
 
 	switch(ReportID)
 	{
@@ -800,11 +966,16 @@ ProcessReport(
 		Status = ProcessRegisterReadReport(DeviceContext, (((BYTE *)ReadBuffer) + 1), (ReadBufferSize - 1));
 		break;
 
+	case 0x22:
+		Status = ProcessAcknowledgementReport(DeviceContext, (((BYTE *)ReadBuffer) + 1), (ReadBufferSize - 1));
+		break;
+
 	case 0x30:
 	case 0x31:
 	case 0x32:
 	case 0x34:
 	case 0x35:
+	case 0x36:
 	case 0x3D:
 		Status = ProcessInputReport(DeviceContext,(((BYTE *)ReadBuffer) + 1), (ReadBufferSize - 1));
 		break;

@@ -18,10 +18,6 @@ Abstract:
 
 #define DEFAULT_REPORT_ID 0x01
 
-//#define MOUSE_DPAD
-//#define MOUSE_IR
-
-
 extern CONST HID_REPORT_DESCRIPTOR HIDReportDescriptor[];
 extern CONST HID_DESCRIPTOR HIDDescriptor;
 extern CONST BYTE HIDReportDescriptorSize;

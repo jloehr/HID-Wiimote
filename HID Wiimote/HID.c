@@ -299,10 +299,14 @@ CompletePendingReadReportRequest(
 	}
 
 	RequestBuffer[0] = DEFAULT_REPORT_ID;
-#ifdef MOUSE_DPAD
+#if defined MOUSE_DPAD
 	ParseWiimoteStateAsDPadMouse(WiimoteContext, RequestBuffer + 1);
 #else
+#if defined MOUSE_IR
+	ParseWiimoteStateAsIRMouse(WiimoteContext, RequestBuffer + 1);
+#else 
 	ParseWiimoteState(WiimoteContext, RequestBuffer + 1);
+#endif
 #endif
 
 	WdfRequestCompleteWithInformation(Request, Status, ReportSize);

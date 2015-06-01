@@ -19,10 +19,18 @@ Abstract:
 #define NTSTRSAFE_LIB
 #include <ntstrsafe.h>
 
+#define PRINTBYTE_POOL_TAG '_BrP'
+
 VOID
 Trace(
     _In_ PCCHAR  DebugMessage,
     ...
     );
+
+VOID
+PrintBytes(
+	_In_ PCCHAR Data,
+	_In_ INT Size
+	);
 
 #endif

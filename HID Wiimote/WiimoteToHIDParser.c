@@ -162,6 +162,106 @@ _Out_ BYTE ReportByte[1]
 	ReportByte[0] = ValueLookUpTable[Down + 1 - Up][Right + 1 - Left];
 }
 
+BOOLEAN AccumulateIRPoint(
+	_In_ PWIIMOTE_IR_POINT Point,
+	_Inout_ PUINT16 X,
+	_Inout_ PUINT16 Y
+	)
+{
+	// X ranges from 0-1023; Y from 0-767; so if Y == 0x3FF (1023) the point data is empty
+	if (Point->Y != 0x3FF)
+	{
+		(*X) += Point->X;
+		(*Y) += Point->Y;
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+BOOLEAN ParseIRPoints(
+	_In_ WIIMOTE_IR_POINT Points[WIIMOTE_IR_POINTS],
+	_Out_ PUINT32 X,
+	_Out_ PUINT32 Y
+	)
+{
+	BYTE ValidPointCount = 0;
+	UINT16 GroupX = 0;
+	UINT16 GroupY = 0;
+
+	for (BYTE i = 0; i < WIIMOTE_IR_POINTS; i++)
+	{
+		if (AccumulateIRPoint(&Points[i], &GroupX, &GroupY))
+		{
+			ValidPointCount++;
+		}
+	}
+
+	if (ValidPointCount > 0)
+	{
+		(*X) += GroupX / ValidPointCount;
+		(*Y) += GroupY / ValidPointCount;
+
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+VOID ParseIRCamera(
+	_In_ WIIMOTE_IR_POINT Points[WIIMOTE_IR_POINTS_BUFFER_SIZE][WIIMOTE_IR_POINTS],
+	_Out_ BYTE ReportByte[4],
+	_In_ BYTE XPadding,
+	_In_ BYTE YPadding
+	)
+{
+	UNREFERENCED_PARAMETER(ReportByte);
+
+	BYTE ValidBufferCount = 0;
+	UINT32 X = 0;
+	UINT32 Y = 0;
+
+	for (BYTE i = 0; i < WIIMOTE_IR_POINTS_BUFFER_SIZE; i++)
+	{
+		if (ParseIRPoints(Points[i], &X, &Y))
+		{
+			ValidBufferCount++;
+		}
+	}
+
+	if (ValidBufferCount == 0)
+	{
+		return;
+	}
+
+	X /= ValidBufferCount;
+	Y /= ValidBufferCount;
+
+	//Invert X
+	X = WIIMOTE_IR_POINT_X_MAX - X;
+
+	X = (X >= (UINT32)(WIIMOTE_IR_POINT_X_MAX - XPadding)) ? WIIMOTE_IR_POINT_X_MAX - XPadding : X;
+	X = (X <= XPadding) ? 0 : X - XPadding;
+
+	Y = (Y >= (UINT32)(WIIMOTE_IR_POINT_Y_MAX - YPadding)) ? WIIMOTE_IR_POINT_Y_MAX - YPadding : Y;
+	Y = (Y <= YPadding) ? 0 : Y - YPadding;
+
+	// Value = OldValue * NewMax / OldMax
+	// Bug or Feature in at least Windows 8.1 HID Class, LOGCIAL_MAXIMUM musst be power of 2 - 1
+	X *= 1023;
+	X /= WIIMOTE_IR_POINT_X_MAX - 2 * XPadding;
+
+	Y *= 1023;
+	Y /= WIIMOTE_IR_POINT_Y_MAX - 2 * YPadding;
+	
+
+	ReportByte[0] = (0xFF & X);
+	ReportByte[1] = (0xFF & (X >> 8));
+
+	ReportByte[2] = (0xFF & Y);
+	ReportByte[3] = (0xFF & (Y >> 8));
+}
+
 VOID
 ParseWiimoteStateAsStandaloneWiiremote(
 	_In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext,
@@ -307,4 +407,23 @@ VOID ParseWiimoteStateAsDPadMouse(
 	//Axis
 	ParseBooleanAxis(WiimoteContext->State.CoreButtons.DPad.Up, WiimoteContext->State.CoreButtons.DPad.Down, RequestBuffer + 1, 6, 2);
 	ParseBooleanAxis(WiimoteContext->State.CoreButtons.DPad.Right, WiimoteContext->State.CoreButtons.DPad.Left, RequestBuffer + 2, 6, 2);
+}
+
+VOID ParseWiimoteStateAsIRMouse(
+	_In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext,
+	_Out_ BYTE RequestBuffer[5])
+{
+	UNREFERENCED_PARAMETER(WiimoteContext);
+
+	RtlSecureZeroMemory(RequestBuffer, 3);
+	
+	//Buttons
+	ParseButton(WiimoteContext->State.CoreButtons.A, RequestBuffer, 0);
+	ParseButton(WiimoteContext->State.CoreButtons.B, RequestBuffer, 1);
+	ParseButton(WiimoteContext->State.CoreButtons.Home, RequestBuffer, 2);
+
+	//Axis
+	ParseIRCamera(WiimoteContext->IRState.Points, RequestBuffer + 1, 128, 121);
+
+
 }
