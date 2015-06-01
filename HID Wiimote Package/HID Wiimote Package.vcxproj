@@ -299,8 +299,8 @@ move /y "$(TargetDir)$(SolutionName.replace(' ','-'))-$(TargetVersion.replace('d
     </PreLinkEvent>
     <PostBuildEvent>
       <Command>c:\Tools\7za920\7za.exe d "$(TargetDir)$(SolutionName.replace(' ','-'))-$(TargetVersion.replace('dows', ''))-$(PlatformArchitecture)Bit.zip"
-c:\Tools\7za920\7za.exe a "$(TargetDir)$(SolutionName.replace(' ','-'))-$(TargetVersion.replace('dows', ''))-$(PlatformArchitecture)Bit.zip" "$(PackageDir)\*"
-move /y "$(TargetDir)$(SolutionName.replace(' ','-'))-$(TargetVersion.replace('dows', ''))-$(PlatformArchitecture)Bit.zip" "$(SolutionDir)Zip\$(SolutionName.replace(' ','-'))-$(TargetVersion.replace('dows', ''))-$(PlatformArchitecture)Bit.zip"</Command>
+c:\Tools\7za920\7za.exe a "$(TargetDir)$(SolutionName.replace(' ','-'))-Win8.1-$(PlatformArchitecture)Bit.zip" "$(PackageDir)\*"
+move /y "$(TargetDir)$(SolutionName.replace(' ','-'))-Win8.1-$(PlatformArchitecture)Bit.zip" "$(SolutionDir)Zip\$(SolutionName.replace(' ','-'))-Win8.1-$(PlatformArchitecture)Bit.zip"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Win8 Release|Win32'">
@@ -407,8 +407,8 @@ move /y "$(TargetDir)$(SolutionName.replace(' ','-'))-$(TargetVersion.replace('d
     </PreLinkEvent>
     <PostBuildEvent>
       <Command>c:\Tools\7za920\7za.exe d "$(TargetDir)$(SolutionName.replace(' ','-'))-$(TargetVersion.replace('dows', ''))-$(PlatformArchitecture)Bit.zip"
-c:\Tools\7za920\7za.exe a "$(TargetDir)$(SolutionName.replace(' ','-'))-$(TargetVersion.replace('dows', ''))-$(PlatformArchitecture)Bit.zip" "$(PackageDir)\*"
-move /y "$(TargetDir)$(SolutionName.replace(' ','-'))-$(TargetVersion.replace('dows', ''))-$(PlatformArchitecture)Bit.zip" "$(SolutionDir)Zip\$(SolutionName.replace(' ','-'))-$(TargetVersion.replace('dows', ''))-$(PlatformArchitecture)Bit.zip"</Command>
+c:\Tools\7za920\7za.exe a "$(TargetDir)$(SolutionName.replace(' ','-'))-Win8.1-$(PlatformArchitecture)Bit.zip" "$(PackageDir)\*"
+move /y "$(TargetDir)$(SolutionName.replace(' ','-'))-Win8.1-$(PlatformArchitecture)Bit.zip" "$(SolutionDir)Zip\$(SolutionName.replace(' ','-'))-Win8.1-$(PlatformArchitecture)Bit.zip"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Win8 Release|x64'">
