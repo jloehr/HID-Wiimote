@@ -21,7 +21,7 @@ Abstract:
 #include "Trace.h"
 
 //#define MOUSE_DPAD
-#define MOUSE_IR
+//#define MOUSE_IR
 
 
 //Forward Declarations
