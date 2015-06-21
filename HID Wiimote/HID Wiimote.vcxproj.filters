@@ -48,6 +48,9 @@
     <ClCompile Include="HIDDescriptors.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="RawPDOInterface.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HIDWiimote.h">
@@ -75,6 +78,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="HIDDescriptors.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RawPDOInterface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

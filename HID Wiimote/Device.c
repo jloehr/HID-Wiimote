@@ -13,6 +13,8 @@ Abstract:
 
 #include "Device.h"
 
+#include "RawPDOInterface.h"
+
 NTSTATUS
 DeviceAdd(
 	_In_    WDFDRIVER		Driver,
@@ -63,6 +65,13 @@ DeviceAdd(
 	if(!NT_SUCCESS(Status))
 	{
 		Trace("Device Added Error On CreateQueues Result: 0x%x", Status);
+		return Status;
+	}
+
+	Status = CreateRawPDO(DevContext); 
+	if (!NT_SUCCESS(Status))
+	{
+		Trace("Failed to Create Raw PDO: 0x%x", Status);
 		return Status;
 	}
 	
@@ -163,7 +172,6 @@ DeviceD0Exit(
 
 	//Close BluetoothConnection
 	Status = CloseChannels(DeviceContext);
-
 	
 	Trace("Exit D0 Result: 0x%x", Status);
 
@@ -186,6 +194,9 @@ ReleaseHardware(
 	DeviceContext = GetDeviceContext(Device);
 
 	Status = ReleaseHID(DeviceContext);
+
+	//Mark our Raw PDO missing
+	Status = WdfPdoMarkMissing(DeviceContext->RawDeviceContext->RawDevice);
 	
 	Trace("Releasee Hardware Result: 0x%x", Status);
 

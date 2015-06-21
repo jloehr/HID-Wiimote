@@ -211,7 +211,9 @@
       <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Vista Debug|x64'">%(AdditionalDependencies);$(DDK_LIB_PATH)\hidclass.lib;$(DDK_LIB_PATH)\ntstrsafe.lib</AdditionalDependencies>
     </Link>
     <Link>
-      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug|x64'">%(AdditionalDependencies);$(DDK_LIB_PATH)\hidclass.lib;$(DDK_LIB_PATH)\ntstrsafe.lib</AdditionalDependencies>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug|x64'">%(AdditionalDependencies);$(DDK_LIB_PATH)\hidclass.lib;$(DDK_LIB_PATH)\ntstrsafe.lib;$(DDK_LIB_PATH)\Wdmsec.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug|x64'">
+      </AdditionalLibraryDirectories>
     </Link>
     <Link>
       <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Win8 Debug|x64'">%(AdditionalDependencies);$(DDK_LIB_PATH)\hidclass.lib;$(DDK_LIB_PATH)\ntstrsafe.lib</AdditionalDependencies>
@@ -245,6 +247,7 @@
     <ClCompile Include="Driver.c" />
     <ClCompile Include="HID.c" />
     <ClCompile Include="HIDDescriptors.c" />
+    <ClCompile Include="RawPDOInterface.c" />
     <ClCompile Include="Trace.c" />
     <ClCompile Include="Wiimote.c" />
     <ClCompile Include="WiimoteToHIDParser.c" />
@@ -256,6 +259,7 @@
     <ClInclude Include="HID.h" />
     <ClInclude Include="HIDDescriptors.h" />
     <ClInclude Include="HIDWiimote.h" />
+    <ClInclude Include="RawPDOInterface.h" />
     <ClInclude Include="Trace.h" />
     <ClInclude Include="Wiimote.h" />
     <ClInclude Include="WiimoteToHIDParser.h" />
