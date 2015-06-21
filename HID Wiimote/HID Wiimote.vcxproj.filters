@@ -48,7 +48,10 @@
     <ClCompile Include="HIDDescriptors.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RawPDOInterface.c">
+    <ClCompile Include="ConfigInterface.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RawDevice.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -80,7 +83,10 @@
     <ClInclude Include="HIDDescriptors.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RawPDOInterface.h">
+    <ClInclude Include="ConfigInterface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RawDevice.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

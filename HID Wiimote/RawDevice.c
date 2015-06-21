@@ -4,13 +4,13 @@ Copyright (C) 2015 Julian Löhr
 All rights reserved.
 
 Filename:
-RawPDOInterface.c
+RawDevice.c
 
 Abstract:
 	Contains Code regarding the Raw PDO to open an interface from User Space
 
 */
-#include "RawPDOInterface.h"
+#include "RawDevice.h"
 
 #include "Device.h"
 
@@ -27,7 +27,6 @@ CreateRawPDO(
 	WDF_OBJECT_ATTRIBUTES Attributes;
 	WDFDEVICE RawDevice;
 	PRAW_DEVICE_CONTEXT RawDeviceContext;
-	WDF_IO_QUEUE_CONFIG IncomingQueueConfig;
 	WDF_DEVICE_STATE DeviceState;
 	WDF_DEVICE_PNP_CAPABILITIES PnpCapabilities;
 	WDFSTRING WdfString;
@@ -117,18 +116,6 @@ CreateRawPDO(
 	RawDeviceContext->RawDevice = RawDevice;
 	RawDeviceContext->InstanceNumber = InstanceNumber;
 
-	//Create IO Device Control Queue
-	WDF_IO_QUEUE_CONFIG_INIT_DEFAULT_QUEUE(&IncomingQueueConfig, WdfIoQueueDispatchSequential);
-
-	IncomingQueueConfig.EvtIoDeviceControl = RawPDODeviceControlCallback;
-
-	Status = WdfIoQueueCreate(RawDevice, &IncomingQueueConfig, WDF_NO_OBJECT_ATTRIBUTES, &RawDeviceContext->IncomingQueue);
-	if (!NT_SUCCESS(Status)) 
-	{
-		Trace("Failed to create IO Device Control Queue for Raw PDO: 0x%x\n", Status);
-		return Status;
-	}
-
 	// Plug'n'Play Settings
 	WDF_DEVICE_PNP_CAPABILITIES_INIT(&PnpCapabilities);
 
@@ -188,6 +175,27 @@ CreateRawPDO(
 }
 
 NTSTATUS 
+CreateRawPDOQueues(_In_ PDEVICE_CONTEXT DeviceContext)
+{
+	NTSTATUS Status = STATUS_SUCCESS;
+	WDF_IO_QUEUE_CONFIG IncomingQueueConfig;
+	PRAW_DEVICE_CONTEXT RawDeviceContext = DeviceContext->RawDeviceContext;
+
+	WDF_IO_QUEUE_CONFIG_INIT_DEFAULT_QUEUE(&IncomingQueueConfig, WdfIoQueueDispatchSequential);
+
+	IncomingQueueConfig.EvtIoDeviceControl = RawPDODeviceControlCallback;
+
+	Status = WdfIoQueueCreate(RawDeviceContext->RawDevice, &IncomingQueueConfig, WDF_NO_OBJECT_ATTRIBUTES, &RawDeviceContext->IncomingQueue);
+	if (!NT_SUCCESS(Status))
+	{
+		Trace("Failed to create IO Device Control Queue for Raw PDO: 0x%x\n", Status);
+		return Status;
+	}
+
+	return Status;
+}
+
+NTSTATUS 
 ReleaseRawPDO(_In_ PDEVICE_CONTEXT DeviceContext)
 {
 	NTSTATUS Status = STATUS_SUCCESS;
@@ -225,23 +233,17 @@ IN ULONG         IoControlCode
 )
 {
 	NTSTATUS Status = STATUS_SUCCESS;
-	//WDF_REQUEST_FORWARD_OPTIONS ForwardOptions;
-	//PRAW_DEVICE_CONTEXT RawDeviceContext = GetRawDeviceContext(WdfIoQueueGetDevice(Queue));
+	WDF_REQUEST_FORWARD_OPTIONS ForwardOptions;
+	PRAW_DEVICE_CONTEXT RawDeviceContext = GetRawDeviceContext(WdfIoQueueGetDevice(Queue));
 
-	UNREFERENCED_PARAMETER(Queue);
 	UNREFERENCED_PARAMETER(OutputBufferLength);
 	UNREFERENCED_PARAMETER(InputBufferLength); 
-	//UNREFERENCED_PARAMETER(IoControlCode);
+	UNREFERENCED_PARAMETER(IoControlCode);
 	
-	Trace("Recieved IOCTL on Raw PDO: 0x%8X", IoControlCode);
-	WdfRequestComplete(Request, Status);
-
-	/*
 	WDF_REQUEST_FORWARD_OPTIONS_INIT(&ForwardOptions);
 	Status = WdfRequestForwardToParentDeviceIoQueue(Request, RawDeviceContext->ForwardQueue, &ForwardOptions);
 	if (!NT_SUCCESS(Status))
 	{
 		WdfRequestComplete(Request, Status);
 	}
-	*/
 }

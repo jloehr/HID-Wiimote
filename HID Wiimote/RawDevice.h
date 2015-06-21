@@ -4,10 +4,10 @@ Copyright (C) 2015 Julian Löhr
 All rights reserved.
 
 Filename:
-RawPDOInterface.h
+RawDevice.h
 
 Abstract:
-	Header file for RawPDOInterface.c
+	Header file for RawDevice.c
 
 */
 
@@ -35,6 +35,7 @@ WDF_DECLARE_CONTEXT_TYPE_WITH_NAME(RAW_DEVICE_CONTEXT, GetRawDeviceContext);
 EVT_WDF_IO_QUEUE_IO_DEVICE_CONTROL RawPDODeviceControlCallback;
 
 NTSTATUS CreateRawPDO(_In_ PDEVICE_CONTEXT DeviceContext);
+NTSTATUS CreateRawPDOQueues(_In_ PDEVICE_CONTEXT DeviceContext);
 NTSTATUS ReleaseRawPDO(_In_ PDEVICE_CONTEXT DeviceContext);
 
 

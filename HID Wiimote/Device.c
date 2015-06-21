@@ -13,7 +13,7 @@ Abstract:
 
 #include "Device.h"
 
-#include "RawPDOInterface.h"
+#include "RawDevice.h"
 
 NTSTATUS
 DeviceAdd(
@@ -60,21 +60,36 @@ DeviceAdd(
 	DevContext = GetDeviceContext(Device);
 	DevContext->Device = Device;
 
-	// Create IO Queue
-	Status = CreateQueues(Device, &(DevContext->HIDContext));
-	if(!NT_SUCCESS(Status))
-	{
-		Trace("Device Added Error On CreateQueues Result: 0x%x", Status);
-		return Status;
-	}
-
-	Status = CreateRawPDO(DevContext); 
+	//Create the Raw PDO for User Mode Interface
+	Status = CreateRawPDO(DevContext);
 	if (!NT_SUCCESS(Status))
 	{
 		Trace("Failed to Create Raw PDO: 0x%x", Status);
 		return Status;
 	}
+
+	// Create IO Queues
+	Status = CreateHIDQueues(Device, &(DevContext->HIDContext));
+	if(!NT_SUCCESS(Status))
+	{
+		Trace("Device Added Error On CreateHIDQueues Result: 0x%x", Status);
+		return Status;
+	}
 	
+	Status = CreateRawPDOQueues(DevContext);
+	if (!NT_SUCCESS(Status))
+	{
+		Trace("Device Added Error On CreateRawPDOQueues Result: 0x%x", Status);
+		return Status;
+	}
+
+	Status = CreateConfigInterfaceQueues(DevContext);
+	if(!NT_SUCCESS(Status))
+	{
+		Trace("Device Added Error On CreateConfigInterfaceQueues Result: 0x%x", Status);
+		return Status;
+	}
+
 	Trace("Device Added Result: %#02X", Status);
 
 	return Status;

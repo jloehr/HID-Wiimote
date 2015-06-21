@@ -243,23 +243,25 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bluetooth.c" />
+    <ClCompile Include="ConfigInterface.c" />
     <ClCompile Include="Device.c" />
     <ClCompile Include="Driver.c" />
     <ClCompile Include="HID.c" />
     <ClCompile Include="HIDDescriptors.c" />
-    <ClCompile Include="RawPDOInterface.c" />
+    <ClCompile Include="RawDevice.c" />
     <ClCompile Include="Trace.c" />
     <ClCompile Include="Wiimote.c" />
     <ClCompile Include="WiimoteToHIDParser.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bluetooth.h" />
+    <ClInclude Include="ConfigInterface.h" />
     <ClInclude Include="Device.h" />
     <ClInclude Include="Driver.h" />
     <ClInclude Include="HID.h" />
     <ClInclude Include="HIDDescriptors.h" />
     <ClInclude Include="HIDWiimote.h" />
-    <ClInclude Include="RawPDOInterface.h" />
+    <ClInclude Include="RawDevice.h" />
     <ClInclude Include="Trace.h" />
     <ClInclude Include="Wiimote.h" />
     <ClInclude Include="WiimoteToHIDParser.h" />

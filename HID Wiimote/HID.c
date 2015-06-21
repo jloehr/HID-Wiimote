@@ -46,7 +46,7 @@ NTSTATUS PrepareHID(
 }
 
 NTSTATUS 
-CreateQueues(
+CreateHIDQueues(
 	_In_ WDFDEVICE Device, 
 	_In_ PHID_DEVICE_CONTEXT HIDContext
 	)

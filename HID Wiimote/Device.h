@@ -18,6 +18,7 @@ Abstract:
 #include "Wiimote.h"
 #include "Bluetooth.h"
 #include "HID.h"
+#include "ConfigInterface.h"
 
 typedef struct _DEVICE_CONTEXT 
 {
@@ -29,6 +30,7 @@ typedef struct _DEVICE_CONTEXT
 	BLUETOOTH_DEVICE_CONTEXT BluetoothContext;
 	HID_DEVICE_CONTEXT HIDContext;
 	WIIMOTE_DEVICE_CONTEXT WiimoteContext;
+	CONFIG_INTERFACE_CONTEXT ConfigInterfaceContext;
 
 	HID_MINIPORT_ADDRESSES HIDMiniportAddresses;
 
