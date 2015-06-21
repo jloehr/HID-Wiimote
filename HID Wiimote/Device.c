@@ -169,9 +169,17 @@ DeviceD0Exit(
 
 	//Suspend Wiimote
 	Status = StopWiimote(DeviceContext);
+	if (!NT_SUCCESS(Status))
+	{
+		Trace("Error Stopping Wiimote");
+	}
 
 	//Close BluetoothConnection
 	Status = CloseChannels(DeviceContext);
+	if (!NT_SUCCESS(Status))
+	{
+		Trace("Error Closing Bluetooth Channels");
+	}
 	
 	Trace("Exit D0 Result: 0x%x", Status);
 
@@ -194,10 +202,17 @@ ReleaseHardware(
 	DeviceContext = GetDeviceContext(Device);
 
 	Status = ReleaseHID(DeviceContext);
+	if (!NT_SUCCESS(Status))
+	{
+		Trace("Error Releasing HID Resources");
+	}
 
-	//Mark our Raw PDO missing
-	Status = WdfPdoMarkMissing(DeviceContext->RawDeviceContext->RawDevice);
-	
+	Status = ReleaseRawPDO(DeviceContext);
+	if (!NT_SUCCESS(Status))
+	{
+		Trace("Error Releasing Raw PDO Resources");
+	}
+
 	Trace("Releasee Hardware Result: 0x%x", Status);
 
 	return Status;

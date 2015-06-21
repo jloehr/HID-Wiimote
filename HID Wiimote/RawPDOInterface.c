@@ -27,7 +27,7 @@ CreateRawPDO(
 	WDF_OBJECT_ATTRIBUTES Attributes;
 	WDFDEVICE RawDevice;
 	PRAW_DEVICE_CONTEXT RawDeviceContext;
-	WDF_IO_QUEUE_CONFIG DefaultQueueConfig;
+	WDF_IO_QUEUE_CONFIG IncomingQueueConfig;
 	WDF_DEVICE_STATE DeviceState;
 	WDF_DEVICE_PNP_CAPABILITIES PnpCapabilities;
 	WDFSTRING WdfString;
@@ -117,11 +117,17 @@ CreateRawPDO(
 	RawDeviceContext->RawDevice = RawDevice;
 	RawDeviceContext->InstanceNumber = InstanceNumber;
 
-	//Create Default IO Queue
-	UNREFERENCED_PARAMETER(DefaultQueueConfig);
-	//WDF_IO_QUEUE_CONFIG_INIT_DEFAULT_QUEUE(&DefaultQueueConfig, WdfIoQueueDispatchSequential);
+	//Create IO Device Control Queue
+	WDF_IO_QUEUE_CONFIG_INIT_DEFAULT_QUEUE(&IncomingQueueConfig, WdfIoQueueDispatchSequential);
 
-	//DefaultQueueConfig
+	IncomingQueueConfig.EvtIoDeviceControl = RawPDODeviceControlCallback;
+
+	Status = WdfIoQueueCreate(RawDevice, &IncomingQueueConfig, WDF_NO_OBJECT_ATTRIBUTES, &RawDeviceContext->IncomingQueue);
+	if (!NT_SUCCESS(Status)) 
+	{
+		Trace("Failed to create IO Device Control Queue for Raw PDO: 0x%x\n", Status);
+		return Status;
+	}
 
 	// Plug'n'Play Settings
 	WDF_DEVICE_PNP_CAPABILITIES_INIT(&PnpCapabilities);
@@ -179,4 +185,63 @@ CreateRawPDO(
 	DeviceContext->RawDeviceContext = RawDeviceContext;
 
 	return STATUS_SUCCESS;
+}
+
+NTSTATUS 
+ReleaseRawPDO(_In_ PDEVICE_CONTEXT DeviceContext)
+{
+	NTSTATUS Status = STATUS_SUCCESS;
+	WDFREQUEST TmpRequest;
+
+	//Mark our Raw PDO missing
+	Status = WdfPdoMarkMissing(DeviceContext->RawDeviceContext->RawDevice);
+	if (!NT_SUCCESS(Status))
+	{
+		Trace("Error marking Raw PDO missing");
+	}
+
+	//Complete remaining Requests
+	while (NT_SUCCESS(Status = (WdfIoQueueRetrieveNextRequest(DeviceContext->RawDeviceContext->IncomingQueue, &TmpRequest))))
+	{
+		WdfRequestComplete(TmpRequest, STATUS_DEVICE_REMOVED);
+	}
+
+	if (Status == STATUS_NO_MORE_ENTRIES)
+	{
+		Status = STATUS_SUCCESS;
+	}
+
+	return Status;
+}
+
+
+VOID
+RawPDODeviceControlCallback(
+IN WDFQUEUE      Queue,
+IN WDFREQUEST    Request,
+IN size_t        OutputBufferLength,
+IN size_t        InputBufferLength,
+IN ULONG         IoControlCode
+)
+{
+	NTSTATUS Status = STATUS_SUCCESS;
+	//WDF_REQUEST_FORWARD_OPTIONS ForwardOptions;
+	//PRAW_DEVICE_CONTEXT RawDeviceContext = GetRawDeviceContext(WdfIoQueueGetDevice(Queue));
+
+	UNREFERENCED_PARAMETER(Queue);
+	UNREFERENCED_PARAMETER(OutputBufferLength);
+	UNREFERENCED_PARAMETER(InputBufferLength); 
+	//UNREFERENCED_PARAMETER(IoControlCode);
+	
+	Trace("Recieved IOCTL on Raw PDO: 0x%8X", IoControlCode);
+	WdfRequestComplete(Request, Status);
+
+	/*
+	WDF_REQUEST_FORWARD_OPTIONS_INIT(&ForwardOptions);
+	Status = WdfRequestForwardToParentDeviceIoQueue(Request, RawDeviceContext->ForwardQueue, &ForwardOptions);
+	if (!NT_SUCCESS(Status))
+	{
+		WdfRequestComplete(Request, Status);
+	}
+	*/
 }
