@@ -14,9 +14,6 @@ Abstract:
 
 #include "Device.h"
 
-#include <initguid.h>
-#include <devguid.h>
-
 static ULONG RawPDOInstanceCounter = 0;
 
 NTSTATUS
@@ -47,7 +44,7 @@ CreateRawPDO(
 		return STATUS_INSUFFICIENT_RESOURCES;
 	}
 
-	Status = WdfPdoInitAssignRawDevice(DeviceInit, /*&GUID_DEVCLASS_HIDCLASS*/ &GUID_DEVCLASS_HIDWIIMOTE_RAWPDO);
+	Status = WdfPdoInitAssignRawDevice(DeviceInit, &GUID_DEVCLASS_HIDWIIMOTE_RAWPDO);
 	if (!NT_SUCCESS(Status)) 
 	{
 		WdfDeviceInitFree(DeviceInit);
