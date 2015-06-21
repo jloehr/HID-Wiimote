@@ -131,7 +131,7 @@ CreateRawPDO(
 
 	PnpCapabilities.Removable = WdfTrue;
 	PnpCapabilities.SurpriseRemovalOK = WdfTrue;
-	//PnpCapabilities.NoDisplayInUI = WdfTrue;
+	PnpCapabilities.NoDisplayInUI = WdfTrue;
 
 	PnpCapabilities.Address = InstanceNumber;
 	PnpCapabilities.UINumber = InstanceNumber;
@@ -139,12 +139,10 @@ CreateRawPDO(
 	WdfDeviceSetPnpCapabilities(RawDevice, &PnpCapabilities);
 
 	//Hide it in Device Manager
-	UNREFERENCED_PARAMETER(DeviceState);
-	/*
 	WDF_DEVICE_STATE_INIT(&DeviceState);
 	DeviceState.DontDisplayInUI = WdfTrue;
 	WdfDeviceSetDeviceState(RawDevice, &DeviceState);
-	*/
+	
 
 	// Create Device Interface
 	Status = WdfDeviceCreateDeviceInterface(RawDevice, &GUID_DEVINTERFACE_HIDWIIMOTE, NULL);
