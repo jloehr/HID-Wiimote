@@ -656,8 +656,8 @@ _In_ BYTE RawInputData[11]
 	DeviceContext->WiimoteContext.ClassicControllerState.RightAnalogStick.Y = 0xFF & ((RawInputData[6] >> 4) | (RawInputData[7] << 4));
 
 	//Not Supported Input
-	DeviceContext->WiimoteContext.ClassicControllerState.LeftTrigger = DeviceContext->WiimoteContext.ClassicControllerState.Buttons.ZL ? 0x7F : 0x00;
-	DeviceContext->WiimoteContext.ClassicControllerState.RightTrigger = DeviceContext->WiimoteContext.ClassicControllerState.Buttons.ZR ? 0x7F : 0x00;
+	DeviceContext->WiimoteContext.ClassicControllerState.LeftTrigger = DeviceContext->WiimoteContext.ClassicControllerState.Buttons.ZL ? 0xFF : 0x00;
+	DeviceContext->WiimoteContext.ClassicControllerState.RightTrigger = DeviceContext->WiimoteContext.ClassicControllerState.Buttons.ZR ? 0xFF : 0x00;
 
 	//Battery Level
 	switch ((DecodedInputData[2] ^ 0xFF) & 0xF0)

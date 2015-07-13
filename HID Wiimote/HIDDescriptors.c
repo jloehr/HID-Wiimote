@@ -199,13 +199,14 @@ CONST HID_REPORT_DESCRIPTOR HIDReportDescriptor[] = {
     0x75, 0x03,                    //     REPORT_SIZE (3)
     0x81, 0x03,                    //     INPUT (Cnst,Var,Abs)
     0x05, 0x01,                    //	  USAGE_PAGE (Generic Desktop)
+	0x09, 0x32,                    //	  USAGE (Z)
 	0x09, 0x33,                    //	  USAGE (RX)
     0x09, 0x34,                    //	  USAGE (RY)
 	0x09, 0x35,                    //	  USAGE (RZ)
     0x15, 0x00,					   //	  LOGICAL_MINIMUM (0)
     0x26, 0xFF, 0x00,			   //	  LOGICAL_MAXIMUM (255)
     0x75, 0x08,                    //	  REPORT_SIZE (8)
-    0x95, 0x03,                    //	  REPORT_COUNT (3)
+    0x95, 0x04,                    //	  REPORT_COUNT (4)
     0x81, 0x02,                    //	  INPUT (Data,Var,Abs)
 	0x05, 0x01,                    //	  USAGE_PAGE (Generic Desktop)
 	0x09, 0x39,                    //     USAGE (Hat Swtich)
@@ -222,7 +223,7 @@ CONST HID_REPORT_DESCRIPTOR HIDReportDescriptor[] = {
     0xc0                           // END_COLLECTION
 };
 
-CONST BYTE HIDReportSize = 9;
+CONST BYTE HIDReportSize = 10;
 
 /*
 |--------|-------|--------|-------|--------|-------|--------|-------|
@@ -235,6 +236,8 @@ CONST BYTE HIDReportSize = 9;
 |							Button 1-8								|
 |--------|-------|--------|-------|--------|-------|--------|-------|
 |			  Button 9-13				   |xxxxxxx Padding xxxxxxxx|
+|--------|-------|--------|-------|--------|-------|--------|-------|
+|								Z-Axis								|
 |--------|-------|--------|-------|--------|-------|--------|-------|
 |								RX-Axis								|
 |--------|-------|--------|-------|--------|-------|--------|-------|
