@@ -452,33 +452,48 @@ ResetToNullState(
 }
 
 NTSTATUS
-ProcessBatteryLevel(
+UpdateBatteryLEDs(
+	_In_ PDEVICE_CONTEXT DeviceContext
+	)
+{
+	NTSTATUS Status = STATUS_SUCCESS;
+	PWIIMOTE_DEVICE_CONTEXT WiimoteContext = &(DeviceContext->WiimoteContext);
+
+	Trace("UpdateBatteryLEDs - BatteryFlag: 0x%x", WiimoteContext->State.BatteryFlag);
+
+	Status = SetLEDs(DeviceContext, WiimoteContext->State.BatteryFlag);
+	if (!NT_SUCCESS(Status))
+	{
+		return Status;
+	}
+
+	if (WiimoteContext->State.BatteryFlag == WIIMOTE_LEDS_ONE)
+	{
+		WdfTimerStop(WiimoteContext->BatteryLevelLEDUpdateTimer, FALSE);
+	}
+
+	return Status;
+}
+
+NTSTATUS
+ProcessWiimoteBatteryLevel(
 	_In_ PDEVICE_CONTEXT DeviceContext,
 	_In_ BYTE BatteryLevel
 	)
 {
 	NTSTATUS Status = STATUS_SUCCESS;
-	BYTE BatteryFlag = WIIMOTE_LEDS_ONE;
-	PWIIMOTE_DEVICE_CONTEXT WiimoteContext = &(DeviceContext->WiimoteContext);
-	
+
 	Trace("BatteryLevel: 0x%x", BatteryLevel);
 
-	BatteryFlag = ((0xF0 << (3 - (BatteryLevel / 64))) & 0xF0);
-	
-	Trace("BatteryFlag: 0x%x", BatteryFlag);
+	DeviceContext->WiimoteContext.State.BatteryFlag = ((0xF0 << (3 - (BatteryLevel / 64))) & 0xF0);
 
-Status = SetLEDs(DeviceContext, BatteryFlag);
-if (!NT_SUCCESS(Status))
-{
-	return Status;
-}
+	Status = UpdateBatteryLEDs(DeviceContext); 
+	if (!NT_SUCCESS(Status))
+	{
+		return Status;
+	}
 
-if (BatteryFlag == WIIMOTE_LEDS_ONE)
-{
-	WdfTimerStop(WiimoteContext->StatusInformationTimer, FALSE);
-}
-
-return Status;
+	return STATUS_SUCCESS;
 }
 
 VOID
@@ -625,6 +640,7 @@ _In_ BYTE RawInputData[11]
 {
 	BYTE DecodedInputData[3];
 	XorData(RawInputData + 8, DecodedInputData, 3);
+	BYTE BatteryFlag = 0;
 
 	//Buttons
 	ExtractClassicControllerButtons(DeviceContext, DecodedInputData);
@@ -642,6 +658,21 @@ _In_ BYTE RawInputData[11]
 	//Not Supported Input
 	DeviceContext->WiimoteContext.ClassicControllerState.LeftTrigger = DeviceContext->WiimoteContext.ClassicControllerState.Buttons.ZL ? 0x7F : 0x00;
 	DeviceContext->WiimoteContext.ClassicControllerState.RightTrigger = DeviceContext->WiimoteContext.ClassicControllerState.Buttons.ZR ? 0x7F : 0x00;
+
+	//Battery Level
+	switch ((DecodedInputData[2] ^ 0xFF) & 0xF0)
+	{
+	case 0xC0:
+		BatteryFlag |= WIIMOTE_LEDS_FOUR;
+	case 0xB0:
+		BatteryFlag |= WIIMOTE_LEDS_THREE;
+	case 0xA0:
+		BatteryFlag |= WIIMOTE_LEDS_TWO;
+	default:
+		BatteryFlag |= WIIMOTE_LEDS_ONE;
+	}
+
+	DeviceContext->WiimoteContext.State.BatteryFlag = BatteryFlag;
 }
 
 
@@ -758,11 +789,14 @@ ProcessStatusInformation(
 	}
 #endif
 
-	//Process the Battery Level to set the LEDS
-	Status = ProcessBatteryLevel(DeviceContext, ReadBuffer[6]);
-	if(!NT_SUCCESS(Status))
+	//Process the Battery Level to set the LEDS; Wii U Pro Controller reports its Battery Level in its Input Report
+	if (DeviceContext->WiimoteContext.Extension != WiiUProController)
 	{
-		return Status;
+		Status = ProcessWiimoteBatteryLevel(DeviceContext, ReadBuffer[6]);
+		if (!NT_SUCCESS(Status))
+		{
+			return Status;
+		}
 	}
 
 	//Set Report Mode, if extension changed
@@ -1000,12 +1034,23 @@ BatteryLevelLEDUpdateTimerExpired(
 	NTSTATUS Status;
 	PDEVICE_CONTEXT DeviceContext = GetDeviceContext(WdfTimerGetParentObject(Timer));
 
-	Trace("StatusInfro Timer!");
+	Trace("BatteryLevelLEDUpdate Timer!");
 
-	Status = RequestStatusInformation(DeviceContext);
-	Trace("Request Status Information Result: 0x%x", Status);
-	if(!NT_SUCCESS(Status))
+	if (DeviceContext->WiimoteContext.Extension == WiiUProController)
 	{
-		return;
+		Status = UpdateBatteryLEDs(DeviceContext);
+		if (!NT_SUCCESS(Status))
+		{
+			return;
+		}
+	}
+	else
+	{
+		Status = RequestStatusInformation(DeviceContext);
+		Trace("Request Status Information Result: 0x%x", Status);
+		if (!NT_SUCCESS(Status))
+		{
+			return;
+		}
 	}
 }

@@ -171,6 +171,8 @@ typedef struct _WIIMOTE_STATE
 	};
 
 
+	BYTE BatteryFlag;
+
 } WIIMTOE_STATE, *PWIIMOTE_STATE;
 
 typedef struct _WIIMOTE_IR_POINT
