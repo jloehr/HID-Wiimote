@@ -202,7 +202,7 @@ typedef struct _WIIMOTE_DEVICE_CONTEXT
 
 	WIIMOTE_IR_STATE IRState;
 
-	WDFTIMER StatusInformationTimer;
+	WDFTIMER BatteryLevelLEDUpdateTimer;
 
 } WIIMOTE_DEVICE_CONTEXT, * PWIIMOTE_DEVICE_CONTEXT;
 
@@ -213,6 +213,6 @@ NTSTATUS ResetToNullState(_In_ PDEVICE_CONTEXT DeviceContext);
 
 NTSTATUS ProcessReport(_In_ PDEVICE_CONTEXT DeviceContext, _In_ PVOID ReadBuffer, _In_ size_t ReadBufferSize);
 
-EVT_WDF_TIMER StatusInformationTimerExpired;
+EVT_WDF_TIMER BatteryLevelLEDUpdateTimerExpired;
 
 #endif

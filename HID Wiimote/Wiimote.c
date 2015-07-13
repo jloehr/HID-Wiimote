@@ -30,11 +30,11 @@ PrepareWiimote(
 
 	//Create Timer to request StatusInformation
 
-	WDF_TIMER_CONFIG_INIT_PERIODIC(&TimerConfig, StatusInformationTimerExpired, WIIMOTE_STATUSINFORMATION_INTERVAL);
+	WDF_TIMER_CONFIG_INIT_PERIODIC(&TimerConfig, BatteryLevelLEDUpdateTimerExpired, WIIMOTE_STATUSINFORMATION_INTERVAL);
 	WDF_OBJECT_ATTRIBUTES_INIT(&TimerAttributes);
 	TimerAttributes.ParentObject = DeviceContext->Device;
 	
-	Status = WdfTimerCreate(&TimerConfig, &TimerAttributes, &(WiimoteContext->StatusInformationTimer));
+	Status = WdfTimerCreate(&TimerConfig, &TimerAttributes, &(WiimoteContext->BatteryLevelLEDUpdateTimer));
 	if(!NT_SUCCESS(Status))
 	{
 		return Status;
@@ -320,7 +320,7 @@ StartWiimote(
 	}
 
 	//Start Timer
-	WdfTimerStart(DeviceContext->WiimoteContext.StatusInformationTimer, WDF_REL_TIMEOUT_IN_SEC(1));
+	WdfTimerStart(DeviceContext->WiimoteContext.BatteryLevelLEDUpdateTimer, WDF_REL_TIMEOUT_IN_SEC(1));
 
 	return Status;
 }
@@ -419,7 +419,7 @@ StopWiimote(
 	NTSTATUS Status = STATUS_SUCCESS;
 
 	//Stop Timer
-	WdfTimerStop(DeviceContext->WiimoteContext.StatusInformationTimer, TRUE);
+	WdfTimerStop(DeviceContext->WiimoteContext.BatteryLevelLEDUpdateTimer, TRUE);
 
 	//Shut down Wiimote
 	Status = SuspendWiimote(DeviceContext);
@@ -993,7 +993,7 @@ ProcessReport(
 }
 
 VOID
-StatusInformationTimerExpired (
+BatteryLevelLEDUpdateTimerExpired(
     WDFTIMER  Timer
     )
 {
