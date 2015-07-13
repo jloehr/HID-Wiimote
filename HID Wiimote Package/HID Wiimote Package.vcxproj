@@ -218,8 +218,7 @@
       </Command>
     </PreLinkEvent>
     <PostBuildEvent>
-      <Command>c:\Tools\7za920\7za.exe d "$(TargetDir)$(SolutionName.replace(' ','-'))-$(TargetVersion.replace('dows', ''))-$(PlatformArchitecture)Bit.zip"
-c:\Tools\7za920\7za.exe a "$(TargetDir)$(SolutionName.replace(' ','-'))-$(TargetVersion.replace('dows', ''))-$(PlatformArchitecture)Bit.zip" "$(PackageDir)\*"</Command>
+      <Command></Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug|Win32'">
@@ -231,8 +230,7 @@ c:\Tools\7za920\7za.exe a "$(TargetDir)$(SolutionName.replace(' ','-'))-$(Target
       </Command>
     </PreLinkEvent>
     <PostBuildEvent>
-      <Command>c:\Tools\7za920\7za.exe d "$(TargetDir)$(SolutionName.replace(' ','-'))-$(TargetVersion.replace('dows', ''))-$(PlatformArchitecture)Bit.zip"
-c:\Tools\7za920\7za.exe a "$(TargetDir)$(SolutionName.replace(' ','-'))-$(TargetVersion.replace('dows', ''))-$(PlatformArchitecture)Bit.zip" "$(PackageDir)\*"</Command>
+      <Command></Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Win8 Debug|Win32'">
@@ -244,8 +242,7 @@ c:\Tools\7za920\7za.exe a "$(TargetDir)$(SolutionName.replace(' ','-'))-$(Target
       </Command>
     </PreLinkEvent>
     <PostBuildEvent>
-      <Command>c:\Tools\7za920\7za.exe d "$(TargetDir)$(SolutionName.replace(' ','-'))-$(TargetVersion.replace('dows', ''))-$(PlatformArchitecture)Bit.zip"
-c:\Tools\7za920\7za.exe a "$(TargetDir)$(SolutionName.replace(' ','-'))-$(TargetVersion.replace('dows', ''))-$(PlatformArchitecture)Bit.zip" "$(PackageDir)\*"</Command>
+      <Command></Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Vista Release|Win32'">
@@ -271,8 +268,7 @@ move /y "$(TargetDir)$(SolutionName.replace(' ','-'))-$(TargetVersion.replace('d
       </Command>
     </PreLinkEvent>
     <PostBuildEvent>
-      <Command>c:\Tools\7za920\7za.exe d "$(TargetDir)$(SolutionName.replace(' ','-'))-$(TargetVersion.replace('dows', ''))-$(PlatformArchitecture)Bit.zip"
-c:\Tools\7za920\7za.exe a "$(TargetDir)$(SolutionName.replace(' ','-'))-$(TargetVersion.replace('dows', ''))-$(PlatformArchitecture)Bit.zip" "$(PackageDir)\*"</Command>
+      <Command></Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Win7 Release|Win32'">
@@ -326,8 +322,7 @@ move /y "$(TargetDir)$(SolutionName.replace(' ','-'))-$(TargetVersion.replace('d
       </Command>
     </PreLinkEvent>
     <PostBuildEvent>
-      <Command>c:\Tools\7za920\7za.exe d "$(TargetDir)$(SolutionName.replace(' ','-'))-$(TargetVersion.replace('dows', ''))-$(PlatformArchitecture)Bit.zip"
-c:\Tools\7za920\7za.exe a "$(TargetDir)$(SolutionName.replace(' ','-'))-$(TargetVersion.replace('dows', ''))-$(PlatformArchitecture)Bit.zip" "$(PackageDir)\*"</Command>
+      <Command></Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug|x64'">
@@ -339,8 +334,8 @@ c:\Tools\7za920\7za.exe a "$(TargetDir)$(SolutionName.replace(' ','-'))-$(Target
       </Command>
     </PreLinkEvent>
     <PostBuildEvent>
-      <Command>c:\Tools\7za920\7za.exe d "$(TargetDir)$(SolutionName.replace(' ','-'))-$(TargetVersion.replace('dows', ''))-$(PlatformArchitecture)Bit.zip"
-c:\Tools\7za920\7za.exe a "$(TargetDir)$(SolutionName.replace(' ','-'))-$(TargetVersion.replace('dows', ''))-$(PlatformArchitecture)Bit.zip" "$(PackageDir)\*"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Win8 Debug|x64'">
@@ -352,8 +347,7 @@ c:\Tools\7za920\7za.exe a "$(TargetDir)$(SolutionName.replace(' ','-'))-$(Target
       </Command>
     </PreLinkEvent>
     <PostBuildEvent>
-      <Command>c:\Tools\7za920\7za.exe d "$(TargetDir)$(SolutionName.replace(' ','-'))-$(TargetVersion.replace('dows', ''))-$(PlatformArchitecture)Bit.zip"
-c:\Tools\7za920\7za.exe a "$(TargetDir)$(SolutionName.replace(' ','-'))-$(TargetVersion.replace('dows', ''))-$(PlatformArchitecture)Bit.zip" "$(PackageDir)\*"</Command>
+      <Command></Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Vista Release|x64'">
@@ -379,8 +373,7 @@ move /y "$(TargetDir)$(SolutionName.replace(' ','-'))-$(TargetVersion.replace('d
       </Command>
     </PreLinkEvent>
     <PostBuildEvent>
-      <Command>c:\Tools\7za920\7za.exe d "$(TargetDir)$(SolutionName.replace(' ','-'))-$(TargetVersion.replace('dows', ''))-$(PlatformArchitecture)Bit.zip"
-c:\Tools\7za920\7za.exe a "$(TargetDir)$(SolutionName.replace(' ','-'))-$(TargetVersion.replace('dows', ''))-$(PlatformArchitecture)Bit.zip" "$(PackageDir)\*"</Command>
+      <Command></Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Win7 Release|x64'">
@@ -431,15 +424,7 @@ move /y "$(TargetDir)$(SolutionName.replace(' ','-'))-$(TargetVersion.replace('d
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
-    <FilesToPackage Include="C:\Program Files (x86)\Windows Kits\8.1\Redist\DIFx\dpinst\MultiLin\x64\dpinst.exe" Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug|x64'">
-      <PackageRelativeDirectory>
-      </PackageRelativeDirectory>
-    </FilesToPackage>
     <FilesToPackage Include="C:\Program Files (x86)\Windows Kits\8.1\Redist\DIFx\dpinst\MultiLin\x64\dpinst.exe" Condition="'$(Configuration)|$(Platform)'=='Win8 Release|x64'">
-      <PackageRelativeDirectory>
-      </PackageRelativeDirectory>
-    </FilesToPackage>
-    <FilesToPackage Include="C:\Program Files (x86)\Windows Kits\8.1\Redist\DIFx\dpinst\MultiLin\x64\dpinst.exe" Condition="'$(Configuration)|$(Platform)'=='Win8 Debug|x64'">
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
@@ -447,15 +432,7 @@ move /y "$(TargetDir)$(SolutionName.replace(' ','-'))-$(TargetVersion.replace('d
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
-    <FilesToPackage Include="C:\Program Files (x86)\Windows Kits\8.1\Redist\DIFx\dpinst\MultiLin\x64\dpinst.exe" Condition="'$(Configuration)|$(Platform)'=='Win7 Debug|x64'">
-      <PackageRelativeDirectory>
-      </PackageRelativeDirectory>
-    </FilesToPackage>
     <FilesToPackage Include="C:\Program Files (x86)\Windows Kits\8.1\Redist\DIFx\dpinst\MultiLin\x64\dpinst.exe" Condition="'$(Configuration)|$(Platform)'=='Vista Release|x64'">
-      <PackageRelativeDirectory>
-      </PackageRelativeDirectory>
-    </FilesToPackage>
-    <FilesToPackage Include="C:\Program Files (x86)\Windows Kits\8.1\Redist\DIFx\dpinst\MultiLin\x64\dpinst.exe" Condition="'$(Configuration)|$(Platform)'=='Vista Debug|x64'">
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
@@ -463,15 +440,7 @@ move /y "$(TargetDir)$(SolutionName.replace(' ','-'))-$(TargetVersion.replace('d
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
-    <FilesToPackage Include="C:\Program Files (x86)\Windows Kits\8.1\Redist\DIFx\dpinst\MultiLin\x86\dpinst.exe" Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug|Win32'">
-      <PackageRelativeDirectory>
-      </PackageRelativeDirectory>
-    </FilesToPackage>
     <FilesToPackage Include="C:\Program Files (x86)\Windows Kits\8.1\Redist\DIFx\dpinst\MultiLin\x86\dpinst.exe" Condition="'$(Configuration)|$(Platform)'=='Win8 Release|Win32'">
-      <PackageRelativeDirectory>
-      </PackageRelativeDirectory>
-    </FilesToPackage>
-    <FilesToPackage Include="C:\Program Files (x86)\Windows Kits\8.1\Redist\DIFx\dpinst\MultiLin\x86\dpinst.exe" Condition="'$(Configuration)|$(Platform)'=='Win8 Debug|Win32'">
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
@@ -479,28 +448,12 @@ move /y "$(TargetDir)$(SolutionName.replace(' ','-'))-$(TargetVersion.replace('d
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
-    <FilesToPackage Include="C:\Program Files (x86)\Windows Kits\8.1\Redist\DIFx\dpinst\MultiLin\x86\dpinst.exe" Condition="'$(Configuration)|$(Platform)'=='Win7 Debug|Win32'">
-      <PackageRelativeDirectory>
-      </PackageRelativeDirectory>
-    </FilesToPackage>
     <FilesToPackage Include="C:\Program Files (x86)\Windows Kits\8.1\Redist\DIFx\dpinst\MultiLin\x86\dpinst.exe" Condition="'$(Configuration)|$(Platform)'=='Vista Release|Win32'">
-      <PackageRelativeDirectory>
-      </PackageRelativeDirectory>
-    </FilesToPackage>
-    <FilesToPackage Include="C:\Program Files (x86)\Windows Kits\8.1\Redist\DIFx\dpinst\MultiLin\x86\dpinst.exe" Condition="'$(Configuration)|$(Platform)'=='Vista Debug|Win32'">
-      <PackageRelativeDirectory>
-      </PackageRelativeDirectory>
-    </FilesToPackage>
-    <FilesToPackage Include="..\DPInst\DPInst.xml" Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug|x64'">
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
     <FilesToPackage Include="..\HID Wiimote\x64\Win8.1Debug\vc120.pdb" Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug|x64'">
       <PackageRelativeDirectory>Debug</PackageRelativeDirectory>
-    </FilesToPackage>
-    <FilesToPackage Include="..\TinyInstaller\bin\Release\TinyInstaller.exe" Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug|x64'">
-      <PackageRelativeDirectory>
-      </PackageRelativeDirectory>
     </FilesToPackage>
     <FilesToPackage Include="..\x64\Win8.1Debug\HIDMiniport.pdb" Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug|x64'">
       <PackageRelativeDirectory>Debug</PackageRelativeDirectory>
@@ -512,16 +465,8 @@ move /y "$(TargetDir)$(SolutionName.replace(' ','-'))-$(TargetVersion.replace('d
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
-    <FilesToPackage Include="..\DPInst\DPInst.xml" Condition="'$(Configuration)|$(Platform)'=='Win8 Debug|x64'">
-      <PackageRelativeDirectory>
-      </PackageRelativeDirectory>
-    </FilesToPackage>
     <FilesToPackage Include="..\HID Wiimote\x64\Win8Debug\vc120.pdb" Condition="'$(Configuration)|$(Platform)'=='Win8 Debug|x64'">
       <PackageRelativeDirectory>Debug</PackageRelativeDirectory>
-    </FilesToPackage>
-    <FilesToPackage Include="..\TinyInstaller\bin\Release\TinyInstaller.exe" Condition="'$(Configuration)|$(Platform)'=='Win8 Debug|x64'">
-      <PackageRelativeDirectory>
-      </PackageRelativeDirectory>
     </FilesToPackage>
     <FilesToPackage Include="..\x64\Win8Debug\HIDMiniport.pdb" Condition="'$(Configuration)|$(Platform)'=='Win8 Debug|x64'">
       <PackageRelativeDirectory>Debug</PackageRelativeDirectory>
@@ -537,15 +482,7 @@ move /y "$(TargetDir)$(SolutionName.replace(' ','-'))-$(TargetVersion.replace('d
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
-    <FilesToPackage Include="..\DPInst\DPInst.xml" Condition="'$(Configuration)|$(Platform)'=='Win7 Debug|x64'">
-      <PackageRelativeDirectory>
-      </PackageRelativeDirectory>
-    </FilesToPackage>
     <FilesToPackage Include="..\DPInst\DPInst.xml" Condition="'$(Configuration)|$(Platform)'=='Vista Release|x64'">
-      <PackageRelativeDirectory>
-      </PackageRelativeDirectory>
-    </FilesToPackage>
-    <FilesToPackage Include="..\DPInst\DPInst.xml" Condition="'$(Configuration)|$(Platform)'=='Vista Debug|x64'">
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
@@ -553,23 +490,11 @@ move /y "$(TargetDir)$(SolutionName.replace(' ','-'))-$(TargetVersion.replace('d
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
-    <FilesToPackage Include="..\DPInst\DPInst.xml" Condition="'$(Configuration)|$(Platform)'=='Win8 Debug|Win32'">
-      <PackageRelativeDirectory>
-      </PackageRelativeDirectory>
-    </FilesToPackage>
     <FilesToPackage Include="..\DPInst\DPInst.xml" Condition="'$(Configuration)|$(Platform)'=='Win7 Release|Win32'">
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
-    <FilesToPackage Include="..\DPInst\DPInst.xml" Condition="'$(Configuration)|$(Platform)'=='Win7 Debug|Win32'">
-      <PackageRelativeDirectory>
-      </PackageRelativeDirectory>
-    </FilesToPackage>
     <FilesToPackage Include="..\DPInst\DPInst.xml" Condition="'$(Configuration)|$(Platform)'=='Vista Release|Win32'">
-      <PackageRelativeDirectory>
-      </PackageRelativeDirectory>
-    </FilesToPackage>
-    <FilesToPackage Include="..\DPInst\DPInst.xml" Condition="'$(Configuration)|$(Platform)'=='Vista Debug|Win32'">
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
@@ -585,15 +510,7 @@ move /y "$(TargetDir)$(SolutionName.replace(' ','-'))-$(TargetVersion.replace('d
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
-    <FilesToPackage Include="..\TinyInstaller\bin\Release\TinyInstaller.exe" Condition="'$(Configuration)|$(Platform)'=='Win7 Debug|x64'">
-      <PackageRelativeDirectory>
-      </PackageRelativeDirectory>
-    </FilesToPackage>
     <FilesToPackage Include="..\TinyInstaller\bin\Release\TinyInstaller.exe" Condition="'$(Configuration)|$(Platform)'=='Vista Release|x64'">
-      <PackageRelativeDirectory>
-      </PackageRelativeDirectory>
-    </FilesToPackage>
-    <FilesToPackage Include="..\TinyInstaller\bin\Release\TinyInstaller.exe" Condition="'$(Configuration)|$(Platform)'=='Vista Debug|x64'">
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
@@ -601,15 +518,7 @@ move /y "$(TargetDir)$(SolutionName.replace(' ','-'))-$(TargetVersion.replace('d
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
-    <FilesToPackage Include="..\TinyInstaller\bin\Release\TinyInstaller.exe" Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug|Win32'">
-      <PackageRelativeDirectory>
-      </PackageRelativeDirectory>
-    </FilesToPackage>
     <FilesToPackage Include="..\TinyInstaller\bin\Release\TinyInstaller.exe" Condition="'$(Configuration)|$(Platform)'=='Win8 Release|Win32'">
-      <PackageRelativeDirectory>
-      </PackageRelativeDirectory>
-    </FilesToPackage>
-    <FilesToPackage Include="..\TinyInstaller\bin\Release\TinyInstaller.exe" Condition="'$(Configuration)|$(Platform)'=='Win8 Debug|Win32'">
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
@@ -617,15 +526,7 @@ move /y "$(TargetDir)$(SolutionName.replace(' ','-'))-$(TargetVersion.replace('d
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
-    <FilesToPackage Include="..\TinyInstaller\bin\Release\TinyInstaller.exe" Condition="'$(Configuration)|$(Platform)'=='Win7 Debug|Win32'">
-      <PackageRelativeDirectory>
-      </PackageRelativeDirectory>
-    </FilesToPackage>
     <FilesToPackage Include="..\TinyInstaller\bin\Release\TinyInstaller.exe" Condition="'$(Configuration)|$(Platform)'=='Vista Release|Win32'">
-      <PackageRelativeDirectory>
-      </PackageRelativeDirectory>
-    </FilesToPackage>
-    <FilesToPackage Include="..\TinyInstaller\bin\Release\TinyInstaller.exe" Condition="'$(Configuration)|$(Platform)'=='Vista Debug|Win32'">
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
