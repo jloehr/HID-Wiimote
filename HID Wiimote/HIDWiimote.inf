@@ -78,7 +78,7 @@ LoadOrderGroup = Extended Base
 ; ================= HIDMiniport Inst section =====================
 
 [HIDMiniport_Service_Inst]
-DisplayName    = %HIDMinitport.SVCDESC%
+DisplayName    = %HIDMiniport.SVCDESC%
 ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
 StartType      = 3                  ; SERVICE_DEMAND_START
 ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
