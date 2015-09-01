@@ -1,6 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Windows 10 Universal Debug|Win32">
+      <Configuration>Windows 10 Universal Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Windows 10 Universal Debug|x64">
+      <Configuration>Windows 10 Universal Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Windows 10 Universal Release|Win32">
+      <Configuration>Windows 10 Universal Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Windows 10 Universal Release|x64">
+      <Configuration>Windows 10 Universal Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Windows 7, 8, 8.1 Debug|Win32">
       <Configuration>Windows 7, 8, 8.1 Debug</Configuration>
       <Platform>Win32</Platform>
@@ -41,11 +57,27 @@
     <PlatformToolset>WindowsKernelModeDriver10.0</PlatformToolset>
     <SupportsPackaging>false</SupportsPackaging>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Debug|Win32'" Label="Configuration">
+    <TargetVersion>
+    </TargetVersion>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>WindowsKernelModeDriver10.0</PlatformToolset>
+    <SupportsPackaging>false</SupportsPackaging>
+    <DriverTargetPlatform>Universal</DriverTargetPlatform>
+  </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Release|Win32'">
     <TargetVersion>Windows7</TargetVersion>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>WindowsKernelModeDriver10.0</PlatformToolset>
     <SupportsPackaging>false</SupportsPackaging>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|Win32'" Label="Configuration">
+    <TargetVersion>
+    </TargetVersion>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>WindowsKernelModeDriver10.0</PlatformToolset>
+    <SupportsPackaging>false</SupportsPackaging>
+    <DriverTargetPlatform>Universal</DriverTargetPlatform>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Debug|x64'">
     <TargetVersion>Windows7</TargetVersion>
@@ -53,11 +85,27 @@
     <PlatformToolset>WindowsKernelModeDriver10.0</PlatformToolset>
     <SupportsPackaging>false</SupportsPackaging>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Debug|x64'" Label="Configuration">
+    <TargetVersion>
+    </TargetVersion>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>WindowsKernelModeDriver10.0</PlatformToolset>
+    <SupportsPackaging>false</SupportsPackaging>
+    <DriverTargetPlatform>Universal</DriverTargetPlatform>
+  </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Release|x64'">
     <TargetVersion>Windows7</TargetVersion>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>WindowsKernelModeDriver10.0</PlatformToolset>
     <SupportsPackaging>false</SupportsPackaging>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|x64'" Label="Configuration">
+    <TargetVersion>
+    </TargetVersion>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>WindowsKernelModeDriver10.0</PlatformToolset>
+    <SupportsPackaging>false</SupportsPackaging>
+    <DriverTargetPlatform>Universal</DriverTargetPlatform>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -73,7 +121,15 @@
     <OutDir>$(SolutionDir)$(PlatformShortName)\$(ConfigurationName)\</OutDir>
     <IntDir>$(PlatformShortName)\$(ConfigurationName)\</IntDir>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Debug|Win32'">
+    <OutDir>$(SolutionDir)$(PlatformShortName)\$(ConfigurationName)\</OutDir>
+    <IntDir>$(PlatformShortName)\$(ConfigurationName)\</IntDir>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Release|Win32'">
+    <OutDir>$(SolutionDir)$(PlatformShortName)\$(ConfigurationName)\</OutDir>
+    <IntDir>$(PlatformShortName)\$(ConfigurationName)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|Win32'">
     <OutDir>$(SolutionDir)$(PlatformShortName)\$(ConfigurationName)\</OutDir>
     <IntDir>$(PlatformShortName)\$(ConfigurationName)\</IntDir>
   </PropertyGroup>
@@ -85,6 +141,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Debug|Win32'">%(AdditionalDependencies);$(DDK_LIB_PATH)\hidclass.lib;$(DDK_LIB_PATH)\ntstrsafe.lib</AdditionalDependencies>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Debug|Win32'">%(AdditionalDependencies);$(DDK_LIB_PATH)\hidclass.lib;$(DDK_LIB_PATH)\ntstrsafe.lib</AdditionalDependencies>
     </Link>
     <Link />
     <Link />
@@ -93,11 +150,13 @@
     <Link />
     <Link>
       <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Release|Win32'">%(AdditionalDependencies);$(DDK_LIB_PATH)\hidclass.lib;$(DDK_LIB_PATH)\ntstrsafe.lib</AdditionalDependencies>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|Win32'">%(AdditionalDependencies);$(DDK_LIB_PATH)\hidclass.lib;$(DDK_LIB_PATH)\ntstrsafe.lib</AdditionalDependencies>
     </Link>
     <Link />
     <Link />
     <Link>
       <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Debug|x64'">%(AdditionalDependencies);$(DDK_LIB_PATH)\hidclass.lib;$(DDK_LIB_PATH)\ntstrsafe.lib</AdditionalDependencies>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Debug|x64'">%(AdditionalDependencies);$(DDK_LIB_PATH)\hidclass.lib;$(DDK_LIB_PATH)\ntstrsafe.lib</AdditionalDependencies>
     </Link>
     <Link />
     <Link />
@@ -106,6 +165,7 @@
     <Link />
     <Link>
       <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Release|x64'">%(AdditionalDependencies);$(DDK_LIB_PATH)\hidclass.lib;$(DDK_LIB_PATH)\ntstrsafe.lib</AdditionalDependencies>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|x64'">%(AdditionalDependencies);$(DDK_LIB_PATH)\hidclass.lib;$(DDK_LIB_PATH)\ntstrsafe.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
