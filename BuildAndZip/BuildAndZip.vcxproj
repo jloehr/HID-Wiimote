@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Windows 7, 8, 8.1 Release|Win32">
+      <Configuration>Windows 7, 8, 8.1 Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Windows 7, 8, 8.1 Release|x64">
+      <Configuration>Windows 7, 8, 8.1 Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{0C56BAEE-4F6C-4590-9E48-EFBF80099FEB}</ProjectGuid>
+    <RootNamespace>BuildAndZip</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Release|Win32'">
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Release|x64'">
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros">
+    <ZipTool>$(SolutionDir)BuildTools\7za\7za.exe</ZipTool>
+    <ZipDir>$(SolutionDir)Zip</ZipDir>
+    <ZipName>$(SolutionName.replace(' ','-'))_$(Configuration.replace(" Release", "").replace("dows", "").replace(", ", "-").replace(" ", "-"))_$(PlatformArchitecture)Bit.zip</ZipName>
+    <ZipPath>$(ZipDir)\$(ZipName)</ZipPath>
+    <PackageDir>$(SolutionDir)$(PlatformShortName)\$(Configuration.replace(" ",""))\HID Wiimote Package</PackageDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Release|x64'">
+    <OutDir>$(PlatformShortName)\$(Configuration)\</OutDir>
+    <IntDir>$(PlatformShortName)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Release|Win32'">
+    <OutDir>$(PlatformShortName)\$(Configuration)\</OutDir>
+    <IntDir>$(PlatformShortName)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Release|x64'">
+    <PostBuildEvent>
+      <Command>if not exist "$(ZipDir)" mkdir "$(ZipDir)"
+$(ZipTool) d "$(ZipPath)"
+$(ZipTool) a "$(ZipPath)" "$(PackageDir)\*"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Release|Win32'">
+    <PostBuildEvent>
+      <Command>if not exist "$(ZipDir)" mkdir "$(ZipDir)"
+$(ZipTool) d "$(ZipPath)"
+$(ZipTool) a "$(ZipPath)" "$(PackageDir)\*"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
