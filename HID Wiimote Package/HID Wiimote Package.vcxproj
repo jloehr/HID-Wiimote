@@ -93,54 +93,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Release|x64'">
     <Inf2CatUseLocalTime>true</Inf2CatUseLocalTime>
   </PropertyGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Debug|Win32'">
-    <Inf2Cat>
-      <UseLocalTime>true</UseLocalTime>
-    </Inf2Cat>
-    <PreLinkEvent>
-      <Command>
-      </Command>
-    </PreLinkEvent>
-    <PostBuildEvent>
-      <Command>
-      </Command>
-    </PostBuildEvent>
-  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Release|Win32'">
-    <Inf2Cat>
-      <UseLocalTime>true</UseLocalTime>
-    </Inf2Cat>
-    <PreLinkEvent>
-      <Command>
-      </Command>
-    </PreLinkEvent>
     <PostBuildEvent>
       <Command>c:\Tools\7za920\7za.exe d "$(TargetDir)$(SolutionName.replace(' ','-'))-$(TargetVersion.replace('dows', ''))-$(PlatformArchitecture)Bit.zip"
 c:\Tools\7za920\7za.exe a "$(TargetDir)$(SolutionName.replace(' ','-'))-Win8.1-$(PlatformArchitecture)Bit.zip" "$(PackageDir)\*"
 move /y "$(TargetDir)$(SolutionName.replace(' ','-'))-Win8.1-$(PlatformArchitecture)Bit.zip" "$(SolutionDir)Zip\$(SolutionName.replace(' ','-'))-Win8.1-$(PlatformArchitecture)Bit.zip"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Debug|x64'">
-    <Inf2Cat>
-      <UseLocalTime>true</UseLocalTime>
-    </Inf2Cat>
-    <PreLinkEvent>
-      <Command>
-      </Command>
-    </PreLinkEvent>
-    <PostBuildEvent>
-      <Command>
-      </Command>
-    </PostBuildEvent>
-  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Release|x64'">
-    <Inf2Cat>
-      <UseLocalTime>true</UseLocalTime>
-    </Inf2Cat>
-    <PreLinkEvent>
-      <Command>
-      </Command>
-    </PreLinkEvent>
     <PostBuildEvent>
       <Command>c:\Tools\7za920\7za.exe d "$(TargetDir)$(SolutionName.replace(' ','-'))-$(TargetVersion.replace('dows', ''))-$(PlatformArchitecture)Bit.zip"
 c:\Tools\7za920\7za.exe a "$(TargetDir)$(SolutionName.replace(' ','-'))-Win8.1-$(PlatformArchitecture)Bit.zip" "$(PackageDir)\*"
