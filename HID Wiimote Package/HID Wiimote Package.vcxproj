@@ -93,40 +93,31 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Release|x64'">
     <Inf2CatUseLocalTime>true</Inf2CatUseLocalTime>
   </PropertyGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Release|Win32'">
-    <PostBuildEvent>
-      <Command>c:\Tools\7za920\7za.exe d "$(TargetDir)$(SolutionName.replace(' ','-'))-$(TargetVersion.replace('dows', ''))-$(PlatformArchitecture)Bit.zip"
-c:\Tools\7za920\7za.exe a "$(TargetDir)$(SolutionName.replace(' ','-'))-Win8.1-$(PlatformArchitecture)Bit.zip" "$(PackageDir)\*"
-move /y "$(TargetDir)$(SolutionName.replace(' ','-'))-Win8.1-$(PlatformArchitecture)Bit.zip" "$(SolutionDir)Zip\$(SolutionName.replace(' ','-'))-Win8.1-$(PlatformArchitecture)Bit.zip"</Command>
-    </PostBuildEvent>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Release|x64'">
-    <PostBuildEvent>
-      <Command>c:\Tools\7za920\7za.exe d "$(TargetDir)$(SolutionName.replace(' ','-'))-$(TargetVersion.replace('dows', ''))-$(PlatformArchitecture)Bit.zip"
-c:\Tools\7za920\7za.exe a "$(TargetDir)$(SolutionName.replace(' ','-'))-Win8.1-$(PlatformArchitecture)Bit.zip" "$(PackageDir)\*"
-move /y "$(TargetDir)$(SolutionName.replace(' ','-'))-Win8.1-$(PlatformArchitecture)Bit.zip" "$(SolutionDir)Zip\$(SolutionName.replace(' ','-'))-Win8.1-$(PlatformArchitecture)Bit.zip"</Command>
-    </PostBuildEvent>
-  </ItemDefinitionGroup>
+  
   <ItemGroup>
+    <FilesToPackage Include="$(WindowsSdkDir)Redist\DIFx\dpinst\MultiLin\$(PlatformShortName)\dpinst.exe" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Release|Win32'">
+      <PackageRelativeDirectory>
+      </PackageRelativeDirectory>
+    </FilesToPackage>
+    <FilesToPackage Include="$(WindowsSdkDir)Redist\DIFx\dpinst\MultiLin\$(PlatformShortName)\dpinst.exe" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Release|x64'">
+      <PackageRelativeDirectory>
+      </PackageRelativeDirectory>
+    </FilesToPackage>
+    <FilesToPackage Include="..\$(Platform)\$(ConfigurationName)\HIDMiniport.pdb" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Debug|x64'">
+      <PackageRelativeDirectory>Debug</PackageRelativeDirectory>
+    </FilesToPackage>
+    <FilesToPackage Include="..\$(Platform)\$(ConfigurationName)\HIDWiimote.pdb" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Debug|x64'">
+      <PackageRelativeDirectory>Debug</PackageRelativeDirectory>
+    </FilesToPackage>
+    <FilesToPackage Include="..\HID Wiimote\$(Platform)\$(ConfigurationName)\vc140.pdb" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Debug|x64'">
+      <PackageRelativeDirectory>Debug</PackageRelativeDirectory>
+    </FilesToPackage>
     <FilesToPackage Include="@(Inf->'%(CopyOutput)')" Condition="'@(Inf)'!=''" />
-    <FilesToPackage Include="C:\Program Files (x86)\Windows Kits\8.1\Redist\DIFx\dpinst\MultiLin\x64\dpinst.exe" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Release|x64'">
-      <PackageRelativeDirectory>
-      </PackageRelativeDirectory>
-    </FilesToPackage>
-    <FilesToPackage Include="C:\Program Files (x86)\Windows Kits\8.1\Redist\DIFx\dpinst\MultiLin\x86\dpinst.exe" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Release|Win32'">
-      <PackageRelativeDirectory>
-      </PackageRelativeDirectory>
-    </FilesToPackage>
-    <FilesToPackage Include="..\HID Wiimote\x64\Win8.1Debug\vc120.pdb" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Debug|x64'">
-      <PackageRelativeDirectory>Debug</PackageRelativeDirectory>
-    </FilesToPackage>
-    <FilesToPackage Include="..\x64\Win8.1Debug\HIDMiniport.pdb" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Debug|x64'">
-      <PackageRelativeDirectory>Debug</PackageRelativeDirectory>
-    </FilesToPackage>
-    <FilesToPackage Include="..\x64\Win8.1Debug\HIDWiimote.pdb" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Debug|x64'">
-      <PackageRelativeDirectory>Debug</PackageRelativeDirectory>
-    </FilesToPackage>
     <FilesToPackage Include="..\DPInst\DPInst.xml" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Release|x64'">
+      <PackageRelativeDirectory>
+      </PackageRelativeDirectory>
+    </FilesToPackage>
+    <FilesToPackage Include="..\DPInst\DPInst.xml" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Release|Win32'">
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
