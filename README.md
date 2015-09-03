@@ -43,7 +43,7 @@ Main driver - does all the important Wiimote stuff.
 
 Driver Package/Utility project, to pack everything into one package and sign it. No code, just settings.
 
-### TinyInstaller
+## TinyInstaller
 
 My main installer written in C#. Just a helper to install my certificate to boost the driver ranking (so it will be picked instead of the default driver). Then invokes the Driver Package Installer (DPInst.exe).
 
