@@ -17,20 +17,20 @@
       <Configuration>Windows 10 Universal Release</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Windows 7, 8, 8.1 Debug|Win32">
-      <Configuration>Windows 7, 8, 8.1 Debug</Configuration>
+    <ProjectConfiguration Include="Windows 7, 8, 8.1, 10 Debug|Win32">
+      <Configuration>Windows 7, 8, 8.1, 10 Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Windows 7, 8, 8.1 Release|Win32">
-      <Configuration>Windows 7, 8, 8.1 Release</Configuration>
+    <ProjectConfiguration Include="Windows 7, 8, 8.1, 10 Release|Win32">
+      <Configuration>Windows 7, 8, 8.1, 10 Release</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Windows 7, 8, 8.1 Debug|x64">
-      <Configuration>Windows 7, 8, 8.1 Debug</Configuration>
+    <ProjectConfiguration Include="Windows 7, 8, 8.1, 10 Debug|x64">
+      <Configuration>Windows 7, 8, 8.1, 10 Debug</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Windows 7, 8, 8.1 Release|x64">
-      <Configuration>Windows 7, 8, 8.1 Release</Configuration>
+    <ProjectConfiguration Include="Windows 7, 8, 8.1, 10 Release|x64">
+      <Configuration>Windows 7, 8, 8.1, 10 Release</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
@@ -52,20 +52,21 @@
     <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Debug|Win32'">
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Debug|Win32'">
     <TargetVersion>Windows7</TargetVersion>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>WindowsKernelModeDriver10.0</PlatformToolset>
+    <DriverTargetPlatform>
+    </DriverTargetPlatform>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Debug|Win32'" Label="Configuration">
     <TargetVersion>
     </TargetVersion>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>WindowsKernelModeDriver10.0</PlatformToolset>
-    <DriverTargetPlatform>
-    </DriverTargetPlatform>
+    <DriverTargetPlatform>Universal</DriverTargetPlatform>
   </PropertyGroup>
-  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Release|Win32'">
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|Win32'">
     <TargetVersion>Windows7</TargetVersion>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>WindowsKernelModeDriver10.0</PlatformToolset>
@@ -75,21 +76,23 @@
     </TargetVersion>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>WindowsKernelModeDriver10.0</PlatformToolset>
+    <DriverTargetPlatform>Universal</DriverTargetPlatform>
   </PropertyGroup>
-  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Debug|x64'">
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Debug|x64'">
     <TargetVersion>Windows7</TargetVersion>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>WindowsKernelModeDriver10.0</PlatformToolset>
+    <DriverTargetPlatform>
+    </DriverTargetPlatform>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Debug|x64'" Label="Configuration">
     <TargetVersion>
     </TargetVersion>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>WindowsKernelModeDriver10.0</PlatformToolset>
-    <DriverTargetPlatform>
-    </DriverTargetPlatform>
+    <DriverTargetPlatform>Universal</DriverTargetPlatform>
   </PropertyGroup>
-  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Release|x64'">
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|x64'">
     <TargetVersion>Windows7</TargetVersion>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>WindowsKernelModeDriver10.0</PlatformToolset>
@@ -99,6 +102,7 @@
     </TargetVersion>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>WindowsKernelModeDriver10.0</PlatformToolset>
+    <DriverTargetPlatform>Universal</DriverTargetPlatform>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -121,7 +125,7 @@
     <VerifyFlags>133563</VerifyFlags>
     <PackageDir>$(SolutionDir)$(PlatformShortName)\$(ConfigurationName)\HID Wiimote Package</PackageDir>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Debug|Win32'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Debug|Win32'">
     <OutDir>$(SolutionDir)$(PlatformShortName)\$(ConfigurationName)\</OutDir>
     <IntDir>$(PlatformShortName)\$(ConfigurationName)\</IntDir>
     <Inf2CatUseLocalTime>true</Inf2CatUseLocalTime>
@@ -131,7 +135,7 @@
     <IntDir>$(PlatformShortName)\$(ConfigurationName)\</IntDir>
     <Inf2CatUseLocalTime>true</Inf2CatUseLocalTime>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Release|Win32'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|Win32'">
     <OutDir>$(SolutionDir)$(PlatformShortName)\$(ConfigurationName)\</OutDir>
     <IntDir>$(PlatformShortName)\$(ConfigurationName)\</IntDir>
     <Inf2CatUseLocalTime>true</Inf2CatUseLocalTime>
@@ -141,20 +145,20 @@
     <IntDir>$(PlatformShortName)\$(ConfigurationName)\</IntDir>
     <Inf2CatUseLocalTime>true</Inf2CatUseLocalTime>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Debug|x64'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Debug|x64'">
     <Inf2CatUseLocalTime>true</Inf2CatUseLocalTime>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Debug|x64'">
     <Inf2CatUseLocalTime>true</Inf2CatUseLocalTime>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Release|x64'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|x64'">
     <Inf2CatUseLocalTime>true</Inf2CatUseLocalTime>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|x64'">
     <Inf2CatUseLocalTime>true</Inf2CatUseLocalTime>
   </PropertyGroup>
   <ItemGroup>
-    <FilesToPackage Include="$(WindowsSdkDir)Redist\DIFx\dpinst\MultiLin\$(PlatformShortName)\dpinst.exe" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Release|Win32'">
+    <FilesToPackage Include="$(WindowsSdkDir)Redist\DIFx\dpinst\MultiLin\$(PlatformShortName)\dpinst.exe" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|Win32'">
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
@@ -162,7 +166,7 @@
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
-    <FilesToPackage Include="$(WindowsSdkDir)Redist\DIFx\dpinst\MultiLin\$(PlatformShortName)\dpinst.exe" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Release|x64'">
+    <FilesToPackage Include="$(WindowsSdkDir)Redist\DIFx\dpinst\MultiLin\$(PlatformShortName)\dpinst.exe" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|x64'">
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
@@ -170,26 +174,26 @@
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
-    <FilesToPackage Include="..\$(Platform)\$(ConfigurationName)\HIDMiniport.pdb" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Debug|x64'">
+    <FilesToPackage Include="..\$(Platform)\$(ConfigurationName)\HIDMiniport.pdb" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Debug|x64'">
       <PackageRelativeDirectory>Debug</PackageRelativeDirectory>
     </FilesToPackage>
     <FilesToPackage Include="..\$(Platform)\$(ConfigurationName)\HIDMiniport.pdb" Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Debug|x64'">
       <PackageRelativeDirectory>Debug</PackageRelativeDirectory>
     </FilesToPackage>
-    <FilesToPackage Include="..\$(Platform)\$(ConfigurationName)\HIDWiimote.pdb" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Debug|x64'">
+    <FilesToPackage Include="..\$(Platform)\$(ConfigurationName)\HIDWiimote.pdb" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Debug|x64'">
       <PackageRelativeDirectory>Debug</PackageRelativeDirectory>
     </FilesToPackage>
     <FilesToPackage Include="..\$(Platform)\$(ConfigurationName)\HIDWiimote.pdb" Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Debug|x64'">
       <PackageRelativeDirectory>Debug</PackageRelativeDirectory>
     </FilesToPackage>
-    <FilesToPackage Include="..\HID Wiimote\$(Platform)\$(ConfigurationName)\vc140.pdb" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Debug|x64'">
+    <FilesToPackage Include="..\HID Wiimote\$(Platform)\$(ConfigurationName)\vc140.pdb" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Debug|x64'">
       <PackageRelativeDirectory>Debug</PackageRelativeDirectory>
     </FilesToPackage>
     <FilesToPackage Include="..\HID Wiimote\$(Platform)\$(ConfigurationName)\vc140.pdb" Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Debug|x64'">
       <PackageRelativeDirectory>Debug</PackageRelativeDirectory>
     </FilesToPackage>
     <FilesToPackage Include="@(Inf->'%(CopyOutput)')" Condition="'@(Inf)'!=''" />
-    <FilesToPackage Include="..\DPInst\DPInst.xml" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Release|x64'">
+    <FilesToPackage Include="..\DPInst\DPInst.xml" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|x64'">
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
@@ -197,7 +201,7 @@
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
-    <FilesToPackage Include="..\DPInst\DPInst.xml" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Release|Win32'">
+    <FilesToPackage Include="..\DPInst\DPInst.xml" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|Win32'">
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
@@ -205,7 +209,7 @@
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
-    <FilesToPackage Include="..\TinyInstaller\bin\Release\TinyInstaller.exe" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Release|x64'">
+    <FilesToPackage Include="..\TinyInstaller\bin\Release\TinyInstaller.exe" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|x64'">
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
@@ -213,7 +217,7 @@
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
-    <FilesToPackage Include="..\TinyInstaller\bin\Release\TinyInstaller.exe" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Release|Win32'">
+    <FilesToPackage Include="..\TinyInstaller\bin\Release\TinyInstaller.exe" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|Win32'">
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>

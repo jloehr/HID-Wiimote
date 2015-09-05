@@ -9,12 +9,12 @@
       <Configuration>Windows 10 Universal Release</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Windows 7, 8, 8.1 Release|Win32">
-      <Configuration>Windows 7, 8, 8.1 Release</Configuration>
+    <ProjectConfiguration Include="Windows 7, 8, 8.1, 10 Release|Win32">
+      <Configuration>Windows 7, 8, 8.1, 10 Release</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Windows 7, 8, 8.1 Release|x64">
-      <Configuration>Windows 7, 8, 8.1 Release</Configuration>
+    <ProjectConfiguration Include="Windows 7, 8, 8.1, 10 Release|x64">
+      <Configuration>Windows 7, 8, 8.1, 10 Release</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
@@ -24,13 +24,13 @@
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Release|Win32'">
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|Win32'">
     <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|Win32'" Label="Configuration">
     <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
-  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Release|x64'">
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|x64'">
     <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|x64'" Label="Configuration">
@@ -48,7 +48,7 @@
     <ZipPath>$(ZipDir)\$(ZipName)</ZipPath>
     <PackageDir>$(SolutionDir)$(PlatformShortName)\$(Configuration.replace(" ",""))\HID Wiimote Package</PackageDir>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Release|x64'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|x64'">
     <OutDir>$(PlatformShortName)\$(Configuration)\</OutDir>
     <IntDir>$(PlatformShortName)\$(Configuration)\</IntDir>
   </PropertyGroup>
@@ -56,7 +56,7 @@
     <OutDir>$(PlatformShortName)\$(Configuration)\</OutDir>
     <IntDir>$(PlatformShortName)\$(Configuration)\</IntDir>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Release|Win32'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|Win32'">
     <OutDir>$(PlatformShortName)\$(Configuration)\</OutDir>
     <IntDir>$(PlatformShortName)\$(Configuration)\</IntDir>
   </PropertyGroup>
@@ -64,7 +64,7 @@
     <OutDir>$(PlatformShortName)\$(Configuration)\</OutDir>
     <IntDir>$(PlatformShortName)\$(Configuration)\</IntDir>
   </PropertyGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Release|x64'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|x64'">
     <PostBuildEvent>
       <Command>if not exist "$(ZipDir)" mkdir "$(ZipDir)"
 $(ZipTool) d "$(ZipPath)"
@@ -78,7 +78,7 @@ $(ZipTool) d "$(ZipPath)"
 $(ZipTool) a "$(ZipPath)" "$(PackageDir)\*"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1 Release|Win32'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|Win32'">
     <PostBuildEvent>
       <Command>if not exist "$(ZipDir)" mkdir "$(ZipDir)"
 $(ZipTool) d "$(ZipPath)"
