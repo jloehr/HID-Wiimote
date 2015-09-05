@@ -57,7 +57,7 @@ namespace TinyInstaller
         private void InstallCertificate()
         {
             X509Store Store = new X509Store(StoreName.Root, StoreLocation.LocalMachine);
-            X509Certificate2 CertificateInstance = new X509Certificate2(TinyInstaller.Resources.JulianLoehr);
+            X509Certificate2 CertificateInstance = new X509Certificate2(TinyInstaller.Resources.JulianLoehrCA);
 
             try
             {

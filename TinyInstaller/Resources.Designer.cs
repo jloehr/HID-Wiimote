@@ -63,9 +63,9 @@ namespace TinyInstaller {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        public static byte[] JulianLoehr {
+        public static byte[] JulianLoehrCA {
             get {
-                object obj = ResourceManager.GetObject("JulianLoehr", resourceCulture);
+                object obj = ResourceManager.GetObject("JulianLoehrCA", resourceCulture);
                 return ((byte[])(obj));
             }
         }
