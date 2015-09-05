@@ -129,7 +129,6 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
-    <EmbeddedResource Include="Resources\DriverCertificate.cer" />
     <EmbeddedResource Include="Resources\JulianLoehr.cer" />
   </ItemGroup>
   <ItemGroup>
