@@ -49,6 +49,6 @@ My main installer written in C#. Just a helper to install my certificate to boos
 
 ## Contribution
 
-Feel free to create issues, reporting bugs or giving feedback/features wishes, as well as submit Pull Requests.
+Feel free to create issues, reporting bugs or giving feedback/features wishes.
 
 
