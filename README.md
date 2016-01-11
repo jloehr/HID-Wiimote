@@ -21,7 +21,7 @@ Both can be downloaded on this page: https://msdn.microsoft.com/en-us/windows/ha
 
 ### Paths to adjust
 
-The Dirver Package is going to copy the Driver Package Installer (DPInst) into the Build directoy. (Only on Release Configurations)
+The Driver Package is going to copy the Driver Package Installer (DPInst) into the Build directory. (Only on Release Configurations)
 
 Normally the `WindowsSdkDir` Macro in Visual Studio should point to the Windows SDK 10 installation directory (which in turn contains the WDK). If not either fix it or change the path in the `Driver Package Properties` > `Driver Install` > `Package Files`.
 
@@ -33,7 +33,7 @@ Helper project to zip the Driver Packages after building. Has only Release Confi
 
 ### HID Miniport
 
-My own implementation of the MsHidKmdf driver, so i can pass some function adresses to the HID Wiimote driver. It basicly just passes everything down to the HID Wiimote filter driver, additionaly a custom IOCTL to request function adresses.
+My own implementation of the MsHidKmdf driver, so I can pass some function addresses to the HID Wiimote driver. It basically just passes everything down to the HID Wiimote filter driver, additionally a custom IOCTL to request function addresses.
 
 ### HID Wiimote
 
@@ -50,5 +50,3 @@ My main installer written in C#. Just a helper to install my certificate to boos
 ## Contribution
 
 Feel free to create issues, reporting bugs or giving feedback/features wishes.
-
-
