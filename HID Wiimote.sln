@@ -15,6 +15,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Additional Package Content", "Additional Package Content", "{7EAA057D-3F5C-42FA-8FDB-48BD40126BED}"
 	ProjectSection(SolutionItems) = preProject
 		Additional Package Content\DPInst.xml = Additional Package Content\DPInst.xml
+		Additional Package Content\EULA.txt = Additional Package Content\EULA.txt
+		Additional Package Content\Readme.txt = Additional Package Content\Readme.txt
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TinyInstaller", "TinyInstaller\TinyInstaller.csproj", "{234B7874-FFFB-4FA1-A5CF-AD0184A3DC15}"
