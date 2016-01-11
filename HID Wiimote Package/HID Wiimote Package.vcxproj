@@ -193,19 +193,19 @@
       <PackageRelativeDirectory>Debug</PackageRelativeDirectory>
     </FilesToPackage>
     <FilesToPackage Include="@(Inf->'%(CopyOutput)')" Condition="'@(Inf)'!=''" />
-    <FilesToPackage Include="..\DPInst\DPInst.xml" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|x64'">
+    <FilesToPackage Include="..\Additional Package Content\DPInst.xml" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|x64'">
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
-    <FilesToPackage Include="..\DPInst\DPInst.xml" Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|x64'">
+    <FilesToPackage Include="..\Additional Package Content\DPInst.xml" Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|x64'">
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
-    <FilesToPackage Include="..\DPInst\DPInst.xml" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|Win32'">
+    <FilesToPackage Include="..\Additional Package Content\DPInst.xml" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|Win32'">
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
-    <FilesToPackage Include="..\DPInst\DPInst.xml" Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|Win32'">
+    <FilesToPackage Include="..\Additional Package Content\DPInst.xml" Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|Win32'">
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
