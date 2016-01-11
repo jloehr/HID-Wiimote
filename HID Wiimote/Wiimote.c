@@ -476,6 +476,34 @@ UpdateBatteryLEDs(
 }
 
 NTSTATUS
+InitializeExtension(
+	_In_ PDEVICE_CONTEXT DeviceContext
+	)
+{
+	NTSTATUS Status = STATUS_SUCCESS;
+
+	Status = WriteSingeByteToRegister(DeviceContext, 0xA400F0, 0x55);
+	if (!NT_SUCCESS(Status))
+	{
+		return Status;
+	}
+
+	Status = WriteSingeByteToRegister(DeviceContext, 0xA400FB, 0x00);
+	if (!NT_SUCCESS(Status))
+	{
+		return Status;
+	}
+
+	Status = ReadFromRegister(DeviceContext, 0xA400FA, 0x06);
+	if (!NT_SUCCESS(Status))
+	{
+		return Status;
+	}
+
+	return Status;
+}
+
+NTSTATUS
 ProcessWiimoteBatteryLevel(
 	_In_ PDEVICE_CONTEXT DeviceContext,
 	_In_ BYTE BatteryLevel
@@ -764,19 +792,7 @@ ProcessStatusInformation(
 
 	if (Extension)
 	{
-		Status = WriteSingeByteToRegister(DeviceContext, 0xA400F0, 0x55);
-		if (!NT_SUCCESS(Status))
-		{
-			return Status;
-		}
-
-		Status = WriteSingeByteToRegister(DeviceContext, 0xA400FB, 0x00);
-		if (!NT_SUCCESS(Status))
-		{
-			return Status;
-		}
-
-		Status = ReadFromRegister(DeviceContext, 0xA400FA, 0x06);
+		Status = InitializeExtension(DeviceContext);
 		if (!NT_SUCCESS(Status))
 		{
 			return Status;
@@ -901,20 +917,30 @@ _In_ size_t ReadBufferSize
 
 	switch (ExtensionType)
 	{
-	case 0x0000: //Nunchuck
+	case 0x0000: // Nunchuck
 		Trace("Nunchuck Extension");
 		DeviceContext->WiimoteContext.Extension = Nunchuck;
 		DeviceContext->WiimoteContext.CurrentReportMode = 0x35;
 		break;
-	case 0x0101: //CLassic Controler (Pro)
+	case 0x0101: // Classic Controler (Pro)
 		Trace("Classic Controller (Pro) Extension");
 		DeviceContext->WiimoteContext.Extension = ClassicController;
 		DeviceContext->WiimoteContext.CurrentReportMode = 0x32;
 		break;
-	case 0x0120: //Wii U Pro Controller
+	case 0x0120: // Wii U Pro Controller
 		Trace("Wii U Pro Controller");
 		DeviceContext->WiimoteContext.Extension = WiiUProController;
 		DeviceContext->WiimoteContext.CurrentReportMode = 0x34;
+		break;
+	case 0xFFFFFFFF: // Error
+		Trace("Error");
+		DeviceContext->WiimoteContext.Extension = None;
+		DeviceContext->WiimoteContext.CurrentReportMode = 0x31;
+		Status = InitializeExtension(DeviceContext);
+		if (!NT_SUCCESS(Status))
+		{
+			return Status;
+		}
 		break;
 	default:
 		Trace("No supported Extension!");
