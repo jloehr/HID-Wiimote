@@ -1,4 +1,4 @@
-TLDR: You don't need to pay for it. Don't use this software to harm or kill anybody. Use on your own risk. Don't sue me later, when it breaks or causes any damage
+TLDR: You don't need to pay for it. Don't use this software to harm or kill anybody. Use on your own risk. Don't sue me later, when it breaks or causes any damage.
 
 HID Wiimote is free for use in any environment, including but not necessarily limited to: personal, academic, commercial, government, business, non-profit, and for-profit. "Free" in the preceding sentence means that there is no cost or charge associated with the installation and use of HID Wiimote.
 
