@@ -4,4 +4,76 @@
   <language code="0x0409">
     <eula type="txt" path="EULA.txt" />
   </language>
+  <language code="0x401">
+    <eula type="txt" path="EULA.txt" />
+  </language>
+  <language code="0x8041">
+    <eula type="txt" path="EULA.txt" />
+  </language>
+  <language code="0x4041">
+    <eula type="txt" path="EULA.txt" />
+  </language>
+  <language code="0x4051">
+    <eula type="txt" path="EULA.txt" />
+  </language>
+  <language code="0x4061">
+    <eula type="txt" path="EULA.txt" />
+  </language>
+  <language code="0x4071">
+    <eula type="txt" path="EULA.txt" />
+  </language>
+  <language code="0x4081">
+    <eula type="txt" path="EULA.txt" />
+  </language>
+  <language code="0x4091">
+    <eula type="txt" path="EULA.txt" />
+  </language>
+  <language code="0xC0A1">
+    <eula type="txt" path="EULA.txt" />
+  </language>
+  <language code="0x40B1">
+    <eula type="txt" path="EULA.txt" />
+  </language>
+  <language code="0x40C1">
+    <eula type="txt" path="EULA.txt" />
+  </language>
+  <language code="0x40D1">
+    <eula type="txt" path="EULA.txt" />
+  </language>
+  <language code="0x40E1">
+    <eula type="txt" path="EULA.txt" />
+  </language>
+  <language code="0x4101">
+    <eula type="txt" path="EULA.txt" />
+  </language>
+  <language code="0x4111">
+    <eula type="txt" path="EULA.txt" />
+  </language>
+  <language code="0x4121">
+    <eula type="txt" path="EULA.txt" />
+  </language>
+  <language code="0x4141">
+    <eula type="txt" path="EULA.txt" />
+  </language>
+  <language code="0x4131">
+    <eula type="txt" path="EULA.txt" />
+  </language>
+  <language code="0x4151">
+    <eula type="txt" path="EULA.txt" />
+  </language>
+  <language code="0x4161">
+    <eula type="txt" path="EULA.txt" />
+  </language>
+  <language code="0x8161">
+    <eula type="txt" path="EULA.txt" />
+  </language>
+  <language code="0x4191">
+    <eula type="txt" path="EULA.txt" />
+  </language>
+  <language code="0x41D1">
+    <eula type="txt" path="EULA.txt" />
+  </language>
+  <language code="0x41F1">
+    <eula type="txt" path="EULA.txt" />
+  </language>
 </dpinst>
