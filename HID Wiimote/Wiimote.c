@@ -407,6 +407,7 @@ SuspendWiimote(
 		return Status;
 	}
 
+	WdfObjectDelete(Request);
 	return Status;
 
 }
