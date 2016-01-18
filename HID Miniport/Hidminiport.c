@@ -110,7 +110,7 @@ SendAddresses(
 {
 	NTSTATUS Status = STATUS_SUCCESS;
 	PIRP NewIrp;
-	PIO_STATUS_BLOCK StatusBlock = NULL;
+	IO_STATUS_BLOCK StatusBlock;
 	HID_MINIPORT_ADDRESSES AddressesBuffer;
 
 	UNREFERENCED_PARAMETER(DeviceObject);
@@ -129,7 +129,7 @@ SendAddresses(
 	AddressesBuffer.FDO = DeviceObject;
 	AddressesBuffer.HidNotifyPresence = HidNotifyPresence;
 
-	NewIrp = IoBuildDeviceIoControlRequest(IOCTL_WIIMOTE_ADDRESSES, GET_NEXT_DEVICE_OBJECT(DeviceObject), &AddressesBuffer, sizeof(HID_MINIPORT_ADDRESSES), NULL, 0, TRUE, NULL, StatusBlock);
+	NewIrp = IoBuildDeviceIoControlRequest(IOCTL_WIIMOTE_ADDRESSES, GET_NEXT_DEVICE_OBJECT(DeviceObject), &AddressesBuffer, sizeof(HID_MINIPORT_ADDRESSES), NULL, 0, TRUE, NULL, &StatusBlock);
 	if(NewIrp == NULL)
 	{
 		Trace("Couldn't Build IRP");
