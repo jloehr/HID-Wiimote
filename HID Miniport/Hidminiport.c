@@ -60,8 +60,6 @@ AddDevice(
     _In_ PDEVICE_OBJECT FunctionalDeviceObject
     )
 {
-	PAGED_CODE();
-
     UNREFERENCED_PARAMETER(DriverObject);
 	
 	//Trace("Add Device");
@@ -201,8 +199,6 @@ Unload(
     )
 {
     UNREFERENCED_PARAMETER(DriverObject);
-
-    PAGED_CODE ();
 
     return;
 }
