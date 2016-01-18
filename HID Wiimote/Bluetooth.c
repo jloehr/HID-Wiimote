@@ -174,7 +174,6 @@ CreateRequestAndBuffer(
 
 }
 
-
 NTSTATUS
 PrepareRequest(
 	_In_ WDFIOTARGET IoTarget,
@@ -296,9 +295,6 @@ SendBRBSynchronous(
 		Request = OptRequest;
 	}
 
-
-	
-
 	Status = PrepareRequest(DeviceContext->IoTarget, BRB, Request);
 	if(!NT_SUCCESS(Status))
 	{
@@ -409,6 +405,10 @@ OpenChannel(
 	if(PreAllocatedBRB == NULL)
 	{
 		BRBOpenChannel = (PBRB_L2CA_OPEN_CHANNEL)BluetoothContext->ProfileDriverInterface.BthAllocateBrb(BRB_L2CA_OPEN_CHANNEL, BLUETOOTH_POOL_TAG);
+		if (BRBOpenChannel == NULL)
+		{
+			return STATUS_INSUFFICIENT_RESOURCES;
+		}
 	}
 	else
 	{
@@ -564,10 +564,13 @@ CloseChannel(
 	}
 
 	BRBCloseChannel = (PBRB_L2CA_CLOSE_CHANNEL)BluetoothContext->ProfileDriverInterface.BthAllocateBrb(BRB_L2CA_CLOSE_CHANNEL, BLUETOOTH_POOL_TAG);
+	if (BRBCloseChannel == NULL)
+	{
+		return STATUS_INSUFFICIENT_RESOURCES;
+	}
+
 	BRBCloseChannel->BtAddress = BluetoothContext->DeviceAddress;
 	BRBCloseChannel->ChannelHandle = ChannelHandle;
-	
-	//BluetoothContext->ChannelHandle = NULL;
 
 	Status = SendBRBSynchronous(DeviceContext, NULL, (PBRB)BRBCloseChannel);
 	BluetoothContext->ProfileDriverInterface.BthFreeBrb((PBRB)BRBCloseChannel);
@@ -611,6 +614,11 @@ TransferToDevice(
 
 	// Now get an BRB and fill it
 	BRBTransfer = (PBRB_L2CA_ACL_TRANSFER)BluetoothContext->ProfileDriverInterface.BthAllocateBrb(BRB_L2CA_ACL_TRANSFER, BLUETOOTH_POOL_TAG);
+	if (BRBTransfer == NULL)
+	{
+		return STATUS_INSUFFICIENT_RESOURCES;
+	}
+
 	BRBTransfer->BtAddress = BluetoothContext->DeviceAddress;
 	BRBTransfer->ChannelHandle = BluetoothContext->InterruptChannelHandle;
 	BRBTransfer->TransferFlags = ACL_TRANSFER_DIRECTION_OUT;
@@ -782,6 +790,11 @@ StartContiniousReader(
 
 	// Create BRB
 	BRB = BluetoothContext->ProfileDriverInterface.BthAllocateBrb(BRB_L2CA_ACL_TRANSFER, BLUETOOTH_POOL_TAG);
+	if (BRB)
+	{
+		WdfObjectDelete(Request);
+		return STATUS_INSUFFICIENT_RESOURCES;
+	}
 
 	//Start the Reader
 	Status = ReadFromDevice(DeviceContext, Request, (PBRB_L2CA_ACL_TRANSFER)BRB, ReadBuffer, ReadBufferSize);
