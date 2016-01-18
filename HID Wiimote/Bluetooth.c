@@ -26,6 +26,7 @@ GetVendorAndProductID(
 	WDF_MEMORY_DESCRIPTOR EnumInfoMemDescriptor;
 	BTH_ENUMERATOR_INFO EnumInfo;
 
+	RtlZeroMemory(&EnumInfo, sizeof(EnumInfo));
 	WDF_MEMORY_DESCRIPTOR_INIT_BUFFER(&EnumInfoMemDescriptor, &EnumInfo, sizeof(EnumInfo));
 
 	Status = WdfIoTargetSendInternalIoctlSynchronously(
@@ -76,6 +77,7 @@ PrepareBluetooth(
     }
 
 	//Get BluetoothAdress
+	RtlZeroMemory(&DeviceInfo, sizeof(DeviceInfo));
 	WDF_MEMORY_DESCRIPTOR_INIT_BUFFER(&DeviceInfoMemDescriptor, &DeviceInfo, sizeof(DeviceInfo));
 
 	Status = WdfIoTargetSendInternalIoctlSynchronously(
