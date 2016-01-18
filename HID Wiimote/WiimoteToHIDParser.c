@@ -84,9 +84,11 @@ ParseAccelerometer(
 	_In_opt_ BOOLEAN Invert
 )
 {
-	// 9,8 is gravity, shifted because two lsb are ignored, gives 24
-	//Some varity, so Min = 0, Max = 63, middle 32
+	// Gravity is always present. 10 Bit Accelerometer data would have value of 96 (9,8 m/s²).
+	// As only the 8 MSBs are used the value is 24. To caputure that constant pull a value range from 0 to 63 is used (32 = nullstate).
+	// For a range of 63 6 bits are used.
 
+	// Normally 0x80 (128) is the middle of the 8 bit range, so cap the accelerometer data to a range of 32 around 128.
 	if(RawValue < (0x80 - 0x20))
 	{
 		RawValue = 0x80 - 0x20;
@@ -105,7 +107,6 @@ ParseAccelerometer(
 	RawValue = RawValue << 2;
 
 	ReportByte[0] = RawValue;
-	//ReportByte[1] |= (RawValue >> (8 - LeastSignificantBitPosition));
 }
 
 VOID
