@@ -55,19 +55,29 @@ PrintBytes(
 	UNREFERENCED_PARAMETER(Data);
 	UNREFERENCED_PARAMETER(Size);
 #else
+	NTSTATUS Result = STATUS_SUCCESS;
+	PCHAR Message;
+	PCHAR WritePointer;
+	PCCHAR ReadPointer;
+	const size_t BytesPerElement = 5;
+	size_t StringBufferSize = (Size * BytesPerElement) + 1;
 
-	CHAR * Message;
-	CHAR * WritePointer;
-	CCHAR * ReadPointer;
-	size_t i;
+	Message = (PCHAR)ExAllocatePoolWithTag(NonPagedPool, StringBufferSize, PRINTBYTE_POOL_TAG);
+	if (Message == NULL)
+	{
+		Trace("Error printing Bytes: Out of Memory");
+		return;
+	}
 
-	Message = (CHAR *)ExAllocatePoolWithTag(NonPagedPool, (10 * Size), PRINTBYTE_POOL_TAG);
 	WritePointer = Message;
 	ReadPointer = Data;
 
-	for (i = 0; i < Size; ++i)
+	for (SIZE_T i = 0; (i < Size) && (NT_SUCCESS(Result)); ++i)
 	{
-		WritePointer += sprintf(WritePointer, "%#02x ", *ReadPointer);
+		Result = RtlStringCbPrintfA(WritePointer, StringBufferSize, "%#02x ", *ReadPointer);
+
+		WritePointer += BytesPerElement;
+		StringBufferSize -= BytesPerElement;
 		ReadPointer++;
 	}
 
