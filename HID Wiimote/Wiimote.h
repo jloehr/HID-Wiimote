@@ -213,7 +213,7 @@ NTSTATUS StartWiimote(_In_ PDEVICE_CONTEXT DeviceContext);
 NTSTATUS StopWiimote(_In_ PDEVICE_CONTEXT DeviceContext);
 NTSTATUS ResetToNullState(_In_ PDEVICE_CONTEXT DeviceContext);
 
-NTSTATUS ProcessReport(_In_ PDEVICE_CONTEXT DeviceContext, _In_ PVOID ReadBuffer, _In_ size_t ReadBufferSize);
+NTSTATUS ProcessReport(_In_ PDEVICE_CONTEXT DeviceContext, _In_reads_bytes_(ReadBufferSize) PVOID ReadBuffer, _In_ SIZE_T ReadBufferSize);
 
 EVT_WDF_TIMER BatteryLevelLEDUpdateTimerExpired;
 

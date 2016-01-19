@@ -18,12 +18,11 @@ VOID
 ParseBooleanAxis(
 	_In_ BOOLEAN MinimumValue,
 	_In_ BOOLEAN MaximumValue,
-	_Out_ BYTE * ReportByte,
+	_Inout_updates_(1) PUCHAR ReportByte,
 	_In_ UCHAR LeastSignificantBitPosition,
 	_In_ BYTE Bits
 	)
 {
-	UNREFERENCED_PARAMETER(Bits);
 
 	BYTE MinValue = (0x80 >> (8 - Bits)) + 0x01;
 	BYTE MaxValue = 0x7F >> (8 - Bits);
@@ -41,7 +40,7 @@ ParseBooleanAxis(
 VOID
 ParseButton(
 	_In_ BOOLEAN ButtonValue,
-	_Out_ BYTE * ReportByte,
+	_Inout_updates_(1) PUCHAR ReportByte,
 	_In_ UCHAR LeastSignificantBitPosition
 	)
 {
@@ -54,9 +53,9 @@ ParseButton(
 VOID
 ParseAnalogAxis(
 	_In_ BYTE RawValue,
-	_Out_ BYTE ReportByte[1],
-	_In_opt_ BOOLEAN Signed,
-	_In_opt_ BOOLEAN Invert
+	_Out_writes_all_(1) PUCHAR ReportByte,
+	_In_ BOOLEAN Signed,
+	_In_ BOOLEAN Invert
 )
 {
 	if (Invert)
@@ -68,7 +67,7 @@ ParseAnalogAxis(
 	{
 		CHAR Value = RawValue - 0x80;
 
-		ReportByte[0] |= Value;
+		ReportByte[0] = (0x00 | Value);
 	}
 	else
 	{
@@ -80,8 +79,8 @@ ParseAnalogAxis(
 VOID
 ParseAccelerometer(
 	_In_ BYTE RawValue,
-	_Out_ BYTE ReportByte[2],
-	_In_opt_ BOOLEAN Invert
+	_Out_writes_all_(2) PUCHAR ReportByte,
+	_In_ BOOLEAN Invert
 )
 {
 	// Gravity is always present. 10 Bit Accelerometer data would have value of 96 (9,8 m/s²).
@@ -125,7 +124,7 @@ _In_ BOOLEAN Up,
 _In_ BOOLEAN Right,
 _In_ BOOLEAN Down,
 _In_ BOOLEAN Left,
-_Out_ BYTE ReportByte[1]
+_Out_writes_all_(1) PUCHAR ReportByte
 )
 {
 	/*
@@ -210,7 +209,7 @@ BOOLEAN ParseIRPoints(
 
 VOID ParseIRCamera(
 	_In_ WIIMOTE_IR_POINT Points[WIIMOTE_IR_POINTS_BUFFER_SIZE][WIIMOTE_IR_POINTS],
-	_Out_ BYTE ReportByte[4],
+	_Out_writes_all_(4) PUCHAR ReportByte,
 	_In_ BYTE XPadding,
 	_In_ BYTE YPadding
 	)
@@ -265,7 +264,7 @@ VOID ParseIRCamera(
 VOID
 ParseWiimoteStateAsStandaloneWiiremote(
 	_In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext,
-	_Out_ BYTE RequestBuffer[7]
+	_Inout_updates_(7) PUCHAR RequestBuffer
 	)
 {
 	//Axis
@@ -293,7 +292,7 @@ ParseWiimoteStateAsStandaloneWiiremote(
 VOID
 ParseWiimoteStateAsNunchuckExtension(
 	_In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext,
-	_Out_ BYTE RequestBuffer[9]
+	_Inout_updates_(9) PUCHAR RequestBuffer
 	)
 {
 	//AnalogStick as Axis
@@ -327,7 +326,7 @@ ParseWiimoteStateAsNunchuckExtension(
 VOID
 ParseWiimoteStateAsClassicControllerExtension(
 _In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext,
-_Out_ BYTE RequestBuffer[9]
+_Inout_updates_(9) PUCHAR RequestBuffer
 )
 {
 	//LeftAnalogStick as Axis
@@ -367,12 +366,9 @@ _Out_ BYTE RequestBuffer[9]
 VOID
 ParseWiimoteState(
 _In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext,
-_Out_ BYTE RequestBuffer[9]
+_Out_writes_all_(9) PUCHAR RequestBuffer
 )
 {
-	UNREFERENCED_PARAMETER(WiimoteContext);
-	UNREFERENCED_PARAMETER(RequestBuffer);
-
 	RtlSecureZeroMemory(RequestBuffer, 9);
 
 	switch (WiimoteContext->Extension)
@@ -395,7 +391,8 @@ _Out_ BYTE RequestBuffer[9]
 
 VOID ParseWiimoteStateAsDPadMouse( 
 	_In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext, 
-	_Out_ BYTE RequestBuffer[4])
+	_Out_writes_all_(4) PUCHAR RequestBuffer
+	)
 {
 	RtlSecureZeroMemory(RequestBuffer, 4);
 
@@ -411,10 +408,9 @@ VOID ParseWiimoteStateAsDPadMouse(
 
 VOID ParseWiimoteStateAsIRMouse(
 	_In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext,
-	_Out_ BYTE RequestBuffer[5])
+	_Out_writes_all_(3) PUCHAR RequestBuffer
+	)
 {
-	UNREFERENCED_PARAMETER(WiimoteContext);
-
 	RtlSecureZeroMemory(RequestBuffer, 3);
 	
 	//Buttons
@@ -424,6 +420,4 @@ VOID ParseWiimoteStateAsIRMouse(
 
 	//Axis
 	ParseIRCamera(WiimoteContext->IRState.Points, RequestBuffer + 1, 128, 121);
-
-
 }

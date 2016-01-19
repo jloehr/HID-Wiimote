@@ -53,7 +53,7 @@ VOID L2CAPCallback(_In_  PVOID Context, _In_  INDICATION_CODE Indication, _In_  
 
 NTSTATUS CloseChannels(_In_ PDEVICE_CONTEXT DeviceContext);
 
-NTSTATUS CreateRequestAndBuffer(_In_ WDFDEVICE Device, _In_ WDFIOTARGET IoTarget, _In_ size_t BufferSize, _Out_ WDFREQUEST * Request, _Out_ WDFMEMORY * Memory, _Out_opt_ PVOID * Buffer);
+NTSTATUS CreateRequestAndBuffer(_In_ WDFDEVICE Device, _In_ WDFIOTARGET IoTarget, _In_ SIZE_T BufferSize, _Outptr_ WDFREQUEST * Request, _Outptr_ WDFMEMORY * Memory, _Outptr_opt_result_buffer_(BufferSize) PVOID * Buffer);
 NTSTATUS TransferToDevice(_In_ PDEVICE_CONTEXT DeviceContext, _In_ WDFREQUEST Request, _In_ WDFMEMORY Memory, _In_ BOOLEAN Synchronous);
 EVT_WDF_REQUEST_COMPLETION_ROUTINE TransferToDeviceCompletion;
 

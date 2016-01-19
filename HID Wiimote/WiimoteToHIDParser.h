@@ -15,8 +15,8 @@ Abstract:
 
 #include "HIDWiimote.h"
 
-VOID ParseWiimoteState( _In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext, _Out_ BYTE RequestBuffer[1]);
-VOID ParseWiimoteStateAsDPadMouse(_In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext, _Out_ BYTE RequestBuffer[1]);
-VOID ParseWiimoteStateAsIRMouse(_In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext, _Out_ BYTE RequestBuffer[1]);
+VOID ParseWiimoteState( _In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext, _Out_writes_all_(9) PUCHAR RequestBuffer);
+VOID ParseWiimoteStateAsDPadMouse(_In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext, _Out_writes_all_(4) PUCHAR RequestBuffer);
+VOID ParseWiimoteStateAsIRMouse(_In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext, _Out_writes_all_(3) PUCHAR RequestBuffer);
 
 #endif

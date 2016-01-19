@@ -190,9 +190,9 @@ _In_ BYTE Size
 NTSTATUS
 WriteToRegister(
 _In_ PDEVICE_CONTEXT DeviceContext,
-_In_ const INT32 Address,
-_In_ const BYTE * Data,
-_In_ const BYTE DataSize
+_In_ INT32 Address,
+_In_reads_(DataSize) PCUCHAR Data,
+_In_ BYTE DataSize
 )
 {
 	CONST size_t BufferSize = 23;
@@ -235,8 +235,8 @@ _In_ const BYTE DataSize
 NTSTATUS
 WriteSingeByteToRegister(
 _In_ PDEVICE_CONTEXT DeviceContext,
-_In_ const INT32 Address,
-_In_ const BYTE Data
+_In_ INT32 Address,
+_In_ BYTE Data
 )
 {
 	return WriteToRegister(DeviceContext, Address, &Data, 1);
@@ -527,8 +527,8 @@ ProcessWiimoteBatteryLevel(
 
 VOID
 XorData(
-_In_ BYTE * Source,
-_Inout_ BYTE * Dst,
+_In_reads_(Length) BYTE * Source,
+_Out_writes_all_(Length) BYTE * Dst,
 _In_ SIZE_T Length
 )
 {
@@ -541,7 +541,7 @@ _In_ SIZE_T Length
 VOID
 ExtractCoreButtons(
 _In_ PDEVICE_CONTEXT DeviceContext,
-_In_ BYTE RawCoreButtons[2]
+_In_reads_bytes_(2) BYTE RawCoreButtons[]
 )
 {
 	PWIIMOTE_STATE WiimoteState = &(DeviceContext->WiimoteContext.State);
@@ -563,8 +563,8 @@ _In_ BYTE RawCoreButtons[2]
 VOID
 ExtractAccelerometer(
 _In_ PDEVICE_CONTEXT DeviceContext,
-_In_ BYTE RawCoreButtons[2],
-_In_ BYTE RawAccelerometer[3]
+_In_reads_bytes_(2) BYTE RawCoreButtons[],
+_In_reads_bytes_(3) BYTE RawAccelerometer[]
 )
 {
 	PWIIMOTE_STATE WiimoteState = &(DeviceContext->WiimoteContext.State);
@@ -585,7 +585,7 @@ _In_ BYTE RawAccelerometer[3]
 VOID
 ExtractNunchuck(
 _In_ PDEVICE_CONTEXT DeviceContext,
-_In_ BYTE RawInputData[6]
+_In_reads_bytes_(6) BYTE RawInputData[]
 )
 {
 	BYTE DecodedInputData[1];
@@ -608,7 +608,7 @@ _In_ BYTE RawInputData[6]
 VOID
 ExtractClassicControllerButtons(
 	_In_ PDEVICE_CONTEXT DeviceContext,
-	_In_ BYTE DecodedInputData[2]
+	_In_reads_bytes_(2) BYTE DecodedInputData[]
 	)
 {
 	DeviceContext->WiimoteContext.ClassicControllerState.Buttons.A = DecodedInputData[1] & 0x10;
@@ -633,7 +633,7 @@ ExtractClassicControllerButtons(
 VOID
 ExtractClassicController(
 	_In_ PDEVICE_CONTEXT DeviceContext,
-	_In_ BYTE RawInputData[6]
+	_In_reads_bytes_(6) BYTE RawInputData[]
 	)
 {
 	BYTE DecodedInputData[2];
@@ -664,7 +664,7 @@ ExtractClassicController(
 VOID
 ExtractWiiUProController(
 _In_ PDEVICE_CONTEXT DeviceContext,
-_In_ BYTE RawInputData[11]
+_In_reads_bytes_(11) BYTE RawInputData[]
 )
 {
 	BYTE DecodedInputData[3];
@@ -709,7 +709,7 @@ BOOLEAN
 ExtractIRCameraPoint(
 _In_ PWIIMOTE_IR_POINT IRPointData1,
 _In_ PWIIMOTE_IR_POINT IRPointData2,
-_In_ BYTE InputData[5]
+_In_reads_bytes_(5) BYTE InputData[]
 )
 {
 	USHORT X1 = InputData[0];
@@ -734,7 +734,7 @@ _In_ BYTE InputData[5]
 BOOLEAN
 ExtractIRCamera(
 _In_ PDEVICE_CONTEXT DeviceContext,
-_In_ BYTE RawInputData[10]
+_In_reads_bytes_(10) BYTE RawInputData[]
 )
 {
 	BOOLEAN ValidPointData = FALSE;
@@ -777,7 +777,7 @@ ProcessExtensionData(
 NTSTATUS
 ProcessStatusInformation(
 	_In_ PDEVICE_CONTEXT DeviceContext,
-	_In_ BYTE * ReadBuffer, 
+	_In_reads_bytes_(ReadBufferSize) BYTE * ReadBuffer,
 	_In_ size_t ReadBufferSize
 	)
 {
@@ -830,7 +830,7 @@ ProcessStatusInformation(
 NTSTATUS
 ProcessInputReport(
 	_In_ PDEVICE_CONTEXT DeviceContext,
-	_In_ BYTE * ReadBuffer, 
+	_In_reads_bytes_(ReadBufferSize) BYTE * ReadBuffer,
 	_In_ size_t ReadBufferSize
 	)
 {
@@ -887,7 +887,7 @@ ProcessInputReport(
 NTSTATUS
 ProcessRegisterReadReport(
 _In_ PDEVICE_CONTEXT DeviceContext,
-_In_ BYTE * ReadBuffer,
+_In_reads_bytes_(ReadBufferSize) BYTE * ReadBuffer,
 _In_ size_t ReadBufferSize
 )
 {
@@ -961,7 +961,7 @@ _In_ size_t ReadBufferSize
 NTSTATUS
 ProcessAcknowledgementReport(
 _In_ PDEVICE_CONTEXT DeviceContext,
-_In_ BYTE * ReadBuffer,
+_In_reads_bytes_(ReadBufferSize) BYTE * ReadBuffer,
 _In_ size_t ReadBufferSize
 )
 {
@@ -1002,8 +1002,8 @@ _In_ size_t ReadBufferSize
 NTSTATUS
 ProcessReport(
 	_In_ PDEVICE_CONTEXT DeviceContext,
-	_In_ PVOID ReadBuffer, 
-	_In_ size_t ReadBufferSize
+	_In_reads_bytes_(ReadBufferSize) PVOID ReadBuffer,
+	_In_ SIZE_T ReadBufferSize
 	)
 {
 	NTSTATUS Status = STATUS_SUCCESS;

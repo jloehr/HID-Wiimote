@@ -103,7 +103,7 @@ NTSTATUS
 CreateRequest(
 	_In_ WDFDEVICE Device,
 	_In_ WDFIOTARGET IoTarget,
-	_Out_ WDFREQUEST * Request
+	_Outptr_ WDFREQUEST * Request
 	)
 {
 	NTSTATUS Status = STATUS_SUCCESS;
@@ -124,9 +124,9 @@ CreateRequest(
 NTSTATUS
 CreateBuffer(
 	_In_ WDFREQUEST Request,
-	_In_ size_t BufferSize,
-	_Out_ WDFMEMORY * Memory,
-	_Out_opt_ PVOID * Buffer
+	_In_ SIZE_T BufferSize,
+	_Outptr_ WDFMEMORY * Memory,
+	_Outptr_opt_result_buffer_(BufferSize) PVOID * Buffer
 	)
 {
 	NTSTATUS Status = STATUS_SUCCESS;
@@ -148,10 +148,10 @@ NTSTATUS
 CreateRequestAndBuffer(
 	_In_ WDFDEVICE Device,
 	_In_ WDFIOTARGET IoTarget,
-	_In_ size_t BufferSize,
-	_Out_ WDFREQUEST * Request,
-	_Out_ WDFMEMORY * Memory,
-	_Out_opt_ PVOID * Buffer
+	_In_ SIZE_T BufferSize,
+	_Outptr_ WDFREQUEST * Request,
+	_Outptr_ WDFMEMORY * Memory,
+	_Outptr_opt_result_buffer_(BufferSize) PVOID * Buffer
 	)
 {
 	NTSTATUS Status = STATUS_SUCCESS;
@@ -667,8 +667,8 @@ ReadFromDevice(
 	_In_ PDEVICE_CONTEXT DeviceContext,
 	_In_ WDFREQUEST Request,
 	_In_ PBRB_L2CA_ACL_TRANSFER BRB,
-	_In_ PVOID ReadBuffer,
-	_In_ size_t ReadBufferSize
+	_In_reads_(ReadBufferSize) PVOID ReadBuffer,
+	_In_ SIZE_T ReadBufferSize
 )
 {
 	NTSTATUS Status = STATUS_SUCCESS;
