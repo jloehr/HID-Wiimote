@@ -20,12 +20,13 @@ ParseBooleanAxis(
 	_In_ BOOLEAN MaximumValue,
 	_Inout_updates_(1) PUCHAR ReportByte,
 	_In_ UCHAR LeastSignificantBitPosition,
-	_In_ BYTE Bits
+	_In_ BYTE Bits,
+	_In_ BOOLEAN Signed
 	)
 {
-
-	BYTE MinValue = (0x80 >> (8 - Bits)) + 0x01;
-	BYTE MaxValue = 0x7F >> (8 - Bits);
+	BYTE MinValue = (Signed ? 0x81 : 0x00) >> (8 - Bits);
+	BYTE MaxValue = (Signed ? 0x7F : 0xFF) >> (8 - Bits);
+	BYTE NullValue = (Signed ? 0x00 : 0x7F) >> (8 - Bits);
 
 	if(MinimumValue)
 	{
@@ -34,6 +35,10 @@ ParseBooleanAxis(
 	else if(MaximumValue)
 	{
 		(*ReportByte) |= (MaxValue << LeastSignificantBitPosition);
+	}
+	else
+	{
+		(*ReportByte) |= (NullValue << LeastSignificantBitPosition);
 	}
 }
 
@@ -65,7 +70,7 @@ ParseAnalogAxis(
 
 	if (Signed)
 	{
-		CHAR Value = RawValue - 0x80;
+		CHAR Value = ((CHAR)RawValue) - 0x80;
 
 		ReportByte[0] = (0x00 | Value);
 	}
@@ -268,8 +273,8 @@ ParseWiimoteStateAsStandaloneWiiremote(
 	)
 {
 	//Axis
-	ParseBooleanAxis(WiimoteContext->State.CoreButtons.DPad.Up, WiimoteContext->State.CoreButtons.DPad.Down, RequestBuffer, 0, 8);
-	ParseBooleanAxis(WiimoteContext->State.CoreButtons.DPad.Right, WiimoteContext->State.CoreButtons.DPad.Left, RequestBuffer + 1, 0, 8);
+	ParseBooleanAxis(WiimoteContext->State.CoreButtons.DPad.Up, WiimoteContext->State.CoreButtons.DPad.Down, RequestBuffer, 0, 8, FALSE);
+	ParseBooleanAxis(WiimoteContext->State.CoreButtons.DPad.Right, WiimoteContext->State.CoreButtons.DPad.Left, RequestBuffer + 1, 0, 8, FALSE);
 
 	//Buttons
 	ParseButton(WiimoteContext->State.CoreButtons.One, RequestBuffer + 2, 0);
@@ -296,8 +301,8 @@ ParseWiimoteStateAsNunchuckExtension(
 	)
 {
 	//AnalogStick as Axis
-	ParseAnalogAxis(WiimoteContext->NunchuckState.AnalogStick.X, RequestBuffer, TRUE, FALSE);
-	ParseAnalogAxis(WiimoteContext->NunchuckState.AnalogStick.Y, RequestBuffer + 1, TRUE, TRUE);
+	ParseAnalogAxis(WiimoteContext->NunchuckState.AnalogStick.X, RequestBuffer, FALSE, FALSE);
+	ParseAnalogAxis(WiimoteContext->NunchuckState.AnalogStick.Y, RequestBuffer + 1, FALSE, TRUE);
 
 	//Buttons
 	ParseButton(WiimoteContext->State.CoreButtons.A, RequestBuffer + 2, 0);
@@ -330,8 +335,8 @@ _Inout_updates_(9) PUCHAR RequestBuffer
 )
 {
 	//LeftAnalogStick as Axis
-	ParseAnalogAxis(WiimoteContext->ClassicControllerState.LeftAnalogStick.X, RequestBuffer, TRUE, FALSE);
-	ParseAnalogAxis(WiimoteContext->ClassicControllerState.LeftAnalogStick.Y, RequestBuffer + 1, TRUE, TRUE);
+	ParseAnalogAxis(WiimoteContext->ClassicControllerState.LeftAnalogStick.X, RequestBuffer, FALSE, FALSE);
+	ParseAnalogAxis(WiimoteContext->ClassicControllerState.LeftAnalogStick.Y, RequestBuffer + 1, FALSE, TRUE);
 
 	//Buttons
 	ParseButton(WiimoteContext->State.CoreButtons.A || WiimoteContext->ClassicControllerState.Buttons.A, RequestBuffer + 2, 0);
@@ -402,8 +407,8 @@ VOID ParseWiimoteStateAsDPadMouse(
 	ParseButton(WiimoteContext->State.CoreButtons.B, RequestBuffer, 2);
 
 	//Axis
-	ParseBooleanAxis(WiimoteContext->State.CoreButtons.DPad.Up, WiimoteContext->State.CoreButtons.DPad.Down, RequestBuffer + 1, 6, 2);
-	ParseBooleanAxis(WiimoteContext->State.CoreButtons.DPad.Right, WiimoteContext->State.CoreButtons.DPad.Left, RequestBuffer + 2, 6, 2);
+	ParseBooleanAxis(WiimoteContext->State.CoreButtons.DPad.Up, WiimoteContext->State.CoreButtons.DPad.Down, RequestBuffer + 1, 6, 2, TRUE);
+	ParseBooleanAxis(WiimoteContext->State.CoreButtons.DPad.Right, WiimoteContext->State.CoreButtons.DPad.Left, RequestBuffer + 2, 6, 2, TRUE);
 }
 
 VOID ParseWiimoteStateAsIRMouse(

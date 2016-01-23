@@ -11,6 +11,8 @@ If you like this project and really want to pay for it, see my homepage (https:/
 
 -- Changelog --
 
+- Fix Issues with RawInput Readings
+
 -- 0.2.6.2 --
 
 - Fix non English languages for the Driver Package Installer
