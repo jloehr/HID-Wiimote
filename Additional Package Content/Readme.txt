@@ -11,7 +11,8 @@ If you like this project and really want to pay for it, see my homepage (https:/
 
 -- Changelog --
 
-- Fix Issues with RawInput Readings
+- Fix RawInput not reading the primary axes correctly
+- Add experimental untested Balance Board support
 
 -- 0.2.6.2 --
 

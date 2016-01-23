@@ -122,7 +122,6 @@ ParseTrigger(
 	ReportByte[0] = TriggerValue;
 }
 
-
 VOID
 ParseDPad(
 _In_ BOOLEAN Up,
@@ -164,6 +163,32 @@ _Out_writes_all_(1) PUCHAR ReportByte
 	Right = Right ? 1 : 0;
 
 	ReportByte[0] = ValueLookUpTable[Down + 1 - Up][Right + 1 - Left];
+}
+
+USHORT
+JoinSensorValue(
+	_In_ USHORT ValueOne,
+	_In_ USHORT ValueTwo
+	)
+{
+	UINT32 Value = ValueOne + ValueTwo;
+	return (USHORT)(Value / 2);
+}
+
+BYTE
+ParseBalanceBoardSensors(
+	_In_ USHORT PositiveValueOne,
+	_In_ USHORT PositiveValueTwo,
+	_In_ USHORT NegativeValueOne,
+	_In_ USHORT NegativeValueTwo
+	)
+{
+	USHORT PositiveValue = JoinSensorValue(PositiveValueOne, PositiveValueTwo);
+	USHORT NegativeValue = JoinSensorValue(NegativeValueOne, NegativeValueTwo);
+
+	BYTE Value = (BYTE)((PositiveValue >> 5) - (NegativeValue >> 5));
+
+	return Value;
 }
 
 BOOLEAN AccumulateIRPoint(
@@ -329,6 +354,19 @@ ParseWiimoteStateAsNunchuckExtension(
 }
 
 VOID
+ParseWiimoteStateAsBalanceBoard(
+	_In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext,
+	_Inout_updates_(3) PUCHAR RequestBuffer
+	)
+{
+	RequestBuffer[0] = ParseBalanceBoardSensors(WiimoteContext->BalanceBoardState.Sensor.TopLeft, WiimoteContext->BalanceBoardState.Sensor.TopRight, WiimoteContext->BalanceBoardState.Sensor.BottomLeft, WiimoteContext->BalanceBoardState.Sensor.BottomRight);
+	RequestBuffer[1] = ParseBalanceBoardSensors(WiimoteContext->BalanceBoardState.Sensor.BottomRight, WiimoteContext->BalanceBoardState.Sensor.TopRight, WiimoteContext->BalanceBoardState.Sensor.TopLeft, WiimoteContext->BalanceBoardState.Sensor.BottomLeft);
+
+	// Balance Board has only a single button, that is reported as "A"
+	ParseButton(WiimoteContext->State.CoreButtons.A, RequestBuffer + 2, 0);
+}
+
+VOID
 ParseWiimoteStateAsClassicControllerExtension(
 _In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext,
 _Inout_updates_(9) PUCHAR RequestBuffer
@@ -383,6 +421,9 @@ _Out_writes_all_(9) PUCHAR RequestBuffer
 		break;
 	case Nunchuck:
 		ParseWiimoteStateAsNunchuckExtension(WiimoteContext, RequestBuffer);
+		break;
+	case BalanceBoard:
+		ParseWiimoteStateAsBalanceBoard(WiimoteContext, RequestBuffer);
 		break;
 	case ClassicController:
 	case WiiUProController:

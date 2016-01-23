@@ -606,6 +606,27 @@ _In_reads_bytes_(6) BYTE RawInputData[]
 }
 
 VOID
+ExtractShortValue(
+	_In_reads_(2) PUCHAR RawInputData,
+	_Out_ PUSHORT Destination
+	)
+{
+	(*Destination) = ((USHORT)RawInputData[0] << 8) | RawInputData[1];
+}
+
+VOID
+ExtractBalanceBoard(
+	_In_ PDEVICE_CONTEXT DeviceContext,
+	_In_reads_bytes_(8) BYTE RawInputData[]
+	)
+{
+	ExtractShortValue(RawInputData + 0, &DeviceContext->WiimoteContext.BalanceBoardState.Sensor.TopRight);
+	ExtractShortValue(RawInputData + 2, &DeviceContext->WiimoteContext.BalanceBoardState.Sensor.BottomRight);
+	ExtractShortValue(RawInputData + 4, &DeviceContext->WiimoteContext.BalanceBoardState.Sensor.TopLeft);
+	ExtractShortValue(RawInputData + 6, &DeviceContext->WiimoteContext.BalanceBoardState.Sensor.BottomLeft);
+}
+
+VOID
 ExtractClassicControllerButtons(
 	_In_ PDEVICE_CONTEXT DeviceContext,
 	_In_reads_bytes_(2) BYTE DecodedInputData[]
@@ -760,6 +781,9 @@ ProcessExtensionData(
 	{
 	case Nunchuck:
 		ExtractNunchuck(DeviceContext, ReadBuffer);
+		break;
+	case BalanceBoard:
+		ExtractBalanceBoard(DeviceContext, ReadBuffer);
 		break;
 	case ClassicController:
 		ExtractClassicController(DeviceContext, ReadBuffer);
@@ -922,6 +946,11 @@ _In_ size_t ReadBufferSize
 		Trace("Nunchuck Extension");
 		DeviceContext->WiimoteContext.Extension = Nunchuck;
 		DeviceContext->WiimoteContext.CurrentReportMode = 0x35;
+		break;
+	case 0x2A2C: // Balance Board
+		Trace("Balance Board");
+		DeviceContext->WiimoteContext.Extension = BalanceBoard;
+		DeviceContext->WiimoteContext.CurrentReportMode = 0x32;
 		break;
 	case 0x0101: // Classic Controler (Pro)
 		Trace("Classic Controller (Pro) Extension");

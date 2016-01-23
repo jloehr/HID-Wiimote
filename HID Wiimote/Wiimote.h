@@ -66,6 +66,23 @@ typedef struct _WIIMOTE_NUNCHUCK_STATE
 
 } WIIMOTE_NUNCHUCK_STATE, * PWIIMOTE_NUNCHUCK_STATE;
 
+typedef struct _WIIMOTE_BALANCE_BOARD_STATE
+{
+	union
+	{
+		struct
+		{
+			USHORT TopRight;
+			USHORT BottomRight;
+			USHORT TopLeft;
+			USHORT BottomLeft;
+		} Sensor;
+
+		USHORT SensorRaw[4];
+	};
+
+} WIIMOTE_BALANCE_BOARD_STATE, *PWIIMOTE_BALANCE_BOARD_STATE;
+
 
 typedef struct _WIIMOTE_CLASSIC_CONTROLLER_STATE
 {
@@ -192,13 +209,14 @@ typedef struct _WIIMOTE_IR_STATE
 
 typedef struct _WIIMOTE_DEVICE_CONTEXT
 {
-	enum WIIMOTE_EXTENSION_TYPE { None, Nunchuck, ClassicController, WiiUProController } Extension;
+	enum WIIMOTE_EXTENSION_TYPE { None, Nunchuck, BalanceBoard, ClassicController, WiiUProController } Extension;
 	WIIMTOE_STATE State;
 	BYTE CurrentReportMode;
 
 	union
 	{
 		WIIMOTE_NUNCHUCK_STATE NunchuckState;
+		WIIMOTE_BALANCE_BOARD_STATE BalanceBoardState;
 		WIIMOTE_CLASSIC_CONTROLLER_STATE ClassicControllerState;
 	};
 
