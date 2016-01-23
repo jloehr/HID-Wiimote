@@ -790,7 +790,7 @@ StartContiniousReader(
 
 	// Create BRB
 	BRB = BluetoothContext->ProfileDriverInterface.BthAllocateBrb(BRB_L2CA_ACL_TRANSFER, BLUETOOTH_POOL_TAG);
-	if (BRB)
+	if (BRB == NULL)
 	{
 		WdfObjectDelete(Request);
 		return STATUS_INSUFFICIENT_RESOURCES;
