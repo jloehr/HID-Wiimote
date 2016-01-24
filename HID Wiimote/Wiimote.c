@@ -925,7 +925,7 @@ _In_ size_t ReadBufferSize
 	//PrintBytes(ReadBuffer, ReadBufferSize);
 
 	BYTE Error = 0x0F & (ReadBuffer[4]);
-	Trace("Error Flag: %x", Error);
+	Trace("Error Flag: %#04x", Error);
 
 	ExtractCoreButtons(DeviceContext, ReadBuffer + 1);
 
@@ -998,12 +998,15 @@ _In_ size_t ReadBufferSize
 
 	UNREFERENCED_PARAMETER(ReadBufferSize);
 
+	Trace("ProcessAcknowledgementReport");
+
 	ExtractCoreButtons(DeviceContext, ReadBuffer + 1);
 
 	BYTE Report = ReadBuffer[3];
 	BYTE Result = ReadBuffer[4];
 
-	Trace("Error Flag: %x", Result);
+	Trace("Report: %#04x", Report);
+	Trace("Error Flag: %#04x", Result);
 
 	if (Result == 0x03)
 	{
