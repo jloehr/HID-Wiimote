@@ -186,7 +186,7 @@ ParseBalanceBoardSensors(
 	USHORT PositiveValue = JoinSensorValue(PositiveValueOne, PositiveValueTwo);
 	USHORT NegativeValue = JoinSensorValue(NegativeValueOne, NegativeValueTwo);
 
-	BYTE Value = (BYTE)((PositiveValue >> 5) - (NegativeValue >> 5));
+	BYTE Value = ((BYTE)(PositiveValue >> 5)) + 0x7F - ((BYTE)(NegativeValue >> 5));
 
 	return Value;
 }
