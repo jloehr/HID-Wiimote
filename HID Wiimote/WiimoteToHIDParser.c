@@ -407,6 +407,46 @@ _Inout_updates_(9) PUCHAR RequestBuffer
 }
 
 VOID
+ParseWiimoteStateAsGuitarExtension(
+	_In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext,
+	_Inout_updates_(9) PUCHAR RequestBuffer
+	)
+{
+	// LeftAnalogStick as Axis
+	ParseAnalogAxis(WiimoteContext->GuitarState.AnalogStick.X, RequestBuffer, FALSE, FALSE);
+	ParseAnalogAxis(WiimoteContext->GuitarState.AnalogStick.Y, RequestBuffer + 1, FALSE, TRUE);
+
+	// Buttons
+	ParseButton(WiimoteContext->GuitarState.Buttons.Green, RequestBuffer + 2, 0);
+	ParseButton(WiimoteContext->GuitarState.Buttons.Red, RequestBuffer + 2, 1);
+	ParseButton(WiimoteContext->GuitarState.Buttons.Yellow, RequestBuffer + 2, 2);
+	ParseButton(WiimoteContext->GuitarState.Buttons.Blue, RequestBuffer + 2, 3);
+	ParseButton(WiimoteContext->GuitarState.Buttons.Orange, RequestBuffer + 2, 4);
+	ParseButton(WiimoteContext->GuitarState.Buttons.Up, RequestBuffer + 2, 5);
+	ParseButton(WiimoteContext->GuitarState.Buttons.Down, RequestBuffer + 2, 6);
+	ParseButton(WiimoteContext->State.CoreButtons.Plus || WiimoteContext->GuitarState.Buttons.Plus, RequestBuffer + 3, 0);
+	ParseButton(WiimoteContext->State.CoreButtons.Minus || WiimoteContext->GuitarState.Buttons.Minus, RequestBuffer + 3, 1);
+	ParseButton(WiimoteContext->State.CoreButtons.One, RequestBuffer + 3, 2);
+	ParseButton(WiimoteContext->State.CoreButtons.Two, RequestBuffer + 3, 3);
+	ParseButton(WiimoteContext->State.CoreButtons.A, RequestBuffer + 3, 4);
+	ParseButton(WiimoteContext->State.CoreButtons.B, RequestBuffer + 3, 5);
+	ParseButton(WiimoteContext->State.CoreButtons.Home, RequestBuffer + 3, 6);
+
+	// Analog Bars
+	ParseAnalogAxis(WiimoteContext->GuitarState.WhammyBar, RequestBuffer + 5, FALSE, FALSE);
+	ParseAnalogAxis(WiimoteContext->GuitarState.TouchBar, RequestBuffer + 6, FALSE, TRUE);
+
+	// DPad
+	ParseDPad(
+		WiimoteContext->State.CoreButtons.DPad.Up,
+		WiimoteContext->State.CoreButtons.DPad.Right,
+		WiimoteContext->State.CoreButtons.DPad.Down,
+		WiimoteContext->State.CoreButtons.DPad.Left,
+		RequestBuffer + 8);
+}
+
+
+VOID
 ParseWiimoteState(
 _In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext,
 _Out_writes_all_(9) PUCHAR RequestBuffer
@@ -429,7 +469,8 @@ _Out_writes_all_(9) PUCHAR RequestBuffer
 	case WiiUProController:
 		ParseWiimoteStateAsClassicControllerExtension(WiimoteContext, RequestBuffer);
 		break;
-
+	case Guitar:
+		ParseWiimoteStateAsGuitarExtension(WiimoteContext, RequestBuffer);
 	default:
 		break;
 	}

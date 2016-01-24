@@ -725,6 +725,34 @@ _In_reads_bytes_(11) BYTE RawInputData[]
 	DeviceContext->WiimoteContext.State.BatteryFlag = BatteryFlag;
 }
 
+VOID
+ExtractGuitar(
+	_In_ PDEVICE_CONTEXT DeviceContext,
+	_In_reads_bytes_(6) BYTE RawInputData[]
+	)
+{
+	BYTE DecodedInputData[2];
+	XorData(RawInputData + 4, DecodedInputData, 2);
+
+	// Buttons
+	DeviceContext->WiimoteContext.GuitarState.Buttons.Green = DecodedInputData[1] & 0x10;
+	DeviceContext->WiimoteContext.GuitarState.Buttons.Red = DecodedInputData[1] & 0x40;
+	DeviceContext->WiimoteContext.GuitarState.Buttons.Yellow = DecodedInputData[1] & 0x04;
+	DeviceContext->WiimoteContext.GuitarState.Buttons.Blue = DecodedInputData[1] & 0x20;
+	DeviceContext->WiimoteContext.GuitarState.Buttons.Orange = DecodedInputData[1] & 0x80;
+	DeviceContext->WiimoteContext.GuitarState.Buttons.Plus = DecodedInputData[0] & 0x04;
+	DeviceContext->WiimoteContext.GuitarState.Buttons.Minus = DecodedInputData[0] & 0x10;
+	DeviceContext->WiimoteContext.GuitarState.Buttons.Up = DecodedInputData[1] & 0x01;
+	DeviceContext->WiimoteContext.GuitarState.Buttons.Down = DecodedInputData[0] & 0x40;
+
+	// Analog Sticks
+	DeviceContext->WiimoteContext.GuitarState.AnalogStick.X = 0xFF & ((0x3F & RawInputData[0]) << 2);
+	DeviceContext->WiimoteContext.GuitarState.AnalogStick.Y = 0xFF & ((0x3F & RawInputData[1]) << 2);
+
+	// Analog Bars
+	DeviceContext->WiimoteContext.GuitarState.WhammyBar = 0xFF & ((0x1F & RawInputData[0]) << 3);
+	DeviceContext->WiimoteContext.GuitarState.TouchBar = 0xFF & ((0x1F & RawInputData[1]) << 3);
+}
 
 BOOLEAN
 ExtractIRCameraPoint(
@@ -790,6 +818,9 @@ ProcessExtensionData(
 		break;
 	case WiiUProController:
 		ExtractWiiUProController(DeviceContext, ReadBuffer);
+		break;
+	case Guitar:
+		ExtractGuitar(DeviceContext, ReadBuffer);
 		break;
 	default:
 		break;
@@ -961,6 +992,11 @@ _In_ size_t ReadBufferSize
 		Trace("Wii U Pro Controller");
 		DeviceContext->WiimoteContext.Extension = WiiUProController;
 		DeviceContext->WiimoteContext.CurrentReportMode = 0x34;
+		break;
+	case 0x0103: // Guitar Hero Guitar
+		Trace("Guitar Hero Guitar");
+		DeviceContext->WiimoteContext.Extension = Guitar;
+		DeviceContext->WiimoteContext.CurrentReportMode = 0x32;
 		break;
 	case 0xFFFF: // Error
 		Trace("Error");

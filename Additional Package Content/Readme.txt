@@ -13,6 +13,7 @@ If you like this project and really want to pay for it, see my homepage (https:/
 
 - Fix RawInput not reading the primary axes correctly
 - Add experimental untested Balance Board support
+- Add experimental untested Guitar Hero Guitar support
 
 -- 0.2.6.2 --
 

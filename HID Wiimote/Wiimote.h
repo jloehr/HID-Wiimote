@@ -147,6 +147,42 @@ typedef struct _WIIMOTE_CLASSIC_CONTROLLER_STATE
 
 } WIIMOTE_CLASSIC_CONTROLLER_STATE, *PWIIMOTE_CLASSIC_CONTROLLER_STATE;
 
+typedef struct _WIIMOTE_GUITAR_STATE
+{
+	union
+	{
+		struct
+		{
+			BOOLEAN Green;
+			BOOLEAN Red;
+			BOOLEAN Yellow;
+			BOOLEAN Blue;
+			BOOLEAN Orange;
+			BOOLEAN Plus;
+			BOOLEAN Minus;
+			BOOLEAN Up;
+			BOOLEAN Down;
+		} Buttons;
+
+		BOOLEAN ButtonsRaw[9];
+	};
+
+	BYTE WhammyBar;
+	BYTE TouchBar;
+
+	union
+	{
+		struct
+		{
+			BYTE X;
+			BYTE Y;
+		} AnalogStick;
+
+		BYTE AnalogStickRaw[2];
+	};
+
+} WIIMOTE_GUITAR_STATE, *PWIIMOTE_GUITAR_STATE;
+
 typedef struct _WIIMOTE_STATE
 {
 	union 
@@ -209,7 +245,7 @@ typedef struct _WIIMOTE_IR_STATE
 
 typedef struct _WIIMOTE_DEVICE_CONTEXT
 {
-	enum WIIMOTE_EXTENSION_TYPE { None, Nunchuck, BalanceBoard, ClassicController, WiiUProController } Extension;
+	enum WIIMOTE_EXTENSION_TYPE { None, Nunchuck, BalanceBoard, ClassicController, WiiUProController, Guitar } Extension;
 	WIIMTOE_STATE State;
 	BYTE CurrentReportMode;
 
@@ -218,6 +254,7 @@ typedef struct _WIIMOTE_DEVICE_CONTEXT
 		WIIMOTE_NUNCHUCK_STATE NunchuckState;
 		WIIMOTE_BALANCE_BOARD_STATE BalanceBoardState;
 		WIIMOTE_CLASSIC_CONTROLLER_STATE ClassicControllerState;
+		WIIMOTE_GUITAR_STATE GuitarState;
 	};
 
 	WIIMOTE_IR_STATE IRState;
