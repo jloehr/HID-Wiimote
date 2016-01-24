@@ -934,7 +934,7 @@ _In_ size_t ReadBufferSize
 		return Status;
 	}
 
-	SHORT ExtensionType = 0;
+	USHORT ExtensionType = 0;
 	ExtensionType |= ReadBuffer[10] << 8;
 	ExtensionType |= ReadBuffer[11];
 
@@ -962,7 +962,7 @@ _In_ size_t ReadBufferSize
 		DeviceContext->WiimoteContext.Extension = WiiUProController;
 		DeviceContext->WiimoteContext.CurrentReportMode = 0x34;
 		break;
-	case 0xFFFFFFFF: // Error
+	case 0xFFFF: // Error
 		Trace("Error");
 		DeviceContext->WiimoteContext.Extension = None;
 		DeviceContext->WiimoteContext.CurrentReportMode = 0x31;
