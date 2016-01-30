@@ -165,14 +165,17 @@ _Out_writes_all_(1) PUCHAR ReportByte
 	ReportByte[0] = ValueLookUpTable[Down + 1 - Up][Right + 1 - Left];
 }
 
-USHORT
+UCHAR
 JoinSensorValue(
 	_In_ USHORT ValueOne,
 	_In_ USHORT ValueTwo
 	)
 {
-	UINT32 Value = ValueOne + ValueTwo;
-	return (USHORT)(Value / 2);
+	ValueOne = min(ValueOne, 0x7F);
+	ValueTwo = min(ValueTwo, 0x7F);
+
+	UCHAR Value = (UCHAR)(ValueOne + ValueTwo);
+	return (Value / 2);
 }
 
 BYTE
@@ -183,10 +186,10 @@ ParseBalanceBoardSensors(
 	_In_ USHORT NegativeValueTwo
 	)
 {
-	USHORT PositiveValue = JoinSensorValue(PositiveValueOne, PositiveValueTwo);
-	USHORT NegativeValue = JoinSensorValue(NegativeValueOne, NegativeValueTwo);
+	UCHAR PositiveValue = JoinSensorValue(PositiveValueOne, PositiveValueTwo);
+	UCHAR NegativeValue = JoinSensorValue(NegativeValueOne, NegativeValueTwo);
 
-	BYTE Value = ((BYTE)(PositiveValue >> 5)) + 0x7F - ((BYTE)(NegativeValue >> 5));
+	BYTE Value = PositiveValue + 0x7F - NegativeValue;
 
 	return Value;
 }

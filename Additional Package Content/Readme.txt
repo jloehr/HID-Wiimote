@@ -1,4 +1,4 @@
-HID Wiimote 0.2.7.1
+HID Wiimote 0.2.7.2
 
 HID Wiimote is a Windows Device Driver for the Nintendo Wii Remote.
 
@@ -11,9 +11,13 @@ If you like this project and really want to pay for it, see my homepage (https:/
 
 -- Changelog --
 
+-- 0.2.7.2 --
+
+- Change Balance Board Axes
+
 -- 0.2.7.1 --
 
--- Fix Balance Board Axes
+- Fix Balance Board Axes
 
 -- 0.2.7.0 --
 

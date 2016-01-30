@@ -606,24 +606,16 @@ _In_reads_bytes_(6) BYTE RawInputData[]
 }
 
 VOID
-ExtractShortValue(
-	_In_reads_(2) PUCHAR RawInputData,
-	_Out_ PUSHORT Destination
-	)
-{
-	(*Destination) = ((USHORT)RawInputData[0] << 8) | RawInputData[1];
-}
-
-VOID
 ExtractBalanceBoard(
 	_In_ PDEVICE_CONTEXT DeviceContext,
-	_In_reads_bytes_(8) BYTE RawInputData[]
+	_In_reads_bytes_(8) PUCHAR RawInputData
 	)
 {
-	ExtractShortValue(RawInputData + 0, &DeviceContext->WiimoteContext.BalanceBoardState.Sensor.TopRight);
-	ExtractShortValue(RawInputData + 2, &DeviceContext->WiimoteContext.BalanceBoardState.Sensor.BottomRight);
-	ExtractShortValue(RawInputData + 4, &DeviceContext->WiimoteContext.BalanceBoardState.Sensor.TopLeft);
-	ExtractShortValue(RawInputData + 6, &DeviceContext->WiimoteContext.BalanceBoardState.Sensor.BottomLeft);
+	// Sensor Data is Big-Endian, Windows is always Little-Endian
+	DeviceContext->WiimoteContext.BalanceBoardState.Sensor.TopRight = RtlUshortByteSwap(*((PUSHORT)(RawInputData + 0)));
+	DeviceContext->WiimoteContext.BalanceBoardState.Sensor.BottomRight = RtlUshortByteSwap(*((PUSHORT)(RawInputData + 2)));
+	DeviceContext->WiimoteContext.BalanceBoardState.Sensor.TopLeft = RtlUshortByteSwap(*((PUSHORT)(RawInputData + 4)));
+	DeviceContext->WiimoteContext.BalanceBoardState.Sensor.BottomLeft = RtlUshortByteSwap(*((PUSHORT)(RawInputData + 6)));
 }
 
 VOID
