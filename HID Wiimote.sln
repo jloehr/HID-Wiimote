@@ -26,6 +26,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BuildAndZip", "BuildAndZip\
 		{E1721BA4-CF41-483D-A72A-1452A0FF2F1E} = {E1721BA4-CF41-483D-A72A-1452A0FF2F1E}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HID Wiimote Control Center", "HID Wiimote Control Center\HID Wiimote Control Center.csproj", "{D91AA07C-75AF-47B7-B3EE-CBEFD7AA5616}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -166,6 +168,38 @@ Global
 		{0C56BAEE-4F6C-4590-9E48-EFBF80099FEB}.Universal Release|Mixed Platforms.ActiveCfg = Windows 10 Universal Release|Win32
 		{0C56BAEE-4F6C-4590-9E48-EFBF80099FEB}.Universal Release|Win32.ActiveCfg = Windows 10 Universal Release|Win32
 		{0C56BAEE-4F6C-4590-9E48-EFBF80099FEB}.Universal Release|x64.ActiveCfg = Windows 10 Universal Release|x64
+		{D91AA07C-75AF-47B7-B3EE-CBEFD7AA5616}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D91AA07C-75AF-47B7-B3EE-CBEFD7AA5616}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D91AA07C-75AF-47B7-B3EE-CBEFD7AA5616}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D91AA07C-75AF-47B7-B3EE-CBEFD7AA5616}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D91AA07C-75AF-47B7-B3EE-CBEFD7AA5616}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{D91AA07C-75AF-47B7-B3EE-CBEFD7AA5616}.Debug|Win32.Build.0 = Debug|Any CPU
+		{D91AA07C-75AF-47B7-B3EE-CBEFD7AA5616}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D91AA07C-75AF-47B7-B3EE-CBEFD7AA5616}.Debug|x64.Build.0 = Debug|Any CPU
+		{D91AA07C-75AF-47B7-B3EE-CBEFD7AA5616}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D91AA07C-75AF-47B7-B3EE-CBEFD7AA5616}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D91AA07C-75AF-47B7-B3EE-CBEFD7AA5616}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D91AA07C-75AF-47B7-B3EE-CBEFD7AA5616}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{D91AA07C-75AF-47B7-B3EE-CBEFD7AA5616}.Release|Win32.ActiveCfg = Release|Any CPU
+		{D91AA07C-75AF-47B7-B3EE-CBEFD7AA5616}.Release|Win32.Build.0 = Release|Any CPU
+		{D91AA07C-75AF-47B7-B3EE-CBEFD7AA5616}.Release|x64.ActiveCfg = Release|Any CPU
+		{D91AA07C-75AF-47B7-B3EE-CBEFD7AA5616}.Release|x64.Build.0 = Release|Any CPU
+		{D91AA07C-75AF-47B7-B3EE-CBEFD7AA5616}.Universal Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D91AA07C-75AF-47B7-B3EE-CBEFD7AA5616}.Universal Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D91AA07C-75AF-47B7-B3EE-CBEFD7AA5616}.Universal Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D91AA07C-75AF-47B7-B3EE-CBEFD7AA5616}.Universal Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D91AA07C-75AF-47B7-B3EE-CBEFD7AA5616}.Universal Debug|Win32.ActiveCfg = Debug|Any CPU
+		{D91AA07C-75AF-47B7-B3EE-CBEFD7AA5616}.Universal Debug|Win32.Build.0 = Debug|Any CPU
+		{D91AA07C-75AF-47B7-B3EE-CBEFD7AA5616}.Universal Debug|x64.ActiveCfg = Debug|Any CPU
+		{D91AA07C-75AF-47B7-B3EE-CBEFD7AA5616}.Universal Debug|x64.Build.0 = Debug|Any CPU
+		{D91AA07C-75AF-47B7-B3EE-CBEFD7AA5616}.Universal Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D91AA07C-75AF-47B7-B3EE-CBEFD7AA5616}.Universal Release|Any CPU.Build.0 = Release|Any CPU
+		{D91AA07C-75AF-47B7-B3EE-CBEFD7AA5616}.Universal Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D91AA07C-75AF-47B7-B3EE-CBEFD7AA5616}.Universal Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{D91AA07C-75AF-47B7-B3EE-CBEFD7AA5616}.Universal Release|Win32.ActiveCfg = Release|Any CPU
+		{D91AA07C-75AF-47B7-B3EE-CBEFD7AA5616}.Universal Release|Win32.Build.0 = Release|Any CPU
+		{D91AA07C-75AF-47B7-B3EE-CBEFD7AA5616}.Universal Release|x64.ActiveCfg = Release|Any CPU
+		{D91AA07C-75AF-47B7-B3EE-CBEFD7AA5616}.Universal Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
