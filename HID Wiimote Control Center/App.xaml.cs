@@ -13,5 +13,24 @@ namespace HID_Wiimote_Control_Center
     /// </summary>
     public partial class App : Application
     {
+        SingleInstanceProtector SingleInstanceProtector;
+
+        public App()
+        {
+            this.Startup += OnStartup;
+            SingleInstanceProtector = new SingleInstanceProtector();
+        }
+
+        private void OnStartup(object sender, StartupEventArgs e)
+        {
+            if(!SingleInstanceProtector.IsFirstInstance())
+            {
+                // Bring Other Window up
+                Shutdown();
+                return;
+            }
+
+            MessageBox.Show("On StartUp");
+        }
     }
 }
