@@ -32,7 +32,21 @@ namespace HID_Wiimote_Control_Center
                 return;
             }
 
-            MessageBox.Show("On StartUp");
+            DriverPackageUninstallerRegistry.DriverPackageState DPState = DriverPackageUninstallerRegistry.GetDriverPackageState("0.2.7.1");
+
+            switch (DPState)
+            {
+                case DriverPackageUninstallerRegistry.DriverPackageState.NoneInstalled:
+                    break;
+                case DriverPackageUninstallerRegistry.DriverPackageState.OlderInstalled:
+                    break;
+                case DriverPackageUninstallerRegistry.DriverPackageState.CurrentInstalled:
+                    break;
+                case DriverPackageUninstallerRegistry.DriverPackageState.NewerInstalled:
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }
