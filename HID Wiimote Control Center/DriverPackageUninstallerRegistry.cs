@@ -15,8 +15,8 @@ namespace HID_Wiimote_Control_Center
         {
             public ushort Major;
             public ushort Minor;
-            public ushort Revision;
             public ushort Build;
+            public ushort Revision;
 
             public Version(string VersionString)
             {
@@ -24,8 +24,8 @@ namespace HID_Wiimote_Control_Center
 
                 Major = ParseStringPart(StringParts, 0);
                 Minor = ParseStringPart(StringParts, 1);
-                Revision = ParseStringPart(StringParts, 2);
-                Build = ParseStringPart(StringParts, 3);
+                Build = ParseStringPart(StringParts, 2);
+                Revision = ParseStringPart(StringParts, 3);
             }
 
             public bool IsNewer(Version Other)
@@ -40,14 +40,14 @@ namespace HID_Wiimote_Control_Center
                     return this.Minor > Other.Minor;
                 }
 
-                if (this.Revision != Other.Revision)
-                {
-                    return this.Revision > Other.Revision;
-                }
-
                 if (this.Build != Other.Build)
                 {
                     return this.Build > Other.Build;
+                }
+
+                if (this.Revision != Other.Revision)
+                {
+                    return this.Revision > Other.Revision;
                 }
 
                 return false;
