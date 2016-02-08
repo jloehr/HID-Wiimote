@@ -32,20 +32,25 @@ namespace HID_Wiimote_Control_Center
                 return;
             }
 
-            DriverPackageUninstallerRegistry.DriverPackageState DPState = DriverPackageUninstallerRegistry.GetDriverPackageState(VersionStrings.DriverPackageVersion);
+            string InstalledDriverPackageVersionString;
+            DriverPackageUninstallerRegistry.DriverPackageState DPState = DriverPackageUninstallerRegistry.GetDriverPackageState(VersionStrings.DriverPackageVersion, out InstalledDriverPackageVersionString);          
 
             switch (DPState)
             {
                 case DriverPackageUninstallerRegistry.DriverPackageState.NoneInstalled:
+                    // Installer Window
                     break;
                 case DriverPackageUninstallerRegistry.DriverPackageState.OlderInstalled:
+                    // Update Windows
                     break;
                 case DriverPackageUninstallerRegistry.DriverPackageState.CurrentInstalled:
+                    // Control Center
                     break;
                 case DriverPackageUninstallerRegistry.DriverPackageState.NewerInstalled:
-                    break;
-                default:
-                    break;
+                    // Show Notice & shutdown
+                    MessageBox.Show("There is a newer Driver Package already installed.\nPlease use the Control Center that comes with that Driver Package.\n\nCompatible Driver Package: " + VersionStrings.DriverPackageVersion + "\nInstalled Driver Package: " + InstalledDriverPackageVersionString, "HID Wiimote Control Center");
+                    Shutdown();
+                    return;
             }
         }
     }

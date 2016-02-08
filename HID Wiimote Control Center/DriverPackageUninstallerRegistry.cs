@@ -70,8 +70,9 @@ namespace HID_Wiimote_Control_Center
         public enum DriverPackageState { NoneInstalled, OlderInstalled, CurrentInstalled, NewerInstalled };
 
 
-        public static DriverPackageState GetDriverPackageState(string AppVersionString)
+        public static DriverPackageState GetDriverPackageState(string AppVersionString, out string InstalledVersionString)
         {
+            InstalledVersionString = "";
 #if !DEBUG
             RegistryKey UninstallerKey = GetHIDWiimoteUninstallKey(false);
 
@@ -80,7 +81,7 @@ namespace HID_Wiimote_Control_Center
                 return DriverPackageState.NoneInstalled;
             }
 
-            string InstalledVersionString = UninstallerKey.GetValue("DisplayVersion") as string;
+            InstalledVersionString = UninstallerKey.GetValue("DisplayVersion") as string;
 
             if(AppVersionString == InstalledVersionString)
             {
