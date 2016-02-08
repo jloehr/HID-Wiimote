@@ -3,10 +3,10 @@
 
 # User-specific folders
 Certificates/
-x86/
 Zip/
 
 # User-specific files
+HID Wiimote/Version.props
 *.suo
 *.user
 *.sln.docstates
@@ -14,10 +14,10 @@ Zip/
 *.pfx
 
 # Build results
-
 [Dd]ebug/
 [Rr]elease/
 x64/
+x86/
 build/
 [Bb]in/
 [Oo]bj/

@@ -3,6 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HID Wiimote", "HID Wiimote\HID Wiimote.vcxproj", "{785D88E1-E758-4966-80FA-AEF74681FEF1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{411F3C13-DA46-42DA-9368-F5ADC5072E00} = {411F3C13-DA46-42DA-9368-F5ADC5072E00}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HID Wiimote Package", "HID Wiimote Package\HID Wiimote Package.vcxproj", "{E1721BA4-CF41-483D-A72A-1452A0FF2F1E}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -27,6 +30,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BuildAndZip", "BuildAndZip\
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HID Wiimote Control Center", "HID Wiimote Control Center\HID Wiimote Control Center.csproj", "{D91AA07C-75AF-47B7-B3EE-CBEFD7AA5616}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build Utilities", "Build Utilities", "{DB263901-FCD3-46C6-9E48-460707381DAB}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ReleaseVersioning", "ReleaseVersioning\ReleaseVersioning.vcxproj", "{411F3C13-DA46-42DA-9368-F5ADC5072E00}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -200,8 +207,42 @@ Global
 		{D91AA07C-75AF-47B7-B3EE-CBEFD7AA5616}.Universal Release|Win32.Build.0 = Release|Any CPU
 		{D91AA07C-75AF-47B7-B3EE-CBEFD7AA5616}.Universal Release|x64.ActiveCfg = Release|Any CPU
 		{D91AA07C-75AF-47B7-B3EE-CBEFD7AA5616}.Universal Release|x64.Build.0 = Release|Any CPU
+		{411F3C13-DA46-42DA-9368-F5ADC5072E00}.Debug|Any CPU.ActiveCfg = Release|x64
+		{411F3C13-DA46-42DA-9368-F5ADC5072E00}.Debug|Any CPU.Build.0 = Release|x64
+		{411F3C13-DA46-42DA-9368-F5ADC5072E00}.Debug|Mixed Platforms.ActiveCfg = Release|Win32
+		{411F3C13-DA46-42DA-9368-F5ADC5072E00}.Debug|Mixed Platforms.Build.0 = Release|Win32
+		{411F3C13-DA46-42DA-9368-F5ADC5072E00}.Debug|Win32.ActiveCfg = Release|Win32
+		{411F3C13-DA46-42DA-9368-F5ADC5072E00}.Debug|Win32.Build.0 = Release|Win32
+		{411F3C13-DA46-42DA-9368-F5ADC5072E00}.Debug|x64.ActiveCfg = Release|x64
+		{411F3C13-DA46-42DA-9368-F5ADC5072E00}.Release|Any CPU.ActiveCfg = Release|Win32
+		{411F3C13-DA46-42DA-9368-F5ADC5072E00}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{411F3C13-DA46-42DA-9368-F5ADC5072E00}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{411F3C13-DA46-42DA-9368-F5ADC5072E00}.Release|Win32.ActiveCfg = Release|Win32
+		{411F3C13-DA46-42DA-9368-F5ADC5072E00}.Release|Win32.Build.0 = Release|Win32
+		{411F3C13-DA46-42DA-9368-F5ADC5072E00}.Release|x64.ActiveCfg = Release|x64
+		{411F3C13-DA46-42DA-9368-F5ADC5072E00}.Release|x64.Build.0 = Release|x64
+		{411F3C13-DA46-42DA-9368-F5ADC5072E00}.Universal Debug|Any CPU.ActiveCfg = Release|x64
+		{411F3C13-DA46-42DA-9368-F5ADC5072E00}.Universal Debug|Any CPU.Build.0 = Release|x64
+		{411F3C13-DA46-42DA-9368-F5ADC5072E00}.Universal Debug|Mixed Platforms.ActiveCfg = Release|Win32
+		{411F3C13-DA46-42DA-9368-F5ADC5072E00}.Universal Debug|Mixed Platforms.Build.0 = Release|Win32
+		{411F3C13-DA46-42DA-9368-F5ADC5072E00}.Universal Debug|Win32.ActiveCfg = Release|Win32
+		{411F3C13-DA46-42DA-9368-F5ADC5072E00}.Universal Debug|Win32.Build.0 = Release|Win32
+		{411F3C13-DA46-42DA-9368-F5ADC5072E00}.Universal Debug|x64.ActiveCfg = Release|x64
+		{411F3C13-DA46-42DA-9368-F5ADC5072E00}.Universal Debug|x64.Build.0 = Release|x64
+		{411F3C13-DA46-42DA-9368-F5ADC5072E00}.Universal Release|Any CPU.ActiveCfg = Release|x64
+		{411F3C13-DA46-42DA-9368-F5ADC5072E00}.Universal Release|Any CPU.Build.0 = Release|x64
+		{411F3C13-DA46-42DA-9368-F5ADC5072E00}.Universal Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{411F3C13-DA46-42DA-9368-F5ADC5072E00}.Universal Release|Mixed Platforms.Build.0 = Release|Win32
+		{411F3C13-DA46-42DA-9368-F5ADC5072E00}.Universal Release|Win32.ActiveCfg = Release|Win32
+		{411F3C13-DA46-42DA-9368-F5ADC5072E00}.Universal Release|Win32.Build.0 = Release|Win32
+		{411F3C13-DA46-42DA-9368-F5ADC5072E00}.Universal Release|x64.ActiveCfg = Release|x64
+		{411F3C13-DA46-42DA-9368-F5ADC5072E00}.Universal Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0C56BAEE-4F6C-4590-9E48-EFBF80099FEB} = {DB263901-FCD3-46C6-9E48-460707381DAB}
+		{411F3C13-DA46-42DA-9368-F5ADC5072E00} = {DB263901-FCD3-46C6-9E48-460707381DAB}
 	EndGlobalSection
 EndGlobal
