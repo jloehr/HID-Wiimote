@@ -7,6 +7,7 @@ Zip/
 
 # User-specific files
 HID Wiimote/Version.props
+HID Wiimote Control Center/Properties/VersionStrings.cs
 *.suo
 *.user
 *.sln.docstates
@@ -161,3 +162,4 @@ $RECYCLE.BIN/
 
 # Mac desktop service store files
 .DS_Store
+HID Wiimote Control Center/Properties/VersionStrings.cs

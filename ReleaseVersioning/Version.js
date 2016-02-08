@@ -73,6 +73,16 @@ function GetVersionsFromReadme(ReadmePath)
     return Versions;
 }
 
+function UpdateFile(FilePath, NewContent)
+{
+    var OutputFile = FSO.OpenTextFile(FilePath);
+
+    if ((OutputFile == null) || (OutputFile.ReadAll() != NewContent)) {
+        OutputFile = FSO.CreateTextFile(FilePath, true);
+        OutputFile.Write(NewContent);
+    }
+}
+
 function GenerateDriverPackageVersionPropsSheet(DriverPackageVersion, OutputPath)
 {
     var FileContent = "";
@@ -83,11 +93,21 @@ function GenerateDriverPackageVersionPropsSheet(DriverPackageVersion, OutputPath
     FileContent += '  </PropertyGroup>' + "\n";
     FileContent += '</Project>' + "\n";
 
-    var OutputFile = FSO.OpenTextFile(OutputPath);
+    UpdateFile(OutputPath, FileContent);
+}
 
-    if ((OutputFile == null) || (OutputFile.ReadAll() != FileContent))
-    {
-        OutputFile = FSO.CreateTextFile(OutputPath, true);
-        OutputFile.Write(FileContent);
-    }
+function GenerateVersionStringClass(Versions, OutputPath)
+{
+    var FileContent = "// Auto generated file\n";
+    FileContent += "// Changes will be overwritten\n";
+    FileContent += "namespace HID_Wiimote_Control_Center\n";
+    FileContent += "{\n";
+    FileContent += "    internal static class VersionStrings\n";
+    FileContent += "    {\n";
+    FileContent += "        public const string ControlCenterVersion = \"" + Versions.ControlCenter.String + "\";\n";
+    FileContent += "        public const string DriverPackageVersion = \"" + Versions.DriverPackage.String + "\";\n";
+    FileContent += "    }\n";
+    FileContent += "}\n";
+
+    UpdateFile(OutputPath, FileContent);
 }
