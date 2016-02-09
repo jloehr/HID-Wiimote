@@ -50,7 +50,7 @@ namespace HID_Wiimote_Control_Center
                     break;
                 case DriverPackageUninstallerRegistry.DriverPackageState.NewerInstalled:
                     // Show Notice & shutdown
-                    MessageBox.Show("There is a newer Driver Package already installed.\nPlease use the Control Center that comes with that Driver Package.\n\nCompatible Driver Package: " + VersionStrings.DriverPackageVersion + "\nInstalled Driver Package: " + InstalledDriverPackageVersionString, "HID Wiimote Control Center");
+                    MessageBox.Show(HID_Wiimote_Control_Center.Properties.App.NewerInstalledDialog_MainMessage + "\n\n" + HID_Wiimote_Control_Center.Properties.App.NewerInstalledDialog_CompatibleDriverPackage + ": " + VersionStrings.DriverPackageVersion + "\n" + HID_Wiimote_Control_Center.Properties.App.NewerInstalledDialog_InstalledDriverPackage + ": " + InstalledDriverPackageVersionString, "HID Wiimote Control Center");
                     Shutdown();
                     return;
             }
