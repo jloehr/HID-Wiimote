@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -24,7 +25,7 @@ namespace HID_Wiimote_Control_Center
     {
         List<UpdaterTask> TaskList = new List<UpdaterTask>();
         bool UpdateSuccesfull = false;
-
+        string ErrorMessage;
 
         public UpdaterWindow()
         {
@@ -59,6 +60,10 @@ namespace HID_Wiimote_Control_Center
                 // Error
                 CompletedUpdaterTask.Status = UpdaterTask.TaskStatus.Error;
                 CloseButton.IsEnabled = true;
+                if(ErrorMessage.Length != 0)
+                {
+                    MessageBox.Show(ErrorMessage);
+                }
                 return;
             }
 
@@ -80,13 +85,34 @@ namespace HID_Wiimote_Control_Center
 
         private bool RemoveOldDriverPackage()
         {
-            Thread.Sleep(2000);
+            string UninstallerString = DriverPackageUninstallerRegistry.GetUninstallString();                       
+
+            try
+            {
+                Process Uninstall = Process.Start("cmd.exe", "/C " + UninstallerString);
+                Uninstall.WaitForExit();
+            }
+            catch(Exception e)
+            {
+                ErrorMessage = HID_Wiimote_Control_Center.Properties.App.Updater_RemoveDPException + "\n\n" + e.Message;
+                return false;
+            }
+
+            bool UninstallCheck = (DriverPackageUninstallerRegistry.GetUninstallString().Length == 0);
+            if(!UninstallCheck)
+            {
+                ErrorMessage = HID_Wiimote_Control_Center.Properties.App.Updater_RemoveDPCheckFailed;
+                return false;
+            }
+
             return true;
         }
 
         private bool InstallNewDriverPackage()
         {
             Thread.Sleep(5000);
+            // Run DPinst.exe
+
             return false;
         }
 

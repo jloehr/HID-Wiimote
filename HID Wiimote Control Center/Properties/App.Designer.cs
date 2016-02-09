@@ -98,6 +98,24 @@ namespace HID_Wiimote_Control_Center.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The old Driver Package was not successfully removed. Please try again or remove it via &quot;Programs and Features&quot;..
+        /// </summary>
+        internal static string Updater_RemoveDPCheckFailed {
+            get {
+                return ResourceManager.GetString("Updater_RemoveDPCheckFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error occured while trying to uninstall the old Driver Package..
+        /// </summary>
+        internal static string Updater_RemoveDPException {
+            get {
+                return ResourceManager.GetString("Updater_RemoveDPException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove old Driver Package.
         /// </summary>
         internal static string Updater_RemoveDPMessage {

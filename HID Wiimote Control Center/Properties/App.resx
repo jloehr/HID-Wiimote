@@ -136,6 +136,12 @@ Note: This Control Center is only compatible with the updated Driver Package.</v
   <data name="Updater_InstallDPMessage" xml:space="preserve">
     <value>Install new Driver Package</value>
   </data>
+  <data name="Updater_RemoveDPCheckFailed" xml:space="preserve">
+    <value>The old Driver Package was not successfully removed. Please try again or remove it via "Programs and Features".</value>
+  </data>
+  <data name="Updater_RemoveDPException" xml:space="preserve">
+    <value>An error occured while trying to uninstall the old Driver Package.</value>
+  </data>
   <data name="Updater_RemoveDPMessage" xml:space="preserve">
     <value>Remove old Driver Package</value>
   </data>

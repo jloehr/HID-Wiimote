@@ -101,10 +101,17 @@ namespace HID_Wiimote_Control_Center
             return DriverPackageState.CurrentInstalled;
 #endif
         }
-
-        public static void SetRegistryKey()
+        
+        public static string GetUninstallString()
         {
+            RegistryKey UninstallerKey = GetHIDWiimoteUninstallKey(false);
 
+            if (UninstallerKey == null)
+            {
+                return string.Empty;
+            }
+
+            return UninstallerKey.GetValue("UninstallString") as string;
         }
 
         private static RegistryKey GetHIDWiimoteUninstallKey(bool Writeable)
