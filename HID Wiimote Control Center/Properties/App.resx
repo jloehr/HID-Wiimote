@@ -127,4 +127,10 @@
     <value>There is a newer Driver Package already installed.
 Please use the Control Center that comes with that Driver Package.</value>
   </data>
+  <data name="UpdaterDialog_MainMessage" xml:space="preserve">
+    <value>This Driver Package comes with a Driver Update.
+Would you like to update the HID Wiimote Driver?
+
+Note: This Control Center is only compatible with the updated Driver Package.</value>
+  </data>
 </root>

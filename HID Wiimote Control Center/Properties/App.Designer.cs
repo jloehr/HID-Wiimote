@@ -87,5 +87,17 @@ namespace HID_Wiimote_Control_Center.Properties {
                 return ResourceManager.GetString("NewerInstalledDialog_MainMessage", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This Driver Package comes with a Driver Update.
+        ///Would you like to update the HID Wiimote Driver?
+        ///
+        ///Note: This Control Center is only compatible with the updated Driver Package..
+        /// </summary>
+        internal static string UpdaterDialog_MainMessage {
+            get {
+                return ResourceManager.GetString("UpdaterDialog_MainMessage", resourceCulture);
+            }
+        }
     }
 }

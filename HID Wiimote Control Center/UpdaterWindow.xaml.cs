@@ -23,5 +23,16 @@ namespace HID_Wiimote_Control_Center
         {
             InitializeComponent();
         }
+
+        private void OnInitialized(object sender, EventArgs e)
+        {
+            MessageBoxResult Result = MessageBox.Show(HID_Wiimote_Control_Center.Properties.App.UpdaterDialog_MainMessage, "HID Wiimote Updater", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if(Result != MessageBoxResult.Yes)
+            {
+                this.Close();
+                return;
+            }
+        }
     }
 }
