@@ -729,7 +729,7 @@ ExtractGuitar(
 	// Buttons
 	DeviceContext->WiimoteContext.GuitarState.Buttons.Green = DecodedInputData[1] & 0x10;
 	DeviceContext->WiimoteContext.GuitarState.Buttons.Red = DecodedInputData[1] & 0x40;
-	DeviceContext->WiimoteContext.GuitarState.Buttons.Yellow = DecodedInputData[1] & 0x04;
+	DeviceContext->WiimoteContext.GuitarState.Buttons.Yellow = DecodedInputData[1] & 0x08;
 	DeviceContext->WiimoteContext.GuitarState.Buttons.Blue = DecodedInputData[1] & 0x20;
 	DeviceContext->WiimoteContext.GuitarState.Buttons.Orange = DecodedInputData[1] & 0x80;
 	DeviceContext->WiimoteContext.GuitarState.Buttons.Plus = DecodedInputData[0] & 0x04;
