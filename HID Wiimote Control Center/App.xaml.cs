@@ -19,7 +19,6 @@ namespace HID_Wiimote_Control_Center
 
         public App()
         {
-            this.Startup += OnStartup;
             SingleInstanceProtector = new SingleInstanceProtector();
         }
 
@@ -39,12 +38,15 @@ namespace HID_Wiimote_Control_Center
             {
                 case DriverPackageUninstallerRegistry.DriverPackageState.NoneInstalled:
                     // Installer Window
+                    StartupUri = new Uri("InstallerWindow.xaml", UriKind.Relative);
                     break;
                 case DriverPackageUninstallerRegistry.DriverPackageState.OlderInstalled:
                     // Update Windows
+                    StartupUri = new Uri("UpdaterWindow.xaml", UriKind.Relative);
                     break;
                 case DriverPackageUninstallerRegistry.DriverPackageState.CurrentInstalled:
                     // Control Center
+                    StartupUri = new Uri("ControlCenterWindow.xaml", UriKind.Relative);
                     break;
                 case DriverPackageUninstallerRegistry.DriverPackageState.NewerInstalled:
                     // Show Notice & shutdown
