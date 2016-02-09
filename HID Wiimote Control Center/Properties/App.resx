@@ -133,4 +133,10 @@ Would you like to update the HID Wiimote Driver?
 
 Note: This Control Center is only compatible with the updated Driver Package.</value>
   </data>
+  <data name="Updater_InstallDPMessage" xml:space="preserve">
+    <value>Install new Driver Package</value>
+  </data>
+  <data name="Updater_RemoveDPMessage" xml:space="preserve">
+    <value>Remove old Driver Package</value>
+  </data>
 </root>

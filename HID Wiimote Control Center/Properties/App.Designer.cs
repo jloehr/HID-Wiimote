@@ -89,6 +89,24 @@ namespace HID_Wiimote_Control_Center.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Install new Driver Package.
+        /// </summary>
+        internal static string Updater_InstallDPMessage {
+            get {
+                return ResourceManager.GetString("Updater_InstallDPMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove old Driver Package.
+        /// </summary>
+        internal static string Updater_RemoveDPMessage {
+            get {
+                return ResourceManager.GetString("Updater_RemoveDPMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This Driver Package comes with a Driver Update.
         ///Would you like to update the HID Wiimote Driver?
         ///
