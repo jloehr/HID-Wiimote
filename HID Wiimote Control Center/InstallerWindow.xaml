@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HID_Wiimote_Control_Center"
         mc:Ignorable="d"
-        Title="HID Wiimote Installer" ResizeMode="NoResize" Width="750" SizeToContent="Height" Initialized="OnInitialized" >
+        Title="HID Wiimote Installer" ResizeMode="NoResize" Width="750" SizeToContent="Height" Initialized="OnInitialized" WindowStartupLocation="CenterScreen" >
     <Window.Resources>
         <SolidColorBrush x:Key="BackgroundGood" Color="#40008000" />
         <SolidColorBrush x:Key="BackgroundRed" Color="#40FF0000" />
