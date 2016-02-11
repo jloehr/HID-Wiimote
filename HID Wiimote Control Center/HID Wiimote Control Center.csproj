@@ -164,6 +164,9 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\UninstallerContent.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>cscript.exe "$(SolutionDir)ReleaseVersioning\Version.wsf" //Job:GenerateControlCenterVersionStrings "$(SolutionDir)Additional Package Content\Readme.txt" "$(SolutionDir)HID Wiimote Control Center\Properties\VersionStrings.cs"</PreBuildEvent>

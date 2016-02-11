@@ -231,5 +231,14 @@ namespace HID_Wiimote_Control_Center.Properties {
                 return ResourceManager.GetString("TestMode_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to echo Hello World!.
+        /// </summary>
+        public static string UninstallerContent {
+            get {
+                return ResourceManager.GetString("UninstallerContent", resourceCulture);
+            }
+        }
     }
 }

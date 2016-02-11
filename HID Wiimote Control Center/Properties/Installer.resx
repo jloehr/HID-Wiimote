@@ -175,4 +175,7 @@
   <data name="TestMode_Title" xml:space="preserve">
     <value>Test Mode</value>
   </data>
+  <data name="UninstallerContent" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\UninstallerContent.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
 </root>
