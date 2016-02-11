@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HID_Wiimote_Control_Center.Setup;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
@@ -32,7 +33,8 @@ namespace HID_Wiimote_Control_Center
                 HID_Wiimote_Control_Center.Properties.Installer.TestMode_SmallDescription,
                 HID_Wiimote_Control_Center.Properties.Installer.TestMode_RedNote,
                 HID_Wiimote_Control_Center.Properties.Installer.ButtonDisable,
-                HID_Wiimote_Control_Center.Properties.Installer.ButtonEnable
+                HID_Wiimote_Control_Center.Properties.Installer.ButtonEnable,
+                new TestMode()
                 ));
 
             ActionList.Add(new InstallerAction(
@@ -42,7 +44,8 @@ namespace HID_Wiimote_Control_Center
                 HID_Wiimote_Control_Center.Properties.Installer.Certificate_SmallDescription,
                 string.Empty,
                 HID_Wiimote_Control_Center.Properties.Installer.ButtonUninstall,
-                HID_Wiimote_Control_Center.Properties.Installer.ButtonInstall
+                HID_Wiimote_Control_Center.Properties.Installer.ButtonInstall,
+                new Certificate()
                 ));
 
             ActionList.Add(new InstallerAction(
@@ -52,7 +55,8 @@ namespace HID_Wiimote_Control_Center
                 HID_Wiimote_Control_Center.Properties.Installer.DriverPackage_SmallDescription,
                 string.Empty,
                 HID_Wiimote_Control_Center.Properties.Installer.ButtonUninstall,
-                HID_Wiimote_Control_Center.Properties.Installer.ButtonInstall
+                HID_Wiimote_Control_Center.Properties.Installer.ButtonInstall,
+                new DriverPackage()
                 ));
 
             InitializeComponent();
@@ -108,9 +112,17 @@ namespace HID_Wiimote_Control_Center
         }
     }
 
+    public interface IInstallerTask
+    {
+        bool IsGood();
+        void TryMakeGood();
+        void TryMakeBad();
+    }
+
     public class InstallerAction : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+
 
         private string _Title;
         private bool _Required;
@@ -120,10 +132,13 @@ namespace HID_Wiimote_Control_Center
         private bool _ShowRedNote;
 
         private bool _IsGood;
+        private bool _IsGoodHasReturned;
         private string GoodButtonText;
         private string BadButtonText;
 
-        public InstallerAction(string Title, bool Required, string Description, string SmallDescription, string RedNote, string GoodButtonText, string BadButtonText)
+        private IInstallerTask InstallerTask;
+
+        public InstallerAction(string Title, bool Required, string Description, string SmallDescription, string RedNote, string GoodButtonText, string BadButtonText, IInstallerTask InstallerTask)
         {
             this.Title = Title;
             this._Required = Required;
@@ -133,8 +148,13 @@ namespace HID_Wiimote_Control_Center
             this.GoodButtonText = GoodButtonText;
             this.BadButtonText = BadButtonText;
 
+            this.InstallerTask = InstallerTask;
+
             this.ShowRedNote = false;
             this.IsGood = false;
+            this.IsGoodHasReturned = false;
+
+            Task.Factory.StartNew(CheckIsGood);
         }
 
         public string Title
@@ -240,6 +260,16 @@ namespace HID_Wiimote_Control_Center
             }
         }
 
+        public bool IsGoodHasReturned
+        {
+            get { return _IsGoodHasReturned; }
+            set
+            {
+                _IsGoodHasReturned = value;
+                OnPropertyChanged("IsGoodHasReturned");
+            }
+        }
+
         protected void OnPropertyChanged(string PropertyName)
         {
             PropertyChangedEventHandler Handler = PropertyChanged;
@@ -249,8 +279,31 @@ namespace HID_Wiimote_Control_Center
             }
         }
 
+        private void CheckIsGood()
+        {
+            IsGood = InstallerTask.IsGood();
+            IsGoodHasReturned = true;
+        }
+
         public void ButtonClicked()
         {
+            try
+            {
+                if (IsGood)
+                {
+                    InstallerTask.TryMakeBad();
+                }
+                else
+                {
+                    InstallerTask.TryMakeGood();
+                }
+
+            } catch (Exception e)
+            {
+                // Show Error
+                return;
+            }
+
             IsGood = !IsGood;
             ShowRedNote = !ShowRedNote;
         }       

@@ -23,7 +23,7 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Border BorderBrush="Black" BorderThickness="1" Margin="10, 5, 10, 5" Padding="10" Background="{Binding IsGood, Converter={StaticResource IsGoodColorConverter}}"  >
+                    <Border BorderBrush="Black" BorderThickness="1" Margin="10, 5, 10, 5" Padding="10" Background="{Binding IsGood, Converter={StaticResource IsGoodColorConverter}}" IsEnabled="{Binding IsGoodHasReturned}"  >
                         <StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="0, 0, 0, 5" >
                                 <Label Content="{Binding Title}" FontSize="21.333" FontWeight="Bold" />
