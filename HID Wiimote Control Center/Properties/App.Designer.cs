@@ -89,6 +89,15 @@ namespace HID_Wiimote_Control_Center.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error while: .
+        /// </summary>
+        internal static string Update_RemoveDPErrorDialog_Title {
+            get {
+                return ResourceManager.GetString("Update_RemoveDPErrorDialog_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Install new Driver Package.
         /// </summary>
         internal static string Updater_InstallDPMessage {

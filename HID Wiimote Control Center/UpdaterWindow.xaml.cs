@@ -62,7 +62,7 @@ namespace HID_Wiimote_Control_Center
                 CloseButton.IsEnabled = true;
                 if(ErrorMessage.Length != 0)
                 {
-                    MessageBox.Show(ErrorMessage);
+                    MessageBox.Show(ErrorMessage, HID_Wiimote_Control_Center.Properties.App.Update_RemoveDPErrorDialog_Title + CompletedUpdaterTask.DisplayMessage, MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 return;
             }

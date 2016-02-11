@@ -145,4 +145,7 @@ Note: This Control Center is only compatible with the updated Driver Package.</v
   <data name="Updater_RemoveDPMessage" xml:space="preserve">
     <value>Remove old Driver Package</value>
   </data>
+  <data name="Update_RemoveDPErrorDialog_Title" xml:space="preserve">
+    <value>Error while: </value>
+  </data>
 </root>
