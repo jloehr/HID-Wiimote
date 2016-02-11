@@ -132,7 +132,7 @@ namespace HID_Wiimote_Control_Center
         private bool _ShowRedNote;
 
         private bool _IsGood;
-        private bool _IsGoodHasReturned;
+        private bool _TaskHasReturned;
         private string GoodButtonText;
         private string BadButtonText;
 
@@ -152,9 +152,9 @@ namespace HID_Wiimote_Control_Center
 
             this.ShowRedNote = false;
             this.IsGood = false;
-            this.IsGoodHasReturned = false;
+            this.TaskHasReturned = true;
 
-            Task.Factory.StartNew(CheckIsGood);
+            StartTask(CheckIsGood);
         }
 
         public string Title
@@ -260,13 +260,13 @@ namespace HID_Wiimote_Control_Center
             }
         }
 
-        public bool IsGoodHasReturned
+        public bool TaskHasReturned
         {
-            get { return _IsGoodHasReturned; }
+            get { return _TaskHasReturned; }
             set
             {
-                _IsGoodHasReturned = value;
-                OnPropertyChanged("IsGoodHasReturned");
+                _TaskHasReturned = value;
+                OnPropertyChanged("TaskHasReturned");
             }
         }
 
@@ -279,13 +279,30 @@ namespace HID_Wiimote_Control_Center
             }
         }
 
+        private void StartTask(Action TaskAction)
+        {
+            if(!TaskHasReturned)
+            {
+                return;
+            }
+
+            TaskHasReturned = false;
+            Task NewTask = new Task(TaskAction);
+            NewTask.ContinueWith(TaskCompletion);
+            NewTask.Start(TaskScheduler.Default);
+        }
+
+        private void TaskCompletion(Task CompletedTask)
+        {
+            TaskHasReturned = true;
+        }
+
         private void CheckIsGood()
         {
             IsGood = InstallerTask.IsGood();
-            IsGoodHasReturned = true;
         }
 
-        public void ButtonClicked()
+        private void ButtonAction()
         {
             try
             {
@@ -298,14 +315,20 @@ namespace HID_Wiimote_Control_Center
                     InstallerTask.TryMakeGood();
                 }
 
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
-                // Show Error
+                MessageBox.Show(HID_Wiimote_Control_Center.Properties.Installer.InstallerAction_ExceptionDialogMessage + Title + "\n\n" + e.Message, HID_Wiimote_Control_Center.Properties.Installer.InstallerAction_ExceptionDialogTitle, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
             IsGood = !IsGood;
             ShowRedNote = !ShowRedNote;
+        }
+
+        public void ButtonClicked()
+        {
+            StartTask(ButtonAction);
         }       
     }
 

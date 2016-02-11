@@ -169,6 +169,24 @@ namespace HID_Wiimote_Control_Center.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An error occurred while trying to run the following action: .
+        /// </summary>
+        public static string InstallerAction_ExceptionDialogMessage {
+            get {
+                return ResourceManager.GetString("InstallerAction_ExceptionDialogMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error occured!.
+        /// </summary>
+        public static string InstallerAction_ExceptionDialogTitle {
+            get {
+                return ResourceManager.GetString("InstallerAction_ExceptionDialogTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
         public static byte[] JulianLoehrCA {

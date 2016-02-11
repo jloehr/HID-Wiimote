@@ -153,6 +153,12 @@
   <data name="DriverPackage_Title" xml:space="preserve">
     <value>Driver Package</value>
   </data>
+  <data name="InstallerAction_ExceptionDialogMessage" xml:space="preserve">
+    <value>An error occurred while trying to run the following action: </value>
+  </data>
+  <data name="InstallerAction_ExceptionDialogTitle" xml:space="preserve">
+    <value>An error occured!</value>
+  </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="JulianLoehrCA" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\JulianLoehrCA.cer;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
