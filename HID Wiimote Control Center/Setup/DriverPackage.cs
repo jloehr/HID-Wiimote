@@ -16,9 +16,7 @@ namespace HID_Wiimote_Control_Center.Setup
 
         public bool IsGood()
         {
-            DriverPackageUninstallerRegistry.DriverPackageState DPState = DriverPackageUninstallerRegistry.GetDriverPackageState(VersionStrings.DriverPackageVersion);           
-
-            return (DPState != DriverPackageUninstallerRegistry.DriverPackageState.NoneInstalled);
+            return IsInstalled();
         }
 
         public void TryMakeBad()
@@ -37,6 +35,22 @@ namespace HID_Wiimote_Control_Center.Setup
             
             Process Uninstall = Process.Start("cmd.exe", "/C " + UninstallerString);
             Uninstall.WaitForExit();
+        }
+
+        public static void Install()
+        {
+            if(IsInstalled())
+            {
+                return;
+            }
+
+        }
+
+        private static bool IsInstalled()
+        {
+            DriverPackageUninstallerRegistry.DriverPackageState DPState = DriverPackageUninstallerRegistry.GetDriverPackageState(VersionStrings.DriverPackageVersion);
+
+            return (DPState != DriverPackageUninstallerRegistry.DriverPackageState.NoneInstalled);
         }
     }
 }
