@@ -9,7 +9,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HID Wiimote", "HID Wiimote\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HID Wiimote Package", "HID Wiimote Package\HID Wiimote Package.vcxproj", "{E1721BA4-CF41-483D-A72A-1452A0FF2F1E}"
 	ProjectSection(ProjectDependencies) = postProject
-		{234B7874-FFFB-4FA1-A5CF-AD0184A3DC15} = {234B7874-FFFB-4FA1-A5CF-AD0184A3DC15}
 		{785D88E1-E758-4966-80FA-AEF74681FEF1} = {785D88E1-E758-4966-80FA-AEF74681FEF1}
 	EndProjectSection
 EndProject
@@ -21,8 +20,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Additional Package Content"
 		Additional Package Content\EULA.txt = Additional Package Content\EULA.txt
 		Additional Package Content\Readme.txt = Additional Package Content\Readme.txt
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TinyInstaller", "TinyInstaller\TinyInstaller.csproj", "{234B7874-FFFB-4FA1-A5CF-AD0184A3DC15}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BuildAndZip", "BuildAndZip\BuildAndZip.vcxproj", "{0C56BAEE-4F6C-4590-9E48-EFBF80099FEB}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -95,14 +92,6 @@ Global
 		{3BAFF0EB-1B25-4E8E-8189-267B6686D7BC}.Universal Release|Win32.Build.0 = Windows 10 Universal Release|Win32
 		{3BAFF0EB-1B25-4E8E-8189-267B6686D7BC}.Universal Release|x64.ActiveCfg = Windows 10 Universal Release|x64
 		{3BAFF0EB-1B25-4E8E-8189-267B6686D7BC}.Universal Release|x64.Build.0 = Windows 10 Universal Release|x64
-		{234B7874-FFFB-4FA1-A5CF-AD0184A3DC15}.Debug|Win32.ActiveCfg = Debug|Any CPU
-		{234B7874-FFFB-4FA1-A5CF-AD0184A3DC15}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{234B7874-FFFB-4FA1-A5CF-AD0184A3DC15}.Release|Win32.ActiveCfg = Release|Any CPU
-		{234B7874-FFFB-4FA1-A5CF-AD0184A3DC15}.Release|x64.ActiveCfg = Release|Any CPU
-		{234B7874-FFFB-4FA1-A5CF-AD0184A3DC15}.Universal Debug|Win32.ActiveCfg = Debug|Any CPU
-		{234B7874-FFFB-4FA1-A5CF-AD0184A3DC15}.Universal Debug|x64.ActiveCfg = Debug|Any CPU
-		{234B7874-FFFB-4FA1-A5CF-AD0184A3DC15}.Universal Release|Win32.ActiveCfg = Release|Any CPU
-		{234B7874-FFFB-4FA1-A5CF-AD0184A3DC15}.Universal Release|x64.ActiveCfg = Release|Any CPU
 		{0C56BAEE-4F6C-4590-9E48-EFBF80099FEB}.Debug|Win32.ActiveCfg = Windows 7, 8, 8.1, 10 Release|Win32
 		{0C56BAEE-4F6C-4590-9E48-EFBF80099FEB}.Debug|x64.ActiveCfg = Windows 7, 8, 8.1, 10 Release|x64
 		{0C56BAEE-4F6C-4590-9E48-EFBF80099FEB}.Release|Win32.ActiveCfg = Windows 7, 8, 8.1, 10 Release|Win32

@@ -159,20 +159,12 @@
   </PropertyGroup>
   <ItemGroup>
     <FilesToPackage Include="$(WindowsSdkDir)Redist\DIFx\dpinst\MultiLin\$(PlatformShortName)\dpinst.exe" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|Win32'">
-      <PackageRelativeDirectory>
-      </PackageRelativeDirectory>
     </FilesToPackage>
     <FilesToPackage Include="$(WindowsSdkDir)Redist\DIFx\dpinst\MultiLin\$(PlatformShortName)\dpinst.exe" Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|Win32'">
-      <PackageRelativeDirectory>
-      </PackageRelativeDirectory>
     </FilesToPackage>
     <FilesToPackage Include="$(WindowsSdkDir)Redist\DIFx\dpinst\MultiLin\$(PlatformShortName)\dpinst.exe" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|x64'">
-      <PackageRelativeDirectory>
-      </PackageRelativeDirectory>
     </FilesToPackage>
     <FilesToPackage Include="$(WindowsSdkDir)Redist\DIFx\dpinst\MultiLin\$(PlatformShortName)\dpinst.exe" Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|x64'">
-      <PackageRelativeDirectory>
-      </PackageRelativeDirectory>
     </FilesToPackage>
     <FilesToPackage Include="..\$(Platform)\$(ConfigurationName)\HIDMiniport.pdb" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Debug|x64'">
       <PackageRelativeDirectory>Debug</PackageRelativeDirectory>
@@ -241,22 +233,14 @@
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
-    <FilesToPackage Include="..\TinyInstaller\bin\Release\TinyInstaller.exe" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|x64'">
-      <PackageRelativeDirectory>
-      </PackageRelativeDirectory>
-    </FilesToPackage>
-    <FilesToPackage Include="..\TinyInstaller\bin\Release\TinyInstaller.exe" Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|x64'">
-      <PackageRelativeDirectory>
-      </PackageRelativeDirectory>
-    </FilesToPackage>
-    <FilesToPackage Include="..\TinyInstaller\bin\Release\TinyInstaller.exe" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|Win32'">
-      <PackageRelativeDirectory>
-      </PackageRelativeDirectory>
-    </FilesToPackage>
-    <FilesToPackage Include="..\TinyInstaller\bin\Release\TinyInstaller.exe" Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|Win32'">
-      <PackageRelativeDirectory>
-      </PackageRelativeDirectory>
-    </FilesToPackage>
+    <FilesToPackage Include="..\HID Wiimote Control Center\bin\Debug\HID Wiimote Control Center.exe"  Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Debug|x64'" />
+    <FilesToPackage Include="..\HID Wiimote Control Center\bin\Debug\HID Wiimote Control Center.exe"  Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Debug|Win32'" />
+    <FilesToPackage Include="..\HID Wiimote Control Center\bin\Debug\HID Wiimote Control Center.exe"  Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Debug|x64'" />
+    <FilesToPackage Include="..\HID Wiimote Control Center\bin\Debug\HID Wiimote Control Center.exe"  Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Debug|Win32'" />
+    <FilesToPackage Include="..\HID Wiimote Control Center\bin\Release\HID Wiimote Control Center.exe"  Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|x64'" />
+    <FilesToPackage Include="..\HID Wiimote Control Center\bin\Release\HID Wiimote Control Center.exe"  Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|Win32'" />
+    <FilesToPackage Include="..\HID Wiimote Control Center\bin\Release\HID Wiimote Control Center.exe"  Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|x64'" />
+    <FilesToPackage Include="..\HID Wiimote Control Center\bin\Release\HID Wiimote Control Center.exe"  Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|Win32'" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HID Miniport\HID Miniport.vcxproj">
