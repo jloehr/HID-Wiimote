@@ -80,7 +80,31 @@ namespace HID_Wiimote_Control_Center
 
         private void CloseButtonClick(object sender, RoutedEventArgs e)
         {
-            Close();
+            if (AllRequirementsFulfilled())
+            {
+                App.ChangeMainWindow(new ControlCenterWindow(), this);
+            }
+            else
+            {
+                Close();
+            }
+
+        }
+
+        private bool AllRequirementsFulfilled()
+        {
+            foreach (InstallerAction Action in ActionList)
+            {
+                if (Action.Required)
+                {
+                    if(!Action.IsGood)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
         }
     }
 
@@ -89,7 +113,7 @@ namespace HID_Wiimote_Control_Center
         public event PropertyChangedEventHandler PropertyChanged;
 
         private string _Title;
-        private bool Required;
+        private bool _Required;
         private string _Description;
         private string _SmallDescription;
         private string _RedNote;
@@ -102,7 +126,7 @@ namespace HID_Wiimote_Control_Center
         public InstallerAction(string Title, bool Required, string Description, string SmallDescription, string RedNote, string GoodButtonText, string BadButtonText)
         {
             this.Title = Title;
-            this.Required = Required;
+            this._Required = Required;
             this.Description = Description;
             this.SmallDescription = SmallDescription;
             this._RedNote = RedNote;
@@ -120,6 +144,14 @@ namespace HID_Wiimote_Control_Center
             {
                 _Title = value;
                 OnPropertyChanged("Title");
+            }
+        }
+
+        public bool Required
+        {
+            get
+            {
+                return _Required;
             }
         }
 
