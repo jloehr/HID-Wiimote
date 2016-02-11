@@ -130,12 +130,13 @@ namespace HID_Wiimote_Control_Center
         {
             if(UpdateSuccesfull)
             {
-                ControlCenterWindow NewWindow = new ControlCenterWindow();
-                App.Current.MainWindow = NewWindow;
-                NewWindow.Show();
+                App.ChangeMainWindow(new ControlCenterWindow(), this);
+            }
+            else
+            {
+                this.Close();
             }
 
-            this.Close();
         }
 
         public class UpdaterTask : INotifyPropertyChanged

@@ -55,5 +55,12 @@ namespace HID_Wiimote_Control_Center
                     return;
             }
         }
+
+        public static void ChangeMainWindow(Window NewWindow, Window CallingWindow)
+        {
+            Current.MainWindow = NewWindow;
+            NewWindow.Show();
+            CallingWindow.Close();
+        }
     }
 }
