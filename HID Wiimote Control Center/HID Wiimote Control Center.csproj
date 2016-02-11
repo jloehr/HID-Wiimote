@@ -90,10 +90,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Installer.resx</DependentUpon>
     </Compile>
+    <Compile Include="Setup\Certificate.cs" />
+    <Compile Include="Setup\DriverPackage.cs" />
     <Compile Include="Setup\DriverPackageUninstallerRegistry.cs" />
     <Compile Include="InstallerWindow.xaml.cs">
       <DependentUpon>InstallerWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Setup\TestMode.cs" />
     <Compile Include="Utility\SingleInstanceProtector.cs" />
     <Compile Include="Properties\VersionStrings.cs" />
     <Compile Include="UpdaterWindow.xaml.cs">

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HID_Wiimote_Control_Center.Setup;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -95,12 +96,9 @@ namespace HID_Wiimote_Control_Center
 
         private bool RemoveOldDriverPackage()
         {
-            string UninstallerString = DriverPackageUninstallerRegistry.GetUninstallString();                       
-
             try
             {
-                Process Uninstall = Process.Start("cmd.exe", "/C " + UninstallerString);
-                Uninstall.WaitForExit();
+                DriverPackage.Uninstall();
             }
             catch(Exception e)
             {

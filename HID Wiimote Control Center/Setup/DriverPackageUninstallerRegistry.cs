@@ -69,6 +69,11 @@ namespace HID_Wiimote_Control_Center
 
         public enum DriverPackageState { NoneInstalled, OlderInstalled, CurrentInstalled, NewerInstalled };
 
+        public static DriverPackageState GetDriverPackageState(string AppVersionString)
+        {
+            string InstalledVersionString;
+            return GetDriverPackageState(AppVersionString, out InstalledVersionString);
+        }
 
         public static DriverPackageState GetDriverPackageState(string AppVersionString, out string InstalledVersionString)
         {
