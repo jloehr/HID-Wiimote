@@ -118,10 +118,16 @@ namespace HID_Wiimote_Control_Center
 
         private bool InstallNewDriverPackage()
         {
-            Thread.Sleep(5000);
-            // Run Installer procedure
+            DriverPackage.Install();
 
-            return false;
+            bool InstallCheck = (DriverPackageUninstallerRegistry.GetUninstallString().Length != 0);
+            if (!InstallCheck)
+            {
+                ErrorMessage = HID_Wiimote_Control_Center.Properties.App.Updater_InstallDPCheckFailed;
+                return false;
+            }
+
+            return true;
         }
 
         private void CloseButtonClick(object sender, RoutedEventArgs e)

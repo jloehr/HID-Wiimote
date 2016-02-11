@@ -148,4 +148,7 @@ Note: This Control Center is only compatible with the updated Driver Package.</v
   <data name="Update_RemoveDPErrorDialog_Title" xml:space="preserve">
     <value>Error while: </value>
   </data>
+  <data name="Updater_InstallDPCheckFailed" xml:space="preserve">
+    <value>The new Driver Package was not successfully installed. Please try again.</value>
+  </data>
 </root>

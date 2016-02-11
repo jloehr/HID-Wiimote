@@ -98,6 +98,15 @@ namespace HID_Wiimote_Control_Center.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The new Driver Package was not successfully installed. Please try again..
+        /// </summary>
+        internal static string Updater_InstallDPCheckFailed {
+            get {
+                return ResourceManager.GetString("Updater_InstallDPCheckFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Install new Driver Package.
         /// </summary>
         internal static string Updater_InstallDPMessage {
