@@ -37,7 +37,7 @@ namespace HID_Wiimote_Control_Center.Setup
         {
             string UninstallerString = DriverPackageUninstallerRegistry.GetUninstallString();
 
-            Process Uninstall = Process.Start("cmd.exe", "/C " + UninstallerString);
+            Process Uninstall = Process.Start("cmd.exe", "/C \"" + UninstallerString + "\"");
             Uninstall.WaitForExit();
         }
 
