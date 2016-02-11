@@ -28,26 +28,36 @@ namespace HID_Wiimote_Control_Center
         string ErrorMessage;
 
         public UpdaterWindow()
-        {
-            InitializeComponent();
-
-            TaskListBox.ItemsSource = TaskList;
-
+        {     
+            if(!AskForUpdate())
+            {
+                this.Close();
+                return;
+            }
+             
             TaskList.Add(new UpdaterTask(HID_Wiimote_Control_Center.Properties.App.Updater_RemoveDPMessage, RemoveOldDriverPackage));
             TaskList.Add(new UpdaterTask(HID_Wiimote_Control_Center.Properties.App.Updater_InstallDPMessage, InstallNewDriverPackage));
-            
-            TaskList[0].StartTask(UpdaterTaskComplete);
 
+            InitializeComponent();
+        }
+
+        private bool AskForUpdate()
+        {
+            MessageBoxResult Result = MessageBox.Show(HID_Wiimote_Control_Center.Properties.App.UpdaterDialog_MainMessage, "HID Wiimote Updater", MessageBoxButton.YesNo, MessageBoxImage.Question);           
+
+            return (Result == MessageBoxResult.Yes);
         }
 
         private void OnInitialized(object sender, EventArgs e)
         {
-            MessageBoxResult Result = MessageBox.Show(HID_Wiimote_Control_Center.Properties.App.UpdaterDialog_MainMessage, "HID Wiimote Updater", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            TaskListBox.ItemsSource = TaskList;
+        }
 
-            if(Result != MessageBoxResult.Yes)
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            if(TaskList.Count > 0)
             {
-                this.Close();
-                return;
+                TaskList[0].StartTask(UpdaterTaskComplete);
             }
         }
 
@@ -111,7 +121,7 @@ namespace HID_Wiimote_Control_Center
         private bool InstallNewDriverPackage()
         {
             Thread.Sleep(5000);
-            // Run DPinst.exe
+            // Run Installer procedure
 
             return false;
         }

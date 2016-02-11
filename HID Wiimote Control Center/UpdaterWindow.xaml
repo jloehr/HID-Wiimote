@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:HID_Wiimote_Control_Center"
         xmlns:Emit="clr-namespace:System.Reflection.Emit;assembly=mscorlib" x:Class="HID_Wiimote_Control_Center.UpdaterWindow"
         mc:Ignorable="d"
-        Title="HID Wiimote Updater" Height="297" Width="450" Initialized="OnInitialized" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="HID Wiimote Updater" Height="297" Width="450" Initialized="OnInitialized" Loaded="OnLoaded" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <!-- Bullet Point -->
         <ControlTemplate x:Key="BulletPoint" x:Name="BulletPoint" TargetType="{x:Type ContentControl}">
