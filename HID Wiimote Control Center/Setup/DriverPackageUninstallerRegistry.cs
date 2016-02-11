@@ -78,7 +78,7 @@ namespace HID_Wiimote_Control_Center
         public static DriverPackageState GetDriverPackageState(string AppVersionString, out string InstalledVersionString)
         {
             InstalledVersionString = "";
-#if DEBUG
+#if !DEBUG
             RegistryKey UninstallerKey = GetHIDWiimoteUninstallKey();
 
             if(UninstallerKey == null)
