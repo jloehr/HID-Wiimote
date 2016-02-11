@@ -14,7 +14,9 @@ namespace HID_Wiimote_Control_Center.Setup
         const string InstallDir = @"%ProgramFiles%\DIFX\HID Wiimote";
         const string UninstallFileName = "Uninstall.bat";
         const string DPInstFileName = "dpinst.exe";
-        const string InfFileName = "HIDWiimote.inf";     
+        const string InfFileName = "HIDWiimote.inf";
+        const string UninstallerInfFileToken = "{{InfFileName}}";
+        const string InstallDirToken = "{{InstallDir}}";
 
         public bool IsGood()
         {
@@ -28,7 +30,7 @@ namespace HID_Wiimote_Control_Center.Setup
 
         public void TryMakeGood()
         {
-            // Install
+            Install();
         }
 
         public static void Uninstall()
@@ -50,7 +52,6 @@ namespace HID_Wiimote_Control_Center.Setup
             string DPInstPath = System.IO.Path.Combine(ActuralInstallDir, DPInstFileName);
             string InfPath = System.IO.Path.Combine(ActuralInstallDir, InfFileName);
             string UninstallerPath = System.IO.Path.Combine(ActuralInstallDir, UninstallFileName);
-            string UninstallCommand = string.Format("{0} {1}", DPInstFileName, InfFileName);
 
             // Create Dir
             System.IO.Directory.CreateDirectory(ActuralInstallDir);
@@ -60,15 +61,19 @@ namespace HID_Wiimote_Control_Center.Setup
             System.IO.File.Copy(InfFileName, InfPath);
             using (System.IO.StreamWriter UninstallerStreamWriter = new System.IO.StreamWriter(UninstallerPath))
             {
-                UninstallerStreamWriter.Write(HID_Wiimote_Control_Center.Properties.Installer.UninstallerContent);
+                string UninstallerContent = HID_Wiimote_Control_Center.Properties.Installer.UninstallerContent;
+                UninstallerContent = UninstallerContent.Replace(UninstallerInfFileToken, InfFileName);
+                UninstallerContent = UninstallerContent.Replace(InstallDirToken, ActuralInstallDir);
+                UninstallerStreamWriter.Write(UninstallerContent);
             }
 
             // Run DPinst
             Process DPInst = Process.Start(DPInstFileName);
-            DPInst.WaitForExit();            
+            DPInst.WaitForExit();
+            System.Console.WriteLine(DPInst.ExitCode);   
 
             // Set up uninstall reg key
-            DriverPackageUninstallerRegistry.CreateHIDWiimoteUninstallKey(UninstallCommand, DPInstPath);
+            DriverPackageUninstallerRegistry.CreateHIDWiimoteUninstallKey(UninstallerPath, DPInstPath);
         }
 
         private static bool IsInstalled()

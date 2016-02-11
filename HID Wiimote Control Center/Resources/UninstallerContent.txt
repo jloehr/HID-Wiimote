@@ -1,4 +1,6 @@
-dpinst.exe /u "%~1"
+cd "{{InstallDir}}"
+START /WAIT dpinst.exe /u "{{InfFileName}}"
 REG DELETE "HKLM\Software\Microsoft\Windows\CurrentVersion\Uninstall\HID Wiimote" /f
 del dpinst.exe
+del "{{InfFileName}}"
 del "%~f0"

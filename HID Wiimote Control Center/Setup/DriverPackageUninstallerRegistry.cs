@@ -9,9 +9,7 @@ namespace HID_Wiimote_Control_Center
 {
     static class DriverPackageUninstallerRegistry
     {
-        private static string UninstallKey = "Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\HID Wiimote\\";
-        //private static string UninstallKey = "Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\FAB43A714FABA96287ADD1C89D9D8F912908C52C\\";
-        
+        private static string UninstallKey = "Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\HID Wiimote\\";        
 
         private struct Version
         {
