@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <dpinst>
   <legacyMode />
+  <suppressAddRemovePrograms />
   <enableNotListedLanguages />
   <language code="0x401">
     <eula type="txt" path="EULA.txt" />
