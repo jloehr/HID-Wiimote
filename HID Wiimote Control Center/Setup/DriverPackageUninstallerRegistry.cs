@@ -10,6 +10,8 @@ namespace HID_Wiimote_Control_Center
     static class DriverPackageUninstallerRegistry
     {
         private static string UninstallKey = "Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\HID Wiimote\\";
+        //private static string UninstallKey = "Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\FAB43A714FABA96287ADD1C89D9D8F912908C52C\\";
+        
 
         private struct Version
         {
@@ -78,8 +80,8 @@ namespace HID_Wiimote_Control_Center
         public static DriverPackageState GetDriverPackageState(string AppVersionString, out string InstalledVersionString)
         {
             InstalledVersionString = "";
-#if !DEBUG
-            RegistryKey UninstallerKey = GetHIDWiimoteUninstallKey(false);
+#if DEBUG
+            RegistryKey UninstallerKey = GetHIDWiimoteUninstallKey();
 
             if(UninstallerKey == null)
             {
@@ -109,7 +111,7 @@ namespace HID_Wiimote_Control_Center
         
         public static string GetUninstallString()
         {
-            RegistryKey UninstallerKey = GetHIDWiimoteUninstallKey(false);
+            RegistryKey UninstallerKey = GetHIDWiimoteUninstallKey();
 
             if (UninstallerKey == null)
             {
@@ -119,9 +121,27 @@ namespace HID_Wiimote_Control_Center
             return UninstallerKey.GetValue("UninstallString") as string;
         }
 
-        private static RegistryKey GetHIDWiimoteUninstallKey(bool Writeable)
+        public static bool CreateHIDWiimoteUninstallKey(string UninstallCommnad, string DPInstPath)
         {
-            return Registry.LocalMachine.OpenSubKey(UninstallKey, Writeable);
+            RegistryKey UninstallerKey = Registry.LocalMachine.CreateSubKey(UninstallKey);
+            if (UninstallerKey == null)
+            {
+                return false;
+            }
+
+            UninstallerKey.SetValue("DisplayName", "HID Wiimote " + VersionStrings.DriverPackageVersion, RegistryValueKind.String);
+            UninstallerKey.SetValue("DisplayIcon", DPInstPath + ",0", RegistryValueKind.String);
+            UninstallerKey.SetValue("DisplayVersion", VersionStrings.DriverPackageVersion, RegistryValueKind.String);
+            UninstallerKey.SetValue("Publisher", "Julian Löhr", RegistryValueKind.String);
+            UninstallerKey.SetValue("UninstallString", UninstallCommnad, RegistryValueKind.String);
+            UninstallerKey.SetValue("HelpLink", "https://www.julianloehr.de/educational-work/hid-wiimote/", RegistryValueKind.String);
+
+            return true;
+        }
+
+        private static RegistryKey GetHIDWiimoteUninstallKey()
+        {
+            return Registry.LocalMachine.OpenSubKey(UninstallKey, false);
         }
     }
 }
