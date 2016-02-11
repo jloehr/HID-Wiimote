@@ -5,12 +5,39 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HID_Wiimote_Control_Center"
         mc:Ignorable="d"
-        Title="HID Wiimote Installer" Height="300" Width="300">
+        Title="HID Wiimote Installer" ResizeMode="NoResize" Width="750" SizeToContent="Height" Initialized="OnInitialized" >
+    <Window.Resources>
+        <SolidColorBrush x:Key="BackgroundGood" Color="#40008000" />
+        <SolidColorBrush x:Key="BackgroundRed" Color="#40FF0000" />
+
+        <local:BooleanToColorConverter x:Key="IsGoodColorConverter"
+                                       TrueColor="{StaticResource BackgroundGood}"
+                                       FalseColor="{StaticResource BackgroundRed}"/>
+    </Window.Resources>
     <Grid>
-        <StackPanel Margin="0">
-            <GroupBox x:Name="TestMode" Header="Test Mode" Margin="10,0" Height="78"/>
-            <GroupBox x:Name="Certificate" Header="Certificate" Margin="10,0" Height="78"/>
-            <GroupBox x:Name="DriverPackage" Header="Driver Package" Margin="10,0" Height="78"/>
-        </StackPanel>
+        <ItemsControl x:Name="ActionPanel" Margin="0">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Margin="0,5,0,40" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderBrush="Black" BorderThickness="1" Margin="10, 5, 10, 5" Padding="10" Background="{Binding IsGood, Converter={StaticResource IsGoodColorConverter}}"  >
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0, 0, 0, 5" >
+                                <Label Content="{Binding Title}" FontSize="21.333" FontWeight="Bold" />
+                                <Label Content="{Binding RequiredOptional}" FontSize="21.333" FontStyle="Italic" Foreground="#FF666666" VerticalAlignment="Bottom" />
+                            </StackPanel>
+                            <TextBlock TextWrapping="Wrap" FontSize="16" Text="{Binding Description}" />
+                            <TextBlock TextWrapping="Wrap" FontStyle="Italic" Foreground="#FF202020" Margin="0,5" Text="{Binding SmallDescription}" />
+                            <TextBlock TextWrapping="Wrap" FontStyle="Italic" Foreground="Red" Text="{Binding RedNote}" />
+                            <Button Content="{Binding ButtonText}" Width="75" HorizontalAlignment="Right" Margin="0,0,10,10" Click="InstallerActionButtonClick" />
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <Button x:Name="CloseButton" Content="Close" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" Click="CloseButtonClick"/>
     </Grid>
 </Window>

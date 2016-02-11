@@ -85,6 +85,11 @@
     <Compile Include="ControlCenterWindow.xaml.cs">
       <DependentUpon>ControlCenterWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Installer.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Installer.resx</DependentUpon>
+    </Compile>
     <Compile Include="Setup\DriverPackageUninstallerRegistry.cs" />
     <Compile Include="InstallerWindow.xaml.cs">
       <DependentUpon>InstallerWindow.xaml</DependentUpon>
@@ -125,6 +130,10 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="Properties\Installer.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Installer.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\App.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>App.Designer.cs</LastGenOutput>

@@ -171,6 +171,7 @@ namespace HID_Wiimote_Control_Center
                     OnPropertyChanged("DisplayMessage");
                 }
             }
+
             public TaskStatus Status
             {
                 get { return _Status; }
