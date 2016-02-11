@@ -169,6 +169,16 @@ namespace HID_Wiimote_Control_Center.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] JulianLoehrCA {
+            get {
+                object obj = ResourceManager.GetObject("JulianLoehrCA", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enables permanent Test mode..
         /// </summary>
         public static string TestMode_Description {

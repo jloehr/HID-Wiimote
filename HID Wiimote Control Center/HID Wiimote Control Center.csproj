@@ -147,6 +147,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <EmbeddedResource Include="Resources\JulianLoehrCA.cer" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
