@@ -96,6 +96,11 @@
     <Compile Include="InstallerWindow.xaml.cs">
       <DependentUpon>InstallerWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Setup\InstallAction\CopyFile.cs" />
+    <Compile Include="Setup\InstallAction\CreateRegistryUninstallKey.cs" />
+    <Compile Include="Setup\InstallAction\IInstallAction.cs" />
+    <Compile Include="Setup\InstallAction\RunDPInstall.cs" />
+    <Compile Include="Setup\InstallAction\TextResourceToFile.cs" />
     <Compile Include="Setup\TestMode.cs" />
     <Compile Include="Utility\SingleInstanceProtector.cs" />
     <Compile Include="Properties\VersionStrings.cs" />
