@@ -5,14 +5,14 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HID_Wiimote_Control_Center.Setup
+namespace HID_Wiimote_Control_Center.Setup.SetupAction
 {
-    class Certificate : IInstallerTask
+    class Certificate : ISetupAction
     {
         X509Store Store = new X509Store(StoreName.Root, StoreLocation.LocalMachine);
         X509Certificate2 CertificateInstance = new X509Certificate2(HID_Wiimote_Control_Center.Properties.Installer.JulianLoehrCA);        
 
-        public bool IsGood()
+        public bool IsSetUp()
         {
             bool Result;
 
@@ -33,14 +33,15 @@ namespace HID_Wiimote_Control_Center.Setup
             return Result;
         }
 
-        public void TryMakeBad()
+
+        public void TrySetUp()
         {
             try
             {
                 Store.Open(OpenFlags.ReadWrite);
-                if (Store.Certificates.Contains(CertificateInstance))
+                if (!Store.Certificates.Contains(CertificateInstance))
                 {
-                    Store.Remove(CertificateInstance);
+                    Store.Add(CertificateInstance);
                 }
             }
             finally
@@ -49,14 +50,14 @@ namespace HID_Wiimote_Control_Center.Setup
             }
         }
 
-        public void TryMakeGood()
+        public void TryRevert()
         {
             try
             {
                 Store.Open(OpenFlags.ReadWrite);
-                if (!Store.Certificates.Contains(CertificateInstance))
+                if (Store.Certificates.Contains(CertificateInstance))
                 {
-                    Store.Add(CertificateInstance);
+                    Store.Remove(CertificateInstance);
                 }
             }
             finally

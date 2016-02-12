@@ -90,18 +90,20 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Installer.resx</DependentUpon>
     </Compile>
-    <Compile Include="Setup\Certificate.cs" />
     <Compile Include="Setup\DriverPackage.cs" />
+    <Compile Include="Setup\SetupAction\Certificate.cs" />
+    <Compile Include="Setup\SetupAction\DriverPackage.cs" />
     <Compile Include="Setup\DriverPackageUninstallerRegistry.cs" />
     <Compile Include="InstallerWindow.xaml.cs">
       <DependentUpon>InstallerWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Setup\InstallAction\CopyFile.cs" />
-    <Compile Include="Setup\InstallAction\CreateRegistryUninstallKey.cs" />
-    <Compile Include="Setup\InstallAction\IInstallAction.cs" />
-    <Compile Include="Setup\InstallAction\RunDPInstall.cs" />
-    <Compile Include="Setup\InstallAction\TextResourceToFile.cs" />
-    <Compile Include="Setup\TestMode.cs" />
+    <Compile Include="Setup\InstallStepAction\CopyFile.cs" />
+    <Compile Include="Setup\InstallStepAction\CreateRegistryUninstallKey.cs" />
+    <Compile Include="Setup\InstallStepAction\IInstallAction.cs" />
+    <Compile Include="Setup\InstallStepAction\RunDPInstall.cs" />
+    <Compile Include="Setup\InstallStepAction\TextResourceToFile.cs" />
+    <Compile Include="Setup\SetupAction\ISetupAction.cs" />
+    <Compile Include="Setup\SetupAction\TestMode.cs" />
     <Compile Include="Utility\SingleInstanceProtector.cs" />
     <Compile Include="Properties\VersionStrings.cs" />
     <Compile Include="UpdaterWindow.xaml.cs">

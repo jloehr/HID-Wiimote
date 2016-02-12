@@ -1,4 +1,5 @@
 ﻿using HID_Wiimote_Control_Center.Setup;
+using HID_Wiimote_Control_Center.Setup.SetupAction;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -56,7 +57,7 @@ namespace HID_Wiimote_Control_Center
                 string.Empty,
                 HID_Wiimote_Control_Center.Properties.Installer.ButtonUninstall,
                 HID_Wiimote_Control_Center.Properties.Installer.ButtonInstall,
-                new DriverPackage()
+                new Setup.SetupAction.DriverPackage()
                 ));
 
             InitializeComponent();
@@ -111,14 +112,7 @@ namespace HID_Wiimote_Control_Center
             return true;
         }
     }
-
-    public interface IInstallerTask
-    {
-        bool IsGood();
-        void TryMakeGood();
-        void TryMakeBad();
-    }
-
+    
     public class InstallerAction : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
@@ -136,9 +130,9 @@ namespace HID_Wiimote_Control_Center
         private string GoodButtonText;
         private string BadButtonText;
 
-        private IInstallerTask InstallerTask;
+        private ISetupAction InstallerTask;
 
-        public InstallerAction(string Title, bool Required, string Description, string SmallDescription, string RedNote, string GoodButtonText, string BadButtonText, IInstallerTask InstallerTask)
+        public InstallerAction(string Title, bool Required, string Description, string SmallDescription, string RedNote, string GoodButtonText, string BadButtonText, ISetupAction InstallerTask)
         {
             this.Title = Title;
             this._Required = Required;
@@ -299,7 +293,7 @@ namespace HID_Wiimote_Control_Center
 
         private void CheckIsGood()
         {
-            IsGood = InstallerTask.IsGood();
+            IsGood = InstallerTask.IsSetUp();
         }
 
         private void ButtonAction()
@@ -308,11 +302,11 @@ namespace HID_Wiimote_Control_Center
             {
                 if (IsGood)
                 {
-                    InstallerTask.TryMakeBad();
+                    InstallerTask.TryRevert();
                 }
                 else
                 {
-                    InstallerTask.TryMakeGood();
+                    InstallerTask.TrySetUp();
                 }
 
             }

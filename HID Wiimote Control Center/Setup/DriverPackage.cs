@@ -1,17 +1,14 @@
-﻿using HID_Wiimote_Control_Center.Setup.InstallAction;
+﻿using HID_Wiimote_Control_Center.Setup.InstallStepAction;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace HID_Wiimote_Control_Center.Setup
 {
-
-    class DriverPackage : IInstallerTask
+    static class DriverPackage
     {
         const string InstallDir = @"%ProgramFiles%\DIFX\HID Wiimote";
         const string UninstallFileName = "Uninstall.bat";
@@ -19,28 +16,12 @@ namespace HID_Wiimote_Control_Center.Setup
         const string InfFileName = "HIDWiimote.inf";
         const string UninstallerInfFileToken = "{{InfFileName}}";
         const string InstallDirToken = "{{InstallDir}}";
-        
-        
-        public bool IsGood()
-        {
-            return IsInstalled();
-        }
 
-        public void TryMakeBad()
+        public static bool IsInstalled()
         {
-            Uninstall();
-        }
+            DriverPackageUninstallerRegistry.DriverPackageState DPState = DriverPackageUninstallerRegistry.GetDriverPackageState(VersionStrings.DriverPackageVersion);
 
-        public void TryMakeGood()
-        {
-            Install();
-        }
-        
-        public static void Uninstall()
-        {
-            string UninstallerString = DriverPackageUninstallerRegistry.GetUninstallString();
-            Process Uninstall = Process.Start("cmd.exe", "/C \"" + UninstallerString + "\"");
-            Uninstall.WaitForExit();
+            return (DPState != DriverPackageUninstallerRegistry.DriverPackageState.NoneInstalled);
         }
 
         public static void Install()
@@ -62,7 +43,7 @@ namespace HID_Wiimote_Control_Center.Setup
             // Make sure Directory exists
             System.IO.Directory.CreateDirectory(ActualInstallDir);
 
-            List<IInstallAction> InstallSteps = new List<IInstallAction> {
+            List<IInstallStepAction> InstallSteps = new List<IInstallStepAction> {
                 new CopyFile(DPInstFileName, ActualInstallDir),
                 new CopyFile(InfFileName, ActualInstallDir),
                 new TextResourceToFile(UninstallerPath, UninstallerContent),
@@ -84,11 +65,11 @@ namespace HID_Wiimote_Control_Center.Setup
             }
         }
 
-        private static bool IsInstalled()
+        public static void Uninstall()
         {
-            DriverPackageUninstallerRegistry.DriverPackageState DPState = DriverPackageUninstallerRegistry.GetDriverPackageState(VersionStrings.DriverPackageVersion);
-
-            return (DPState != DriverPackageUninstallerRegistry.DriverPackageState.NoneInstalled);
+            string UninstallerString = DriverPackageUninstallerRegistry.GetUninstallString();
+            Process Uninstall = Process.Start("cmd.exe", "/C \"" + UninstallerString + "\"");
+            Uninstall.WaitForExit();
         }
     }
 }

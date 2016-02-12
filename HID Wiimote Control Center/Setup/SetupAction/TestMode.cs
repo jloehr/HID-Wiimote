@@ -7,9 +7,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace HID_Wiimote_Control_Center.Setup
+namespace HID_Wiimote_Control_Center.Setup.SetupAction
 {
-    class TestMode : IInstallerTask
+    class TestMode : ISetupAction
     {
         private const string BCDEdit = "bcdedit.exe";
         private const string Id = "{current}";
@@ -18,7 +18,7 @@ namespace HID_Wiimote_Control_Center.Setup
         private const string TestSigningSetCommandOn = TestSigningSetCommand + "ON";
         private const string TestSigningSetCommandOff = TestSigningSetCommand + "OFF";
         
-        public bool IsGood()
+        public bool IsSetUp()
         {
             string Result = RunBCDEdit("/enum " + Id);
 
@@ -27,15 +27,15 @@ namespace HID_Wiimote_Control_Center.Setup
             
             return ((TestsigningValue != null) && TestsigningValue.Contains("Yes"));
         }
-
-        public void TryMakeBad()
-        {
-            RunBCDEdit(TestSigningSetCommandOff);
-        }
-
-        public void TryMakeGood()
+        
+        public void TrySetUp()
         {
             RunBCDEdit(TestSigningSetCommandOn);
+        }
+
+        public void TryRevert()
+        {
+            RunBCDEdit(TestSigningSetCommandOff);
         }
 
         private string RunBCDEdit(string Argument)

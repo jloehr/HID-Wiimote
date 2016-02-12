@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HID_Wiimote_Control_Center.Setup.InstallAction
+namespace HID_Wiimote_Control_Center.Setup.InstallStepAction
 {
-    class TextResourceToFile : IInstallAction
+    class TextResourceToFile : IInstallStepAction
     {
         string OutputPath;
         string FileContent;
