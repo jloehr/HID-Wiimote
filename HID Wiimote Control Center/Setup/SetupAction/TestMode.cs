@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
 
 namespace HID_Wiimote_Control_Center.Setup.SetupAction
 {
@@ -17,17 +11,17 @@ namespace HID_Wiimote_Control_Center.Setup.SetupAction
         private const string TestSigningSetCommand = "-set TESTSIGNING ";
         private const string TestSigningSetCommandOn = TestSigningSetCommand + "ON";
         private const string TestSigningSetCommandOff = TestSigningSetCommand + "OFF";
-        
+
         public bool IsSetUp()
         {
             string Result = RunBCDEdit("/enum " + Id);
 
             string[] Lines = Result.Split('\n');
             string TestsigningValue = Array.Find<string>(Lines, (string Line) => { return Line.StartsWith(TestSigningEntryName); });
-            
+
             return ((TestsigningValue != null) && TestsigningValue.Contains("Yes"));
         }
-        
+
         public void TrySetUp()
         {
             RunBCDEdit(TestSigningSetCommandOn);

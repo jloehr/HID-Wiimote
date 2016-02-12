@@ -2,20 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace HID_Wiimote_Control_Center
 {
@@ -29,13 +20,13 @@ namespace HID_Wiimote_Control_Center
         string ErrorMessage;
 
         public UpdaterWindow()
-        {     
-            if(!AskForUpdate())
+        {
+            if (!AskForUpdate())
             {
                 this.Close();
                 return;
             }
-             
+
             TaskList.Add(new UpdaterTask(HID_Wiimote_Control_Center.Properties.App.Updater_RemoveDPMessage, RemoveOldDriverPackage));
             TaskList.Add(new UpdaterTask(HID_Wiimote_Control_Center.Properties.App.Updater_InstallDPMessage, InstallNewDriverPackage));
 
@@ -44,7 +35,7 @@ namespace HID_Wiimote_Control_Center
 
         private bool AskForUpdate()
         {
-            MessageBoxResult Result = MessageBox.Show(HID_Wiimote_Control_Center.Properties.App.UpdaterDialog_MainMessage, "HID Wiimote Updater", MessageBoxButton.YesNo, MessageBoxImage.Question);           
+            MessageBoxResult Result = MessageBox.Show(HID_Wiimote_Control_Center.Properties.App.UpdaterDialog_MainMessage, "HID Wiimote Updater", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
             return (Result == MessageBoxResult.Yes);
         }
@@ -56,7 +47,7 @@ namespace HID_Wiimote_Control_Center
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            if(TaskList.Count > 0)
+            if (TaskList.Count > 0)
             {
                 TaskList[0].StartTask(UpdaterTaskComplete);
             }
@@ -66,12 +57,12 @@ namespace HID_Wiimote_Control_Center
         {
             UpdaterTask CompletedUpdaterTask = State as UpdaterTask;
 
-            if((CompletedTask.Status == TaskStatus.Faulted) || (CompletedTask.Result == false))
+            if ((CompletedTask.Status == TaskStatus.Faulted) || (CompletedTask.Result == false))
             {
                 // Error
                 CompletedUpdaterTask.Status = UpdaterTask.TaskStatus.Error;
                 CloseButton.IsEnabled = true;
-                if(ErrorMessage.Length != 0)
+                if (ErrorMessage.Length != 0)
                 {
                     MessageBox.Show(ErrorMessage, HID_Wiimote_Control_Center.Properties.App.Update_RemoveDPErrorDialog_Title + CompletedUpdaterTask.DisplayMessage, MessageBoxButton.OK, MessageBoxImage.Error);
                 }
@@ -82,7 +73,7 @@ namespace HID_Wiimote_Control_Center
             CompletedUpdaterTask.Status = UpdaterTask.TaskStatus.Finished;
             int TaskIndex = TaskList.IndexOf(CompletedUpdaterTask);
 
-            if(TaskIndex == (TaskList.Count - 1))
+            if (TaskIndex == (TaskList.Count - 1))
             {
                 // Last one finished
                 UpdateSuccesfull = true;
@@ -100,14 +91,14 @@ namespace HID_Wiimote_Control_Center
             {
                 DriverPackage.Uninstall();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 ErrorMessage = HID_Wiimote_Control_Center.Properties.App.Updater_RemoveDPException + "\n\n" + e.Message;
                 return false;
             }
 
             bool UninstallCheck = (DriverPackageUninstallerRegistry.GetUninstallString().Length == 0);
-            if(!UninstallCheck)
+            if (!UninstallCheck)
             {
                 ErrorMessage = HID_Wiimote_Control_Center.Properties.App.Updater_RemoveDPCheckFailed;
                 return false;
@@ -140,7 +131,7 @@ namespace HID_Wiimote_Control_Center
 
         private void CloseButtonClick(object sender, RoutedEventArgs e)
         {
-            if(UpdateSuccesfull)
+            if (UpdateSuccesfull)
             {
                 App.ChangeMainWindow(new ControlCenterWindow(), this);
             }
@@ -209,7 +200,7 @@ namespace HID_Wiimote_Control_Center
                 {
                     Handler(this, new PropertyChangedEventArgs(PropertyName));
                 }
-            }           
+            }
         }
     }
 

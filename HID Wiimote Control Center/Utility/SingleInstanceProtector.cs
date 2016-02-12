@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace HID_Wiimote_Control_Center
 {
@@ -19,7 +15,7 @@ namespace HID_Wiimote_Control_Center
         private static extern bool ShowWindowAsync(IntPtr hWnd, int nCmdShow);
         [DllImport("user32.dll")]
         private static extern bool IsIconic(IntPtr hWnd);
- 
+
         private const int SW_RESTORE = 9;
 
         private const string MutexGUID = "{29E5C640-0885-47E3-A4B2-8F4A2D96F9AD}";
@@ -29,7 +25,7 @@ namespace HID_Wiimote_Control_Center
         public SingleInstanceProtector()
         {
             InstanceMutex = new Mutex(true, MutexGUID, out MutexCreated);
-            if(MutexCreated)
+            if (MutexCreated)
             {
                 App.Current.Exit += OnAppExit;
             }
@@ -57,7 +53,7 @@ namespace HID_Wiimote_Control_Center
                     continue;
                 }
 
-                if(IsIconic(Other.MainWindowHandle))
+                if (IsIconic(Other.MainWindowHandle))
                 {
                     ShowWindowAsync(Other.MainWindowHandle, SW_RESTORE);
                 }

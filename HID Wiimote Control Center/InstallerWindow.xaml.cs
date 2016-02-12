@@ -1,20 +1,12 @@
-﻿using HID_Wiimote_Control_Center.Setup;
-using HID_Wiimote_Control_Center.Setup.SetupAction;
+﻿using HID_Wiimote_Control_Center.Setup.SetupAction;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace HID_Wiimote_Control_Center
 {
@@ -62,7 +54,7 @@ namespace HID_Wiimote_Control_Center
 
             InitializeComponent();
         }
-        
+
         private void OnInitialized(object sender, EventArgs e)
         {
             ActionPanel.ItemsSource = ActionList;
@@ -72,10 +64,10 @@ namespace HID_Wiimote_Control_Center
         {
             FrameworkElement Button = sender as FrameworkElement;
 
-            if(Button != null)
+            if (Button != null)
             {
                 InstallerAction Action = Button.DataContext as InstallerAction;
-                if(Action != null)
+                if (Action != null)
                 {
                     Action.ButtonClicked();
                 }
@@ -102,7 +94,7 @@ namespace HID_Wiimote_Control_Center
             {
                 if (Action.Required)
                 {
-                    if(!Action.IsGood)
+                    if (!Action.IsGood)
                     {
                         return false;
                     }
@@ -112,7 +104,7 @@ namespace HID_Wiimote_Control_Center
             return true;
         }
     }
-    
+
     public class InstallerAction : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
@@ -171,8 +163,9 @@ namespace HID_Wiimote_Control_Center
 
         public string RequiredOptional
         {
-            get {
-                if(Required)
+            get
+            {
+                if (Required)
                 {
                     return "- " + HID_Wiimote_Control_Center.Properties.Installer.ActionRequired;
                 }
@@ -192,7 +185,7 @@ namespace HID_Wiimote_Control_Center
                 OnPropertyChanged("Description");
             }
         }
-        
+
         public string SmallDescription
         {
             get { return _SmallDescription; }
@@ -205,8 +198,9 @@ namespace HID_Wiimote_Control_Center
 
         public string RedNote
         {
-            get {
-                if(ShowRedNote)
+            get
+            {
+                if (ShowRedNote)
                 {
                     return _RedNote;
                 }
@@ -227,7 +221,7 @@ namespace HID_Wiimote_Control_Center
                 OnPropertyChanged("RedNote");
             }
         }
-        
+
         public string ButtonText
         {
             get
@@ -275,7 +269,7 @@ namespace HID_Wiimote_Control_Center
 
         private void StartTask(Action TaskAction)
         {
-            if(!TaskHasReturned)
+            if (!TaskHasReturned)
             {
                 return;
             }
@@ -323,7 +317,7 @@ namespace HID_Wiimote_Control_Center
         public void ButtonClicked()
         {
             StartTask(ButtonAction);
-        }       
+        }
     }
 
     public class BooleanToColorConverter : IValueConverter

@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace HID_Wiimote_Control_Center
@@ -24,7 +17,7 @@ namespace HID_Wiimote_Control_Center
 
         private void OnStartup(object sender, StartupEventArgs e)
         {
-            if(!SingleInstanceProtector.IsFirstInstance())
+            if (!SingleInstanceProtector.IsFirstInstance())
             {
                 SingleInstanceProtector.ShowOtherAppInstance();
                 Shutdown();
@@ -32,7 +25,7 @@ namespace HID_Wiimote_Control_Center
             }
 
             string InstalledDriverPackageVersionString;
-            DriverPackageUninstallerRegistry.DriverPackageState DPState = DriverPackageUninstallerRegistry.GetDriverPackageState(VersionStrings.DriverPackageVersion, out InstalledDriverPackageVersionString);          
+            DriverPackageUninstallerRegistry.DriverPackageState DPState = DriverPackageUninstallerRegistry.GetDriverPackageState(VersionStrings.DriverPackageVersion, out InstalledDriverPackageVersionString);
 
             switch (DPState)
             {

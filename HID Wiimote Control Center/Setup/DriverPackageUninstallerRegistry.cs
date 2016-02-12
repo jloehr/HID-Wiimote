@@ -1,15 +1,10 @@
 ﻿using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HID_Wiimote_Control_Center
 {
     static class DriverPackageUninstallerRegistry
     {
-        private static string UninstallKey = "Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\HID Wiimote\\";        
+        private static string UninstallKey = "Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\HID Wiimote\\";
 
         private struct Version
         {
@@ -30,7 +25,7 @@ namespace HID_Wiimote_Control_Center
 
             public bool IsNewer(Version Other)
             {
-                if(this.Major != Other.Major)
+                if (this.Major != Other.Major)
                 {
                     return this.Major > Other.Major;
                 }
@@ -52,10 +47,10 @@ namespace HID_Wiimote_Control_Center
 
                 return false;
             }
-            
+
             private static ushort ParseStringPart(string[] StringParts, int index)
             {
-                if(StringParts.Length <= index)
+                if (StringParts.Length <= index)
                 {
                     return 0;
                 }
@@ -81,14 +76,14 @@ namespace HID_Wiimote_Control_Center
 #if !DEBUG
             RegistryKey UninstallerKey = GetHIDWiimoteUninstallKey();
 
-            if(UninstallerKey == null)
+            if (UninstallerKey == null)
             {
                 return DriverPackageState.NoneInstalled;
             }
 
             InstalledVersionString = UninstallerKey.GetValue("DisplayVersion") as string;
 
-            if(AppVersionString == InstalledVersionString)
+            if (AppVersionString == InstalledVersionString)
             {
                 return DriverPackageState.CurrentInstalled;
             }
@@ -96,7 +91,7 @@ namespace HID_Wiimote_Control_Center
             Version AppVersion = new Version(AppVersionString);
             Version InstalledVersion = new Version(InstalledVersionString);
 
-            if(AppVersion.IsNewer(InstalledVersion))
+            if (AppVersion.IsNewer(InstalledVersion))
             {
                 return DriverPackageState.OlderInstalled;
             }
@@ -106,7 +101,7 @@ namespace HID_Wiimote_Control_Center
             return DriverPackageState.CurrentInstalled;
 #endif
         }
-        
+
         public static string GetUninstallString()
         {
             RegistryKey UninstallerKey = GetHIDWiimoteUninstallKey();
