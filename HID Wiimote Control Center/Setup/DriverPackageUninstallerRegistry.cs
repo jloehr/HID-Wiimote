@@ -96,7 +96,7 @@ namespace HID_Wiimote_Control_Center
                 return DriverPackageState.OlderInstalled;
             }
 
-            return DriverPackageState.OlderInstalled;
+            return DriverPackageState.NewerInstalled;
 #else
             return DriverPackageState.CurrentInstalled;
 #endif
