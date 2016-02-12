@@ -107,6 +107,15 @@ namespace HID_Wiimote_Control_Center.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An error occured while trying to install the new Driver Package..
+        /// </summary>
+        internal static string Updater_InstallDPException {
+            get {
+                return ResourceManager.GetString("Updater_InstallDPException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Install new Driver Package.
         /// </summary>
         internal static string Updater_InstallDPMessage {

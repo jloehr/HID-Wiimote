@@ -151,4 +151,7 @@ Note: This Control Center is only compatible with the updated Driver Package.</v
   <data name="Updater_InstallDPCheckFailed" xml:space="preserve">
     <value>The new Driver Package was not successfully installed. Please try again.</value>
   </data>
+  <data name="Updater_InstallDPException" xml:space="preserve">
+    <value>An error occured while trying to install the new Driver Package.</value>
+  </data>
 </root>
