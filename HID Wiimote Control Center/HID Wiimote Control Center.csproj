@@ -82,7 +82,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ControlCenterWindow.xaml.cs">
+    <Compile Include="Main Windows\ControlCenterWindow.xaml.cs">
       <DependentUpon>ControlCenterWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\Installer.Designer.cs">
@@ -90,11 +90,14 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Installer.resx</DependentUpon>
     </Compile>
+    <Compile Include="Secondary Windows\About.xaml.cs">
+      <DependentUpon>About.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Setup\DriverPackage.cs" />
     <Compile Include="Setup\SetupAction\Certificate.cs" />
     <Compile Include="Setup\SetupAction\DriverPackage.cs" />
     <Compile Include="Setup\DriverPackageUninstallerRegistry.cs" />
-    <Compile Include="InstallerWindow.xaml.cs">
+    <Compile Include="Main Windows\InstallerWindow.xaml.cs">
       <DependentUpon>InstallerWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Setup\InstallStepAction\CopyFile.cs" />
@@ -106,14 +109,14 @@
     <Compile Include="Setup\SetupAction\TestMode.cs" />
     <Compile Include="Utility\SingleInstanceProtector.cs" />
     <Compile Include="Properties\VersionStrings.cs" />
-    <Compile Include="UpdaterWindow.xaml.cs">
+    <Compile Include="Main Windows\UpdaterWindow.xaml.cs">
       <DependentUpon>UpdaterWindow.xaml</DependentUpon>
     </Compile>
-    <Page Include="ControlCenterWindow.xaml">
+    <Page Include="Main Windows\ControlCenterWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="InstallerWindow.xaml">
+    <Page Include="Main Windows\InstallerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -121,7 +124,11 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="UpdaterWindow.xaml">
+    <Page Include="Main Windows\UpdaterWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Secondary Windows\About.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

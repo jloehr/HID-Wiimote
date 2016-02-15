@@ -8,7 +8,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace HID_Wiimote_Control_Center
+namespace HID_Wiimote_Control_Center.Main_Windows
 {
     /// <summary>
     /// Interaction logic for InstallerWindow.xaml

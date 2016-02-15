@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace HID_Wiimote_Control_Center
+namespace HID_Wiimote_Control_Center.Main_Windows
 {
     /// <summary>
     /// Interaction logic for ControlCenterWindow.xaml
