@@ -11,5 +11,10 @@ namespace HID_Wiimote_Control_Center
         {
             InitializeComponent();
         }
+        
+        private void OnInstallerClick(object sender, RoutedEventArgs e)
+        {
+            App.ChangeMainWindow(new InstallerWindow(), this);
+        }
     }
 }

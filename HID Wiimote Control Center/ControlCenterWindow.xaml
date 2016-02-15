@@ -6,7 +6,15 @@
         xmlns:local="clr-namespace:HID_Wiimote_Control_Center"
         mc:Ignorable="d"
         Title="HID Wiimote Control Center" Height="600" Width="800">
-    <Grid>
-        
-    </Grid>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_Tools">
+                <MenuItem Header="_Installer" Click="OnInstallerClick"/>
+            </MenuItem>
+            <MenuItem Header="_Help">
+                <MenuItem Header="_About"/>
+            </MenuItem>
+        </Menu>
+        <Grid></Grid>
+    </DockPanel>
 </Window>
