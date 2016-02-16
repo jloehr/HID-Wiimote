@@ -1,0 +1,42 @@
+﻿<Window x:Class="HID_Wiimote_Control_Center.Secondary_Windows.About"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HID_Wiimote_Control_Center.Secondary_Windows"
+        mc:Ignorable="d"
+        Initialized="OnInitialized"
+        Title="About" Width="450" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" ShowInTaskbar="False" SizeToContent="Height">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <StackPanel Margin="0,0,0,20">
+            <StackPanel.Resources>
+                <Style x:Key="Header" TargetType="Label">
+                    <Setter Property="FontSize" Value="16" />
+                    <Setter Property="FontWeight" Value="Bold" />
+                </Style>
+            </StackPanel.Resources>
+            <Label Style="{StaticResource Header}" x:Name="DriverPackageHeader" Content="HID Wiimote " />
+            <Label Style="{StaticResource Header}" x:Name="ControlCenterHeader" Content="HID Wiimote Control Center " />
+        </StackPanel>
+        <StackPanel Grid.Row="1">
+            <TextBlock  TextWrapping="Wrap" Margin="0,0,0,10" >
+                <Hyperlink NavigateUri="https://www.julianloehr.de/educational-work/hid-wiimote/" ToolTip="https://www.julianloehr.de/educational-work/hid-wiimote/" RequestNavigate="HyperlinkRequestNavigate" ><Run Text="Project Page"/></Hyperlink><LineBreak/>
+                <Hyperlink NavigateUri="https://github.com/jloehr/HID-Wiimote" ToolTip="https://github.com/jloehr/HID-Wiimote" RequestNavigate="HyperlinkRequestNavigate"><Run Text="Source Code"/></Hyperlink>
+            </TextBlock>
+            <TextBlock   TextWrapping="Wrap" Margin="0,0,0,10" >
+                <Run Text="© 2016 " /><Hyperlink NavigateUri="https://www.julianloehr.de/" ToolTip="https://www.julianloehr.de/" RequestNavigate="HyperlinkRequestNavigate"><Run Text="Julian Löhr" /></Hyperlink>
+            </TextBlock>
+        </StackPanel>
+        <StackPanel Grid.Row="2">
+            <TextBlock TextWrapping="Wrap">
+                This program and accompanied driver is free of charge. If you were charged please claim a refund and report the site. However Donations are welcome to support this project.
+            </TextBlock>
+            <Button Content="Close" Width="75" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="OnCloseClick" />
+        </StackPanel>
+    </Grid>
+</Window>
