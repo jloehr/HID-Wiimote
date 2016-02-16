@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HID_Wiimote_Control_Center.Main_Windows"
         mc:Ignorable="d"
-        Title="HID Wiimote Control Center" Height="600" Width="800">
+        Title="HID Wiimote Control Center" Height="600" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_Tools">
@@ -15,8 +15,178 @@
                 <MenuItem Header="_About" Click="OnAboutClick" />
             </MenuItem>
         </Menu>
-        <Grid>
-            
+        <Grid Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="3.5*"/>
+            </Grid.ColumnDefinitions>
+            <ListBox HorizontalContentAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" UseLayoutRounding="False" BorderThickness="1,1,0,1" Padding="0,0,-1,0">
+                <ListBox.Resources>
+                    <Style x:Key="ListBoxItem" TargetType="ListBoxItem">
+                        <Setter Property="Background" Value="#FFDDDDDD" />
+                        <Setter Property="Margin" Value="0, 0, 0, 2" />
+                        <Setter Property="BorderThickness" Value="1, 1, 0, 1" />
+                    </Style>
+                    <Style x:Key="DeviceHeader" TargetType="Label" >
+                        <Setter Property="FontWeight" Value="Bold" />
+                    </Style>
+                    <Style x:Key="Mode" TargetType="Label">
+                        <Setter Property="FontStyle" Value="Italic" />
+                        <Setter Property="Padding" Value="5, 0, 5, 5" />
+                    </Style>
+                </ListBox.Resources>
+                <ListBoxItem Style="{StaticResource ListBoxItem}">
+                    <StackPanel>
+                        <Label Style="{StaticResource DeviceHeader}" Content="Wiimote"/>
+                        <Label Style="{StaticResource Mode}" Content="IR-Mouse" />
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black" Fill="#FF3070F0"  />
+                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black" />
+                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
+                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
+                        </StackPanel>
+                    </StackPanel>
+                </ListBoxItem>
+                <ListBoxItem Style="{StaticResource ListBoxItem}">
+                    <StackPanel>
+                        <Label Style="{StaticResource DeviceHeader}" Content="Wiimote + Nunchuck" />
+                        <Label Style="{StaticResource Mode}" Content="Gamepad + IR-Mouse" />
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
+                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
+                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
+                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
+                        </StackPanel>
+                    </StackPanel>
+                </ListBoxItem>
+                <ListBoxItem Style="{StaticResource ListBoxItem}">
+                    <StackPanel>
+                        <Label Style="{StaticResource DeviceHeader}" Content="Wii U Pro Controller" />
+                        <Label Style="{StaticResource Mode}" Content="Gamepad" />
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
+                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
+                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
+                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
+                        </StackPanel>
+                    </StackPanel>
+                </ListBoxItem>
+                <ListBoxItem Style="{StaticResource ListBoxItem}">
+                    <StackPanel>
+                        <Label Style="{StaticResource DeviceHeader}" Content="Balance Board" />
+                        <Label Style="{StaticResource Mode}" Content="Gamepad" />
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
+                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
+                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
+                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
+                        </StackPanel>
+                    </StackPanel>
+                </ListBoxItem>
+                <ListBoxItem Style="{StaticResource ListBoxItem}">
+                    <StackPanel>
+                        <Label Style="{StaticResource DeviceHeader}" Content="Guitar Hero Guitar" />
+                        <Label Style="{StaticResource Mode}" Content="Gamepad" />
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
+                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
+                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
+                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
+                        </StackPanel>
+                    </StackPanel>
+                </ListBoxItem>
+                <ListBoxItem Style="{StaticResource ListBoxItem}">
+                    <StackPanel>
+                        <Label Style="{StaticResource DeviceHeader}" Content="Classic Controller (Pro)" />
+                        <Label Style="{StaticResource Mode}" Content="Gamepad" />
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
+                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
+                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
+                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
+                        </StackPanel>
+                    </StackPanel>
+                </ListBoxItem>
+                <ListBoxItem Style="{StaticResource ListBoxItem}">
+                    <StackPanel>
+                        <Label Style="{StaticResource DeviceHeader}" Content="Classic Controller (Pro)" />
+                        <Label Style="{StaticResource Mode}" Content="Gamepad" />
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
+                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
+                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
+                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
+                        </StackPanel>
+                    </StackPanel>
+                </ListBoxItem>
+            </ListBox>
+            <Border Grid.Column="1" BorderThickness="1" BorderBrush="Black">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="2*" />
+                        <RowDefinition Height="5*" />
+                        <RowDefinition Height="5*"  />
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Label Content="Wiimote + Nunchuck" FontWeight="Bold" FontSize="29.333" />
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                <Label Content="Mode: " VerticalContentAlignment="Bottom" />
+                                <ComboBox Width="150" VerticalAlignment="Bottom" >
+                                    <ComboBoxItem Content="Gamepad"/>
+                                    <ComboBoxItem Content="Gamepad + IR-Mouse"/>
+                                    <ComboBoxItem Content="IR-Mouse"/>
+                                    <ComboBoxItem Content="DPad-Mouse"/>
+                                </ComboBox>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" HorizontalAlignment="Right" Margin="10" VerticalAlignment="Center" Orientation="Horizontal" >
+                                <Rectangle Width="16" Height="24" Margin="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <Rectangle.Fill>
+                                        <DrawingBrush>
+                                            <DrawingBrush.Drawing>
+                                                <DrawingGroup>
+                                                    <DrawingGroup.Children>
+                                                        <GeometryDrawing Brush="#00FFFFFF" Geometry="F1M16,24L0,24 0,0 0,24z" />
+                                                        <GeometryDrawing Brush="#FFF6F6F6" Geometry="F1M1,4L1,23 15,23 15,4 12,3 12,1 4,1 4,3z" />
+                                                        <GeometryDrawing Brush="#FF414141" Geometry="F1M3,5L3,22 13,22 13,5 11,4 11,2 5,2 5,4z" />
+                                                    </DrawingGroup.Children>
+                                                </DrawingGroup>
+                                            </DrawingBrush.Drawing>
+                                        </DrawingBrush>
+                                    </Rectangle.Fill>
+                                </Rectangle>
+                                <StackPanel>
+                                    <ProgressBar Width="100" Height="20" />
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
+                                        <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
+                                        <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
+                                        <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
+                                    </StackPanel>
+                                </StackPanel>
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
+                    <StackPanel Grid.Row="1">
+                        <Separator Margin="5" />
+                        <Label Content="Wiimote:" FontStyle="Italic" Margin="10,0,0,0" FontSize="16" />
+                        <CheckBox Content="Accelerometer" Margin="10,10,0,0" />
+                        <CheckBox Content="X-Axis" Margin="20,5,0,0" />
+                        <CheckBox Content="Y-Axis" Margin="20,5,0,0"  />
+                        <CheckBox Content="Switch Mouse Buttons" Margin="10,10,0,0" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="2">
+                        <Separator Margin="5" />
+                        <Label Content="Extensions:" FontStyle="Italic" Margin="10,0,0,0" FontSize="16" />
+                        <CheckBox Content="Switch Trigger and Shoulder" Margin="10,10,0,0" />
+                        <CheckBox Content="Split Trigger" Margin="10,10,0,0" />
+                    </StackPanel>
+                </Grid>
+            </Border>
         </Grid>
     </DockPanel>
 </Window>
