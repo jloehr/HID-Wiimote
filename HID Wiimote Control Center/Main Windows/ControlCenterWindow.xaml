@@ -4,8 +4,27 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HID_Wiimote_Control_Center.Main_Windows"
+        xmlns:res="clr-namespace:HID_Wiimote_Control_Center.Properties"
         mc:Ignorable="d"
-        Title="HID Wiimote Control Center" Height="600" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="HID Wiimote Control Center" Height="600" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Initialized="OnInitialized">
+    <Window.Resources>
+        <local:ExtensionToStringConverter x:Key="ExtensionToStringConverter" 
+                                          WiimoteString="{x:Static res:ControlCenter.ExtensionString_Wiimote}"
+                                          NunchuckString="{x:Static res:ControlCenter.ExtensionString_Nunchuck}"
+                                          ClassicControllerString="{x:Static res:ControlCenter.ExtensionString_ClassicController}"
+                                          WiiUProControllerString="{x:Static res:ControlCenter.ExtensionString_WiiUProController}"
+                                          BalanceBoardString="{x:Static res:ControlCenter.ExtensionString_BalanceBoard}"
+                                          GuitarHeroString="{x:Static res:ControlCenter.ExtensionString_GuitarHero}"/>
+        <local:ModeToStringConverter x:Key="ModeToStringConverter"
+                                     GamepadString="{x:Static res:ControlCenter.ModeString_Gamepad}"
+                                     PassThroughString="{x:Static res:ControlCenter.ModeString_PassThrough}"
+                                     GamepadAndIRMouseString="{x:Static res:ControlCenter.ModeString_GamepadAndIRMouse}"
+                                     IRMouseString="{x:Static res:ControlCenter.ModeString_IRMouse}"
+                                     DPadMouseString="{x:Static res:ControlCenter.ModeString_DPadMouse}" />
+        <local:LEDStateToColorConverter x:Key="LEDStateToColorConverter"
+                                        EnabledColor="#FF3070F0"
+                                         />
+    </Window.Resources>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_Tools">
@@ -20,107 +39,40 @@
                 <ColumnDefinition/>
                 <ColumnDefinition Width="3.5*"/>
             </Grid.ColumnDefinitions>
-            <ListBox HorizontalContentAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" UseLayoutRounding="False" BorderThickness="1,1,0,1" Padding="0,0,-1,0">
-                <ListBox.Resources>
-                    <Style x:Key="ListBoxItem" TargetType="ListBoxItem">
+            <ListBox x:Name="ConnectedDevicesListBox" HorizontalContentAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" UseLayoutRounding="False" BorderThickness="1,1,0,1" Padding="0,0,-1,0" >
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem" >
                         <Setter Property="Background" Value="#FFDDDDDD" />
                         <Setter Property="Margin" Value="0, 0, 0, 2" />
                         <Setter Property="BorderThickness" Value="1, 1, 0, 1" />
                     </Style>
-                    <Style x:Key="DeviceHeader" TargetType="Label" >
-                        <Setter Property="FontWeight" Value="Bold" />
-                    </Style>
-                    <Style x:Key="Mode" TargetType="Label">
-                        <Setter Property="FontStyle" Value="Italic" />
-                        <Setter Property="Padding" Value="5, 0, 5, 5" />
-                    </Style>
-                </ListBox.Resources>
-                <ListBoxItem Style="{StaticResource ListBoxItem}">
-                    <StackPanel>
-                        <Label Style="{StaticResource DeviceHeader}" Content="Wiimote"/>
-                        <Label Style="{StaticResource Mode}" Content="IR-Mouse" />
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black" Fill="#FF3070F0"  />
-                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black" />
-                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
-                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
+                </ListBox.ItemContainerStyle>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <Label FontWeight="Bold" Content="{Binding Extension, Converter={StaticResource ExtensionToStringConverter}, Mode=OneWay}"/>
+                            <Label FontStyle="Italic" Padding="5, 0, 5, 5" Content="{Binding Mode, Converter={StaticResource ModeToStringConverter}, Mode=OneWay}" />
+                            
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Rectangle Width="6" Height="6" Margin="6" Stroke="Black" Fill="{Binding LEDState, Converter={StaticResource LEDStateToColorConverter}, ConverterParameter=0, Mode=OneWay}" />
+                                <Rectangle Width="6" Height="6" Margin="6" Stroke="Black" Fill="{Binding LEDState, Converter={StaticResource LEDStateToColorConverter}, ConverterParameter=1, Mode=OneWay}" />
+                                <Rectangle Width="6" Height="6" Margin="6" Stroke="Black" Fill="{Binding LEDState, Converter={StaticResource LEDStateToColorConverter}, ConverterParameter=2, Mode=OneWay}" />
+                                <Rectangle Width="6" Height="6" Margin="6" Stroke="Black" Fill="{Binding LEDState, Converter={StaticResource LEDStateToColorConverter}, ConverterParameter=3, Mode=OneWay}" />
+                            </StackPanel>
                         </StackPanel>
-                    </StackPanel>
-                </ListBoxItem>
-                <ListBoxItem Style="{StaticResource ListBoxItem}">
-                    <StackPanel>
-                        <Label Style="{StaticResource DeviceHeader}" Content="Wiimote + Nunchuck" />
-                        <Label Style="{StaticResource Mode}" Content="Gamepad + IR-Mouse" />
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
-                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
-                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
-                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
-                        </StackPanel>
-                    </StackPanel>
-                </ListBoxItem>
-                <ListBoxItem Style="{StaticResource ListBoxItem}">
-                    <StackPanel>
-                        <Label Style="{StaticResource DeviceHeader}" Content="Wii U Pro Controller" />
-                        <Label Style="{StaticResource Mode}" Content="Gamepad" />
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
-                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
-                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
-                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
-                        </StackPanel>
-                    </StackPanel>
-                </ListBoxItem>
-                <ListBoxItem Style="{StaticResource ListBoxItem}">
-                    <StackPanel>
-                        <Label Style="{StaticResource DeviceHeader}" Content="Balance Board" />
-                        <Label Style="{StaticResource Mode}" Content="Gamepad" />
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
-                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
-                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
-                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
-                        </StackPanel>
-                    </StackPanel>
-                </ListBoxItem>
-                <ListBoxItem Style="{StaticResource ListBoxItem}">
-                    <StackPanel>
-                        <Label Style="{StaticResource DeviceHeader}" Content="Guitar Hero Guitar" />
-                        <Label Style="{StaticResource Mode}" Content="Gamepad" />
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
-                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
-                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
-                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
-                        </StackPanel>
-                    </StackPanel>
-                </ListBoxItem>
-                <ListBoxItem Style="{StaticResource ListBoxItem}">
-                    <StackPanel>
-                        <Label Style="{StaticResource DeviceHeader}" Content="Classic Controller (Pro)" />
-                        <Label Style="{StaticResource Mode}" Content="Gamepad" />
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
-                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
-                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
-                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
-                        </StackPanel>
-                    </StackPanel>
-                </ListBoxItem>
-                <ListBoxItem Style="{StaticResource ListBoxItem}">
-                    <StackPanel>
-                        <Label Style="{StaticResource DeviceHeader}" Content="Classic Controller (Pro)" />
-                        <Label Style="{StaticResource Mode}" Content="Gamepad" />
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
-                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
-                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
-                            <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
-                        </StackPanel>
-                    </StackPanel>
-                </ListBoxItem>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
             </ListBox>
-            <Border Grid.Column="1" BorderThickness="1" BorderBrush="Black">
+            <Border Grid.Column="1" BorderThickness="1" BorderBrush="Black" DataContext="{Binding SelectedItem, ElementName=ConnectedDevicesListBox}" >
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=DataContext, RelativeSource={RelativeSource Self}}" Value="{x:Null}">
+                                <Setter Property="IsEnabled" Value="false"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="2*" />
@@ -128,7 +80,7 @@
                         <RowDefinition Height="5*"  />
                     </Grid.RowDefinitions>
                     <Grid Grid.Row="0">
-                        <Label Content="Wiimote + Nunchuck" FontWeight="Bold" FontSize="29.333" />
+                        <Label Content="{Binding Extension, Converter={StaticResource ExtensionToStringConverter}, Mode=OneWay}" FontWeight="Bold" FontSize="29.333" />
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition />
@@ -136,12 +88,7 @@
                             </Grid.ColumnDefinitions>
                             <StackPanel Grid.Column="0" Orientation="Horizontal">
                                 <Label Content="Mode: " VerticalContentAlignment="Bottom" />
-                                <ComboBox Width="150" VerticalAlignment="Bottom" >
-                                    <ComboBoxItem Content="Gamepad"/>
-                                    <ComboBoxItem Content="Gamepad + IR-Mouse"/>
-                                    <ComboBoxItem Content="IR-Mouse"/>
-                                    <ComboBoxItem Content="DPad-Mouse"/>
-                                </ComboBox>
+                                <ComboBox Width="150" VerticalAlignment="Bottom" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedValue="{Binding Mode, Mode=TwoWay}" ItemsSource="{Binding WiimoteDeviceModeTypeDescriptions, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ControlCenterWindow}}}" />
                             </StackPanel>
                             <StackPanel Grid.Column="1" HorizontalAlignment="Right" Margin="10" VerticalAlignment="Center" Orientation="Horizontal" >
                                 <Rectangle Width="16" Height="24" Margin="2" HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -160,12 +107,12 @@
                                     </Rectangle.Fill>
                                 </Rectangle>
                                 <StackPanel>
-                                    <ProgressBar Width="100" Height="20" />
+                                    <ProgressBar Width="100" Height="20" Maximum="255" Value="{Binding BatteryLevel}" />
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                        <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
-                                        <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
-                                        <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
-                                        <Rectangle Width="6" Height="6" Margin="6" Stroke="Black"  />
+                                        <Rectangle Width="6" Height="6" Margin="6" Stroke="Black" Fill="{Binding LEDState, Converter={StaticResource LEDStateToColorConverter}, ConverterParameter=0, Mode=OneWay}" />
+                                        <Rectangle Width="6" Height="6" Margin="6" Stroke="Black" Fill="{Binding LEDState, Converter={StaticResource LEDStateToColorConverter}, ConverterParameter=1, Mode=OneWay}" />
+                                        <Rectangle Width="6" Height="6" Margin="6" Stroke="Black" Fill="{Binding LEDState, Converter={StaticResource LEDStateToColorConverter}, ConverterParameter=2, Mode=OneWay}" />
+                                        <Rectangle Width="6" Height="6" Margin="6" Stroke="Black" Fill="{Binding LEDState, Converter={StaticResource LEDStateToColorConverter}, ConverterParameter=3, Mode=OneWay}" />
                                     </StackPanel>
                                 </StackPanel>
                             </StackPanel>
@@ -174,16 +121,16 @@
                     <StackPanel Grid.Row="1">
                         <Separator Margin="5" />
                         <Label Content="Wiimote:" FontStyle="Italic" Margin="10,0,0,0" FontSize="16" />
-                        <CheckBox Content="Accelerometer" Margin="10,10,0,0" />
-                        <CheckBox Content="X-Axis" Margin="20,5,0,0" />
-                        <CheckBox Content="Y-Axis" Margin="20,5,0,0"  />
-                        <CheckBox Content="Switch Mouse Buttons" Margin="10,10,0,0" />
+                        <CheckBox Content="Accelerometer" Margin="10,10,0,0" IsChecked="{Binding AccelerometersEnabled}" />
+                        <CheckBox Content="X-Axis" Margin="20,5,0,0" IsChecked="{Binding XAxisEnabled}" />
+                        <CheckBox Content="Y-Axis" Margin="20,5,0,0"  IsChecked="{Binding YAxisEnabled}" />
+                        <CheckBox Content="Switch Mouse Buttons" Margin="10,10,0,0" IsChecked="{Binding MouseButtonsSwitched}" />
                     </StackPanel>
                     <StackPanel Grid.Row="2">
                         <Separator Margin="5" />
                         <Label Content="Extensions:" FontStyle="Italic" Margin="10,0,0,0" FontSize="16" />
-                        <CheckBox Content="Switch Trigger and Shoulder" Margin="10,10,0,0" />
-                        <CheckBox Content="Split Trigger" Margin="10,10,0,0" />
+                        <CheckBox Content="Switch Trigger and Shoulder" Margin="10,10,0,0" IsChecked="{Binding TriggerAndShoulderSwitched}" />
+                        <CheckBox Content="Split Trigger" Margin="10,10,0,0" IsChecked="{Binding TriggerSplit}" />
                     </StackPanel>
                 </Grid>
             </Border>

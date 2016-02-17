@@ -82,6 +82,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Control Center\WiimoteDevice.cs" />
+    <Compile Include="Properties\ControlCenter.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ControlCenter.resx</DependentUpon>
+    </Compile>
     <Compile Include="Main Windows\ControlCenterWindow.xaml.cs">
       <DependentUpon>ControlCenterWindow.xaml</DependentUpon>
     </Compile>
@@ -147,6 +153,10 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="Properties\ControlCenter.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ControlCenter.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Installer.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Installer.Designer.cs</LastGenOutput>
