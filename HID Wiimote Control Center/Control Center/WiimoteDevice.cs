@@ -51,7 +51,7 @@ namespace HID_Wiimote_Control_Center.Control_Center
 
         public byte BatteryLevel
         {
-            get { return _BatteryLevel; }
+            get { return (byte)(0x00FF - _BatteryLevel); }
             set
             {
                 _BatteryLevel = value;

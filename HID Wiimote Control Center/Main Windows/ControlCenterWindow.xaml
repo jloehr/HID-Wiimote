@@ -52,7 +52,7 @@
                         <StackPanel>
                             <Label FontWeight="Bold" Content="{Binding Extension, Converter={StaticResource ExtensionToStringConverter}, Mode=OneWay}"/>
                             <Label FontStyle="Italic" Padding="5, 0, 5, 5" Content="{Binding Mode, Converter={StaticResource ModeToStringConverter}, Mode=OneWay}" />
-                            
+
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                 <Rectangle Width="6" Height="6" Margin="6" Stroke="Black" Fill="{Binding LEDState, Converter={StaticResource LEDStateToColorConverter}, ConverterParameter=0, Mode=OneWay}" />
                                 <Rectangle Width="6" Height="6" Margin="6" Stroke="Black" Fill="{Binding LEDState, Converter={StaticResource LEDStateToColorConverter}, ConverterParameter=1, Mode=OneWay}" />
@@ -107,7 +107,12 @@
                                     </Rectangle.Fill>
                                 </Rectangle>
                                 <StackPanel>
-                                    <ProgressBar Width="100" Height="20" Maximum="255" Value="{Binding BatteryLevel}" />
+                                    <ProgressBar Width="100" Height="20" Maximum="255" Value="{Binding BatteryLevel}" Background="{DynamicResource FullBar}" Foreground="{DynamicResource EmptyBar}" >
+                                        <ProgressBar.Resources>
+                                            <SolidColorBrush x:Key="EmptyBar" Color="#FFE6E6E6"/>
+                                            <SolidColorBrush x:Key="FullBar" Color="#FF06B025"/>
+                                        </ProgressBar.Resources>
+                                    </ProgressBar>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                         <Rectangle Width="6" Height="6" Margin="6" Stroke="Black" Fill="{Binding LEDState, Converter={StaticResource LEDStateToColorConverter}, ConverterParameter=0, Mode=OneWay}" />
                                         <Rectangle Width="6" Height="6" Margin="6" Stroke="Black" Fill="{Binding LEDState, Converter={StaticResource LEDStateToColorConverter}, ConverterParameter=1, Mode=OneWay}" />
