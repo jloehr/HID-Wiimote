@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HID_Wiimote_Control_Center.Main_Windows"
+        xmlns:user="clr-namespace:HID_Wiimote_Control_Center.UserControls"
         xmlns:res="clr-namespace:HID_Wiimote_Control_Center.Properties"
         mc:Ignorable="d"
         Title="HID Wiimote Control Center" Height="600" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Initialized="OnInitialized">
@@ -21,9 +22,6 @@
                                      GamepadAndIRMouseString="{x:Static res:ControlCenter.ModeString_GamepadAndIRMouse}"
                                      IRMouseString="{x:Static res:ControlCenter.ModeString_IRMouse}"
                                      DPadMouseString="{x:Static res:ControlCenter.ModeString_DPadMouse}" />
-        <local:LEDStateToColorConverter x:Key="LEDStateToColorConverter"
-                                        EnabledColor="#FF3070F0"
-                                         />
     </Window.Resources>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
@@ -52,13 +50,7 @@
                         <StackPanel>
                             <Label FontWeight="Bold" Content="{Binding Extension, Converter={StaticResource ExtensionToStringConverter}, Mode=OneWay}"/>
                             <Label FontStyle="Italic" Padding="5, 0, 5, 5" Content="{Binding Mode, Converter={StaticResource ModeToStringConverter}, Mode=OneWay}" />
-
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Rectangle Width="6" Height="6" Margin="6" Stroke="Black" Fill="{Binding LEDState, Converter={StaticResource LEDStateToColorConverter}, ConverterParameter=0, Mode=OneWay}" />
-                                <Rectangle Width="6" Height="6" Margin="6" Stroke="Black" Fill="{Binding LEDState, Converter={StaticResource LEDStateToColorConverter}, ConverterParameter=1, Mode=OneWay}" />
-                                <Rectangle Width="6" Height="6" Margin="6" Stroke="Black" Fill="{Binding LEDState, Converter={StaticResource LEDStateToColorConverter}, ConverterParameter=2, Mode=OneWay}" />
-                                <Rectangle Width="6" Height="6" Margin="6" Stroke="Black" Fill="{Binding LEDState, Converter={StaticResource LEDStateToColorConverter}, ConverterParameter=3, Mode=OneWay}" />
-                            </StackPanel>
+                            <user:LEDDisplay />
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
@@ -113,12 +105,7 @@
                                             <SolidColorBrush x:Key="FullBar" Color="#FF06B025"/>
                                         </ProgressBar.Resources>
                                     </ProgressBar>
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                        <Rectangle Width="6" Height="6" Margin="6" Stroke="Black" Fill="{Binding LEDState, Converter={StaticResource LEDStateToColorConverter}, ConverterParameter=0, Mode=OneWay}" />
-                                        <Rectangle Width="6" Height="6" Margin="6" Stroke="Black" Fill="{Binding LEDState, Converter={StaticResource LEDStateToColorConverter}, ConverterParameter=1, Mode=OneWay}" />
-                                        <Rectangle Width="6" Height="6" Margin="6" Stroke="Black" Fill="{Binding LEDState, Converter={StaticResource LEDStateToColorConverter}, ConverterParameter=2, Mode=OneWay}" />
-                                        <Rectangle Width="6" Height="6" Margin="6" Stroke="Black" Fill="{Binding LEDState, Converter={StaticResource LEDStateToColorConverter}, ConverterParameter=3, Mode=OneWay}" />
-                                    </StackPanel>
+                                    <user:LEDDisplay />
                                 </StackPanel>
                             </StackPanel>
                         </Grid>

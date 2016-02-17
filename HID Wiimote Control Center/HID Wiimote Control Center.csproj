@@ -113,6 +113,9 @@
     <Compile Include="Setup\InstallStepAction\TextResourceToFile.cs" />
     <Compile Include="Setup\SetupAction\ISetupAction.cs" />
     <Compile Include="Setup\SetupAction\TestMode.cs" />
+    <Compile Include="UserControls\LEDDisplay.xaml.cs">
+      <DependentUpon>LEDDisplay.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Utility\SingleInstanceProtector.cs" />
     <Compile Include="Properties\VersionStrings.cs" />
     <Compile Include="Main Windows\UpdaterWindow.xaml.cs">
@@ -135,6 +138,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Secondary Windows\About.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\LEDDisplay.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -191,6 +198,7 @@
   <ItemGroup>
     <None Include="Resources\UninstallerContent.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>cscript.exe "$(SolutionDir)ReleaseVersioning\Version.wsf" //Job:GenerateControlCenterVersionStrings "$(SolutionDir)Additional Package Content\Readme.txt" "$(SolutionDir)HID Wiimote Control Center\Properties\VersionStrings.cs"</PreBuildEvent>
