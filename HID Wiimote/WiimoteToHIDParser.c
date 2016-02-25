@@ -429,7 +429,7 @@ ParseWiimoteStateAsBalanceBoard(
 	UCHAR BottomLeft = GetCalibratedBoardValue(WiimoteContext->BalanceBoardState.Sensor.Data.BottomLeft, CalibrationBuffer);
 
 	RequestBuffer[0] = ParseBalanceBoardSensors(BottomRight, TopRight, TopLeft, BottomLeft);
-	RequestBuffer[1] = ParseBalanceBoardSensors(TopLeft,TopRight, BottomLeft, BottomRight);
+	RequestBuffer[1] = ParseBalanceBoardSensors(BottomLeft, BottomRight, TopLeft, TopRight);
 
 	// Balance Board has only a single button, that is reported as "A"
 	ParseButton(WiimoteContext->State.CoreButtons.A, RequestBuffer + 2, 0);
