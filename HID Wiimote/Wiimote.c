@@ -612,10 +612,10 @@ ExtractBalanceBoard(
 	)
 {
 	// Sensor Data is Big-Endian, Windows is always Little-Endian
-	DeviceContext->WiimoteContext.BalanceBoardState.Sensor.Data.TopRight = RtlUshortByteSwap(*((PUSHORT)(RawInputData + 0)));
-	DeviceContext->WiimoteContext.BalanceBoardState.Sensor.Data.BottomRight = RtlUshortByteSwap(*((PUSHORT)(RawInputData + 2)));
-	DeviceContext->WiimoteContext.BalanceBoardState.Sensor.Data.TopLeft = RtlUshortByteSwap(*((PUSHORT)(RawInputData + 4)));
-	DeviceContext->WiimoteContext.BalanceBoardState.Sensor.Data.BottomLeft = RtlUshortByteSwap(*((PUSHORT)(RawInputData + 6)));
+	DeviceContext->WiimoteContext.BalanceBoardState.Sensor.TopRight = RtlUshortByteSwap(*((PUSHORT)(RawInputData + 0)));
+	DeviceContext->WiimoteContext.BalanceBoardState.Sensor.BottomRight = RtlUshortByteSwap(*((PUSHORT)(RawInputData + 2)));
+	DeviceContext->WiimoteContext.BalanceBoardState.Sensor.TopLeft = RtlUshortByteSwap(*((PUSHORT)(RawInputData + 4)));
+	DeviceContext->WiimoteContext.BalanceBoardState.Sensor.BottomLeft = RtlUshortByteSwap(*((PUSHORT)(RawInputData + 6)));
 }
 
 VOID
@@ -1016,7 +1016,7 @@ ProcessExtensionRegister(
 NTSTATUS
 ProcessBalanceBoardCalibrationRegister(
 	_In_ PDEVICE_CONTEXT DeviceContext,
-	_In_reads_bytes_(ReadBufferSize) BYTE * ReadBuffer,
+	_In_reads_bytes_(ReadBufferSize) PUCHAR ReadBuffer,
 	_In_ size_t ReadBufferSize,
 	_In_ BYTE ErrorFlag,
 	_In_ USHORT ReadAddress)
@@ -1025,12 +1025,16 @@ ProcessBalanceBoardCalibrationRegister(
 
 	UNREFERENCED_PARAMETER(ErrorFlag);
 
-	size_t Destination = (ReadAddress == 0x0024) ? 0 : 2;
-	PUSHORT WritePointer = DeviceContext->WiimoteContext.BalanceBoardState.Calibration[Destination].Raw;
+	PUSHORT Data = (PUSHORT)ReadBuffer;
+	size_t CalibrationIndexStart = (ReadAddress == 0x0024) ? 0 : 2;
+	size_t CalibrationIndexEnd = CalibrationIndexStart + (ReadBufferSize / 8);
 
-	for (PUSHORT ReadPointer = (PUSHORT)ReadBuffer; ReadPointer < (PUSHORT)(ReadBuffer + ReadBufferSize); ++ReadPointer, ++WritePointer)
+	for (size_t CalibrationDataIndex = CalibrationIndexStart; CalibrationDataIndex < CalibrationIndexEnd; ++CalibrationDataIndex)
 	{
-		(*WritePointer) = RtlUshortByteSwap(*ReadPointer);
+		for (size_t SensorIndex = 0; SensorIndex < 4; ++SensorIndex)
+		{
+			DeviceContext->WiimoteContext.BalanceBoardState.CalibrationRaw[SensorIndex][CalibrationDataIndex] = RtlUshortByteSwap(Data[4 * CalibrationDataIndex + SensorIndex]);
+		}
 	}
 
 	return Status;

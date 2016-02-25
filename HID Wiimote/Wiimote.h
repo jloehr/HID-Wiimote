@@ -67,7 +67,7 @@ typedef struct _WIIMOTE_NUNCHUCK_STATE
 
 } WIIMOTE_NUNCHUCK_STATE, * PWIIMOTE_NUNCHUCK_STATE;
 
-typedef struct _WIIMOTE_BALANCE_BOARD_SENSOR_DATA
+typedef struct _WIIMOTE_BALANCE_BOARD_STATE
 {
 	union
 	{
@@ -77,16 +77,23 @@ typedef struct _WIIMOTE_BALANCE_BOARD_SENSOR_DATA
 			USHORT BottomRight;
 			USHORT TopLeft;
 			USHORT BottomLeft;
-		} Data;
+		} Sensor;
 
-		USHORT Raw[4];
+		USHORT SensorRaw[4];
 	};
-} WIIMOTE_BALANCE_BOARD_SENSOR_DATA, *PWIIMOTE_BALANCE_BOARD_SENSOR_DATA;
 
-typedef struct _WIIMOTE_BALANCE_BOARD_STATE
-{
-	WIIMOTE_BALANCE_BOARD_SENSOR_DATA Sensor;
-	WIIMOTE_BALANCE_BOARD_SENSOR_DATA Calibration[3];
+	union
+	{
+		struct
+		{
+			USHORT TopRight[3];
+			USHORT BottomRight[3];
+			USHORT TopLeft[3];
+			USHORT BottomLeft[3];
+		} Calibration;
+
+		USHORT CalibrationRaw[4][3];
+	};
 
 } WIIMOTE_BALANCE_BOARD_STATE, *PWIIMOTE_BALANCE_BOARD_STATE;
 

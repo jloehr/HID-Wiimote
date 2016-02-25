@@ -230,18 +230,6 @@ GetCalibratedBoardValue(
 	return ActualValue;
 }
 
-VOID
-FillCalibrationData(
-	_Inout_updates_all_(3) PUSHORT Destination,
-	_In_reads_(3) PWIIMOTE_BALANCE_BOARD_SENSOR_DATA CalibrationData,
-	_In_ size_t Offset)
-{
-	for (size_t i = 0; i < 3; ++i)
-	{
-		Destination[i] = CalibrationData[i].Raw[Offset];
-	}
-}
-
 BOOLEAN AccumulateIRPoint(
 	_In_ PWIIMOTE_IR_POINT Point,
 	_Inout_ PUINT16 X,
@@ -410,23 +398,10 @@ ParseWiimoteStateAsBalanceBoard(
 	_Inout_updates_(3) PUCHAR RequestBuffer
 	)
 {
-	USHORT CalibrationBuffer[3];
-
-	// TopRight
-	FillCalibrationData(CalibrationBuffer, WiimoteContext->BalanceBoardState.Calibration, 0);
-	UCHAR TopRight = GetCalibratedBoardValue(WiimoteContext->BalanceBoardState.Sensor.Data.TopRight, CalibrationBuffer);
-
-	// BottomRight
-	FillCalibrationData(CalibrationBuffer, WiimoteContext->BalanceBoardState.Calibration, 1);
-	UCHAR BottomRight = GetCalibratedBoardValue(WiimoteContext->BalanceBoardState.Sensor.Data.BottomRight, CalibrationBuffer);
-	
-	// TopLeft
-	FillCalibrationData(CalibrationBuffer, WiimoteContext->BalanceBoardState.Calibration, 2);
-	UCHAR TopLeft = GetCalibratedBoardValue(WiimoteContext->BalanceBoardState.Sensor.Data.TopLeft, CalibrationBuffer);
-
-	// BottomLeft
-	FillCalibrationData(CalibrationBuffer, WiimoteContext->BalanceBoardState.Calibration, 3); 
-	UCHAR BottomLeft = GetCalibratedBoardValue(WiimoteContext->BalanceBoardState.Sensor.Data.BottomLeft, CalibrationBuffer);
+	UCHAR TopRight = GetCalibratedBoardValue(WiimoteContext->BalanceBoardState.Sensor.TopRight, WiimoteContext->BalanceBoardState.Calibration.TopRight);
+	UCHAR BottomRight = GetCalibratedBoardValue(WiimoteContext->BalanceBoardState.Sensor.BottomRight, WiimoteContext->BalanceBoardState.Calibration.BottomRight);
+	UCHAR TopLeft = GetCalibratedBoardValue(WiimoteContext->BalanceBoardState.Sensor.TopLeft, WiimoteContext->BalanceBoardState.Calibration.TopLeft);
+	UCHAR BottomLeft = GetCalibratedBoardValue(WiimoteContext->BalanceBoardState.Sensor.BottomLeft, WiimoteContext->BalanceBoardState.Calibration.BottomLeft);
 
 	RequestBuffer[0] = ParseBalanceBoardSensors(BottomRight, TopRight, TopLeft, BottomLeft);
 	RequestBuffer[1] = ParseBalanceBoardSensors(BottomLeft, BottomRight, TopLeft, TopRight);
