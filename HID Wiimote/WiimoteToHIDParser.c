@@ -362,8 +362,8 @@ ParseWiimoteStateAsBalanceBoard(
 	_Inout_updates_(3) PUCHAR RequestBuffer
 	)
 {
-	RequestBuffer[0] = ParseBalanceBoardSensors(WiimoteContext->BalanceBoardState.Sensor.TopLeft, WiimoteContext->BalanceBoardState.Sensor.TopRight, WiimoteContext->BalanceBoardState.Sensor.BottomLeft, WiimoteContext->BalanceBoardState.Sensor.BottomRight);
-	RequestBuffer[1] = ParseBalanceBoardSensors(WiimoteContext->BalanceBoardState.Sensor.BottomRight, WiimoteContext->BalanceBoardState.Sensor.TopRight, WiimoteContext->BalanceBoardState.Sensor.TopLeft, WiimoteContext->BalanceBoardState.Sensor.BottomLeft);
+	RequestBuffer[0] = ParseBalanceBoardSensors(WiimoteContext->BalanceBoardState.Sensor.Data.TopLeft, WiimoteContext->BalanceBoardState.Sensor.Data.TopRight, WiimoteContext->BalanceBoardState.Sensor.Data.BottomLeft, WiimoteContext->BalanceBoardState.Sensor.Data.BottomRight);
+	RequestBuffer[1] = ParseBalanceBoardSensors(WiimoteContext->BalanceBoardState.Sensor.Data.BottomRight, WiimoteContext->BalanceBoardState.Sensor.Data.TopRight, WiimoteContext->BalanceBoardState.Sensor.Data.TopLeft, WiimoteContext->BalanceBoardState.Sensor.Data.BottomLeft);
 
 	// Balance Board has only a single button, that is reported as "A"
 	ParseButton(WiimoteContext->State.CoreButtons.A, RequestBuffer + 2, 0);

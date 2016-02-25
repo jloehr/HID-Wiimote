@@ -612,10 +612,10 @@ ExtractBalanceBoard(
 	)
 {
 	// Sensor Data is Big-Endian, Windows is always Little-Endian
-	DeviceContext->WiimoteContext.BalanceBoardState.Sensor.TopRight = RtlUshortByteSwap(*((PUSHORT)(RawInputData + 0)));
-	DeviceContext->WiimoteContext.BalanceBoardState.Sensor.BottomRight = RtlUshortByteSwap(*((PUSHORT)(RawInputData + 2)));
-	DeviceContext->WiimoteContext.BalanceBoardState.Sensor.TopLeft = RtlUshortByteSwap(*((PUSHORT)(RawInputData + 4)));
-	DeviceContext->WiimoteContext.BalanceBoardState.Sensor.BottomLeft = RtlUshortByteSwap(*((PUSHORT)(RawInputData + 6)));
+	DeviceContext->WiimoteContext.BalanceBoardState.Sensor.Data.TopRight = RtlUshortByteSwap(*((PUSHORT)(RawInputData + 0)));
+	DeviceContext->WiimoteContext.BalanceBoardState.Sensor.Data.BottomRight = RtlUshortByteSwap(*((PUSHORT)(RawInputData + 2)));
+	DeviceContext->WiimoteContext.BalanceBoardState.Sensor.Data.TopLeft = RtlUshortByteSwap(*((PUSHORT)(RawInputData + 4)));
+	DeviceContext->WiimoteContext.BalanceBoardState.Sensor.Data.BottomLeft = RtlUshortByteSwap(*((PUSHORT)(RawInputData + 6)));
 }
 
 VOID
@@ -937,34 +937,22 @@ ProcessInputReport(
 }
 
 NTSTATUS
-ProcessRegisterReadReport(
-_In_ PDEVICE_CONTEXT DeviceContext,
-_In_reads_bytes_(ReadBufferSize) BYTE * ReadBuffer,
-_In_ size_t ReadBufferSize
-)
+ProcessExtensionRegister(
+	_In_ PDEVICE_CONTEXT DeviceContext,
+	_In_reads_bytes_(ReadBufferSize) BYTE * ReadBuffer,
+	_In_ size_t ReadBufferSize,
+	_In_ BYTE ErrorFlag,
+	_In_ USHORT ReadAddress)
 {
 	NTSTATUS Status = STATUS_SUCCESS;
-	//BYTE ReportID = ReadBuffer[0];
 
 	UNREFERENCED_PARAMETER(ReadBufferSize);
-
-	Trace("ProcessRegisterReadReport");
-	/*Trace("ProcessReport - ReportID: 0x%x - ReportSize: %d", ReportID, ReadBufferSize); */
-	//PrintBytes(ReadBuffer, ReadBufferSize);
-
-	BYTE Error = 0x0F & (ReadBuffer[4]);
-	Trace("Error Flag: %#04x", Error);
-
-	ExtractCoreButtons(DeviceContext, ReadBuffer + 1);
-
-	if (Error != 0x00)
-	{
-		return Status;
-	}
+	UNREFERENCED_PARAMETER(ErrorFlag);
+	UNREFERENCED_PARAMETER(ReadAddress);
 
 	USHORT ExtensionType = 0;
-	ExtensionType |= ReadBuffer[10] << 8;
-	ExtensionType |= ReadBuffer[11];
+	ExtensionType |= ReadBuffer[4] << 8;
+	ExtensionType |= ReadBuffer[5];
 
 	Trace("Extension Type: %#06x", ExtensionType);
 
@@ -980,6 +968,8 @@ _In_ size_t ReadBufferSize
 		DeviceContext->WiimoteContext.Extension = BalanceBoard;
 		DeviceContext->WiimoteContext.CurrentReportMode = 0x32;
 		SetLEDs(DeviceContext, WIIMTOE_LEDS_ALL);
+		// Get Calibration Data
+		ReadFromRegister(DeviceContext, 0xA40024, 24);
 		break;
 	case 0x0101: // Classic Controler (Pro)
 		Trace("Classic Controller (Pro) Extension");
@@ -1011,11 +1001,70 @@ _In_ size_t ReadBufferSize
 		return Status;
 	}
 
-
 	Status = SetReportMode(DeviceContext, DeviceContext->WiimoteContext.CurrentReportMode);
 	if (!NT_SUCCESS(Status))
 	{
 		return Status;
+	}
+
+	return Status;
+}
+
+NTSTATUS
+ProcessBalanceBoardCalibrationRegister(
+	_In_ PDEVICE_CONTEXT DeviceContext,
+	_In_reads_bytes_(ReadBufferSize) BYTE * ReadBuffer,
+	_In_ size_t ReadBufferSize,
+	_In_ BYTE ErrorFlag,
+	_In_ USHORT ReadAddress)
+{
+	NTSTATUS Status = STATUS_SUCCESS;
+
+	UNREFERENCED_PARAMETER(ErrorFlag);
+
+	size_t Destination = (ReadAddress == 0x0024) ? 0 : 2;
+	PUSHORT WritePointer = DeviceContext->WiimoteContext.BalanceBoardState.Calibration[Destination].Raw;
+
+	for (PUSHORT ReadPointer = (PUSHORT)ReadBuffer; ReadPointer < (PUSHORT)(ReadBuffer + ReadBufferSize); ++ReadPointer, ++WritePointer)
+	{
+		(*WritePointer) = RtlUshortByteSwap(*ReadPointer);
+	}
+
+	return Status;
+}
+
+NTSTATUS
+ProcessRegisterReadReport(
+	_In_ PDEVICE_CONTEXT DeviceContext,
+	_In_reads_bytes_(ReadBufferSize) BYTE * ReadBuffer,
+	_In_ size_t ReadBufferSize
+	)
+{
+	NTSTATUS Status = STATUS_SUCCESS;
+
+	UNREFERENCED_PARAMETER(ReadBufferSize);
+
+	Trace("ProcessRegisterReadReport");
+
+	ExtractCoreButtons(DeviceContext, ReadBuffer + 1);
+
+	BYTE Error = 0x0F & (ReadBuffer[3]);
+	Trace("Error Flag: %#04x", Error);
+
+	BYTE Size = ((0xF0 & (ReadBuffer[3])) >> 4) + 1;
+	Trace("Size: %#04x", Size);
+	USHORT Address = RtlUshortByteSwap(*((USHORT *)(ReadBuffer + 4)));
+	Trace("Address: %#06x", Address);
+
+	switch(Address)
+	{
+	case 0x00FA: // Extension Type
+		Status = ProcessExtensionRegister(DeviceContext, ReadBuffer + 6, Size, Error, Address);
+		break;
+	case 0x0024: // BalanceBoard Calibration
+	case 0x0034:
+		Status = ProcessBalanceBoardCalibrationRegister(DeviceContext, ReadBuffer + 6, Size, Error, Address);
+		break;
 	}
 
 	return Status;
