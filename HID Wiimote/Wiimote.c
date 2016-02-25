@@ -840,10 +840,13 @@ ProcessStatusInformation(
 
 	if (Extension)
 	{
-		Status = InitializeExtension(DeviceContext);
-		if (!NT_SUCCESS(Status))
+		if (DeviceContext->WiimoteContext.Extension == None)
 		{
-			return Status;
+			Status = InitializeExtension(DeviceContext);
+			if (!NT_SUCCESS(Status))
+			{
+				return Status;
+			}
 		}
 	}
 	else
