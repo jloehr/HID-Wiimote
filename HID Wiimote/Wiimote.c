@@ -970,7 +970,7 @@ _In_ size_t ReadBufferSize
 		DeviceContext->WiimoteContext.Extension = Nunchuck;
 		DeviceContext->WiimoteContext.CurrentReportMode = 0x35;
 		break;
-	case 0x2A2C: // Balance Board
+	case 0x0402: // Balance Board
 		Trace("Balance Board");
 		DeviceContext->WiimoteContext.Extension = BalanceBoard;
 		DeviceContext->WiimoteContext.CurrentReportMode = 0x32;
