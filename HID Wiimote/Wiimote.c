@@ -854,8 +854,13 @@ ProcessStatusInformation(
 #endif
 
 	//Process the Battery Level to set the LEDS; Wii U Pro Controller reports its Battery Level in its Input Report
-	if (DeviceContext->WiimoteContext.Extension != WiiUProController)
+
+	switch (DeviceContext->WiimoteContext.Extension)
 	{
+	case BalanceBoard:
+	case WiiUProController:
+		break;
+	default:
 		Status = ProcessWiimoteBatteryLevel(DeviceContext, ReadBuffer[6]);
 		if (!NT_SUCCESS(Status))
 		{
@@ -974,6 +979,7 @@ _In_ size_t ReadBufferSize
 		Trace("Balance Board");
 		DeviceContext->WiimoteContext.Extension = BalanceBoard;
 		DeviceContext->WiimoteContext.CurrentReportMode = 0x32;
+		SetLEDs(DeviceContext, WIIMTOE_LEDS_ALL);
 		break;
 	case 0x0101: // Classic Controler (Pro)
 		Trace("Classic Controller (Pro) Extension");
