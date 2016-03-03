@@ -47,7 +47,7 @@ Trace(
 
 VOID 
 PrintBytes(
-	_In_reads_(Size) PCCHAR Data,
+	_In_reads_(Size) PCUCHAR Data,
 	_In_ SIZE_T Size 
 	)
 {
@@ -58,7 +58,7 @@ PrintBytes(
 	NTSTATUS Result = STATUS_SUCCESS;
 	PCHAR Message;
 	PCHAR WritePointer;
-	PCCHAR ReadPointer;
+	PCUCHAR ReadPointer;
 	const size_t BytesPerElement = 5;
 	size_t StringBufferSize = (Size * BytesPerElement) + 1;
 
