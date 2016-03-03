@@ -1033,7 +1033,7 @@ ProcessBalanceBoardCalibrationRegister(
 	{
 		for (size_t SensorIndex = 0; SensorIndex < 4; ++SensorIndex)
 		{
-			DeviceContext->WiimoteContext.BalanceBoardState.CalibrationRaw[SensorIndex][CalibrationDataIndex] = RtlUshortByteSwap(Data[4 * CalibrationDataIndex + SensorIndex]);
+			DeviceContext->WiimoteContext.BalanceBoardState.CalibrationRaw[SensorIndex][CalibrationDataIndex] = RtlUshortByteSwap(Data[4 * (CalibrationDataIndex - CalibrationIndexStart) + SensorIndex]);
 		}
 	}
 
