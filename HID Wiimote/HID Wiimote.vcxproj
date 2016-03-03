@@ -168,13 +168,13 @@
       <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|x64'">%(AdditionalDependencies);$(DDK_LIB_PATH)\hidclass.lib;$(DDK_LIB_PATH)\ntstrsafe.lib</AdditionalDependencies>
     </Link>
     <Inf>
-      <TimeStamp Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|x64'">0.2.7.3</TimeStamp>
+      <TimeStamp Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|x64'">0.2.7.4</TimeStamp>
     </Inf>
     <Inf>
       <TimeStamp Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|Win32'">0.2.7.3</TimeStamp>
     </Inf>
     <Inf>
-      <TimeStamp Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|x64'">0.2.7.3</TimeStamp>
+      <TimeStamp Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|x64'">0.2.7.4</TimeStamp>
     </Inf>
     <Inf>
       <TimeStamp Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|Win32'">0.2.7.3</TimeStamp>
