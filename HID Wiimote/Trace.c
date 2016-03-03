@@ -74,7 +74,7 @@ PrintBytes(
 
 	for (SIZE_T i = 0; (i < Size) && (NT_SUCCESS(Result)); ++i)
 	{
-		Result = RtlStringCbPrintfA(WritePointer, StringBufferSize, "%#02x ", *ReadPointer);
+		Result = RtlStringCbPrintfA(WritePointer, StringBufferSize, "%#04x ", *ReadPointer);
 
 		WritePointer += BytesPerElement;
 		StringBufferSize -= BytesPerElement;
