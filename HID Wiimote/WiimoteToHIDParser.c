@@ -221,7 +221,7 @@ GetCalibratedBoardValue(
 
 	const UCHAR SegmentRange = 128;
 	USHORT RawRange = CalibrationData[CalibrationHigherBound] - CalibrationData[CalibrationHigherBound - 1];
-	USHORT RawValue = (Value - CalibrationData[CalibrationHigherBound - 1]);
+	DWORD32 RawValue = (Value - CalibrationData[CalibrationHigherBound - 1]);
 
 	RawValue *= SegmentRange;
 	UCHAR ActualValue = (UCHAR)(RawValue / RawRange);
@@ -408,8 +408,6 @@ ParseWiimoteStateAsBalanceBoard(
 
 	// Balance Board has only a single button, that is reported as "A"
 	ParseButton(WiimoteContext->State.CoreButtons.A, RequestBuffer + 2, 0);
-
-	//Trace("HID Report: %u - %u", RequestBuffer[0], RequestBuffer[1]);
 }
 
 VOID
