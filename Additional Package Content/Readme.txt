@@ -13,7 +13,7 @@ If you like this project and really want to pay for it, see my homepage (https:/
 
 -- 0.2.7.4 --
 
-- Fix Balance Board not reporting any input
+- Fix Balance Board not beeing detected correctly and reporting any input
 
 -- 0.2.7.3 --
 
