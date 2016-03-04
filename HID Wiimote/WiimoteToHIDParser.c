@@ -171,19 +171,16 @@ JoinSensorValue(
 	_In_ USHORT ValueTwo
 	)
 {
-	ValueOne = min(ValueOne, 0x7F);
-	ValueTwo = min(ValueTwo, 0x7F);
-
-	UCHAR Value = (UCHAR)(ValueOne + ValueTwo);
-	return (Value / 2);
+	USHORT Value = (ValueOne + ValueTwo);
+	return (UCHAR)(Value / 4);
 }
 
 BYTE
 ParseBalanceBoardSensors(
-	_In_ USHORT PositiveValueOne,
-	_In_ USHORT PositiveValueTwo,
-	_In_ USHORT NegativeValueOne,
-	_In_ USHORT NegativeValueTwo
+	_In_ UCHAR PositiveValueOne,
+	_In_ UCHAR PositiveValueTwo,
+	_In_ UCHAR NegativeValueOne,
+	_In_ UCHAR NegativeValueTwo
 	)
 {
 	UCHAR PositiveValue = JoinSensorValue(PositiveValueOne, PositiveValueTwo);
@@ -192,6 +189,45 @@ ParseBalanceBoardSensors(
 	BYTE Value = PositiveValue + 0x7F - NegativeValue;
 
 	return Value;
+}
+
+UCHAR
+GetCalibratedBoardValue(
+	_In_ USHORT Value,
+	_In_reads_(3) PUSHORT CalibrationData)
+{
+	/*
+	Calibration - return range 0 - 255 
+	-----------
+	0		0
+		...
+	1		128
+		...	
+	2		255
+
+	*/
+
+	if (Value <= CalibrationData[0])
+	{
+		return 0;
+	}
+
+	if (Value >= CalibrationData[2])
+	{
+		return 255;
+	}
+
+	size_t CalibrationHigherBound = (Value > CalibrationData[1]) ? 2 : 1;
+
+	const UCHAR SegmentRange = 128;
+	USHORT RawRange = CalibrationData[CalibrationHigherBound] - CalibrationData[CalibrationHigherBound - 1];
+	DWORD32 RawValue = (Value - CalibrationData[CalibrationHigherBound - 1]);
+
+	RawValue *= SegmentRange;
+	UCHAR ActualValue = (UCHAR)(RawValue / RawRange);
+	ActualValue += (UCHAR)(CalibrationHigherBound - 1) * SegmentRange;
+
+	return ActualValue;
 }
 
 BOOLEAN AccumulateIRPoint(
@@ -362,8 +398,13 @@ ParseWiimoteStateAsBalanceBoard(
 	_Inout_updates_(3) PUCHAR RequestBuffer
 	)
 {
-	RequestBuffer[0] = ParseBalanceBoardSensors(WiimoteContext->BalanceBoardState.Sensor.TopLeft, WiimoteContext->BalanceBoardState.Sensor.TopRight, WiimoteContext->BalanceBoardState.Sensor.BottomLeft, WiimoteContext->BalanceBoardState.Sensor.BottomRight);
-	RequestBuffer[1] = ParseBalanceBoardSensors(WiimoteContext->BalanceBoardState.Sensor.BottomRight, WiimoteContext->BalanceBoardState.Sensor.TopRight, WiimoteContext->BalanceBoardState.Sensor.TopLeft, WiimoteContext->BalanceBoardState.Sensor.BottomLeft);
+	UCHAR TopRight = GetCalibratedBoardValue(WiimoteContext->BalanceBoardState.Sensor.TopRight, WiimoteContext->BalanceBoardState.Calibration.TopRight);
+	UCHAR BottomRight = GetCalibratedBoardValue(WiimoteContext->BalanceBoardState.Sensor.BottomRight, WiimoteContext->BalanceBoardState.Calibration.BottomRight);
+	UCHAR TopLeft = GetCalibratedBoardValue(WiimoteContext->BalanceBoardState.Sensor.TopLeft, WiimoteContext->BalanceBoardState.Calibration.TopLeft);
+	UCHAR BottomLeft = GetCalibratedBoardValue(WiimoteContext->BalanceBoardState.Sensor.BottomLeft, WiimoteContext->BalanceBoardState.Calibration.BottomLeft);
+
+	RequestBuffer[0] = ParseBalanceBoardSensors(BottomRight, TopRight, TopLeft, BottomLeft);
+	RequestBuffer[1] = ParseBalanceBoardSensors(BottomLeft, BottomRight, TopLeft, TopRight);
 
 	// Balance Board has only a single button, that is reported as "A"
 	ParseButton(WiimoteContext->State.CoreButtons.A, RequestBuffer + 2, 0);

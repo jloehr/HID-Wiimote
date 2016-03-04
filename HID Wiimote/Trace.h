@@ -29,7 +29,7 @@ Trace(
 
 VOID
 PrintBytes(
-	_In_reads_(Size) PCCHAR Data,
+	_In_reads_(Size) PCUCHAR Data,
 	_In_ SIZE_T Size
 	);
 

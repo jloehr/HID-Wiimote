@@ -23,6 +23,7 @@ Abstract:
 #define WIIMOTE_LEDS_THREE (0xE0)
 #define WIIMOTE_LEDS_TWO (0xC0)
 #define WIIMOTE_LEDS_ONE (0x80)
+#define WIIMTOE_LEDS_ALL (WIIMOTE_LEDS_FOUR | WIIMOTE_LEDS_THREE | WIIMOTE_LEDS_TWO | WIIMOTE_LEDS_ONE)
 
 #define WIIMOTE_IR_POINTS 4
 #define WIIMOTE_IR_POINTS_BUFFER_SIZE 5
@@ -79,6 +80,19 @@ typedef struct _WIIMOTE_BALANCE_BOARD_STATE
 		} Sensor;
 
 		USHORT SensorRaw[4];
+	};
+
+	union
+	{
+		struct
+		{
+			USHORT TopRight[3];
+			USHORT BottomRight[3];
+			USHORT TopLeft[3];
+			USHORT BottomLeft[3];
+		} Calibration;
+
+		USHORT CalibrationRaw[4][3];
 	};
 
 } WIIMOTE_BALANCE_BOARD_STATE, *PWIIMOTE_BALANCE_BOARD_STATE;

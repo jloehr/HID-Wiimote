@@ -729,7 +729,7 @@ ExtractGuitar(
 	// Buttons
 	DeviceContext->WiimoteContext.GuitarState.Buttons.Green = DecodedInputData[1] & 0x10;
 	DeviceContext->WiimoteContext.GuitarState.Buttons.Red = DecodedInputData[1] & 0x40;
-	DeviceContext->WiimoteContext.GuitarState.Buttons.Yellow = DecodedInputData[1] & 0x04;
+	DeviceContext->WiimoteContext.GuitarState.Buttons.Yellow = DecodedInputData[1] & 0x08;
 	DeviceContext->WiimoteContext.GuitarState.Buttons.Blue = DecodedInputData[1] & 0x20;
 	DeviceContext->WiimoteContext.GuitarState.Buttons.Orange = DecodedInputData[1] & 0x80;
 	DeviceContext->WiimoteContext.GuitarState.Buttons.Plus = DecodedInputData[0] & 0x04;
@@ -840,10 +840,13 @@ ProcessStatusInformation(
 
 	if (Extension)
 	{
-		Status = InitializeExtension(DeviceContext);
-		if (!NT_SUCCESS(Status))
+		if (DeviceContext->WiimoteContext.Extension == None)
 		{
-			return Status;
+			Status = InitializeExtension(DeviceContext);
+			if (!NT_SUCCESS(Status))
+			{
+				return Status;
+			}
 		}
 	}
 	else
@@ -854,8 +857,13 @@ ProcessStatusInformation(
 #endif
 
 	//Process the Battery Level to set the LEDS; Wii U Pro Controller reports its Battery Level in its Input Report
-	if (DeviceContext->WiimoteContext.Extension != WiiUProController)
+
+	switch (DeviceContext->WiimoteContext.Extension)
 	{
+	case BalanceBoard:
+	case WiiUProController:
+		break;
+	default:
 		Status = ProcessWiimoteBatteryLevel(DeviceContext, ReadBuffer[6]);
 		if (!NT_SUCCESS(Status))
 		{
@@ -932,34 +940,22 @@ ProcessInputReport(
 }
 
 NTSTATUS
-ProcessRegisterReadReport(
-_In_ PDEVICE_CONTEXT DeviceContext,
-_In_reads_bytes_(ReadBufferSize) BYTE * ReadBuffer,
-_In_ size_t ReadBufferSize
-)
+ProcessExtensionRegister(
+	_In_ PDEVICE_CONTEXT DeviceContext,
+	_In_reads_bytes_(ReadBufferSize) BYTE * ReadBuffer,
+	_In_ size_t ReadBufferSize,
+	_In_ BYTE ErrorFlag,
+	_In_ USHORT ReadAddress)
 {
 	NTSTATUS Status = STATUS_SUCCESS;
-	//BYTE ReportID = ReadBuffer[0];
 
 	UNREFERENCED_PARAMETER(ReadBufferSize);
-
-	Trace("ProcessRegisterReadReport");
-	/*Trace("ProcessReport - ReportID: 0x%x - ReportSize: %d", ReportID, ReadBufferSize); */
-	//PrintBytes(ReadBuffer, ReadBufferSize);
-
-	BYTE Error = 0x0F & (ReadBuffer[4]);
-	Trace("Error Flag: %#04x", Error);
-
-	ExtractCoreButtons(DeviceContext, ReadBuffer + 1);
-
-	if (Error != 0x00)
-	{
-		return Status;
-	}
+	UNREFERENCED_PARAMETER(ErrorFlag);
+	UNREFERENCED_PARAMETER(ReadAddress);
 
 	USHORT ExtensionType = 0;
-	ExtensionType |= ReadBuffer[10] << 8;
-	ExtensionType |= ReadBuffer[11];
+	ExtensionType |= ReadBuffer[4] << 8;
+	ExtensionType |= ReadBuffer[5];
 
 	Trace("Extension Type: %#06x", ExtensionType);
 
@@ -970,10 +966,13 @@ _In_ size_t ReadBufferSize
 		DeviceContext->WiimoteContext.Extension = Nunchuck;
 		DeviceContext->WiimoteContext.CurrentReportMode = 0x35;
 		break;
-	case 0x2A2C: // Balance Board
+	case 0x0402: // Balance Board
 		Trace("Balance Board");
 		DeviceContext->WiimoteContext.Extension = BalanceBoard;
 		DeviceContext->WiimoteContext.CurrentReportMode = 0x32;
+		SetLEDs(DeviceContext, WIIMTOE_LEDS_ALL);
+		// Get Calibration Data
+		ReadFromRegister(DeviceContext, 0xA40024, 24);
 		break;
 	case 0x0101: // Classic Controler (Pro)
 		Trace("Classic Controller (Pro) Extension");
@@ -1005,11 +1004,74 @@ _In_ size_t ReadBufferSize
 		return Status;
 	}
 
-
 	Status = SetReportMode(DeviceContext, DeviceContext->WiimoteContext.CurrentReportMode);
 	if (!NT_SUCCESS(Status))
 	{
 		return Status;
+	}
+
+	return Status;
+}
+
+NTSTATUS
+ProcessBalanceBoardCalibrationRegister(
+	_In_ PDEVICE_CONTEXT DeviceContext,
+	_In_reads_bytes_(ReadBufferSize) PUCHAR ReadBuffer,
+	_In_ size_t ReadBufferSize,
+	_In_ BYTE ErrorFlag,
+	_In_ USHORT ReadAddress)
+{
+	NTSTATUS Status = STATUS_SUCCESS;
+
+	UNREFERENCED_PARAMETER(ErrorFlag);
+
+	PUSHORT Data = (PUSHORT)ReadBuffer;
+	size_t CalibrationIndexStart = (ReadAddress == 0x0024) ? 0 : 2;
+	size_t CalibrationIndexEnd = CalibrationIndexStart + (ReadBufferSize / 8);
+
+	for (size_t CalibrationDataIndex = CalibrationIndexStart; CalibrationDataIndex < CalibrationIndexEnd; ++CalibrationDataIndex)
+	{
+		for (size_t SensorIndex = 0; SensorIndex < 4; ++SensorIndex)
+		{
+			DeviceContext->WiimoteContext.BalanceBoardState.CalibrationRaw[SensorIndex][CalibrationDataIndex] = RtlUshortByteSwap(Data[4 * (CalibrationDataIndex - CalibrationIndexStart) + SensorIndex]);
+		}
+	}
+
+	return Status;
+}
+
+NTSTATUS
+ProcessRegisterReadReport(
+	_In_ PDEVICE_CONTEXT DeviceContext,
+	_In_reads_bytes_(ReadBufferSize) BYTE * ReadBuffer,
+	_In_ size_t ReadBufferSize
+	)
+{
+	NTSTATUS Status = STATUS_SUCCESS;
+
+	UNREFERENCED_PARAMETER(ReadBufferSize);
+
+	Trace("ProcessRegisterReadReport");
+
+	ExtractCoreButtons(DeviceContext, ReadBuffer + 1);
+
+	BYTE Error = 0x0F & (ReadBuffer[3]);
+	Trace("Error Flag: %#04x", Error);
+
+	BYTE Size = ((0xF0 & (ReadBuffer[3])) >> 4) + 1;
+	Trace("Size: %#04x", Size);
+	USHORT Address = RtlUshortByteSwap(*((USHORT *)(ReadBuffer + 4)));
+	Trace("Address: %#06x", Address);
+
+	switch(Address)
+	{
+	case 0x00FA: // Extension Type
+		Status = ProcessExtensionRegister(DeviceContext, ReadBuffer + 6, Size, Error, Address);
+		break;
+	case 0x0024: // BalanceBoard Calibration
+	case 0x0034:
+		Status = ProcessBalanceBoardCalibrationRegister(DeviceContext, ReadBuffer + 6, Size, Error, Address);
+		break;
 	}
 
 	return Status;
