@@ -111,3 +111,16 @@ function GenerateVersionStringClass(Versions, OutputPath)
 
     UpdateFile(OutputPath, FileContent);
 }
+
+function GenerateVersionStringHeaderFile(Versions, OutputPath)
+{
+    var FileContent = "// Auto generated file\n";
+    FileContent += "// Changes will be overwritten\n";
+    FileContent += "#pragma once\n";
+    FileContent += "\n";
+    FileContent += "#define CONTROL_CENTER_VERSION \"" + Versions.ControlCenter.String + "\"\n";
+    FileContent += "#define DRIVER_PACKAGE_VERSION \"" + Versions.DriverPackage.String + "\"\n";
+    FileContent += "\n";
+
+    UpdateFile(OutputPath, FileContent);
+}

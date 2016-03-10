@@ -20,4 +20,15 @@
             GenerateVersionStringClass(Versions, WScript.arguments(1));
         </script>
     </job>
+
+    <job id="GenerateUserModeLibVersionStrings">
+        <script language="JScript" src="Version.js" />
+        <script language="JScript">
+            // Arg 0: Readme file path
+            // Arg 1: VersionStrings.h path
+            WScript.Echo("Generating VersionStrings.h: " + WScript.arguments(1));
+            var Versions = GetVersionsFromReadme(WScript.arguments(0));
+            GenerateVersionStringHeaderFile(Versions, WScript.arguments(1));
+        </script>
+    </job>
 </package>
