@@ -198,7 +198,12 @@
   <ItemGroup>
     <None Include="Resources\UninstallerContent.txt" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\HID Wiimote User Mode\HID Wiimote User Mode.vcxproj">
+      <Project>{591eee1a-3007-4d38-910a-af3d065105f9}</Project>
+      <Name>HID Wiimote User Mode</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>cscript.exe "$(SolutionDir)ReleaseVersioning\Version.wsf" //Job:GenerateControlCenterVersionStrings "$(SolutionDir)Additional Package Content\Readme.txt" "$(SolutionDir)HID Wiimote Control Center\Properties\VersionStrings.cs"</PreBuildEvent>
