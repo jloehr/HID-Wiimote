@@ -8,6 +8,8 @@ Zip/
 # User-specific files
 HID Wiimote/Version.props
 HID Wiimote Control Center/Properties/VersionStrings.cs
+HID Wiimote User Mode/VersionStrings.h
+HID Wiimote.VC.opendb
 *.suo
 *.user
 *.sln.docstates
