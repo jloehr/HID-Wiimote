@@ -8,10 +8,10 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("HID Wiimote Control Center")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Control Center Application for the HID Wiimote Driver")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Julian Löhr")]
-[assembly: AssemblyProduct("HID Wiimote Control Center")]
+[assembly: AssemblyProduct("HID Wiimote")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
