@@ -179,6 +179,30 @@
     <Inf>
       <TimeStamp Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|Win32'">$(DriverPackageVersion)</TimeStamp>
     </Inf>
+    <PreBuildEvent>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|x64'">cscript.exe "$(SolutionDir)ReleaseVersioning\Version.wsf" //Job:GenerateVersionStringsHeader "$(SolutionDir)Additional Package Content\Readme.txt" "$(ProjectDir)VersionStrings.h"</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Debug|x64'">cscript.exe "$(SolutionDir)ReleaseVersioning\Version.wsf" //Job:GenerateVersionStringsHeader "$(SolutionDir)Additional Package Content\Readme.txt" "$(ProjectDir)VersionStrings.h"</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|x64'">cscript.exe "$(SolutionDir)ReleaseVersioning\Version.wsf" //Job:GenerateVersionStringsHeader "$(SolutionDir)Additional Package Content\Readme.txt" "$(ProjectDir)VersionStrings.h"</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Debug|x64'">cscript.exe "$(SolutionDir)ReleaseVersioning\Version.wsf" //Job:GenerateVersionStringsHeader "$(SolutionDir)Additional Package Content\Readme.txt" "$(ProjectDir)VersionStrings.h"</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|Win32'">cscript.exe "$(SolutionDir)ReleaseVersioning\Version.wsf" //Job:GenerateVersionStringsHeader "$(SolutionDir)Additional Package Content\Readme.txt" "$(ProjectDir)VersionStrings.h"</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Debug|Win32'">cscript.exe "$(SolutionDir)ReleaseVersioning\Version.wsf" //Job:GenerateVersionStringsHeader "$(SolutionDir)Additional Package Content\Readme.txt" "$(ProjectDir)VersionStrings.h"</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|Win32'">cscript.exe "$(SolutionDir)ReleaseVersioning\Version.wsf" //Job:GenerateVersionStringsHeader "$(SolutionDir)Additional Package Content\Readme.txt" "$(ProjectDir)VersionStrings.h"</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Debug|Win32'">cscript.exe "$(SolutionDir)ReleaseVersioning\Version.wsf" //Job:GenerateVersionStringsHeader "$(SolutionDir)Additional Package Content\Readme.txt" "$(ProjectDir)VersionStrings.h"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <Inf Include="HIDWiimote.inf" />
@@ -204,9 +228,14 @@
     <ClInclude Include="HID.h" />
     <ClInclude Include="HIDDescriptors.h" />
     <ClInclude Include="HIDWiimote.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Trace.h" />
+    <ClInclude Include="VersionStrings.h" />
     <ClInclude Include="Wiimote.h" />
     <ClInclude Include="WiimoteToHIDParser.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="HID Wiimote.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

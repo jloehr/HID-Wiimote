@@ -145,41 +145,65 @@
     <Link>
       <AdditionalDependencies>$(DDK_LIB_PATH)\hidclass.lib;$(DDK_LIB_PATH)\ntstrsafe.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>cscript.exe "$(SolutionDir)ReleaseVersioning\Version.wsf" //Job:GenerateVersionStringsHeader "$(SolutionDir)Additional Package Content\Readme.txt" "$(ProjectDir)VersionStrings.h"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Debug|x64'">
     <Link>
       <AdditionalDependencies>$(DDK_LIB_PATH)\hidclass.lib;$(DDK_LIB_PATH)\ntstrsafe.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>cscript.exe "$(SolutionDir)ReleaseVersioning\Version.wsf" //Job:GenerateVersionStringsHeader "$(SolutionDir)Additional Package Content\Readme.txt" "$(ProjectDir)VersionStrings.h"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|x64'">
     <Link>
       <AdditionalDependencies>$(DDK_LIB_PATH)\hidclass.lib;$(DDK_LIB_PATH)\ntstrsafe.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>cscript.exe "$(SolutionDir)ReleaseVersioning\Version.wsf" //Job:GenerateVersionStringsHeader "$(SolutionDir)Additional Package Content\Readme.txt" "$(ProjectDir)VersionStrings.h"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|x64'">
     <Link>
       <AdditionalDependencies>$(DDK_LIB_PATH)\hidclass.lib;$(DDK_LIB_PATH)\ntstrsafe.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>cscript.exe "$(SolutionDir)ReleaseVersioning\Version.wsf" //Job:GenerateVersionStringsHeader "$(SolutionDir)Additional Package Content\Readme.txt" "$(ProjectDir)VersionStrings.h"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Debug|Win32'">
     <Link>
       <AdditionalDependencies>$(DDK_LIB_PATH)\hidclass.lib;$(DDK_LIB_PATH)\ntstrsafe.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>cscript.exe "$(SolutionDir)ReleaseVersioning\Version.wsf" //Job:GenerateVersionStringsHeader "$(SolutionDir)Additional Package Content\Readme.txt" "$(ProjectDir)VersionStrings.h"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Debug|Win32'">
     <Link>
       <AdditionalDependencies>$(DDK_LIB_PATH)\hidclass.lib;$(DDK_LIB_PATH)\ntstrsafe.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>cscript.exe "$(SolutionDir)ReleaseVersioning\Version.wsf" //Job:GenerateVersionStringsHeader "$(SolutionDir)Additional Package Content\Readme.txt" "$(ProjectDir)VersionStrings.h"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|Win32'">
     <Link>
       <AdditionalDependencies>$(DDK_LIB_PATH)\hidclass.lib;$(DDK_LIB_PATH)\ntstrsafe.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>cscript.exe "$(SolutionDir)ReleaseVersioning\Version.wsf" //Job:GenerateVersionStringsHeader "$(SolutionDir)Additional Package Content\Readme.txt" "$(ProjectDir)VersionStrings.h"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|Win32'">
     <Link>
       <AdditionalDependencies>$(DDK_LIB_PATH)\hidclass.lib;$(DDK_LIB_PATH)\ntstrsafe.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>cscript.exe "$(SolutionDir)ReleaseVersioning\Version.wsf" //Job:GenerateVersionStringsHeader "$(SolutionDir)Additional Package Content\Readme.txt" "$(ProjectDir)VersionStrings.h"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <FilesToPackage Include="$(TargetPath)" />
@@ -191,7 +215,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Hidminiport.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Trace.h" />
+    <ClInclude Include="VersionStrings.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="HID Miniport.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

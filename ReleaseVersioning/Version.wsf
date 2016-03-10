@@ -21,7 +21,7 @@
         </script>
     </job>
 
-    <job id="GenerateUserModeLibVersionStrings">
+    <job id="GenerateVersionStringsHeader">
         <script language="JScript" src="Version.js" />
         <script language="JScript">
             // Arg 0: Readme file path

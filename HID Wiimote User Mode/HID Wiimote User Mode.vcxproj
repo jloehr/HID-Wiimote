@@ -103,7 +103,7 @@
       <AdditionalDependencies />
     </Link>
     <PreBuildEvent>
-      <Command>cscript.exe "$(SolutionDir)ReleaseVersioning\Version.wsf" //Job:GenerateUserModeLibVersionStrings "$(SolutionDir)Additional Package Content\Readme.txt" "$(SolutionDir)HID Wiimote User Mode\VersionStrings.h"</Command>
+      <Command>cscript.exe "$(SolutionDir)ReleaseVersioning\Version.wsf" //Job:GenerateVersionStringsHeader "$(SolutionDir)Additional Package Content\Readme.txt" "$(ProjectDir)VersionStrings.h"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -117,7 +117,7 @@
       <AdditionalDependencies />
     </Link>
     <PreBuildEvent>
-      <Command>cscript.exe "$(SolutionDir)ReleaseVersioning\Version.wsf" //Job:GenerateUserModeLibVersionStrings "$(SolutionDir)Additional Package Content\Readme.txt" "$(SolutionDir)HID Wiimote User Mode\VersionStrings.h"</Command>
+      <Command>cscript.exe "$(SolutionDir)ReleaseVersioning\Version.wsf" //Job:GenerateVersionStringsHeader "$(SolutionDir)Additional Package Content\Readme.txt" "$(ProjectDir)VersionStrings.h"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -130,7 +130,7 @@
       <AdditionalDependencies />
     </Link>
     <PreBuildEvent>
-      <Command>cscript.exe "$(SolutionDir)ReleaseVersioning\Version.wsf" //Job:GenerateUserModeLibVersionStrings "$(SolutionDir)Additional Package Content\Readme.txt" "$(SolutionDir)HID Wiimote User Mode\VersionStrings.h"</Command>
+      <Command>cscript.exe "$(SolutionDir)ReleaseVersioning\Version.wsf" //Job:GenerateVersionStringsHeader "$(SolutionDir)Additional Package Content\Readme.txt" "$(ProjectDir)VersionStrings.h"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -143,7 +143,7 @@
       <AdditionalDependencies />
     </Link>
     <PreBuildEvent>
-      <Command>cscript.exe "$(SolutionDir)ReleaseVersioning\Version.wsf" //Job:GenerateUserModeLibVersionStrings "$(SolutionDir)Additional Package Content\Readme.txt" "$(SolutionDir)HID Wiimote User Mode\VersionStrings.h"</Command>
+      <Command>cscript.exe "$(SolutionDir)ReleaseVersioning\Version.wsf" //Job:GenerateVersionStringsHeader "$(SolutionDir)Additional Package Content\Readme.txt" "$(ProjectDir)VersionStrings.h"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

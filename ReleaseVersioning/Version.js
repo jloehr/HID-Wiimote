@@ -75,7 +75,12 @@ function GetVersionsFromReadme(ReadmePath)
 
 function UpdateFile(FilePath, NewContent)
 {
-    var OutputFile = FSO.OpenTextFile(FilePath);
+    var OutputFile = null;
+
+    if (FSO.FileExists(FilePath))
+    {
+        OutputFile = FSO.OpenTextFile(FilePath);
+    }
 
     if ((OutputFile == null) || (OutputFile.ReadAll() != NewContent)) {
         OutputFile = FSO.CreateTextFile(FilePath, true);
@@ -118,9 +123,10 @@ function GenerateVersionStringHeaderFile(Versions, OutputPath)
     FileContent += "// Changes will be overwritten\n";
     FileContent += "#pragma once\n";
     FileContent += "\n";
-    FileContent += "#define CONTROL_CENTER_VERSION \"" + Versions.ControlCenter.String + "\"\n";
-    FileContent += "#define CONTROL_CENTER_VERSION_RESOURCE " + Versions.ControlCenter.Major + "," + Versions.ControlCenter.Minor + "," + Versions.ControlCenter.Build + "," + Versions.ControlCenter.Revision + "\n";
-    FileContent += "#define DRIVER_PACKAGE_VERSION \"" + Versions.DriverPackage.String + "\"\n";
+    FileContent += "#define CONTROL_CENTER_VERSION " + Versions.ControlCenter.Major + "," + Versions.ControlCenter.Minor + "," + Versions.ControlCenter.Build + "," + Versions.ControlCenter.Revision + "\n";
+    FileContent += "#define CONTROL_CENTER_VERSION_STRING \"" + Versions.ControlCenter.String + "\"\n";
+    FileContent += "#define DRIVER_PACKAGE_VERSION " + Versions.DriverPackage.Major + "," + Versions.DriverPackage.Minor + "," + Versions.DriverPackage.Build + "," + Versions.DriverPackage.Revision + "\n";
+    FileContent += "#define DRIVER_PACKAGE_VERSION_STRING \"" + Versions.DriverPackage.String + "\"\n";
     FileContent += "\n";
 
     UpdateFile(OutputPath, FileContent);
