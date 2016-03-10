@@ -119,6 +119,7 @@ function GenerateVersionStringHeaderFile(Versions, OutputPath)
     FileContent += "#pragma once\n";
     FileContent += "\n";
     FileContent += "#define CONTROL_CENTER_VERSION \"" + Versions.ControlCenter.String + "\"\n";
+    FileContent += "#define CONTROL_CENTER_VERSION_RESOURCE " + Versions.ControlCenter.Major + "," + Versions.ControlCenter.Minor + "," + Versions.ControlCenter.Build + "," + Versions.ControlCenter.Revision + "\n";
     FileContent += "#define DRIVER_PACKAGE_VERSION \"" + Versions.DriverPackage.String + "\"\n";
     FileContent += "\n";
 
