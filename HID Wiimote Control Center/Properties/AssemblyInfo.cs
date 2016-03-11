@@ -51,5 +51,5 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion(HID_Wiimote_Control_Center.VersionStrings.ControlCenterVersion)]
-[assembly: AssemblyFileVersion(HID_Wiimote_Control_Center.VersionStrings.ControlCenterVersion)]
+[assembly: AssemblyVersion(HIDWiimote.VersionStrings.ControlCenterVersion)]
+[assembly: AssemblyFileVersion(HIDWiimote.VersionStrings.ControlCenterVersion)]

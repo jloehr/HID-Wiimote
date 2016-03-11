@@ -1,9 +1,9 @@
-﻿<Window x:Class="HID_Wiimote_Control_Center.Main_Windows.UpdaterWindow"
+﻿<Window x:Class="HIDWiimote.ControlCenter.Main_Windows.UpdaterWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:HID_Wiimote_Control_Center.Main_Windows"
+        xmlns:local="clr-namespace:HIDWiimote.ControlCenter.Main_Windows"
         xmlns:Emit="clr-namespace:System.Reflection.Emit;assembly=mscorlib"
         mc:Ignorable="d"
         Title="HID Wiimote Updater" Height="297" Width="450" Initialized="OnInitialized" Loaded="OnLoaded" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">

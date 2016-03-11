@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 
-namespace HID_Wiimote_Control_Center
+namespace HIDWiimote.ControlCenter
 {
     class SingleInstanceProtector
     {

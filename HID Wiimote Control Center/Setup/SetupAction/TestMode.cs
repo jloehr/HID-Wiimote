@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace HID_Wiimote_Control_Center.Setup.SetupAction
+namespace HIDWiimote.ControlCenter.Setup.SetupAction
 {
     class TestMode : ISetupAction
     {

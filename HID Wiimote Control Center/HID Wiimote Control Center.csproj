@@ -7,7 +7,7 @@
     <ProjectGuid>{D91AA07C-75AF-47B7-B3EE-CBEFD7AA5616}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HID_Wiimote_Control_Center</RootNamespace>
+    <RootNamespace>HIDWiimote.ControlCenter</RootNamespace>
     <AssemblyName>HID Wiimote Control Center</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

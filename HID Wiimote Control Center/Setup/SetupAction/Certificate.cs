@@ -1,11 +1,11 @@
 ﻿using System.Security.Cryptography.X509Certificates;
 
-namespace HID_Wiimote_Control_Center.Setup.SetupAction
+namespace HIDWiimote.ControlCenter.Setup.SetupAction
 {
     class Certificate : ISetupAction
     {
         X509Store Store = new X509Store(StoreName.Root, StoreLocation.LocalMachine);
-        X509Certificate2 CertificateInstance = new X509Certificate2(HID_Wiimote_Control_Center.Properties.Installer.JulianLoehrCA);
+        X509Certificate2 CertificateInstance = new X509Certificate2(HIDWiimote.ControlCenter.Properties.Installer.JulianLoehrCA);
 
         public bool IsSetUp()
         {

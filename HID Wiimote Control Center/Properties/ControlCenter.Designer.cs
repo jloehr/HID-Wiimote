@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace HID_Wiimote_Control_Center.Properties {
+namespace HIDWiimote.ControlCenter.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace HID_Wiimote_Control_Center.Properties {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("HID_Wiimote_Control_Center.Properties.ControlCenter", typeof(ControlCenter).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("HIDWiimote.ControlCenter.Properties.ControlCenter", typeof(ControlCenter).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

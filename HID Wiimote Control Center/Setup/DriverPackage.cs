@@ -1,9 +1,9 @@
-﻿using HID_Wiimote_Control_Center.Setup.InstallStepAction;
+﻿using HIDWiimote.ControlCenter.Setup.InstallStepAction;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace HID_Wiimote_Control_Center.Setup
+namespace HIDWiimote.ControlCenter.Setup
 {
     static class DriverPackage
     {
@@ -33,7 +33,7 @@ namespace HID_Wiimote_Control_Center.Setup
             string InfInstallPath = System.IO.Path.Combine(ActualInstallDir, InfFileName);
             string UninstallerPath = System.IO.Path.Combine(ActualInstallDir, UninstallFileName);
 
-            string UninstallerContent = HID_Wiimote_Control_Center.Properties.Installer.UninstallerContent;
+            string UninstallerContent = HIDWiimote.ControlCenter.Properties.Installer.UninstallerContent;
             UninstallerContent = UninstallerContent.Replace(UninstallerInfFileToken, InfFileName);
             UninstallerContent = UninstallerContent.Replace(InstallDirToken, ActualInstallDir);
 

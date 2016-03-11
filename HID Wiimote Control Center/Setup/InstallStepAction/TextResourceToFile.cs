@@ -1,4 +1,4 @@
-﻿namespace HID_Wiimote_Control_Center.Setup.InstallStepAction
+﻿namespace HIDWiimote.ControlCenter.Setup.InstallStepAction
 {
     class TextResourceToFile : IInstallStepAction
     {

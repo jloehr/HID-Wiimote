@@ -1,4 +1,4 @@
-﻿using HID_Wiimote_Control_Center.Control_Center;
+﻿using HIDWiimote.ControlCenter.Control_Center;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -6,7 +6,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace HID_Wiimote_Control_Center.Main_Windows
+namespace HIDWiimote.ControlCenter.Main_Windows
 {
     /// <summary>
     /// Interaction logic for ControlCenterWindow.xaml
@@ -48,11 +48,11 @@ namespace HID_Wiimote_Control_Center.Main_Windows
 
         private static Dictionary<WiimoteDevice.ModeType, string> WiimoteDeviceModeTypeDescriptionsDictionary = new Dictionary<WiimoteDevice.ModeType, string>()
         {
-            { WiimoteDevice.ModeType.Gamepad, HID_Wiimote_Control_Center.Properties.ControlCenter.ModeString_Gamepad },
-            { WiimoteDevice.ModeType.PassThrough, HID_Wiimote_Control_Center.Properties.ControlCenter.ModeString_PassThrough },
-            { WiimoteDevice.ModeType.GamepadAndIRMouse, HID_Wiimote_Control_Center.Properties.ControlCenter.ModeString_GamepadAndIRMouse },
-            { WiimoteDevice.ModeType.IRMouse, HID_Wiimote_Control_Center.Properties.ControlCenter.ModeString_IRMouse },
-            { WiimoteDevice.ModeType.DPadMouse, HID_Wiimote_Control_Center.Properties.ControlCenter.ModeString_DPadMouse }
+            { WiimoteDevice.ModeType.Gamepad, HIDWiimote.ControlCenter.Properties.ControlCenter.ModeString_Gamepad },
+            { WiimoteDevice.ModeType.PassThrough, HIDWiimote.ControlCenter.Properties.ControlCenter.ModeString_PassThrough },
+            { WiimoteDevice.ModeType.GamepadAndIRMouse, HIDWiimote.ControlCenter.Properties.ControlCenter.ModeString_GamepadAndIRMouse },
+            { WiimoteDevice.ModeType.IRMouse, HIDWiimote.ControlCenter.Properties.ControlCenter.ModeString_IRMouse },
+            { WiimoteDevice.ModeType.DPadMouse, HIDWiimote.ControlCenter.Properties.ControlCenter.ModeString_DPadMouse }
         };
 
         public Dictionary<WiimoteDevice.ModeType, string> WiimoteDeviceModeTypeDescriptions

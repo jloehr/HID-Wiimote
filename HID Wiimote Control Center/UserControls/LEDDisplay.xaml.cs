@@ -4,7 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace HID_Wiimote_Control_Center.UserControls
+namespace HIDWiimote.ControlCenter.UserControls
 {
     /// <summary>
     /// Interaction logic for LEDDisplay.xaml

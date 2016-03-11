@@ -1,6 +1,6 @@
 ﻿using Microsoft.Win32;
 
-namespace HID_Wiimote_Control_Center
+namespace HIDWiimote.ControlCenter
 {
     static class DriverPackageUninstallerRegistry
     {

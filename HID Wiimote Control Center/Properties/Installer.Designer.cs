@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace HID_Wiimote_Control_Center.Properties {
+namespace HIDWiimote.ControlCenter.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace HID_Wiimote_Control_Center.Properties {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("HID_Wiimote_Control_Center.Properties.Installer", typeof(Installer).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("HIDWiimote.ControlCenter.Properties.Installer", typeof(Installer).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -233,7 +233,13 @@ namespace HID_Wiimote_Control_Center.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to echo Hello World!.
+        ///   Looks up a localized string similar to cd &quot;{{InstallDir}}&quot;
+        ///START /WAIT dpinst.exe /q /u &quot;{{InfFileName}}&quot;
+        ///echo %ERRORLEVEL%
+        ///REG DELETE &quot;HKLM\Software\Microsoft\Windows\CurrentVersion\Uninstall\HID Wiimote&quot; /f
+        ///del dpinst.exe
+        ///del &quot;{{InfFileName}}&quot;
+        ///del &quot;%~f0&quot;.
         /// </summary>
         public static string UninstallerContent {
             get {

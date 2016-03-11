@@ -1,4 +1,4 @@
-﻿using HID_Wiimote_Control_Center.Setup.SetupAction;
+﻿using HIDWiimote.ControlCenter.Setup.SetupAction;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,7 +8,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace HID_Wiimote_Control_Center.Main_Windows
+namespace HIDWiimote.ControlCenter.Main_Windows
 {
     /// <summary>
     /// Interaction logic for InstallerWindow.xaml
@@ -20,35 +20,35 @@ namespace HID_Wiimote_Control_Center.Main_Windows
         public InstallerWindow()
         {
             ActionList.Add(new InstallerAction(
-                HID_Wiimote_Control_Center.Properties.Installer.TestMode_Title,
+                HIDWiimote.ControlCenter.Properties.Installer.TestMode_Title,
                 false,
-                HID_Wiimote_Control_Center.Properties.Installer.TestMode_Description,
-                HID_Wiimote_Control_Center.Properties.Installer.TestMode_SmallDescription,
-                HID_Wiimote_Control_Center.Properties.Installer.TestMode_RedNote,
-                HID_Wiimote_Control_Center.Properties.Installer.ButtonDisable,
-                HID_Wiimote_Control_Center.Properties.Installer.ButtonEnable,
+                HIDWiimote.ControlCenter.Properties.Installer.TestMode_Description,
+                HIDWiimote.ControlCenter.Properties.Installer.TestMode_SmallDescription,
+                HIDWiimote.ControlCenter.Properties.Installer.TestMode_RedNote,
+                HIDWiimote.ControlCenter.Properties.Installer.ButtonDisable,
+                HIDWiimote.ControlCenter.Properties.Installer.ButtonEnable,
                 new TestMode()
                 ));
 
             ActionList.Add(new InstallerAction(
-                HID_Wiimote_Control_Center.Properties.Installer.Certificate_Title,
+                HIDWiimote.ControlCenter.Properties.Installer.Certificate_Title,
                 false,
-                HID_Wiimote_Control_Center.Properties.Installer.Certificate_Description,
-                HID_Wiimote_Control_Center.Properties.Installer.Certificate_SmallDescription,
+                HIDWiimote.ControlCenter.Properties.Installer.Certificate_Description,
+                HIDWiimote.ControlCenter.Properties.Installer.Certificate_SmallDescription,
                 string.Empty,
-                HID_Wiimote_Control_Center.Properties.Installer.ButtonUninstall,
-                HID_Wiimote_Control_Center.Properties.Installer.ButtonInstall,
+                HIDWiimote.ControlCenter.Properties.Installer.ButtonUninstall,
+                HIDWiimote.ControlCenter.Properties.Installer.ButtonInstall,
                 new Certificate()
                 ));
 
             ActionList.Add(new InstallerAction(
-                HID_Wiimote_Control_Center.Properties.Installer.DriverPackage_Title,
+                HIDWiimote.ControlCenter.Properties.Installer.DriverPackage_Title,
                 true,
-                HID_Wiimote_Control_Center.Properties.Installer.DriverPackage_Description,
-                HID_Wiimote_Control_Center.Properties.Installer.DriverPackage_SmallDescription,
+                HIDWiimote.ControlCenter.Properties.Installer.DriverPackage_Description,
+                HIDWiimote.ControlCenter.Properties.Installer.DriverPackage_SmallDescription,
                 string.Empty,
-                HID_Wiimote_Control_Center.Properties.Installer.ButtonUninstall,
-                HID_Wiimote_Control_Center.Properties.Installer.ButtonInstall,
+                HIDWiimote.ControlCenter.Properties.Installer.ButtonUninstall,
+                HIDWiimote.ControlCenter.Properties.Installer.ButtonInstall,
                 new Setup.SetupAction.DriverPackage()
                 ));
 
@@ -167,11 +167,11 @@ namespace HID_Wiimote_Control_Center.Main_Windows
             {
                 if (Required)
                 {
-                    return "- " + HID_Wiimote_Control_Center.Properties.Installer.ActionRequired;
+                    return "- " + HIDWiimote.ControlCenter.Properties.Installer.ActionRequired;
                 }
                 else
                 {
-                    return "- " + HID_Wiimote_Control_Center.Properties.Installer.ActionOptional;
+                    return "- " + HIDWiimote.ControlCenter.Properties.Installer.ActionOptional;
                 }
             }
         }
@@ -306,7 +306,7 @@ namespace HID_Wiimote_Control_Center.Main_Windows
             }
             catch (Exception e)
             {
-                MessageBox.Show(HID_Wiimote_Control_Center.Properties.Installer.InstallerAction_ExceptionDialogMessage + Title + "\n\n" + e.Message, HID_Wiimote_Control_Center.Properties.Installer.InstallerAction_ExceptionDialogTitle, MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(HIDWiimote.ControlCenter.Properties.Installer.InstallerAction_ExceptionDialogMessage + Title + "\n\n" + e.Message, HIDWiimote.ControlCenter.Properties.Installer.InstallerAction_ExceptionDialogTitle, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 

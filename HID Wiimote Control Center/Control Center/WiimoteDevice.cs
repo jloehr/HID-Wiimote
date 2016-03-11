@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace HID_Wiimote_Control_Center.Control_Center
+namespace HIDWiimote.ControlCenter.Control_Center
 {
     public class WiimoteDevice : INotifyPropertyChanged
     {

@@ -1,4 +1,4 @@
-﻿namespace HID_Wiimote_Control_Center.Setup.SetupAction
+﻿namespace HIDWiimote.ControlCenter.Setup.SetupAction
 {
     public interface ISetupAction
     {

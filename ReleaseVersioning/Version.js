@@ -105,7 +105,7 @@ function GenerateVersionStringClass(Versions, OutputPath)
 {
     var FileContent = "// Auto generated file\n";
     FileContent += "// Changes will be overwritten\n";
-    FileContent += "namespace HID_Wiimote_Control_Center\n";
+    FileContent += "namespace HIDWiimote\n";
     FileContent += "{\n";
     FileContent += "    internal static class VersionStrings\n";
     FileContent += "    {\n";

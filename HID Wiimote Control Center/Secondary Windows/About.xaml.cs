@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Windows;
 
-namespace HID_Wiimote_Control_Center.Secondary_Windows
+namespace HIDWiimote.ControlCenter.Secondary_Windows
 {
     /// <summary>
     /// Interaction logic for About.xaml
