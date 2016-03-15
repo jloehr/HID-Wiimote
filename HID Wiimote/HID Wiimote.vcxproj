@@ -114,16 +114,16 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|x64'">
-    <Import Project="Version.props" />
+    <Import Project="..\ReleaseVersioning\Version.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|Win32'">
-    <Import Project="Version.props" />
+    <Import Project="..\ReleaseVersioning\Version.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|x64'">
-    <Import Project="Version.props" />
+    <Import Project="..\ReleaseVersioning\Version.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|Win32'">
-    <Import Project="Version.props" />
+    <Import Project="..\ReleaseVersioning\Version.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
@@ -179,30 +179,6 @@
     <Inf>
       <TimeStamp Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|Win32'">$(DriverPackageVersion)</TimeStamp>
     </Inf>
-    <PreBuildEvent>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|x64'">cscript.exe "$(SolutionDir)ReleaseVersioning\Version.wsf" //Job:GenerateVersionStringsHeader "$(SolutionDir)Additional Package Content\Readme.txt" "$(ProjectDir)VersionStrings.h"</Command>
-    </PreBuildEvent>
-    <PreBuildEvent>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Debug|x64'">cscript.exe "$(SolutionDir)ReleaseVersioning\Version.wsf" //Job:GenerateVersionStringsHeader "$(SolutionDir)Additional Package Content\Readme.txt" "$(ProjectDir)VersionStrings.h"</Command>
-    </PreBuildEvent>
-    <PreBuildEvent>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|x64'">cscript.exe "$(SolutionDir)ReleaseVersioning\Version.wsf" //Job:GenerateVersionStringsHeader "$(SolutionDir)Additional Package Content\Readme.txt" "$(ProjectDir)VersionStrings.h"</Command>
-    </PreBuildEvent>
-    <PreBuildEvent>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Debug|x64'">cscript.exe "$(SolutionDir)ReleaseVersioning\Version.wsf" //Job:GenerateVersionStringsHeader "$(SolutionDir)Additional Package Content\Readme.txt" "$(ProjectDir)VersionStrings.h"</Command>
-    </PreBuildEvent>
-    <PreBuildEvent>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|Win32'">cscript.exe "$(SolutionDir)ReleaseVersioning\Version.wsf" //Job:GenerateVersionStringsHeader "$(SolutionDir)Additional Package Content\Readme.txt" "$(ProjectDir)VersionStrings.h"</Command>
-    </PreBuildEvent>
-    <PreBuildEvent>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Debug|Win32'">cscript.exe "$(SolutionDir)ReleaseVersioning\Version.wsf" //Job:GenerateVersionStringsHeader "$(SolutionDir)Additional Package Content\Readme.txt" "$(ProjectDir)VersionStrings.h"</Command>
-    </PreBuildEvent>
-    <PreBuildEvent>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|Win32'">cscript.exe "$(SolutionDir)ReleaseVersioning\Version.wsf" //Job:GenerateVersionStringsHeader "$(SolutionDir)Additional Package Content\Readme.txt" "$(ProjectDir)VersionStrings.h"</Command>
-    </PreBuildEvent>
-    <PreBuildEvent>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Debug|Win32'">cscript.exe "$(SolutionDir)ReleaseVersioning\Version.wsf" //Job:GenerateVersionStringsHeader "$(SolutionDir)Additional Package Content\Readme.txt" "$(ProjectDir)VersionStrings.h"</Command>
-    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <Inf Include="HIDWiimote.inf" />
@@ -230,7 +206,6 @@
     <ClInclude Include="HIDWiimote.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Trace.h" />
-    <ClInclude Include="VersionStrings.h" />
     <ClInclude Include="Wiimote.h" />
     <ClInclude Include="WiimoteToHIDParser.h" />
   </ItemGroup>

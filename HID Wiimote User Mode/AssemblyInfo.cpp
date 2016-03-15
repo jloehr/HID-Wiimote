@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "VersionStrings.h"
+#include "..\ReleaseVersioning\VersionStrings.h"
 
 using namespace System;
 using namespace System::Reflection;

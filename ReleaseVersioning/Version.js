@@ -88,13 +88,14 @@ function UpdateFile(FilePath, NewContent)
     }
 }
 
-function GenerateDriverPackageVersionPropsSheet(DriverPackageVersion, OutputPath)
+function GenerateDriverPackageVersionPropsSheet(Versions, OutputPath)
 {
     var FileContent = "";
     FileContent += '<?xml version="1.0" encoding="utf-8"?>' + "\n";
     FileContent += '<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">' + "\n";
     FileContent += '  <PropertyGroup Label="UserMacros">' + "\n";
-    FileContent += '    <DriverPackageVersion>' + DriverPackageVersion.String + '</DriverPackageVersion>' + "\n";
+    FileContent += '    <ControlCenterVersion>' + Versions.ControlCenter.String + '</ControlCenterVersion>' + "\n";
+    FileContent += '    <DriverPackageVersion>' + Versions.DriverPackage.String + '</DriverPackageVersion>' + "\n";
     FileContent += '  </PropertyGroup>' + "\n";
     FileContent += '</Project>' + "\n";
 

@@ -206,7 +206,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>cscript.exe "$(SolutionDir)ReleaseVersioning\Version.wsf" //Job:GenerateControlCenterVersionStrings "$(SolutionDir)Additional Package Content\Readme.txt" "$(SolutionDir)HID Wiimote Control Center\Properties\VersionStrings.cs"</PreBuildEvent>
+    <PreBuildEvent>copy /y "$(SolutionDir)ReleaseVersioning\VersionStrings.cs" "$(SolutionDir)HID Wiimote Control Center\Properties\VersionStrings.cs"</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

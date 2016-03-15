@@ -1,34 +1,15 @@
 <package>
-    <job id="GenerateDriverPackageVersion">
+    <job id="GenerateVersionStringFiles" >
         <script language="JScript" src="Version.js" />
         <script language="JScript">
             // Arg 0: Readme file path
-            // Arg 1: Version.props file path
-            WScript.Echo("Generating Version.props: " + WScript.arguments(1));
-            var Versions = GetVersionsFromReadme(WScript.arguments(0));
-            GenerateDriverPackageVersionPropsSheet(Versions.DriverPackage, WScript.arguments(1));
-        </script>
-    </job>
+            WScript.Echo("Generating Version String Files...");
 
-    <job id="GenerateControlCenterVersionStrings">
-        <script language="JScript" src="Version.js" />
-        <script language="JScript">
-            // Arg 0: Readme file path
-            // Arg 1: VersionStrings.cs path
-            WScript.Echo("Generating VersionStrings.cs: " + WScript.arguments(1));
             var Versions = GetVersionsFromReadme(WScript.arguments(0));
-            GenerateVersionStringClass(Versions, WScript.arguments(1));
-        </script>
-    </job>
 
-    <job id="GenerateVersionStringsHeader">
-        <script language="JScript" src="Version.js" />
-        <script language="JScript">
-            // Arg 0: Readme file path
-            // Arg 1: VersionStrings.h path
-            WScript.Echo("Generating VersionStrings.h: " + WScript.arguments(1));
-            var Versions = GetVersionsFromReadme(WScript.arguments(0));
-            GenerateVersionStringHeaderFile(Versions, WScript.arguments(1));
+            GenerateDriverPackageVersionPropsSheet(Versions, "Version.props");
+            GenerateVersionStringClass(Versions, "VersionStrings.cs");
+            GenerateVersionStringHeaderFile(Versions, "VersionStrings.h");
         </script>
     </job>
 </package>

@@ -3,5 +3,21 @@
   <ItemGroup>
     <None Include="Version.js" />
     <None Include="Version.wsf" />
+    <None Include="Version.props">
+      <Filter>Output</Filter>
+    </None>
+    <None Include="VersionStrings.cs">
+      <Filter>Output</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Output">
+      <UniqueIdentifier>{fd41ccd1-1a75-4bdf-81b9-1e1bd69feb41}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="VersionStrings.h">
+      <Filter>Output</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
