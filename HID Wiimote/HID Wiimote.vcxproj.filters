@@ -1,14 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
@@ -16,6 +8,24 @@
     <Filter Include="Driver Files">
       <UniqueIdentifier>{8E41214B-6785-4CFE-B992-037D68949A14}</UniqueIdentifier>
       <Extensions>inf;inv;inx;mof;mc;</Extensions>
+    </Filter>
+    <Filter Include="Device">
+      <UniqueIdentifier>{5159a567-d541-480d-953f-e3c93dffcaa2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Bluetooth">
+      <UniqueIdentifier>{c20eef7d-9f93-4c18-9f99-bfb2145ed4a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Wiimote">
+      <UniqueIdentifier>{ec536e52-2b68-45dd-a902-0321278a5e69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HID">
+      <UniqueIdentifier>{90c8726a-976d-46bc-ac3c-1b98dbd789d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Driver">
+      <UniqueIdentifier>{5a23eaec-7eab-4ec8-a970-9d4d31de22de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utilities">
+      <UniqueIdentifier>{a11a5e1a-29a3-478a-a65f-6a59c0e0acf7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -25,60 +35,60 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Device.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Driver.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="HID.c">
-      <Filter>Source Files</Filter>
+      <Filter>Device</Filter>
     </ClCompile>
     <ClCompile Include="Bluetooth.c">
-      <Filter>Source Files</Filter>
+      <Filter>Bluetooth</Filter>
     </ClCompile>
     <ClCompile Include="Wiimote.c">
-      <Filter>Source Files</Filter>
+      <Filter>Wiimote</Filter>
     </ClCompile>
-    <ClCompile Include="Trace.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="WiimoteToHIDParser.c">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="HID.c">
+      <Filter>HID</Filter>
     </ClCompile>
     <ClCompile Include="HIDDescriptors.c">
-      <Filter>Source Files</Filter>
+      <Filter>HID</Filter>
+    </ClCompile>
+    <ClCompile Include="WiimoteToHIDParser.c">
+      <Filter>HID</Filter>
+    </ClCompile>
+    <ClCompile Include="Driver.c">
+      <Filter>Driver</Filter>
+    </ClCompile>
+    <ClCompile Include="Trace.c">
+      <Filter>Utilities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="HIDWiimote.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Driver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Device.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="HID.h">
-      <Filter>Header Files</Filter>
+      <Filter>Device</Filter>
     </ClInclude>
     <ClInclude Include="Bluetooth.h">
-      <Filter>Header Files</Filter>
+      <Filter>Bluetooth</Filter>
     </ClInclude>
     <ClInclude Include="Wiimote.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Trace.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="WiimoteToHIDParser.h">
-      <Filter>Header Files</Filter>
+      <Filter>Wiimote</Filter>
     </ClInclude>
     <ClInclude Include="HIDDescriptors.h">
-      <Filter>Header Files</Filter>
+      <Filter>HID</Filter>
+    </ClInclude>
+    <ClInclude Include="HID.h">
+      <Filter>HID</Filter>
+    </ClInclude>
+    <ClInclude Include="WiimoteToHIDParser.h">
+      <Filter>HID</Filter>
+    </ClInclude>
+    <ClInclude Include="Driver.h">
+      <Filter>Driver</Filter>
+    </ClInclude>
+    <ClInclude Include="HIDWiimote.h">
+      <Filter>Driver</Filter>
+    </ClInclude>
+    <ClInclude Include="Trace.h">
+      <Filter>Utilities</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
+      <Filter>Utilities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
