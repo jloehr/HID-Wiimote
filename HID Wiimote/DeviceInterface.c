@@ -87,10 +87,10 @@ NTSTATUS CreateDeviceInterface(_In_ PDEVICE_CONTEXT ParentDeviceContext)
 
 	// Create the raw PDO
 	Status = WdfDeviceCreate(&DeviceInit, &Attributes, &InterfaceDevice);
-	WdfDeviceInitFree(DeviceInit);
 	if (!NT_SUCCESS(Status))
 	{
 		TraceStatus("Error creating raw PDO for Settings Interface", Status);
+		WdfDeviceInitFree(DeviceInit);
 		return Status;
 	}
 
