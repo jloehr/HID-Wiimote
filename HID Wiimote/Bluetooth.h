@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) 2013 Julian Löhr
+Copyright (C) 2016 Julian Löhr
 All rights reserved.
 
 Filename:
@@ -10,8 +10,7 @@ Abstract:
 	Header file for Bluetooth.c
 */
 
-#ifndef _BLUETOOTH_H_
-#define _BLUETOOTH_H_
+#pragma once
 
 #include "HIDWiimote.h"
 
@@ -59,4 +58,3 @@ EVT_WDF_REQUEST_COMPLETION_ROUTINE TransferToDeviceCompletion;
 
 NTSTATUS StartContiniousReader(_In_ PDEVICE_CONTEXT DeviceContext);
 EVT_WDF_REQUEST_COMPLETION_ROUTINE ReadFromDeviceCompletion;
-#endif

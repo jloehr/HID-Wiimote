@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) 2013 Julian Löhr
+Copyright (C) 2016 Julian Löhr
 All rights reserved.
 
 Filename:
@@ -11,8 +11,7 @@ Abstract:
 	Contains common includes and declarations.
 
 */
-#ifndef _HIDDESCRIPTORS_H_
-#define _HIDDESCRIPTORS_H_
+#pragma once
 
 #include "HID.h"
 
@@ -22,5 +21,3 @@ extern CONST HID_REPORT_DESCRIPTOR HIDReportDescriptor[];
 extern CONST HID_DESCRIPTOR HIDDescriptor;
 extern CONST BYTE HIDReportDescriptorSize;
 extern CONST BYTE HIDReportSize;
-
-#endif

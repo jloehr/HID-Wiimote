@@ -12,7 +12,6 @@ Abstract:
 */
 #include "Trace.h"
 
-
 VOID
 Trace(
     _In_ PCCHAR  DebugMessage,
@@ -49,7 +48,12 @@ TraceStatus(
 	_In_ NTSTATUS Status
 	)
 {
+#ifndef DBG
+	UNREFERENCED_PARAMETER(DebugMessage);
+	UNREFERENCED_PARAMETER(Status);
+#else
 	Trace("%s: " NTSTATUS_FORMAT_IDENTIFIER, DebugMessage, Status);
+#endif
 }
 
 VOID 

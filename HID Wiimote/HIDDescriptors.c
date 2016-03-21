@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) 2013 Julian Löhr
+Copyright (C) 2016 Julian Löhr
 All rights reserved.
 
 Filename:
@@ -9,7 +9,6 @@ Filename:
 Abstract:
 	Contains the definition of several HID Descriptors
 */
-
 #include "HIDDescriptors.h"
 
 /*

@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) 2013 Julian Löhr
+Copyright (C) 2016 Julian Löhr
 All rights reserved.
 
 Filename:
@@ -11,8 +11,8 @@ Abstract:
 	Like establishing the connection, reading and writing,
 	closing the connection to the device and Bluetooth error handling.
 */
-
 #include "Bluetooth.h"
+
 #include "Device.h"
 
 NTSTATUS 
@@ -471,7 +471,7 @@ ControlChannelCompletion(
 
 	Status = Params->IoStatus.Status;
 	
-	Trace("Control Channel Result: 0x%x", Status);
+	TraceStatus("Control Channel Result", Status);
 
 	if(!NT_SUCCESS(Status))
 	{
@@ -514,7 +514,7 @@ InterruptChannelCompletion(
 
 	Status = Params->IoStatus.Status;
 	
-	Trace("Interrupt Channel Result: 0x%x", Status);
+	TraceStatus("Interrupt Channel Result", Status);
 
 	if(!NT_SUCCESS(Status))
 	{
@@ -689,7 +689,7 @@ ReadFromDevice(
 	Status = SendBRB(DeviceContext, Request, (PBRB)BRB, ReadFromDeviceCompletion);
 	if(!NT_SUCCESS(Status))
 	{
-		Trace("SendBRB Failed 0x%x", Status);
+		TraceStatus("SendBRB Failed", Status);
 		return Status;
 	}
 
@@ -718,7 +718,7 @@ ReadFromDeviceCompletion(
 
 	Status = Params->IoStatus.Status;
 
-	//Trace("ReadFromDeviceCompletion Result: %#02X", Status);
+	//TraceStatus("ReadFromDeviceCompletion Result", Status);
 
 	if(!NT_SUCCESS(Status))
 	{
@@ -781,7 +781,7 @@ StartContiniousReader(
 	Status = CreateRequestAndBuffer(DeviceContext->Device, DeviceContext->IoTarget, ReadBufferSize, &Request, &Memory, &ReadBuffer);
 	if(!NT_SUCCESS(Status))
 	{
-		Trace("CreateRequestAndBuffer Failed: 0x%x", Status);
+		TraceStatus("CreateRequestAndBuffer Failed", Status);
 		return Status;
 	}
 

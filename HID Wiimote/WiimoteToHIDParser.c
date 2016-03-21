@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) 2014 Julian Löhr
+Copyright (C) 2016 Julian Löhr
 All rights reserved.
 
 Filename:
@@ -10,8 +10,8 @@ Abstract:
 	Parses the current Wiimote State to a HID Read Report
 
 */
-
 #include "WiimoteToHIDParser.h"
+
 #include "Wiimote.h"
 
 VOID

@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) 2013 Julian Löhr
+Copyright (C) 2016 Julian Löhr
 All rights reserved.
 
 Filename:
@@ -9,9 +9,7 @@ Filename:
 Abstract:
 	Header file for HID.c
 */
-
-#ifndef _HID_H_
-#define _HID_H_
+#pragma once
 
 #include "HIDWiimote.h"
 
@@ -41,5 +39,3 @@ NTSTATUS ReleaseHID(_In_ PDEVICE_CONTEXT DeviceContext);
 NTSTATUS WiimoteStateUpdated(_In_ PDEVICE_CONTEXT DeviceContext);
 
 #define IOCTL_WIIMOTE_ADDRESSES CTL_CODE(FILE_DEVICE_KEYBOARD, 0x800, METHOD_BUFFERED, FILE_ANY_ACCESS)
-
-#endif

@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) 2013 Julian Löhr
+Copyright (C) 2016 Julian Löhr
 All rights reserved.
 
 Filename:
@@ -10,8 +10,8 @@ Abstract:
 	Contains IOQueues and HID specific functions.
 	Handles all HID Requests and translates the Wiimote State into HID reports.
 */
-
 #include "HID.h"
+
 #include "Device.h"
 #include "Bluetooth.h"
 #include "HIDDescriptors.h"
@@ -62,7 +62,7 @@ CreateQueues(
 
 	if(!NT_SUCCESS(Status))
 	{
-		Trace("Creating DefaultIOQueue Failed: 0x%x", Status);
+		TraceStatus("Creating DefaultIOQueue Failed", Status);
 		return Status;
 	}
 
@@ -74,7 +74,7 @@ CreateQueues(
 	
 	if(!NT_SUCCESS(Status))
 	{
-		Trace("Creating ReadBufferQueue Failed: 0x%x", Status);
+		TraceStatus("Creating ReadBufferQueue Failed", Status);
 		return Status;
 	}
 
@@ -354,7 +354,7 @@ ProcessAddresses(
 	Status = WdfRequestRetrieveInputBuffer(Request, sizeof(HID_MINIPORT_ADDRESSES), (PVOID *)&Addresses, NULL);
 	if(!NT_SUCCESS(Status))
 	{
-		Trace("Couldn't retrieve Input Buffer: 0x%x", Status);
+		TraceStatus("Couldn't retrieve Input Buffer", Status);
 		WdfRequestComplete(Request, STATUS_SUCCESS);
 		return;
 	}

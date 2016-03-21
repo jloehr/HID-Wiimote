@@ -11,7 +11,6 @@ Abstract:
 	Handles all incomming IOCTLs.
 
 */
-
 #include "DeviceInterface.h"
 
 #include "SettingsInterface.h"

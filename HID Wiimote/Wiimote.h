@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) 2013 Julian Löhr
+Copyright (C) 2016 Julian Löhr
 All rights reserved.
 
 Filename:
@@ -9,9 +9,7 @@ Filename:
 Abstract:
 	Header file for Wiimote.c
 */
-
-#ifndef _WIIMOTE_H_
-#define _WIIMOTE_H_
+#pragma once
 
 #include "HIDWiimote.h"
 
@@ -285,5 +283,3 @@ NTSTATUS ResetToNullState(_In_ PDEVICE_CONTEXT DeviceContext);
 NTSTATUS ProcessReport(_In_ PDEVICE_CONTEXT DeviceContext, _In_reads_bytes_(ReadBufferSize) PVOID ReadBuffer, _In_ SIZE_T ReadBufferSize);
 
 EVT_WDF_TIMER BatteryLevelLEDUpdateTimerExpired;
-
-#endif

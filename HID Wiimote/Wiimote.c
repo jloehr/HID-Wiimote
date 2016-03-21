@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) 2013 Julian Löhr
+Copyright (C) 2016 Julian Löhr
 All rights reserved.
 
 Filename:
@@ -9,8 +9,8 @@ Filename:
 Abstract:
 	Manages the Wiimote states and is the layer between HID and Bluetooth.
 */
-
 #include "Wiimote.h"
+
 #include "Device.h"
 #include "Bluetooth.h"
 
@@ -298,7 +298,7 @@ StartWiimote(
 	Status = SendSingleByteReport(DeviceContext, 0x13, 0x06);
 	if(!NT_SUCCESS(Status))
 	{
-		Trace("EnableIR Failed: 0x%x", Status);
+		TraceStatus("EnableIR Failed", Status);
 		return Status;
 	}
 #else
@@ -306,7 +306,7 @@ StartWiimote(
 	Status = SetReportMode(DeviceContext, 0x31);
 	if(!NT_SUCCESS(Status))
 	{
-		Trace("SetReportMode Failed: 0x%x", Status);
+		TraceStatus("SetReportMode Failed", Status);
 		return Status;
 	}
 #endif
@@ -315,7 +315,7 @@ StartWiimote(
 	Status = StartContiniousReader(DeviceContext);
 	if(!NT_SUCCESS(Status))
 	{
-		Trace("StartContiniousReader Failed: 0x%x", Status);
+		TraceStatus("StartContiniousReader Failed", Status);
 		return Status;
 	}
 
@@ -1196,7 +1196,7 @@ BatteryLevelLEDUpdateTimerExpired(
 	else
 	{
 		Status = RequestStatusInformation(DeviceContext);
-		Trace("Request Status Information Result: 0x%x", Status);
+		TraceStatus("Request Status Information Result", Status);
 		if (!NT_SUCCESS(Status))
 		{
 			return;

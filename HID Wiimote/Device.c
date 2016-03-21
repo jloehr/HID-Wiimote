@@ -9,7 +9,6 @@ Filename:
 Abstract:
 	Contains all system callbacks regarding a devices pnp and power states.
 */
-
 #include "Device.h"
 
 NTSTATUS
@@ -116,8 +115,7 @@ PrepareHardware(
 		return Status;
 	}
 	
-	Trace("PrepareHardware Result: 0x%x", Status);
-
+	TraceStatus("PrepareHardware Result", Status);
 	return Status;
 }
 
@@ -144,8 +142,7 @@ DeviceD0Entry(
 		return Status;
 	}
 
-	Trace("Device D0 Entry Result: 0x%x", Status);
-
+	TraceStatus("Device D0 Entry Result", Status);
 	return Status;
 }
 
@@ -166,13 +163,19 @@ DeviceD0Exit(
 
 	//Suspend Wiimote
 	Status = StopWiimote(DeviceContext);
+	if (!NT_SUCCESS(Status))
+	{
+		TraceStatus("Error Stopping Wiimote", Status);
+	}
 
 	//Close BluetoothConnection
 	Status = CloseChannels(DeviceContext);
+	if (!NT_SUCCESS(Status))
+	{
+		TraceStatus("Error Closing Bluetooth Connections", Status);
+	}
 
-	
-	Trace("Exit D0 Result: 0x%x", Status);
-
+	TraceStatus("Exit D0 Result", Status);
 	return Status;
 }
 
@@ -198,8 +201,12 @@ ReleaseHardware(
 	}
 
 	Status = ReleaseHID(DeviceContext);
+	if (!NT_SUCCESS(Status))
+	{
+		TraceStatus("Error Releaseing HID", Status);
+	}
 	
-	Trace("Releasee Hardware Result: 0x%x", Status);
+	TraceStatus("Releasee Hardware Result", Status);
 
 	return Status;
 }
@@ -225,7 +232,7 @@ SignalDeviceIsGone(
 	if((DeviceContext->HIDMiniportAddresses.FDO != NULL) && (DeviceContext->HIDMiniportAddresses.HidNotifyPresence != NULL))
 	{
 		Status = (DeviceContext->HIDMiniportAddresses.HidNotifyPresence)((DeviceContext->HIDMiniportAddresses.FDO), FALSE);
-		Trace("Signaling Device is Gone: 0x%x", Status);
+		TraceStatus("Signaling Device is Gone", Status);
 	}
 
 	return Status;
