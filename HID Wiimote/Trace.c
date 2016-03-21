@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) 2013 Julian Löhr
+Copyright (C) 2016 Julian Löhr
 All rights reserved.
 
 Filename:
@@ -10,7 +10,6 @@ Abstract:
 	Contains the code for Tracing.
 
 */
-
 #include "Trace.h"
 
 
@@ -44,6 +43,14 @@ Trace(
 #endif
 }
 
+VOID
+TraceStatus(
+	_In_ PCCHAR  DebugMessage,
+	_In_ NTSTATUS Status
+	)
+{
+	Trace("%s: " NTSTATUS_FORMAT_IDENTIFIER, DebugMessage, Status);
+}
 
 VOID 
 PrintBytes(
