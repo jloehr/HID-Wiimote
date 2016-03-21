@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) 2013 Julian Löhr
+Copyright (C) 2016 Julian Löhr
 All rights reserved.
 
 Filename:
@@ -9,7 +9,6 @@ Filename:
 Abstract:
 	Contains all system callbacks regarding a devices pnp and power states.
 */
-
 
 #include "Device.h"
 
@@ -65,9 +64,16 @@ DeviceAdd(
 		Trace("Device Added Error On CreateQueues Result: 0x%x", Status);
 		return Status;
 	}
-	
-	Trace("Device Added Result: %#02X", Status);
 
+	// Create Settings Device Interface
+	Status = CreateDeviceInterface(DevContext);
+	if (!NT_SUCCESS(Status))
+	{
+		TraceStatus("Error Creating Device Interface", Status);
+		return Status;
+	}
+
+	TraceStatus("Device Added Result", Status);
 	return Status;
 }
 
@@ -184,6 +190,12 @@ ReleaseHardware(
 	Trace("Releasee Hardware");
 
 	DeviceContext = GetDeviceContext(Device);
+
+	Status = ReleaseDeviceInterface(DeviceContext);
+	if (!NT_SUCCESS(Status))
+	{
+		TraceStatus("Error Releaseing Device Interface", Status);
+	}
 
 	Status = ReleaseHID(DeviceContext);
 	

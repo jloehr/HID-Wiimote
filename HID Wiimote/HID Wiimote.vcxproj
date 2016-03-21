@@ -190,6 +190,7 @@
   <ItemGroup>
     <ClCompile Include="Bluetooth.c" />
     <ClCompile Include="Device.c" />
+    <ClCompile Include="DeviceInterface.c" />
     <ClCompile Include="Driver.c" />
     <ClCompile Include="HID.c" />
     <ClCompile Include="HIDDescriptors.c" />
@@ -200,11 +201,13 @@
   <ItemGroup>
     <ClInclude Include="Bluetooth.h" />
     <ClInclude Include="Device.h" />
+    <ClInclude Include="DeviceInterface.h" />
     <ClInclude Include="Driver.h" />
     <ClInclude Include="HID.h" />
     <ClInclude Include="HIDDescriptors.h" />
     <ClInclude Include="HIDWiimote.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="SettingsInterface.h" />
     <ClInclude Include="Trace.h" />
     <ClInclude Include="Wiimote.h" />
     <ClInclude Include="WiimoteToHIDParser.h" />
