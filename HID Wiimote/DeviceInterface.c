@@ -16,10 +16,9 @@ Abstract:
 #include "SettingsInterface.h"
 #include "Device.h"
 
-// {745a17a0-74d3-11d0-b6fe-00a0c90f57da}
-DEFINE_GUID(GUID_DEVCLASS_HID,
-	0x745a17a0, 0x74d3, 0x11d0, 0xb6, 0xfe, 0x00, 0xa0, 0xc9, 0x0f, 0x57, 0xda);
-
+// {7D180E63-2CAC-4112-B3D4-C42275CA497E}
+DEFINE_GUID(GUID_DEVCLASS_HIDWIIMOTE,
+	0x7d180e63, 0x2cac, 0x4112, 0xb3, 0xd4, 0xc4, 0x22, 0x75, 0xca, 0x49, 0x7e);
 
 WDF_DECLARE_CONTEXT_TYPE_WITH_NAME(DEVICE_INTERFACE_CONTEXT, GetDeviceInterfaceContext);
 
@@ -48,8 +47,8 @@ NTSTATUS CreateDeviceInterface(_In_ PDEVICE_CONTEXT ParentDeviceContext)
 		return STATUS_INSUFFICIENT_RESOURCES;
 	}
 
-	// Assing Device Class, what icon and category it will be shown in Device Manager
-	Status = WdfPdoInitAssignRawDevice(DeviceInit, &GUID_DEVCLASS_HID);
+	// Assing custom Device Class
+	Status = WdfPdoInitAssignRawDevice(DeviceInit, &GUID_DEVCLASS_HIDWIIMOTE);
 	if (!NT_SUCCESS(Status))
 	{
 		WdfDeviceInitFree(DeviceInit);
