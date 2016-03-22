@@ -132,6 +132,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="Stdafx.h" />
     <ClInclude Include="WiimoteDevice.h" />
+    <ClInclude Include="WiimoteDeviceInterfaceEnumerator.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
@@ -143,6 +144,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="WiimoteDevice.cpp" />
+    <ClCompile Include="WiimoteDeviceInterfaceEnumerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="HID Wiimote User Mode.rc" />
