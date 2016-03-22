@@ -16,6 +16,9 @@ namespace HIDWiimote
 {
 	namespace UserModeLib
 	{
+		class WiimoteDeviceInterfaceEnumerator;
+		typedef WiimoteDeviceInterfaceEnumerator * PWiimoteDeviceInterfaceEnumerator;
+
 		class WiimoteDeviceInterfaceEnumerator
 		{
 		public:

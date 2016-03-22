@@ -131,7 +131,8 @@
     <ClInclude Include="Log.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Stdafx.h" />
-    <ClInclude Include="WiimoteDevice.h" />
+    <ClInclude Include="WiimoteDeviceInterface.h" />
+    <ClInclude Include="WiimoteDeviceInterfaceDiscoverer.h" />
     <ClInclude Include="WiimoteDeviceInterfaceEnumerator.h" />
   </ItemGroup>
   <ItemGroup>
@@ -143,7 +144,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="WiimoteDevice.cpp" />
+    <ClCompile Include="WiimoteDeviceInterface.cpp" />
+    <ClCompile Include="WiimoteDeviceInterfaceDiscoverer.cpp" />
     <ClCompile Include="WiimoteDeviceInterfaceEnumerator.cpp" />
   </ItemGroup>
   <ItemGroup>

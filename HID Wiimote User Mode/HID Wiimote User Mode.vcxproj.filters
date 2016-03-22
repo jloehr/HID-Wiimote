@@ -20,7 +20,10 @@
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="WiimoteDevice.h">
+    <ClInclude Include="WiimoteDeviceInterfaceDiscoverer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WiimoteDeviceInterface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="WiimoteDeviceInterfaceEnumerator.h">
@@ -37,7 +40,10 @@
     <ClCompile Include="Stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="WiimoteDevice.cpp">
+    <ClCompile Include="WiimoteDeviceInterfaceDiscoverer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WiimoteDeviceInterface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="WiimoteDeviceInterfaceEnumerator.cpp">
