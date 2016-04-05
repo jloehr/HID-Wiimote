@@ -210,6 +210,7 @@
     <ClInclude Include="SettingsInterface.h" />
     <ClInclude Include="Trace.h" />
     <ClInclude Include="Wiimote.h" />
+    <ClInclude Include="WiimotePublic.h" />
     <ClInclude Include="WiimoteToHIDParser.h" />
   </ItemGroup>
   <ItemGroup>

@@ -99,6 +99,9 @@
     <ClInclude Include="SettingsInterface.h">
       <Filter>Device</Filter>
     </ClInclude>
+    <ClInclude Include="WiimotePublic.h">
+      <Filter>Wiimote</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="HID Wiimote.rc">

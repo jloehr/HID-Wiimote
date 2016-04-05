@@ -13,15 +13,11 @@ Abstract:
 
 #include "HIDWiimote.h"
 
+#include "WiimotePublic.h"
+
 #pragma warning(disable:4201) //nameless struct/union
 
 #define WIIMOTE_STATUSINFORMATION_INTERVAL (60000) // 60 Second
-
-#define WIIMOTE_LEDS_FOUR (0xF0)
-#define WIIMOTE_LEDS_THREE (0xE0)
-#define WIIMOTE_LEDS_TWO (0xC0)
-#define WIIMOTE_LEDS_ONE (0x80)
-#define WIIMTOE_LEDS_ALL (WIIMOTE_LEDS_FOUR | WIIMOTE_LEDS_THREE | WIIMOTE_LEDS_TWO | WIIMOTE_LEDS_ONE)
 
 #define WIIMOTE_IR_POINTS 4
 #define WIIMOTE_IR_POINTS_BUFFER_SIZE 5
@@ -235,7 +231,6 @@ typedef struct _WIIMOTE_STATE
 		BYTE AccelerometerRaw[3];
 	};
 
-
 	BYTE BatteryFlag;
 
 } WIIMTOE_STATE, *PWIIMOTE_STATE;
@@ -257,9 +252,13 @@ typedef struct _WIIMOTE_IR_STATE
 
 typedef struct _WIIMOTE_DEVICE_CONTEXT
 {
-	enum WIIMOTE_EXTENSION_TYPE { None, Nunchuck, BalanceBoard, ClassicController, WiiUProController, Guitar } Extension;
-	WIIMTOE_STATE State;
+	WIIMOTE_DRIVER_MODE Mode;
+	WIIMOTE_SETTINGS Settings;
+
 	BYTE CurrentReportMode;
+	WIIMOTE_EXTENSION Extension;
+	WIIMTOE_STATE State;
+	WIIMOTE_IR_STATE IRState;
 
 	union
 	{
@@ -268,8 +267,6 @@ typedef struct _WIIMOTE_DEVICE_CONTEXT
 		WIIMOTE_CLASSIC_CONTROLLER_STATE ClassicControllerState;
 		WIIMOTE_GUITAR_STATE GuitarState;
 	};
-
-	WIIMOTE_IR_STATE IRState;
 
 	WDFTIMER BatteryLevelLEDUpdateTimer;
 

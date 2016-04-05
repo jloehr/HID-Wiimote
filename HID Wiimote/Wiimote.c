@@ -284,6 +284,7 @@ StartWiimote(
 {
 	NTSTATUS Status = STATUS_SUCCESS;
 
+	DeviceContext->WiimoteContext.Mode = Gamepad;
 	DeviceContext->WiimoteContext.Extension = None;
 
 	//Set LEDs
