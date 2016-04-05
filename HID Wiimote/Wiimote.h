@@ -26,38 +26,24 @@ Abstract:
 
 typedef struct _WIIMOTE_NUNCHUCK_STATE
 {
-	union
+	struct
 	{
-		struct
-		{
-			BOOLEAN C;
-			BOOLEAN Z;
-		} Buttons;
+		BOOLEAN C;
+		BOOLEAN Z;
+	} Buttons;
 
-		BOOLEAN BottonsRaw[2];
-	};
-
-	union
+	struct
 	{
-		struct
-		{
-			BYTE X;
-			BYTE Y;
-		} AnalogStick;
+		BYTE X;
+		BYTE Y;
+	} AnalogStick;
 
-		BYTE AnalogStickRaw[2];
-	};
-
-	union {
-		struct
-		{
-			BYTE X;
-			BYTE Y;
-			BYTE Z;
-		} Accelerometer;
-
-		BYTE AccelerometerRaw[3];
-	};
+	struct
+	{
+		BYTE X;
+		BYTE Y;
+		BYTE Z;
+	} Accelerometer;
 
 } WIIMOTE_NUNCHUCK_STATE, * PWIIMOTE_NUNCHUCK_STATE;
 
@@ -94,144 +80,102 @@ typedef struct _WIIMOTE_BALANCE_BOARD_STATE
 
 typedef struct _WIIMOTE_CLASSIC_CONTROLLER_STATE
 {
-	union
+	struct
 	{
+		BOOLEAN L;
+		BOOLEAN R;
+		BOOLEAN ZL;
+		BOOLEAN ZR;
+		BOOLEAN LH;
+		BOOLEAN RH;
+		BOOLEAN A;
+		BOOLEAN B;
+		BOOLEAN Y;
+		BOOLEAN X;
+		BOOLEAN Plus;
+		BOOLEAN Minus;
+		BOOLEAN Home;
+
 		struct
 		{
-			BOOLEAN L;
-			BOOLEAN R;
-			BOOLEAN ZL;
-			BOOLEAN ZR;
-			BOOLEAN LH;
-			BOOLEAN RH;
-			BOOLEAN A;
-			BOOLEAN B;
-			BOOLEAN Y;
-			BOOLEAN X;
-			BOOLEAN Plus;
-			BOOLEAN Minus;
-			BOOLEAN Home;
+			BOOLEAN Up;
+			BOOLEAN Down;
+			BOOLEAN Left;
+			BOOLEAN Right;
+		} DPad;
 
-			union {
-				struct
-				{
-					BOOLEAN Up;
-					BOOLEAN Down;
-					BOOLEAN Left;
-					BOOLEAN Right;
-				} DPad;
-				BOOLEAN DPadRaw[4];
-			};
-
-		} Buttons;
-
-		BOOLEAN ButtonsRaw[15];
-	};
+	} Buttons;
 
 	BYTE LeftTrigger;
 	BYTE RightTrigger;
 
-	union
+	struct
 	{
-		struct
-		{
-			BYTE X;
-			BYTE Y;
-		} LeftAnalogStick;
+		BYTE X;
+		BYTE Y;
+	} LeftAnalogStick;
 
-		BYTE LeftAnalogStickRaw[2];
-	};
-
-	union
+	struct
 	{
-		struct
-		{
-			BYTE X;
-			BYTE Y;
-		} RightAnalogStick;
-
-		BYTE RightAnalogStickRaw[2];
-	};
+		BYTE X;
+		BYTE Y;
+	} RightAnalogStick;
 
 } WIIMOTE_CLASSIC_CONTROLLER_STATE, *PWIIMOTE_CLASSIC_CONTROLLER_STATE;
 
 typedef struct _WIIMOTE_GUITAR_STATE
 {
-	union
+	struct
 	{
-		struct
-		{
-			BOOLEAN Green;
-			BOOLEAN Red;
-			BOOLEAN Yellow;
-			BOOLEAN Blue;
-			BOOLEAN Orange;
-			BOOLEAN Plus;
-			BOOLEAN Minus;
-			BOOLEAN Up;
-			BOOLEAN Down;
-		} Buttons;
-
-		BOOLEAN ButtonsRaw[9];
-	};
+		BOOLEAN Green;
+		BOOLEAN Red;
+		BOOLEAN Yellow;
+		BOOLEAN Blue;
+		BOOLEAN Orange;
+		BOOLEAN Plus;
+		BOOLEAN Minus;
+		BOOLEAN Up;
+		BOOLEAN Down;
+	} Buttons;
 
 	BYTE WhammyBar;
 	BYTE TouchBar;
 
-	union
+	struct
 	{
-		struct
-		{
-			BYTE X;
-			BYTE Y;
-		} AnalogStick;
-
-		BYTE AnalogStickRaw[2];
-	};
+		BYTE X;
+		BYTE Y;
+	} AnalogStick;
 
 } WIIMOTE_GUITAR_STATE, *PWIIMOTE_GUITAR_STATE;
 
 typedef struct _WIIMOTE_STATE
 {
-	union 
+	struct 
 	{
-		struct 
-		{
-			BOOLEAN A;
-			BOOLEAN B;
-			BOOLEAN One;
-			BOOLEAN Two;
-			BOOLEAN Plus;
-			BOOLEAN Minus;
-			BOOLEAN Home;
+		BOOLEAN A;
+		BOOLEAN B;
+		BOOLEAN One;
+		BOOLEAN Two;
+		BOOLEAN Plus;
+		BOOLEAN Minus;
+		BOOLEAN Home;
 
-			union {
-				struct
-				{
-					BOOLEAN Up;
-					BOOLEAN Down;
-					BOOLEAN Left;
-					BOOLEAN Right;
-				} DPad;
-				BOOLEAN DPadRaw[4]; 
-			};
-		} CoreButtons;
-
-		BOOLEAN CoreButtonsRaw[11];
-	};
-
-	union {
 		struct
 		{
-			BYTE X;
-			BYTE Y;
-			BYTE Z;
-		} Accelerometer;
+			BOOLEAN Up;
+			BOOLEAN Down;
+			BOOLEAN Left;
+			BOOLEAN Right;
+		} DPad;
+	} CoreButtons;
 
-		BYTE AccelerometerRaw[3];
-	};
-
-	BYTE BatteryFlag;
+	struct
+	{
+		BYTE X;
+		BYTE Y;
+		BYTE Z;
+	} Accelerometer;
 
 } WIIMTOE_STATE, *PWIIMOTE_STATE;
 
