@@ -26,10 +26,16 @@
     <ClInclude Include="WiimoteDeviceInterface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Status.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="WiimoteDeviceInterfaceEnumerator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Log.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="State.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -46,10 +52,16 @@
     <ClCompile Include="WiimoteDeviceInterface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Status.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="WiimoteDeviceInterfaceEnumerator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Log.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="State.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
