@@ -107,15 +107,12 @@ InternalDeviceControlCallback(
 	case IOCTL_HID_GET_DEVICE_DESCRIPTOR:
 		ProcessGetDeviceDescriptor(Request);
 		break;
-
 	case IOCTL_HID_GET_DEVICE_ATTRIBUTES:
 		ProcessGetDeviceAttributes(Request, GetHIDContext(Queue));
 		break;
-
 	case IOCTL_HID_GET_REPORT_DESCRIPTOR:
 		ProcessGetReportDescriptor(Request);
 		break;
-
 	case IOCTL_HID_READ_REPORT:
 		ForwardReadReportRequest(Request, GetDeviceContext(WdfIoQueueGetDevice(Queue)));
 		break;
@@ -173,8 +170,6 @@ ProcessGetDeviceAttributes(
 		WdfRequestComplete(Request, Status);
 		return;
 	}
-
-
 
 	// Fill out
 	DeviceAttributes->Size = (ULONG)DeviceAttributesSize;
