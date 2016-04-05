@@ -46,7 +46,7 @@ PrepareWiimote(
 NTSTATUS
 SetLEDs(
 	_In_ PDEVICE_CONTEXT DeviceContext,
-	_In_ BYTE LedFlag
+	_In_ BYTE LEDFlag
 	)
 {
 	CONST size_t BufferSize = 3;
@@ -54,6 +54,9 @@ SetLEDs(
 	WDFREQUEST Request;
 	WDFMEMORY Memory;
 	BYTE * Data;
+
+	// Save new LED State
+	DeviceContext->WiimoteContext.LEDState = LEDFlag;
 
 	// Get Resources
 	Status = CreateRequestAndBuffer(DeviceContext->Device, DeviceContext->IoTarget, BufferSize, &Request, &Memory, (PVOID *)&Data); 
@@ -65,7 +68,7 @@ SetLEDs(
 	// Fill Buffer	
 	Data[0] = 0xA2;	//HID Output Report
 	Data[1] = 0x11;	//Player LED
-	Data[2] = LedFlag;
+	Data[2] = LEDFlag;
 
 	Status = TransferToDevice(DeviceContext, Request, Memory, FALSE);
 	if(!NT_SUCCESS(Status))
@@ -461,15 +464,18 @@ UpdateBatteryLEDs(
 	NTSTATUS Status = STATUS_SUCCESS;
 	PWIIMOTE_DEVICE_CONTEXT WiimoteContext = &(DeviceContext->WiimoteContext);
 
-	Trace("UpdateBatteryLEDs - BatteryFlag: 0x%x", WiimoteContext->State.BatteryFlag);
+	if (WiimoteContext->Extension == BalanceBoard)
+	{
+		return Status;
+	}
 
-	Status = SetLEDs(DeviceContext, WiimoteContext->State.BatteryFlag);
+	Status = SetLEDs(DeviceContext, ((0xF0 << (3 - (DeviceContext->WiimoteContext.BatteryLevel / 64))) & 0xF0));
 	if (!NT_SUCCESS(Status))
 	{
 		return Status;
 	}
 
-	if (WiimoteContext->State.BatteryFlag == WIIMOTE_LEDS_ONE)
+	if (DeviceContext->WiimoteContext.LEDState == WIIMOTE_LEDS_ONE)
 	{
 		WdfTimerStop(WiimoteContext->BatteryLevelLEDUpdateTimer, FALSE);
 	}
@@ -515,7 +521,7 @@ ProcessWiimoteBatteryLevel(
 
 	Trace("BatteryLevel: 0x%x", BatteryLevel);
 
-	DeviceContext->WiimoteContext.State.BatteryFlag = ((0xF0 << (3 - (BatteryLevel / 64))) & 0xF0);
+	DeviceContext->WiimoteContext.BatteryLevel = BatteryLevel;
 
 	Status = UpdateBatteryLEDs(DeviceContext); 
 	if (!NT_SUCCESS(Status))
@@ -683,7 +689,8 @@ _In_reads_bytes_(11) BYTE RawInputData[]
 {
 	BYTE DecodedInputData[3];
 	XorData(RawInputData + 8, DecodedInputData, 3);
-	BYTE BatteryFlag = 0;
+
+	BYTE BatteryLevel = 0;
 
 	//Buttons
 	ExtractClassicControllerButtons(DeviceContext, DecodedInputData);
@@ -706,16 +713,23 @@ _In_reads_bytes_(11) BYTE RawInputData[]
 	switch ((DecodedInputData[2] ^ 0xFF) & 0xF0)
 	{
 	case 0xC0:
-		BatteryFlag |= WIIMOTE_LEDS_FOUR;
+		BatteryLevel = 0xFF;
+		break;
 	case 0xB0:
-		BatteryFlag |= WIIMOTE_LEDS_THREE;
+		BatteryLevel = 0xBF;
+		break;
 	case 0xA0:
-		BatteryFlag |= WIIMOTE_LEDS_TWO;
+		BatteryLevel = 0x7F;
+		break;
+	case 0x90:
+		BatteryLevel = 0x3F;
+		break;
+	case 0x80:
 	default:
-		BatteryFlag |= WIIMOTE_LEDS_ONE;
+		BatteryLevel = 0x10;
 	}
 
-	DeviceContext->WiimoteContext.State.BatteryFlag = BatteryFlag;
+	DeviceContext->WiimoteContext.BatteryLevel = BatteryLevel;
 }
 
 VOID
@@ -858,10 +872,8 @@ ProcessStatusInformation(
 #endif
 
 	//Process the Battery Level to set the LEDS; Wii U Pro Controller reports its Battery Level in its Input Report
-
 	switch (DeviceContext->WiimoteContext.Extension)
 	{
-	case BalanceBoard:
 	case WiiUProController:
 		break;
 	default:

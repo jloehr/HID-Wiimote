@@ -200,6 +200,9 @@ typedef struct _WIIMOTE_DEVICE_CONTEXT
 	WIIMOTE_SETTINGS Settings;
 
 	BYTE CurrentReportMode;
+	BYTE BatteryLevel;
+	BYTE LEDState;
+
 	WIIMOTE_EXTENSION Extension;
 	WIIMTOE_STATE State;
 	WIIMOTE_IR_STATE IRState;
