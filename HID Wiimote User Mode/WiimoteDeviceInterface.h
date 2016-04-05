@@ -30,9 +30,14 @@ namespace HIDWiimote
 			void Initialize();
 
 		private:
+			HANDLE DeviceInterfaceHandle;
+
+			bool OpenDevice();
+			bool DeviceIsGood();
+			void CloseDevice();
+
 
 		};
-
 	}
 }
 
