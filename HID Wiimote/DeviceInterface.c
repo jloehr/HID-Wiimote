@@ -25,6 +25,10 @@ WDF_DECLARE_CONTEXT_TYPE_WITH_NAME(DEVICE_INTERFACE_CONTEXT, GetDeviceInterfaceC
 NTSTATUS CreateSettingsInterfaceQueues(_In_ PDEVICE_INTERFACE_CONTEXT DeviceInterfaceContext);
 EVT_WDF_IO_QUEUE_IO_DEVICE_CONTROL SettingsInterfaceDeviceControlCallback;
 
+VOID ProcessGetState(_In_ WDFREQUEST Request, _In_ PDEVICE_INTERFACE_CONTEXT DeviceInterfaceContext);
+VOID FillStateIoControlData(_In_ PWIIMOTE_STATE_IOCTL_DATA StateData, _In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext);
+VOID FillStatusIoControlData(_In_ PWIIMOTE_STATUS_IOCTL_DATA StatusData, _In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext);
+
 NTSTATUS CreateDeviceInterface(_In_ PDEVICE_CONTEXT ParentDeviceContext)
 {
 	NTSTATUS Status = STATUS_SUCCESS;
@@ -180,19 +184,74 @@ SettingsInterfaceDeviceControlCallback(
 	IN ULONG         IoControlCode
 	)
 {
-	UNREFERENCED_PARAMETER(Queue);
 	UNREFERENCED_PARAMETER(OutputBufferLength);
 	UNREFERENCED_PARAMETER(InputBufferLength);
-	UNREFERENCED_PARAMETER(IoControlCode);
+
+	PDEVICE_INTERFACE_CONTEXT DeviceInterfaceContext = GetDeviceInterfaceContext(WdfIoQueueGetDevice(Queue));
 
 	switch (IoControlCode)
 	{
-	case IOCTL_WIIMOTE_TEST:
-		Trace("Test IOCTL: %#010x", IoControlCode);
+	case IOCTL_WIIMOTE_GET_STATE:
+		ProcessGetState(Request, DeviceInterfaceContext);
+		break;
+	case IOCTL_WIIMOTE_READ_STATUS:
+		Trace("IOCTL_WIIMOTE_READ_STATUS: %#010x", IoControlCode);
 		WdfRequestComplete(Request, STATUS_SUCCESS);
 		break;
 	default:
 		Trace("Something Else: %#010x", IoControlCode);
 		WdfRequestComplete(Request, STATUS_NOT_IMPLEMENTED);
 	}
+}
+
+VOID 
+ProcessGetState(
+	_In_ WDFREQUEST Request,
+	_In_ PDEVICE_INTERFACE_CONTEXT DeviceInterfaceContext
+	)
+{
+	NTSTATUS Status = STATUS_SUCCESS;
+	PWIIMOTE_STATE_IOCTL_DATA StateData = NULL;
+	PWIIMOTE_DEVICE_CONTEXT WiimoteContext = &(DeviceInterfaceContext->Parent->WiimoteContext);
+
+	Trace("Processing IOCTL_WIIMOTE_GET_STATE");
+
+	Status = WdfRequestRetrieveOutputBuffer(Request, sizeof(WIIMOTE_STATE_IOCTL_DATA), &StateData, NULL);
+	if (!NT_SUCCESS(Status))
+	{
+		TraceStatus("Error retrieving State Buffer", Status);
+		WdfRequestComplete(Request, Status);
+		return;
+	}
+
+	FillStateIoControlData(StateData, WiimoteContext);
+
+	WdfRequestCompleteWithInformation(Request, STATUS_SUCCESS, sizeof(WIIMOTE_STATE_IOCTL_DATA));
+}
+
+VOID
+FillStateIoControlData(
+	_In_ PWIIMOTE_STATE_IOCTL_DATA StateData,
+	_In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext
+	)
+{
+	RtlZeroMemory(StateData, sizeof(WIIMOTE_STATE_IOCTL_DATA));
+
+	StateData->Mode = WiimoteContext->Mode;
+	StateData->Settings = WiimoteContext->Settings;
+
+	FillStatusIoControlData(&(StateData->Status), WiimoteContext);
+}
+
+VOID
+FillStatusIoControlData(
+	_In_ PWIIMOTE_STATUS_IOCTL_DATA StatusData,
+	_In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext
+	)
+{
+	RtlZeroMemory(StatusData, sizeof(WIIMOTE_STATUS_IOCTL_DATA));
+
+	StatusData->Extension = WiimoteContext->Extension;
+	StatusData->BatteryLevel = WiimoteContext->BatteryLevel;
+	StatusData->LEDs = WiimoteContext->LEDState;
 }
