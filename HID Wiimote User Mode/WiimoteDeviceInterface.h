@@ -36,6 +36,9 @@ namespace HIDWiimote
 			bool DeviceIsGood();
 			void CloseDevice();
 
+			State^ GetState();
+
+			bool SendBufferdIOCTL(DWORD IoControlCode, LPVOID Buffer, DWORD BufferSize, LPOVERLAPPED Overlapped);
 
 		};
 	}
