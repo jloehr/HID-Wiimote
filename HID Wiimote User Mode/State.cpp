@@ -27,11 +27,11 @@ namespace HIDWiimote
 
 			SetMode(StateData.Mode);
 			
-			XAxisEnabled = StateData.Settings.XAxisEnabled;
-			YAxisEnabled = StateData.Settings.YAxisEnabled;
-			MouseButtonsSwitched = StateData.Settings.MouseButtonsSwitched;
-			TriggerAndShoulderSwitched = StateData.Settings.TriggerAndShoulderSwitched;
-			TriggerSplit = StateData.Settings.TriggerSplit;
+			XAxisEnabled = (StateData.Settings.XAxisEnabled > 0);
+			YAxisEnabled = (StateData.Settings.YAxisEnabled > 0);
+			MouseButtonsSwitched = (StateData.Settings.MouseButtonsSwitched > 0);
+			TriggerAndShoulderSwitched = (StateData.Settings.TriggerAndShoulderSwitched > 0);
+			TriggerSplit = (StateData.Settings.TriggerSplit > 0);
 		}
 
 		void State::SetMode(WIIMOTE_DRIVER_MODE Mode)
