@@ -15,6 +15,13 @@ Abstract:
 
 #include "Device.h"
 
+EVT_WDF_REQUEST_COMPLETION_ROUTINE ControlChannelCompletion;
+EVT_WDF_REQUEST_COMPLETION_ROUTINE InterruptChannelCompletion;
+VOID L2CAPCallback(_In_  PVOID Context, _In_  INDICATION_CODE Indication, _In_  PINDICATION_PARAMETERS Parameters);
+
+EVT_WDF_REQUEST_COMPLETION_ROUTINE TransferToDeviceCompletion;
+EVT_WDF_REQUEST_COMPLETION_ROUTINE ReadFromDeviceCompletion;
+
 NTSTATUS 
 GetVendorAndProductID(
 	_In_ WDFIOTARGET IoTarget, 
@@ -50,7 +57,7 @@ GetVendorAndProductID(
 }
 
 NTSTATUS 
-PrepareBluetooth(
+BluetoothPrepare(
 	_In_ PDEVICE_CONTEXT DeviceContext
 	)
 {
@@ -145,7 +152,7 @@ CreateBuffer(
 }
 
 NTSTATUS
-CreateRequestAndBuffer(
+BluetoothCreateRequestAndBuffer(
 	_In_ WDFDEVICE Device,
 	_In_ WDFIOTARGET IoTarget,
 	_In_ SIZE_T BufferSize,
@@ -374,7 +381,7 @@ L2CAPCallback(
 		Trace("Disconnect");
 		Trace("Parameter: %u; %u", Parameters->Parameters.Disconnect.Reason, Parameters->Parameters.Disconnect.CloseNow);
 	
-		ResetToNullState(DeviceContext);
+		WiimoteResetToNullState(DeviceContext);
 		SignalDeviceIsGone(DeviceContext);
 
 		//WDF_DEVICE_STATE_INIT (&NewDeviceState);
@@ -535,11 +542,11 @@ InterruptChannelCompletion(
 	CleanUpCompletedRequest(Request, IoTarget, Context);
 	
 	// Start Wiimote functionality
-	StartWiimote(DeviceContext);
+	WiimoteStart(DeviceContext);
 }
 
 NTSTATUS
-OpenChannels(
+BluetoothOpenChannels(
 	_In_ PDEVICE_CONTEXT DeviceContext
 	)
 {
@@ -579,7 +586,7 @@ CloseChannel(
 }
 
 NTSTATUS
-CloseChannels(
+BluetoothCloseChannels(
 	_In_ PDEVICE_CONTEXT DeviceContext
 	)
 {	
@@ -595,7 +602,7 @@ CloseChannels(
 }
 
 NTSTATUS 
-TransferToDevice(
+BluetoothTransferToDevice(
 	_In_ PDEVICE_CONTEXT DeviceContext, 
 	_In_ WDFREQUEST Request, 
 	_In_ WDFMEMORY Memory,
@@ -733,7 +740,7 @@ ReadFromDeviceCompletion(
 	//Trace("BufferSize: %d - RemainingBufferSize: %d", BRB->BufferSize, BRB->RemainingBufferSize);
 
 	//Call Wiimote Read Callback
-	Status = ProcessReport(DeviceContext, ReadBuffer, (ReadBufferSize - BRB->RemainingBufferSize));
+	Status = WiimoteProcessReport(DeviceContext, ReadBuffer, (ReadBufferSize - BRB->RemainingBufferSize));
 	if(!NT_SUCCESS(Status))
 	{
 		WdfObjectDelete(Request);
@@ -762,7 +769,7 @@ ReadFromDeviceCompletion(
 }
 
 NTSTATUS
-StartContiniousReader(
+BluetoothStartContiniousReader(
 	_In_ PDEVICE_CONTEXT DeviceContext
 	)
 {
@@ -778,7 +785,7 @@ StartContiniousReader(
 	Trace("StartContiniousReader");
 
 	//Create Report And Buffer
-	Status = CreateRequestAndBuffer(DeviceContext->Device, DeviceContext->IoTarget, ReadBufferSize, &Request, &Memory, &ReadBuffer);
+	Status = BluetoothCreateRequestAndBuffer(DeviceContext->Device, DeviceContext->IoTarget, ReadBufferSize, &Request, &Memory, &ReadBuffer);
 	if(!NT_SUCCESS(Status))
 	{
 		TraceStatus("CreateRequestAndBuffer Failed", Status);

@@ -14,8 +14,10 @@ Abstract:
 #include "Device.h"
 #include "Bluetooth.h"
 
+EVT_WDF_TIMER BatteryLevelLEDUpdateTimerExpired;
+
 NTSTATUS 
-PrepareWiimote(
+WiimotePrepare(
 	_In_ PDEVICE_CONTEXT DeviceContext
 	)
 {
@@ -59,7 +61,7 @@ SetLEDs(
 	DeviceContext->WiimoteContext.LEDState = LEDFlag;
 
 	// Get Resources
-	Status = CreateRequestAndBuffer(DeviceContext->Device, DeviceContext->IoTarget, BufferSize, &Request, &Memory, (PVOID *)&Data); 
+	Status = BluetoothCreateRequestAndBuffer(DeviceContext->Device, DeviceContext->IoTarget, BufferSize, &Request, &Memory, (PVOID *)&Data); 
 	if(!NT_SUCCESS(Status))
 	{
 		return Status;
@@ -70,7 +72,7 @@ SetLEDs(
 	Data[1] = 0x11;	//Player LED
 	Data[2] = LEDFlag;
 
-	Status = TransferToDevice(DeviceContext, Request, Memory, FALSE);
+	Status = BluetoothTransferToDevice(DeviceContext, Request, Memory, FALSE);
 	if(!NT_SUCCESS(Status))
 	{
 		return Status;
@@ -93,7 +95,7 @@ SetReportMode(
 	BYTE * Data;
 
 	// Get Resources
-	Status = CreateRequestAndBuffer(DeviceContext->Device, DeviceContext->IoTarget, BufferSize, &Request, &Memory, (PVOID *)&Data); 
+	Status = BluetoothCreateRequestAndBuffer(DeviceContext->Device, DeviceContext->IoTarget, BufferSize, &Request, &Memory, (PVOID *)&Data); 
 	if(!NT_SUCCESS(Status))
 	{
 		return Status;
@@ -105,7 +107,7 @@ SetReportMode(
 	Data[2] = 0x00;	//Only On Change
 	Data[3] = ReportMode; //Mode
 
-	Status = TransferToDevice(DeviceContext, Request, Memory, FALSE);
+	Status = BluetoothTransferToDevice(DeviceContext, Request, Memory, FALSE);
 	if(!NT_SUCCESS(Status))
 	{
 		return Status;
@@ -128,7 +130,7 @@ RequestStatusInformation(
 	BYTE * Data;
 
 	// Get Resources
-	Status = CreateRequestAndBuffer(DeviceContext->Device, DeviceContext->IoTarget, BufferSize, &Request, &Memory, (PVOID *)&Data); 
+	Status = BluetoothCreateRequestAndBuffer(DeviceContext->Device, DeviceContext->IoTarget, BufferSize, &Request, &Memory, (PVOID *)&Data); 
 	if(!NT_SUCCESS(Status))
 	{
 		return Status;
@@ -139,7 +141,7 @@ RequestStatusInformation(
 	Data[1] = 0x15;	//Status Information Request
 	Data[2] = 0x00;	//Rumble Off
 
-	Status = TransferToDevice(DeviceContext, Request, Memory, FALSE);
+	Status = BluetoothTransferToDevice(DeviceContext, Request, Memory, FALSE);
 	if(!NT_SUCCESS(Status))
 	{
 		return Status;
@@ -162,7 +164,7 @@ _In_ BYTE Size
 	BYTE * Data;
 
 	// Get Resources
-	Status = CreateRequestAndBuffer(DeviceContext->Device, DeviceContext->IoTarget, BufferSize, &Request, &Memory, (PVOID *)&Data);
+	Status = BluetoothCreateRequestAndBuffer(DeviceContext->Device, DeviceContext->IoTarget, BufferSize, &Request, &Memory, (PVOID *)&Data);
 	if (!NT_SUCCESS(Status))
 	{
 		return Status;
@@ -181,7 +183,7 @@ _In_ BYTE Size
 	Data[6] = 0x00; //Size
 	Data[7] = Size; //Size
 
-	Status = TransferToDevice(DeviceContext, Request, Memory, FALSE);
+	Status = BluetoothTransferToDevice(DeviceContext, Request, Memory, FALSE);
 	if (!NT_SUCCESS(Status))
 	{
 		return Status;
@@ -205,7 +207,7 @@ _In_ BYTE DataSize
 	BYTE * Report;
 
 	// Get Resources
-	Status = CreateRequestAndBuffer(DeviceContext->Device, DeviceContext->IoTarget, BufferSize, &Request, &Memory, (PVOID *)&Report);
+	Status = BluetoothCreateRequestAndBuffer(DeviceContext->Device, DeviceContext->IoTarget, BufferSize, &Request, &Memory, (PVOID *)&Report);
 	if (!NT_SUCCESS(Status))
 	{
 		return Status;
@@ -226,7 +228,7 @@ _In_ BYTE DataSize
 	RtlSecureZeroMemory(Report + 7, 16);
 	RtlCopyBytes(Report + 7, Data, DataSize);
 
-	Status = TransferToDevice(DeviceContext, Request, Memory, FALSE);
+	Status = BluetoothTransferToDevice(DeviceContext, Request, Memory, FALSE);
 	if (!NT_SUCCESS(Status))
 	{
 		return Status;
@@ -259,7 +261,7 @@ _In_ BYTE Byte
 	BYTE * Data;
 
 	// Get Resources
-	Status = CreateRequestAndBuffer(DeviceContext->Device, DeviceContext->IoTarget, BufferSize, &Request, &Memory, (PVOID *)&Data);
+	Status = BluetoothCreateRequestAndBuffer(DeviceContext->Device, DeviceContext->IoTarget, BufferSize, &Request, &Memory, (PVOID *)&Data);
 	if (!NT_SUCCESS(Status))
 	{
 		return Status;
@@ -271,7 +273,7 @@ _In_ BYTE Byte
 	Data[2] = Byte; // Get acknowledgement 
 
 
-	Status = TransferToDevice(DeviceContext, Request, Memory, FALSE);
+	Status = BluetoothTransferToDevice(DeviceContext, Request, Memory, FALSE);
 	if (!NT_SUCCESS(Status))
 	{
 		return Status;
@@ -281,7 +283,7 @@ _In_ BYTE Byte
 }
 
 NTSTATUS 
-StartWiimote(
+WiimoteStart(
 	_In_ PDEVICE_CONTEXT DeviceContext
 	)
 {
@@ -316,7 +318,7 @@ StartWiimote(
 #endif
 
 	//Start Continious Reader
-	Status = StartContiniousReader(DeviceContext);
+	Status = BluetoothStartContiniousReader(DeviceContext);
 	if(!NT_SUCCESS(Status))
 	{
 		TraceStatus("StartContiniousReader Failed", Status);
@@ -396,7 +398,7 @@ SuspendWiimote(
 	BYTE * Data;
 
 	// Get Resources
-	Status = CreateRequestAndBuffer(DeviceContext->Device, DeviceContext->IoTarget, BufferSize, &Request, &Memory, (PVOID *)&Data); 
+	Status = BluetoothCreateRequestAndBuffer(DeviceContext->Device, DeviceContext->IoTarget, BufferSize, &Request, &Memory, (PVOID *)&Data); 
 	if(!NT_SUCCESS(Status))
 	{
 		return Status;
@@ -405,7 +407,7 @@ SuspendWiimote(
 	// Fill Buffer	
 	Data[0] = 0x13;	//HID Control with Suspend: 0x10 = HID_Control - 0x03 = SUSPEND
 
-	Status = TransferToDevice(DeviceContext, Request, Memory, TRUE);
+	Status = BluetoothTransferToDevice(DeviceContext, Request, Memory, TRUE);
 	if(!NT_SUCCESS(Status))
 	{
 		return Status;
@@ -417,7 +419,7 @@ SuspendWiimote(
 }
 
 NTSTATUS
-StopWiimote(
+WiimoteStop(
 	_In_ PDEVICE_CONTEXT DeviceContext
 	)
 {
@@ -438,7 +440,7 @@ StopWiimote(
 }
 
 NTSTATUS 
-ResetToNullState(
+WiimoteResetToNullState(
 	_In_ PDEVICE_CONTEXT DeviceContext
 	)
 {
@@ -447,7 +449,7 @@ ResetToNullState(
 	DeviceContext->WiimoteContext.Extension = None;
 	RtlSecureZeroMemory(&DeviceContext->WiimoteContext.State, sizeof(WIIMTOE_STATE));
 
-	WiimoteStateUpdated(DeviceContext);
+	HIDWiimoteStateUpdated(DeviceContext);
 	if (!NT_SUCCESS(Status))
 	{
 		return Status;
@@ -891,6 +893,8 @@ ProcessStatusInformation(
 		return Status;
 	}
 	
+	// Notify Device Interface about Status Update
+	DeviceInterfaceWiimoteStateUpdated(DeviceContext);
 
 	return Status;
 }
@@ -942,7 +946,7 @@ ProcessInputReport(
 
 	if (UpdateHIDState)
 	{
-		WiimoteStateUpdated(DeviceContext);
+		HIDWiimoteStateUpdated(DeviceContext);
 		if (!NT_SUCCESS(Status))
 		{
 			return Status;
@@ -1135,7 +1139,7 @@ _In_ size_t ReadBufferSize
 }
 
 NTSTATUS
-ProcessReport(
+WiimoteProcessReport(
 	_In_ PDEVICE_CONTEXT DeviceContext,
 	_In_reads_bytes_(ReadBufferSize) PVOID ReadBuffer,
 	_In_ SIZE_T ReadBufferSize

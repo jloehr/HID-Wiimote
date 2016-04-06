@@ -57,7 +57,7 @@ DeviceAdd(
 	DevContext->Device = Device;
 
 	// Create IO Queue
-	Status = CreateQueues(Device, DevContext);
+	Status = HIDCreateQueues(Device, DevContext);
 	if(!NT_SUCCESS(Status))
 	{
 		Trace("Device Added Error On CreateQueues Result: 0x%x", Status);
@@ -65,7 +65,7 @@ DeviceAdd(
 	}
 
 	// Create Settings Device Interface
-	Status = CreateDeviceInterface(DevContext);
+	Status = DeviceInterfaceCreate(DevContext);
 	if (!NT_SUCCESS(Status))
 	{
 		TraceStatus("Error Creating Device Interface", Status);
@@ -95,21 +95,21 @@ PrepareHardware(
 	DeviceContext->IoTarget = WdfDeviceGetIoTarget(Device);
 
 	//Initialize Bluetooth
-	Status = PrepareBluetooth(DeviceContext);
+	Status = BluetoothPrepare(DeviceContext);
 	if(!NT_SUCCESS(Status))
 	{
 		return Status;
 	}
 	
 	//Initialize HID
-	Status = PrepareHID(DeviceContext);
+	Status = HIDPrepare(DeviceContext);
 	if(!NT_SUCCESS(Status))
 	{
 		return Status;
 	}
 	
 	//Initialize Wiimote
-	Status = PrepareWiimote(DeviceContext);
+	Status = WiimotePrepare(DeviceContext);
 	if(!NT_SUCCESS(Status))
 	{
 		return Status;
@@ -136,7 +136,7 @@ DeviceD0Entry(
 
 	RtlSecureZeroMemory(&(DeviceContext->HIDMiniportAddresses), sizeof(HID_MINIPORT_ADDRESSES));
 
-	Status = OpenChannels(DeviceContext);
+	Status = BluetoothOpenChannels(DeviceContext);
 	if(!NT_SUCCESS(Status))
 	{
 		return Status;
@@ -162,14 +162,14 @@ DeviceD0Exit(
 	DeviceContext = GetDeviceContext(Device);
 
 	//Suspend Wiimote
-	Status = StopWiimote(DeviceContext);
+	Status = WiimoteStop(DeviceContext);
 	if (!NT_SUCCESS(Status))
 	{
 		TraceStatus("Error Stopping Wiimote", Status);
 	}
 
 	//Close BluetoothConnection
-	Status = CloseChannels(DeviceContext);
+	Status = BluetoothCloseChannels(DeviceContext);
 	if (!NT_SUCCESS(Status))
 	{
 		TraceStatus("Error Closing Bluetooth Connections", Status);
@@ -194,13 +194,13 @@ ReleaseHardware(
 
 	DeviceContext = GetDeviceContext(Device);
 
-	Status = ReleaseDeviceInterface(DeviceContext);
+	Status = DeviceInterfaceRelease(DeviceContext->SettingsInterfaceContext);
 	if (!NT_SUCCESS(Status))
 	{
 		TraceStatus("Error Releaseing Device Interface", Status);
 	}
 
-	Status = ReleaseHID(DeviceContext);
+	Status = HIDRelease(DeviceContext);
 	if (!NT_SUCCESS(Status))
 	{
 		TraceStatus("Error Releaseing HID", Status);

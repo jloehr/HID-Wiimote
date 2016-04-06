@@ -17,15 +17,16 @@ Abstract:
 #include "HIDDescriptors.h"
 #include "WiimoteToHIDParser.h"
 
+EVT_WDF_IO_QUEUE_IO_INTERNAL_DEVICE_CONTROL InternalDeviceControlCallback;
+EVT_READ_IO_CONTROL_BUFFER_FILL_BUFFER FillReadBufferCallback;
+
 VOID ProcessGetDeviceDescriptor(_In_ WDFREQUEST Request);
 VOID ProcessGetReportDescriptor(_In_ WDFREQUEST Request);
 VOID ProcessGetDeviceAttributes(_In_ WDFREQUEST Request,_In_ PHID_DEVICE_CONTEXT HIDContext);
 VOID ForwardReadReportRequest(_In_ WDFREQUEST Request, _In_ PDEVICE_CONTEXT DeviceContext);
 VOID ProcessAddresses(_In_ WDFREQUEST Request, _In_ PDEVICE_CONTEXT DeviceContext);
 
-EVT_READ_IO_CONTROL_BUFFER_FILL_BUFFER FillReadBufferCallback;
-
-NTSTATUS PrepareHID(
+NTSTATUS HIDPrepare(
 	_In_ PDEVICE_CONTEXT DeviceContext
 	)
 {
@@ -44,7 +45,7 @@ NTSTATUS PrepareHID(
 }
 
 NTSTATUS 
-CreateQueues(
+HIDCreateQueues(
 	_In_ WDFDEVICE Device, 
 	_In_ PDEVICE_CONTEXT DeviceContext
 	)
@@ -215,7 +216,7 @@ ForwardReadReportRequest(
 
 
 NTSTATUS 
-ReleaseHID(
+HIDRelease(
 	_In_ PDEVICE_CONTEXT DeviceContext
 	)
 {
@@ -251,7 +252,7 @@ FillReadBufferCallback(
 }
 
 VOID 
-WiimoteStateUpdated(
+HIDWiimoteStateUpdated(
 	_In_ PDEVICE_CONTEXT DeviceContext
 	)
 {

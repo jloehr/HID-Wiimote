@@ -219,11 +219,9 @@ typedef struct _WIIMOTE_DEVICE_CONTEXT
 
 } WIIMOTE_DEVICE_CONTEXT, * PWIIMOTE_DEVICE_CONTEXT;
 
-NTSTATUS PrepareWiimote(_In_ PDEVICE_CONTEXT DeviceContext);
-NTSTATUS StartWiimote(_In_ PDEVICE_CONTEXT DeviceContext);
-NTSTATUS StopWiimote(_In_ PDEVICE_CONTEXT DeviceContext);
-NTSTATUS ResetToNullState(_In_ PDEVICE_CONTEXT DeviceContext);
+NTSTATUS WiimotePrepare(_In_ PDEVICE_CONTEXT DeviceContext);
+NTSTATUS WiimoteStart(_In_ PDEVICE_CONTEXT DeviceContext);
+NTSTATUS WiimoteStop(_In_ PDEVICE_CONTEXT DeviceContext);
+NTSTATUS WiimoteResetToNullState(_In_ PDEVICE_CONTEXT DeviceContext);
 
-NTSTATUS ProcessReport(_In_ PDEVICE_CONTEXT DeviceContext, _In_reads_bytes_(ReadBufferSize) PVOID ReadBuffer, _In_ SIZE_T ReadBufferSize);
-
-EVT_WDF_TIMER BatteryLevelLEDUpdateTimerExpired;
+NTSTATUS WiimoteProcessReport(_In_ PDEVICE_CONTEXT DeviceContext, _In_reads_bytes_(ReadBufferSize) PVOID ReadBuffer, _In_ SIZE_T ReadBufferSize);
