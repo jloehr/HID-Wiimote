@@ -14,7 +14,7 @@ Abstract:
 
 #include "Status.h"
 
-typedef struct _WIIMOTE_STATE_IOCTL_DATA WIIMOTE_STATE_IOCTL_DATA;
+#include "../HID Wiimote/SettingsInterface.h"
 
 namespace HIDWiimote
 {

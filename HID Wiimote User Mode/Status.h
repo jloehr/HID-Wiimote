@@ -12,7 +12,7 @@ Abstract:
 */
 #pragma once
 
-typedef struct _WIIMOTE_STATUS_IOCTL_DATA WIIMOTE_STATUS_IOCTL_DATA;
+#include "../HID Wiimote/SettingsInterface.h"
 
 namespace HIDWiimote
 {
