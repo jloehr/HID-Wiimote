@@ -22,13 +22,20 @@ namespace HIDWiimote
 	namespace UserModeLib
 	{
 		WiimoteDeviceInterface::WiimoteDeviceInterface(System::String ^ DeviceInterfacePath)
-			: DeviceInterfaceHandle(INVALID_HANDLE_VALUE)
+			: DeviceInterfaceHandle(INVALID_HANDLE_VALUE),
+			ReaderThread(nullptr),
+			StopThread(false)
 		{
 			this->DeviceInterfacePath = DeviceInterfacePath;
 		}
 
 		State^ WiimoteDeviceInterface::Initialize()
 		{
+			if (DeviceIsGood())
+			{
+				Log::Write("Device Interface already initialized: " + DeviceInterfacePath);
+			}
+
 			// Open Device Interface Path
 			if (!OpenDevice())
 			{
@@ -45,9 +52,18 @@ namespace HIDWiimote
 				return nullptr;
 			}
 
-			// Start Continous Status Reader
+			StartContinousReader();
 
 			return InitinalState;
+		}
+
+		void WiimoteDeviceInterface::Disconnect()
+		{
+			StopContinousReader();
+
+			CloseDevice();
+
+			DeviceRemoved(this, nullptr);
 		}
 
 		bool WiimoteDeviceInterface::OpenDevice()
@@ -75,6 +91,80 @@ namespace HIDWiimote
 		{
 			CloseHandle(DeviceInterfaceHandle);
 			DeviceInterfaceHandle = INVALID_HANDLE_VALUE;
+		}
+
+		void WiimoteDeviceInterface::StartContinousReader()
+		{
+			if (ReaderThread != nullptr)
+			{
+				return;
+			}
+
+			System::Threading::ThreadStart^ ThreadEntry = gcnew System::Threading::ThreadStart(this, &WiimoteDeviceInterface::ContinousReaderThreadBody);
+			ReaderThread = gcnew System::Threading::Thread(ThreadEntry);
+			ReaderThread->Name = "Continous Reader Thread";
+			StopThread = false;
+
+			ReadIo = new OVERLAPPED();
+			ReadIo->hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
+
+			ReaderThread->Start();
+		}
+
+		void WiimoteDeviceInterface::StopContinousReader()
+		{
+			StopThread = true;
+
+			if ((ReaderThread != nullptr) && (System::Threading::Thread::CurrentThread != ReaderThread) && (ReaderThread->IsAlive))
+			{
+				do {
+					SetEvent(ReadIo->hEvent);
+				} while (!ReaderThread->Join(100));
+			}
+		}
+
+		void WiimoteDeviceInterface::ContinousReaderThreadBody()
+		{
+			WIIMOTE_STATUS_IOCTL_DATA StatusBuffer = {};
+			DWORD ByteWritten = 0;
+
+			while (!StopThread)
+			{
+				ResetEvent(ReadIo->hEvent);
+
+				if (!SendBufferdIOCTL(IOCTL_WIIMOTE_READ_STATUS, &StatusBuffer, sizeof(StatusBuffer), ReadIo))
+				{
+					Log::Write("Error sending Read Status Request");
+					Disconnect();
+					break;
+				}
+
+				if (ReadIo->Internal == STATUS_PENDING)
+				{
+					// Stop Continous Reader was called;
+					CancelIo(DeviceInterfaceHandle);
+					break;
+				}
+			}
+
+			FreeThreadResources();
+			ReaderThread = nullptr;
+		}
+
+		void WiimoteDeviceInterface::FreeThreadResources()
+		{
+			if (ReadIo != nullptr)
+			{
+				if (ReadIo->hEvent != INVALID_HANDLE_VALUE)
+				{
+					CloseHandle(ReadIo->hEvent);
+					ReadIo->hEvent = INVALID_HANDLE_VALUE;
+				}
+
+				delete ReadIo;
+				ReadIo = nullptr;
+			}
+
 		}
 
 		State^ WiimoteDeviceInterface::GetState()

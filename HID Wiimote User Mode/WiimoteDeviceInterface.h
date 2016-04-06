@@ -31,13 +31,24 @@ namespace HIDWiimote
 
 			//Starts Status Update Reader and returns InitialState
 			State^ Initialize();
+			void Disconnect();
 
 		private:
 			HANDLE DeviceInterfaceHandle;
+			LPOVERLAPPED ReadIo;
+
+			System::Threading::Thread^ ReaderThread;
+			volatile bool StopThread;
 
 			bool OpenDevice();
 			bool DeviceIsGood();
 			void CloseDevice();
+
+			void StartContinousReader();
+			void StopContinousReader();
+			void ContinousReaderThreadBody();
+
+			void FreeThreadResources();
 
 			State^ GetState();
 
