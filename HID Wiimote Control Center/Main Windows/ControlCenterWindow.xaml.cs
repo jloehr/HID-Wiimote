@@ -14,23 +14,35 @@ namespace HIDWiimote.ControlCenter.Main_Windows
     public partial class ControlCenterWindow : Window
     {
         List<WiimoteDevice> ConnectedWiimoteDevices = new List<WiimoteDevice>();
+        HIDWiimote.UserModeLib.WiimoteDeviceInterfaceDiscoverer DeviceInterfaceDiscoverer;
 
         public ControlCenterWindow()
         {
             InitializeComponent();
 
-            ConnectedWiimoteDevices.Add(new WiimoteDevice(WiimoteDevice.ExtensionType.None, WiimoteDevice.ModeType.IRMouse, 0x3F, new bool[4] { true, true, true, true }));
-            ConnectedWiimoteDevices.Add(new WiimoteDevice(WiimoteDevice.ExtensionType.None, WiimoteDevice.ModeType.DPadMouse, 0xFF, new bool[4] { true, false, true, true }));
-            ConnectedWiimoteDevices.Add(new WiimoteDevice(WiimoteDevice.ExtensionType.Nunchuck, WiimoteDevice.ModeType.GamepadAndIRMouse, 0x1A, new bool[4] { true, true, true, true }));
-            ConnectedWiimoteDevices.Add(new WiimoteDevice(WiimoteDevice.ExtensionType.WiiUProController, WiimoteDevice.ModeType.Gamepad, 0x8C, new bool[4] { true, true, false, true }));
-            ConnectedWiimoteDevices.Add(new WiimoteDevice(WiimoteDevice.ExtensionType.BalanceBoard, WiimoteDevice.ModeType.Gamepad, 0x45, new bool[4] { true, true, false, false }));
-            ConnectedWiimoteDevices.Add(new WiimoteDevice(WiimoteDevice.ExtensionType.ClassicController, WiimoteDevice.ModeType.Gamepad, 0x9A, new bool[4] { false, true, true, false }));
-            ConnectedWiimoteDevices.Add(new WiimoteDevice(WiimoteDevice.ExtensionType.GuitarHero, WiimoteDevice.ModeType.Gamepad, 0x21, new bool[4] { false, false, true, true }));
+            /*
+            ConnectedWiimoteDevices.Add(new WiimoteDevice(UserModeLib.Extension.None, UserModeLib.DriverMode.IRMouse, 0x3F, new bool[4] { true, true, true, true }));
+            ConnectedWiimoteDevices.Add(new WiimoteDevice(UserModeLib.Extension.None, UserModeLib.DriverMode.DPadMouse, 0xFF, new bool[4] { true, false, true, true }));
+            ConnectedWiimoteDevices.Add(new WiimoteDevice(UserModeLib.Extension.Nunchuck, UserModeLib.DriverMode.GamepadAndIRMouse, 0x1A, new bool[4] { true, true, true, true }));
+            ConnectedWiimoteDevices.Add(new WiimoteDevice(UserModeLib.Extension.WiiUProController, UserModeLib.DriverMode.Gamepad, 0x8C, new bool[4] { true, true, false, true }));
+            ConnectedWiimoteDevices.Add(new WiimoteDevice(UserModeLib.Extension.BalanceBoard, UserModeLib.DriverMode.Gamepad, 0x45, new bool[4] { true, true, false, false }));
+            ConnectedWiimoteDevices.Add(new WiimoteDevice(UserModeLib.Extension.ClassicController, UserModeLib.DriverMode.Gamepad, 0x9A, new bool[4] { false, true, true, false }));
+            ConnectedWiimoteDevices.Add(new WiimoteDevice(UserModeLib.Extension.Guitar, UserModeLib.DriverMode.Gamepad, 0x21, new bool[4] { false, false, true, true }));
+            */
         }
         
         private void OnInitialized(object sender, System.EventArgs e)
         {
             ConnectedDevicesListBox.ItemsSource = ConnectedWiimoteDevices;
+
+            DeviceInterfaceDiscoverer = new UserModeLib.WiimoteDeviceInterfaceDiscoverer();
+            DeviceInterfaceDiscoverer.NewWiimoteDeviceInterfaceFound += OnNewWiimoteDeviceInterfaceFound;
+            DeviceInterfaceDiscoverer.Start();
+        }
+
+        private void OnNewWiimoteDeviceInterfaceFound(object sender, UserModeLib.WiimoteDeviceInterface NewInterface)
+        {
+            ConnectedWiimoteDevices.Add(new WiimoteDevice(NewInterface));
         }
 
         private void OnInstallerClick(object sender, RoutedEventArgs e)
@@ -46,16 +58,16 @@ namespace HIDWiimote.ControlCenter.Main_Windows
             AboutDialog.ShowDialog();
         }
 
-        private static Dictionary<WiimoteDevice.ModeType, string> WiimoteDeviceModeTypeDescriptionsDictionary = new Dictionary<WiimoteDevice.ModeType, string>()
+        private static Dictionary<UserModeLib.DriverMode, string> WiimoteDeviceModeTypeDescriptionsDictionary = new Dictionary<UserModeLib.DriverMode, string>()
         {
-            { WiimoteDevice.ModeType.Gamepad, HIDWiimote.ControlCenter.Properties.ControlCenter.ModeString_Gamepad },
-            { WiimoteDevice.ModeType.PassThrough, HIDWiimote.ControlCenter.Properties.ControlCenter.ModeString_PassThrough },
-            { WiimoteDevice.ModeType.GamepadAndIRMouse, HIDWiimote.ControlCenter.Properties.ControlCenter.ModeString_GamepadAndIRMouse },
-            { WiimoteDevice.ModeType.IRMouse, HIDWiimote.ControlCenter.Properties.ControlCenter.ModeString_IRMouse },
-            { WiimoteDevice.ModeType.DPadMouse, HIDWiimote.ControlCenter.Properties.ControlCenter.ModeString_DPadMouse }
+            { UserModeLib.DriverMode.Gamepad, HIDWiimote.ControlCenter.Properties.ControlCenter.ModeString_Gamepad },
+            { UserModeLib.DriverMode.PassThrough, HIDWiimote.ControlCenter.Properties.ControlCenter.ModeString_PassThrough },
+            { UserModeLib.DriverMode.GamepadAndIRMouse, HIDWiimote.ControlCenter.Properties.ControlCenter.ModeString_GamepadAndIRMouse },
+            { UserModeLib.DriverMode.IRMouse, HIDWiimote.ControlCenter.Properties.ControlCenter.ModeString_IRMouse },
+            { UserModeLib.DriverMode.DPadMouse, HIDWiimote.ControlCenter.Properties.ControlCenter.ModeString_DPadMouse }
         };
 
-        public Dictionary<WiimoteDevice.ModeType, string> WiimoteDeviceModeTypeDescriptions
+        public Dictionary<UserModeLib.DriverMode, string> WiimoteDeviceModeTypeDescriptions
         {
             get
             {
@@ -63,6 +75,15 @@ namespace HIDWiimote.ControlCenter.Main_Windows
             }
         }
 
+        private void OnClosing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if(DeviceInterfaceDiscoverer != null)
+            {
+                DeviceInterfaceDiscoverer.Stop();
+            }
+
+            // Remove/Close all Devices
+        }
     }
 
     public class ExtensionToStringConverter : IValueConverter
@@ -76,21 +97,21 @@ namespace HIDWiimote.ControlCenter.Main_Windows
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            WiimoteDevice.ExtensionType Extension = (WiimoteDevice.ExtensionType)value;
+            UserModeLib.Extension Extension = (UserModeLib.Extension)value;
 
             switch (Extension)
             {
-                case WiimoteDevice.ExtensionType.None:
+                case UserModeLib.Extension.None:
                     return WiimoteString;
-                case WiimoteDevice.ExtensionType.Nunchuck:
+                case UserModeLib.Extension.Nunchuck:
                     return NunchuckString;
-                case WiimoteDevice.ExtensionType.BalanceBoard:
+                case UserModeLib.Extension.BalanceBoard:
                     return BalanceBoardString;
-                case WiimoteDevice.ExtensionType.ClassicController:
+                case UserModeLib.Extension.ClassicController:
                     return ClassicControllerString;
-                case WiimoteDevice.ExtensionType.WiiUProController:
+                case UserModeLib.Extension.WiiUProController:
                     return WiiUProControllerString;
-                case WiimoteDevice.ExtensionType.GuitarHero:
+                case UserModeLib.Extension.Guitar:
                     return GuitarHeroString;
                 default:
                     return "Error";
@@ -114,19 +135,19 @@ namespace HIDWiimote.ControlCenter.Main_Windows
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            WiimoteDevice.ModeType Mode = (WiimoteDevice.ModeType)value;
+            UserModeLib.DriverMode Mode = (UserModeLib.DriverMode)value;
 
             switch (Mode)
             {
-                case WiimoteDevice.ModeType.Gamepad:
+                case UserModeLib.DriverMode.Gamepad:
                     return GamepadString;
-                case WiimoteDevice.ModeType.PassThrough:
+                case UserModeLib.DriverMode.PassThrough:
                     return PassThroughString;
-                case WiimoteDevice.ModeType.GamepadAndIRMouse:
+                case UserModeLib.DriverMode.GamepadAndIRMouse:
                     return GamepadAndIRMouseString;
-                case WiimoteDevice.ModeType.IRMouse:
+                case UserModeLib.DriverMode.IRMouse:
                     return IRMouseString;
-                case WiimoteDevice.ModeType.DPadMouse:
+                case UserModeLib.DriverMode.DPadMouse:
                     return DPadMouseString;
                 default:
                     return "Error";

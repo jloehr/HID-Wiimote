@@ -1,35 +1,45 @@
 ﻿using System.ComponentModel;
+using System.Threading.Tasks;
 
 namespace HIDWiimote.ControlCenter.Control_Center
 {
     public class WiimoteDevice : INotifyPropertyChanged
     {
-        public enum ExtensionType { None, Nunchuck, BalanceBoard, ClassicController, WiiUProController, GuitarHero };
-        public enum ModeType { Gamepad, PassThrough, GamepadAndIRMouse, IRMouse, DPadMouse };
+        private UserModeLib.Extension _Extension = UserModeLib.Extension.None;
+        private UserModeLib.DriverMode _Mode = UserModeLib.DriverMode.Gamepad;
+        private byte _BatteryLevel = 0;
+        private bool[] _LEDState = { false, false, false, false };
 
-        private ExtensionType _Extension;
-        private ModeType _Mode;
-        private byte _BatteryLevel;
-        private bool[] _LEDState;
+        private bool _AccelerometersEnabled = true;
+        private bool _XAxisEnabled = false;
+        private bool _YAxisEnabled = false;
+        private bool _MouseButtonsSwitched = false;
+        private bool _TriggerAndShoulderSwitched = false;
+        private bool _TriggerSplit = false;
 
-        private bool _AccelerometersEnabled;
-        private bool _XAxisEnabled;
-        private bool _YAxisEnabled;
-        private bool _MouseButtonsSwitched;
-        private bool _TriggerAndShoulderSwitched;
-        private bool _TriggerSplit;
+        private UserModeLib.WiimoteDeviceInterface DeviceInterface;
+        private bool _Initilized = false;
 
         public event PropertyChangedEventHandler PropertyChanged;
         
-        public WiimoteDevice(ExtensionType Extension, ModeType Mode, byte BatteryLevel, bool[] LEDState)
+        public WiimoteDevice(UserModeLib.WiimoteDeviceInterface DeviceInterface)
+        {
+            this.DeviceInterface = DeviceInterface;
+
+            Task.Factory.StartNew(Initilize);
+        }
+
+        public WiimoteDevice(UserModeLib.Extension Extension, UserModeLib.DriverMode Mode, byte BatteryLevel, bool[] LEDState)
         {
             this.Extension = Extension;
             this.Mode = Mode;
             this.BatteryLevel = BatteryLevel;
             this.LEDState = LEDState;
+
+            this.Initilized = true;
         }
 
-        public ExtensionType Extension
+        public UserModeLib.Extension Extension
         {
             get { return _Extension; }
             set
@@ -39,7 +49,7 @@ namespace HIDWiimote.ControlCenter.Control_Center
             }
         }
 
-        public ModeType Mode
+        public UserModeLib.DriverMode Mode
         {
             get { return _Mode; }
             set
@@ -128,6 +138,15 @@ namespace HIDWiimote.ControlCenter.Control_Center
                 OnPropertyChanged("TriggerSplit");
             }
         }
+        public bool Initilized
+        {
+            get { return _Initilized; }
+            set
+            {
+                _Initilized = value;
+                OnPropertyChanged("Initilized");
+            }
+        }
 
         protected void OnPropertyChanged(string PropertyName)
         {
@@ -136,6 +155,40 @@ namespace HIDWiimote.ControlCenter.Control_Center
             {
                 Handler(this, new PropertyChangedEventArgs(PropertyName));
             }
+        }
+
+        protected void Initilize()
+        {
+            UserModeLib.State InitinalState = DeviceInterface.Initialize();
+
+            if(InitinalState == null)
+            {
+                // Error
+                // Call Disconnect
+                return;
+            }
+
+            ApplyState(InitinalState);
+            Initilized = true;
+        }       
+
+        protected void ApplyState(UserModeLib.State State)
+        {
+            Mode = State.Mode;
+            XAxisEnabled = State.XAxisEnabled;
+            YAxisEnabled = State.YAxisEnabled;
+            MouseButtonsSwitched = State.MouseButtonsSwitched;
+            TriggerAndShoulderSwitched = State.TriggerAndShoulderSwitched;
+            TriggerSplit = State.TriggerSplit;           
+
+            ApplyStatus(State.Status);
+        }
+
+        protected void ApplyStatus(UserModeLib.Status Status)
+        {
+            Extension = Status.Extension;
+            BatteryLevel = Status.BatteryLevel;
+            LEDState = Status.LEDState;
         }
     }
 }

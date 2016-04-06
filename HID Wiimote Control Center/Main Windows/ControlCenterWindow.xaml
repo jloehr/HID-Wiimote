@@ -7,7 +7,7 @@
         xmlns:user="clr-namespace:HIDWiimote.ControlCenter.UserControls"
         xmlns:res="clr-namespace:HIDWiimote.ControlCenter.Properties"
         mc:Ignorable="d"
-        Title="HID Wiimote Control Center" Height="600" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Initialized="OnInitialized">
+        Title="HID Wiimote Control Center" Height="600" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Initialized="OnInitialized" Closing="OnClosing">
     <Window.Resources>
         <local:ExtensionToStringConverter x:Key="ExtensionToStringConverter" 
                                           WiimoteString="{x:Static res:ControlCenter.ExtensionString_Wiimote}"
