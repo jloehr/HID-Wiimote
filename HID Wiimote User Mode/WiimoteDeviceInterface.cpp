@@ -27,8 +27,27 @@ namespace HIDWiimote
 			this->DeviceInterfacePath = DeviceInterfacePath;
 		}
 
-		void WiimoteDeviceInterface::Initialize()
+		State^ WiimoteDeviceInterface::Initialize()
 		{
+			// Open Device Interface Path
+			if (!OpenDevice())
+			{
+				Log::Write("Error Opening Device: " + DeviceInterfacePath);
+				return nullptr;
+			}
+
+			// Query Initinal State
+			State^ InitinalState = GetState();
+
+			if (InitinalState == nullptr)
+			{
+				Log::Write("Error getting initinal state " + DeviceInterfacePath);
+				return nullptr;
+			}
+
+			// Start Continous Status Reader
+
+			return InitinalState;
 		}
 
 		bool WiimoteDeviceInterface::OpenDevice()

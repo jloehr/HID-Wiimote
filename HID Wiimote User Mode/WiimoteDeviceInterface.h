@@ -12,6 +12,9 @@ Abstract:
 */
 #pragma once
 
+#include "Status.h"
+#include "State.h"
+
 namespace HIDWiimote
 {
 	namespace UserModeLib
@@ -24,10 +27,10 @@ namespace HIDWiimote
 			property System::String^ DeviceInterfacePath;
 
 			event System::EventHandler^ DeviceRemoved;
-			event System::EventHandler^ StatusUpdate;
+			event System::EventHandler<Status^>^ StatusUpdate;
 
 			//Starts Status Update Reader and returns InitialState
-			void Initialize();
+			State^ Initialize();
 
 		private:
 			HANDLE DeviceInterfaceHandle;
