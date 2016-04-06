@@ -170,7 +170,7 @@ NTSTATUS CreateSettingsInterfaceQueues(_In_ PDEVICE_INTERFACE_CONTEXT DeviceInte
 	// Read Buffer Queue
 	Status = ReadIoControlBufferCreate(
 		&DeviceInterfaceContext->ReadBuffer, 
-		DeviceInterfaceContext->Parent->Device, 
+		DeviceInterfaceContext->InterfaceDevice, 
 		DeviceInterfaceContext->Parent, 
 		DeviceInterfaceFillReadBufferCallback,
 		sizeof(WIIMOTE_STATUS_IOCTL_DATA));
