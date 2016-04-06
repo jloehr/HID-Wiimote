@@ -61,6 +61,9 @@
     <ClCompile Include="DeviceInterface.c">
       <Filter>Device</Filter>
     </ClCompile>
+    <ClCompile Include="ReadIoControlBuffer.c">
+      <Filter>Utilities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Device.h">
@@ -101,6 +104,9 @@
     </ClInclude>
     <ClInclude Include="WiimotePublic.h">
       <Filter>Wiimote</Filter>
+    </ClInclude>
+    <ClInclude Include="ReadIoControlBuffer.h">
+      <Filter>Utilities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

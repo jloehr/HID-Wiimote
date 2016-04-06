@@ -57,7 +57,7 @@ DeviceAdd(
 	DevContext->Device = Device;
 
 	// Create IO Queue
-	Status = CreateQueues(Device, &(DevContext->HIDContext));
+	Status = CreateQueues(Device, DevContext);
 	if(!NT_SUCCESS(Status))
 	{
 		Trace("Device Added Error On CreateQueues Result: 0x%x", Status);

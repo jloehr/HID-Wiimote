@@ -447,7 +447,7 @@ ResetToNullState(
 	DeviceContext->WiimoteContext.Extension = None;
 	RtlSecureZeroMemory(&DeviceContext->WiimoteContext.State, sizeof(WIIMTOE_STATE));
 
-	Status = WiimoteStateUpdated(DeviceContext);
+	WiimoteStateUpdated(DeviceContext);
 	if (!NT_SUCCESS(Status))
 	{
 		return Status;
@@ -942,7 +942,7 @@ ProcessInputReport(
 
 	if (UpdateHIDState)
 	{
-		Status = WiimoteStateUpdated(DeviceContext);
+		WiimoteStateUpdated(DeviceContext);
 		if (!NT_SUCCESS(Status))
 		{
 			return Status;

@@ -194,6 +194,7 @@
     <ClCompile Include="Driver.c" />
     <ClCompile Include="HID.c" />
     <ClCompile Include="HIDDescriptors.c" />
+    <ClCompile Include="ReadIoControlBuffer.c" />
     <ClCompile Include="Trace.c" />
     <ClCompile Include="Wiimote.c" />
     <ClCompile Include="WiimoteToHIDParser.c" />
@@ -206,6 +207,7 @@
     <ClInclude Include="HID.h" />
     <ClInclude Include="HIDDescriptors.h" />
     <ClInclude Include="HIDWiimote.h" />
+    <ClInclude Include="ReadIoControlBuffer.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SettingsInterface.h" />
     <ClInclude Include="Trace.h" />
