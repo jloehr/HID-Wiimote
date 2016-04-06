@@ -18,17 +18,7 @@ namespace HIDWiimote.ControlCenter.Main_Windows
 
         public ControlCenterWindow()
         {
-            InitializeComponent();
-
-            /*
-            ConnectedWiimoteDevices.Add(new WiimoteDevice(UserModeLib.Extension.None, UserModeLib.DriverMode.IRMouse, 0x3F, new bool[4] { true, true, true, true }));
-            ConnectedWiimoteDevices.Add(new WiimoteDevice(UserModeLib.Extension.None, UserModeLib.DriverMode.DPadMouse, 0xFF, new bool[4] { true, false, true, true }));
-            ConnectedWiimoteDevices.Add(new WiimoteDevice(UserModeLib.Extension.Nunchuck, UserModeLib.DriverMode.GamepadAndIRMouse, 0x1A, new bool[4] { true, true, true, true }));
-            ConnectedWiimoteDevices.Add(new WiimoteDevice(UserModeLib.Extension.WiiUProController, UserModeLib.DriverMode.Gamepad, 0x8C, new bool[4] { true, true, false, true }));
-            ConnectedWiimoteDevices.Add(new WiimoteDevice(UserModeLib.Extension.BalanceBoard, UserModeLib.DriverMode.Gamepad, 0x45, new bool[4] { true, true, false, false }));
-            ConnectedWiimoteDevices.Add(new WiimoteDevice(UserModeLib.Extension.ClassicController, UserModeLib.DriverMode.Gamepad, 0x9A, new bool[4] { false, true, true, false }));
-            ConnectedWiimoteDevices.Add(new WiimoteDevice(UserModeLib.Extension.Guitar, UserModeLib.DriverMode.Gamepad, 0x21, new bool[4] { false, false, true, true }));
-            */
+            InitializeComponent();            
         }
         
         private void OnInitialized(object sender, System.EventArgs e)
@@ -42,8 +32,21 @@ namespace HIDWiimote.ControlCenter.Main_Windows
 
         private void OnNewWiimoteDeviceInterfaceFound(object sender, UserModeLib.WiimoteDeviceInterface NewInterface)
         {
-            ConnectedWiimoteDevices.Add(new WiimoteDevice(NewInterface));
+            WiimoteDevice NewWiimoteDevice = new WiimoteDevice(NewInterface);
+
+            NewWiimoteDevice.Disconneted += OnWiimoteDeviceDisconneted;
+            ConnectedWiimoteDevices.Add(NewWiimoteDevice);
+
+            NewWiimoteDevice.Initilize();
         }
+
+        private void OnWiimoteDeviceDisconneted(object sender, EventArgs e)
+        {
+            WiimoteDevice DisconnectedWiimoteDevice = sender as WiimoteDevice;
+
+            ConnectedWiimoteDevices.Remove(DisconnectedWiimoteDevice);
+        }
+        
 
         private void OnInstallerClick(object sender, RoutedEventArgs e)
         {
@@ -81,8 +84,14 @@ namespace HIDWiimote.ControlCenter.Main_Windows
             {
                 DeviceInterfaceDiscoverer.Stop();
             }
+            
+            foreach(WiimoteDevice WiimoteDevice in ConnectedWiimoteDevices)
+            {
+                WiimoteDevice.Disconneted -= OnWiimoteDeviceDisconneted;
+                WiimoteDevice.Disconnect();
+            }
 
-            // Remove/Close all Devices
+            ConnectedWiimoteDevices.Clear();
         }
     }
 

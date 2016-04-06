@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Threading.Tasks;
 
 namespace HIDWiimote.ControlCenter.Control_Center
@@ -21,12 +22,14 @@ namespace HIDWiimote.ControlCenter.Control_Center
         private bool _Initilized = false;
 
         public event PropertyChangedEventHandler PropertyChanged;
+        public event EventHandler Disconneted;
         
         public WiimoteDevice(UserModeLib.WiimoteDeviceInterface DeviceInterface)
         {
             this.DeviceInterface = DeviceInterface;
 
-            Task.Factory.StartNew(Initilize);
+            DeviceInterface.StatusUpdate += OnStatusUpdate;
+            DeviceInterface.DeviceRemoved += OnDeviceRemoved;
         }
 
         public WiimoteDevice(UserModeLib.Extension Extension, UserModeLib.DriverMode Mode, byte BatteryLevel, bool[] LEDState)
@@ -157,20 +160,42 @@ namespace HIDWiimote.ControlCenter.Control_Center
             }
         }
 
-        protected void Initilize()
+        public void Disconnect()
+        {
+            DeviceInterface.Disconnect();
+        }
+
+        public void Initilize()
+        {
+            Task.Factory.StartNew(InitilizeAction);
+        }
+
+        protected void InitilizeAction()
         {
             UserModeLib.State InitinalState = DeviceInterface.Initialize();
 
             if(InitinalState == null)
             {
-                // Error
-                // Call Disconnect
+                DeviceInterface.Disconnect();
                 return;
             }
 
             ApplyState(InitinalState);
             Initilized = true;
-        }       
+        }
+
+        private void OnDeviceRemoved(object sender, System.EventArgs e)
+        {
+            DeviceInterface.StatusUpdate -= OnStatusUpdate;
+            DeviceInterface.DeviceRemoved -= OnDeviceRemoved;
+
+            Disconneted(this, null);
+        }
+
+        private void OnStatusUpdate(object sender, UserModeLib.Status StatusUpdate)
+        {
+            ApplyStatus(StatusUpdate);
+        }
 
         protected void ApplyState(UserModeLib.State State)
         {
