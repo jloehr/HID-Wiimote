@@ -20,7 +20,7 @@ Abstract:
 
 // Enumerations
 typedef enum _WIIMOTE_EXTENSION { None, Nunchuck, BalanceBoard, ClassicController, WiiUProController, Guitar } WIIMOTE_EXTENSION;
-typedef enum _WIIMOTE_DRIVER_MODE { PassThrough, Gamepad, IRMouse, DPadMouse, GamepadAndIRMouse } WIIMOTE_DRIVER_MODE;
+typedef enum _WIIMOTE_DRIVER_MODE { Gamepad, PassThrough, IRMouse, DPadMouse, GamepadAndIRMouse } WIIMOTE_DRIVER_MODE;
 
 // Settings
 typedef struct _WIIMOTE_SETTINGS

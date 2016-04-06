@@ -20,7 +20,7 @@ namespace HIDWiimote
 {
 	namespace UserModeLib
 	{
-		public enum class DriverMode { PassThrough, Gamepad, IRMouse, DPadMouse, GamepadAndIRMouse };
+		public enum class DriverMode { Gamepad, PassThrough,  IRMouse, DPadMouse, GamepadAndIRMouse };
 
 		public ref class State
 		{
