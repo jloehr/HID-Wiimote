@@ -106,6 +106,7 @@ ReadIoControlBufferCompleteRequest(
 	NTSTATUS Status = STATUS_SUCCESS;
 	PVOID OutputBuffer;
 	size_t OutputBufferSize;
+	SIZE_T BytesWritten = 0;
 
 	ReadIoControlBuffer->InstantCompletion = FALSE;
 
@@ -117,7 +118,7 @@ ReadIoControlBufferCompleteRequest(
 		return;
 	}
 
-	SIZE_T BytesWritten = ReadIoControlBuffer->Callback(ReadIoControlBuffer->DeviceContext, OutputBuffer, OutputBufferSize);
+	ReadIoControlBuffer->Callback(ReadIoControlBuffer->DeviceContext, OutputBuffer, OutputBufferSize, &BytesWritten);
 
 	WdfRequestCompleteWithInformation(Request, Status, BytesWritten);
 }

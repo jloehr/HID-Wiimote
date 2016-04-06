@@ -17,8 +17,8 @@ Abstract:
 #include "HIDDescriptors.h"
 #include "WiimoteToHIDParser.h"
 
-EVT_WDF_IO_QUEUE_IO_INTERNAL_DEVICE_CONTROL InternalDeviceControlCallback;
-EVT_READ_IO_CONTROL_BUFFER_FILL_BUFFER FillReadBufferCallback;
+EVT_WDF_IO_QUEUE_IO_INTERNAL_DEVICE_CONTROL HIDInternalDeviceControlCallback;
+EVT_READ_IO_CONTROL_BUFFER_FILL_BUFFER HIDFillReadBufferCallback;
 
 VOID ProcessGetDeviceDescriptor(_In_ WDFREQUEST Request);
 VOID ProcessGetReportDescriptor(_In_ WDFREQUEST Request);
@@ -56,7 +56,7 @@ HIDCreateQueues(
 
 	// Create Default Queue
 	WDF_IO_QUEUE_CONFIG_INIT_DEFAULT_QUEUE(&QueueConfig, WdfIoQueueDispatchParallel);
-	QueueConfig.EvtIoInternalDeviceControl = InternalDeviceControlCallback;
+	QueueConfig.EvtIoInternalDeviceControl = HIDInternalDeviceControlCallback;
 
 	Status = WdfIoQueueCreate(Device, &QueueConfig, WDF_NO_OBJECT_ATTRIBUTES, &(HIDContext->DefaultIOQueue));
 	if(!NT_SUCCESS(Status))
@@ -66,7 +66,7 @@ HIDCreateQueues(
 	}
 
 	// Create Read Buffer Queue
-	Status = ReadIoControlBufferCreate(&HIDContext->ReadBuffer, DeviceContext->Device, DeviceContext, FillReadBufferCallback, HIDReportSize);
+	Status = ReadIoControlBufferCreate(&HIDContext->ReadBuffer, DeviceContext->Device, DeviceContext, HIDFillReadBufferCallback, HIDReportSize);
 	if (!NT_SUCCESS(Status))
 	{
 		TraceStatus("Creating HID Read Buffer failed", Status);
@@ -85,7 +85,7 @@ GetHIDContext(
 }
 
 VOID
-InternalDeviceControlCallback(
+HIDInternalDeviceControlCallback(
 	_In_ WDFQUEUE Queue,
     _In_ WDFREQUEST Request,
     _In_ size_t OutputBufferLength,
@@ -228,11 +228,12 @@ HIDRelease(
 	return Status;
 }
 
-SIZE_T 
-FillReadBufferCallback(
+VOID 
+HIDFillReadBufferCallback(
 	_In_ PDEVICE_CONTEXT DeviceContext, 
 	_Inout_updates_all_(BufferSize) PVOID Buffer,
-	_In_ size_t BufferSize)
+	_In_ size_t BufferSize, 
+	_Out_ PSIZE_T BytesWritten)
 {
 	PWIIMOTE_DEVICE_CONTEXT WiimoteContext = &(DeviceContext->WiimoteContext);
 	BYTE * RequestBuffer = (PUCHAR)Buffer;
@@ -248,7 +249,7 @@ FillReadBufferCallback(
 #endif
 #endif
 
-	return BufferSize;
+	(*BytesWritten) = BufferSize;
 }
 
 VOID 

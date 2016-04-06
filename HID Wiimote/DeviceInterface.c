@@ -23,13 +23,16 @@ DEFINE_GUID(GUID_DEVCLASS_HIDWIIMOTE,
 WDF_DECLARE_CONTEXT_TYPE_WITH_NAME(DEVICE_INTERFACE_CONTEXT, GetDeviceInterfaceContext);
 
 NTSTATUS CreateSettingsInterfaceQueues(_In_ PDEVICE_INTERFACE_CONTEXT DeviceInterfaceContext);
-EVT_WDF_IO_QUEUE_IO_DEVICE_CONTROL SettingsInterfaceDeviceControlCallback;
+EVT_WDF_IO_QUEUE_IO_DEVICE_CONTROL DeviceInterfaceDeviceControlCallback;
+EVT_READ_IO_CONTROL_BUFFER_FILL_BUFFER DeviceInterfaceFillReadBufferCallback;
 
 VOID ProcessGetState(_In_ WDFREQUEST Request, _In_ PDEVICE_INTERFACE_CONTEXT DeviceInterfaceContext);
+VOID ForwardReadStatusRequest(_In_ WDFREQUEST Request, _In_ PDEVICE_INTERFACE_CONTEXT DeviceInterfaceContext);
+
 VOID FillStateIoControlData(_In_ PWIIMOTE_STATE_IOCTL_DATA StateData, _In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext);
 VOID FillStatusIoControlData(_In_ PWIIMOTE_STATUS_IOCTL_DATA StatusData, _In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext);
 
-NTSTATUS CreateDeviceInterface(_In_ PDEVICE_CONTEXT ParentDeviceContext)
+NTSTATUS DeviceInterfaceCreate(_In_ PDEVICE_CONTEXT ParentDeviceContext)
 {
 	NTSTATUS Status = STATUS_SUCCESS;
 	PWDFDEVICE_INIT DeviceInit;
@@ -150,11 +153,12 @@ NTSTATUS CreateDeviceInterface(_In_ PDEVICE_CONTEXT ParentDeviceContext)
 NTSTATUS CreateSettingsInterfaceQueues(_In_ PDEVICE_INTERFACE_CONTEXT DeviceInterfaceContext)
 {
 	NTSTATUS Status = STATUS_SUCCESS;
-	WDF_IO_QUEUE_CONFIG DefaultQueueConfig; 
+	WDF_IO_QUEUE_CONFIG DefaultQueueConfig;
 	
+	// Default IO Queue
 	WDF_IO_QUEUE_CONFIG_INIT_DEFAULT_QUEUE(&DefaultQueueConfig, WdfIoQueueDispatchSequential);
 
-	DefaultQueueConfig.EvtIoDeviceControl = SettingsInterfaceDeviceControlCallback;
+	DefaultQueueConfig.EvtIoDeviceControl = DeviceInterfaceDeviceControlCallback;
 
 	Status = WdfIoQueueCreate(DeviceInterfaceContext->InterfaceDevice, &DefaultQueueConfig, WDF_NO_OBJECT_ATTRIBUTES, &DeviceInterfaceContext->DefaultIOQueue);
 	if (!NT_SUCCESS(Status))
@@ -163,20 +167,41 @@ NTSTATUS CreateSettingsInterfaceQueues(_In_ PDEVICE_INTERFACE_CONTEXT DeviceInte
 		return Status;
 	}
 
+	// Read Buffer Queue
+	Status = ReadIoControlBufferCreate(
+		&DeviceInterfaceContext->ReadBuffer, 
+		DeviceInterfaceContext->Parent->Device, 
+		DeviceInterfaceContext->Parent, 
+		DeviceInterfaceFillReadBufferCallback,
+		sizeof(WIIMOTE_STATUS_IOCTL_DATA));
+	if (!NT_SUCCESS(Status))
+	{
+		TraceStatus("Creating Device Interface Read Buffer failed", Status);
+		return Status;
+	}
+
 	return STATUS_SUCCESS;
 }
 
-NTSTATUS ReleaseDeviceInterface(_In_ PDEVICE_CONTEXT ParentDeviceContext)
+NTSTATUS 
+DeviceInterfaceRelease(
+	_In_ PDEVICE_INTERFACE_CONTEXT DeviceInterfaceContext
+	)
 {
 	NTSTATUS Status = STATUS_SUCCESS;
 
-	UNREFERENCED_PARAMETER(ParentDeviceContext);
+	ReadIoControlBufferFlush(&DeviceInterfaceContext->ReadBuffer);
 
 	return Status;
 }
 
+VOID DeviceInterfaceWiimoteStateUpdated(PDEVICE_CONTEXT DeviceContext)
+{
+	ReadIoControlBufferDispatchRequest(&DeviceContext->SettingsInterfaceContext->ReadBuffer);
+}
+
 VOID
-SettingsInterfaceDeviceControlCallback(
+DeviceInterfaceDeviceControlCallback(
 	IN WDFQUEUE      Queue,
 	IN WDFREQUEST    Request,
 	IN size_t        OutputBufferLength,
@@ -195,11 +220,10 @@ SettingsInterfaceDeviceControlCallback(
 		ProcessGetState(Request, DeviceInterfaceContext);
 		break;
 	case IOCTL_WIIMOTE_READ_STATUS:
-		Trace("IOCTL_WIIMOTE_READ_STATUS: %#010x", IoControlCode);
-		WdfRequestComplete(Request, STATUS_SUCCESS);
+		ForwardReadStatusRequest(Request, DeviceInterfaceContext);
 		break;
 	default:
-		Trace("Something Else: %#010x", IoControlCode);
+		Trace("Devcice Interface recieved unknown IOCTL: %#010x", IoControlCode);
 		WdfRequestComplete(Request, STATUS_NOT_IMPLEMENTED);
 	}
 }
@@ -227,6 +251,29 @@ ProcessGetState(
 	FillStateIoControlData(StateData, WiimoteContext);
 
 	WdfRequestCompleteWithInformation(Request, STATUS_SUCCESS, sizeof(WIIMOTE_STATE_IOCTL_DATA));
+}
+
+VOID 
+ForwardReadStatusRequest(
+	_In_ WDFREQUEST Request, 
+	_In_ PDEVICE_INTERFACE_CONTEXT DeviceInterfaceContext
+	)
+{
+	ReadIoControlBufferForwardRequest(&DeviceInterfaceContext->ReadBuffer, Request);
+}
+
+VOID
+DeviceInterfaceFillReadBufferCallback(
+	_In_ PDEVICE_CONTEXT DeviceContext,
+	_Inout_updates_all_(BufferSize) PVOID Buffer,
+	_In_ size_t BufferSize, 
+	_Out_ PSIZE_T BytesWritten)
+{
+	UNREFERENCED_PARAMETER(BufferSize);
+
+	FillStatusIoControlData((PWIIMOTE_STATUS_IOCTL_DATA)Buffer, &DeviceContext->WiimoteContext);
+
+	(*BytesWritten) = sizeof(WIIMOTE_STATUS_IOCTL_DATA);
 }
 
 VOID

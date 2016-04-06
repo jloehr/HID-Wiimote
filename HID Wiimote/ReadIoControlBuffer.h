@@ -14,7 +14,7 @@ Abstract:
 
 #include "HIDWiimote.h"
 
-typedef SIZE_T EVT_READ_IO_CONTROL_BUFFER_FILL_BUFFER(_In_ PDEVICE_CONTEXT DeviceContext, _Inout_updates_all_(BufferSize) PVOID Buffer, _In_ size_t BufferSize);
+typedef VOID EVT_READ_IO_CONTROL_BUFFER_FILL_BUFFER(_In_ PDEVICE_CONTEXT DeviceContext, _Inout_updates_all_(BufferSize) PVOID Buffer, _In_ size_t BufferSize, _Out_ PSIZE_T BytesWritten);
 typedef EVT_READ_IO_CONTROL_BUFFER_FILL_BUFFER *PFN_READ_IO_CONTROL_BUFFER_FILL_BUFFER;
 
 typedef struct _READ_IO_CONTROL_BUFFER
