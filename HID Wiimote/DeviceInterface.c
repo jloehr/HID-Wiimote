@@ -195,7 +195,7 @@ DeviceInterfaceRelease(
 	return Status;
 }
 
-VOID DeviceInterfaceWiimoteStateUpdated(PDEVICE_CONTEXT DeviceContext)
+VOID DeviceInterfaceWiimoteStateUpdated(_In_ PDEVICE_CONTEXT DeviceContext)
 {
 	ReadIoControlBufferDispatchRequest(&DeviceContext->SettingsInterfaceContext->ReadBuffer);
 }
