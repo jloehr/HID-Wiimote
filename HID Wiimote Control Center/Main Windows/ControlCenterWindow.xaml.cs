@@ -36,6 +36,7 @@ namespace HIDWiimote.ControlCenter.Main_Windows
 
             NewWiimoteDevice.Disconneted += OnWiimoteDeviceDisconneted;
             ConnectedWiimoteDevices.Add(NewWiimoteDevice);
+            ConnectedDevicesListBox.Items.Refresh();
 
             NewWiimoteDevice.Initilize();
         }
@@ -45,6 +46,7 @@ namespace HIDWiimote.ControlCenter.Main_Windows
             WiimoteDevice DisconnectedWiimoteDevice = sender as WiimoteDevice;
 
             ConnectedWiimoteDevices.Remove(DisconnectedWiimoteDevice);
+            ConnectedDevicesListBox.Items.Refresh();
         }
         
 
@@ -92,6 +94,7 @@ namespace HIDWiimote.ControlCenter.Main_Windows
             }
 
             ConnectedWiimoteDevices.Clear();
+            ConnectedDevicesListBox.Items.Refresh();
         }
     }
 
