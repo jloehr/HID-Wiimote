@@ -293,7 +293,7 @@ WiimoteStart(
 	DeviceContext->WiimoteContext.Extension = None;
 
 	//Set LEDs
-	Status = SetLEDs(DeviceContext, WIIMOTE_LEDS_FOUR);
+	Status = SetLEDs(DeviceContext, WIIMOTE_LEDS_ALL);
 	if(!NT_SUCCESS(Status))
 	{
 		return Status;
@@ -987,7 +987,7 @@ ProcessExtensionRegister(
 		Trace("Balance Board");
 		DeviceContext->WiimoteContext.Extension = BalanceBoard;
 		DeviceContext->WiimoteContext.CurrentReportMode = 0x32;
-		SetLEDs(DeviceContext, WIIMTOE_LEDS_ALL);
+		SetLEDs(DeviceContext, WIIMOTE_LEDS_ALL);
 		// Get Calibration Data
 		ReadFromRegister(DeviceContext, 0xA40024, 24);
 		break;
