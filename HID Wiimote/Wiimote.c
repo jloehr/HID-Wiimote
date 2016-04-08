@@ -1027,6 +1027,9 @@ ProcessExtensionRegister(
 		return Status;
 	}
 
+	// Signal Device Interface to report the new Extension Type
+	DeviceInterfaceWiimoteStateUpdated(DeviceContext);
+
 	return Status;
 }
 
