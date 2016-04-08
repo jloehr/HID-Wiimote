@@ -39,6 +39,11 @@ namespace HIDWiimote.ControlCenter.Main_Windows
                 ConnectedWiimoteDevices.Add(NewWiimoteDevice);
                 ConnectedDevicesListBox.Items.Refresh();
 
+                if(ConnectedDevicesListBox.SelectedItem == null)
+                {
+                    ConnectedDevicesListBox.SelectedItem = NewWiimoteDevice;
+                }
+
                 NewWiimoteDevice.Initilize();
             });
         }
@@ -51,6 +56,11 @@ namespace HIDWiimote.ControlCenter.Main_Windows
 
                 ConnectedWiimoteDevices.Remove(DisconnectedWiimoteDevice);
                 ConnectedDevicesListBox.Items.Refresh();
+
+                if ((ConnectedDevicesListBox.SelectedItem == null) && ConnectedDevicesListBox.HasItems)
+                {
+                    ConnectedDevicesListBox.SelectedItem = ConnectedDevicesListBox.Items[0];
+                }
             });
         }
         
