@@ -145,6 +145,8 @@ namespace HIDWiimote
 					CancelIo(DeviceInterfaceHandle);
 					break;
 				}
+
+				StatusUpdate(this, gcnew Status(StatusBuffer));
 			}
 
 			FreeThreadResources();
