@@ -477,7 +477,7 @@ UpdateBatteryLEDs(
 		return Status;
 	}
 
-	if (DeviceContext->WiimoteContext.LEDState == WIIMOTE_LEDS_ONE)
+	if (DeviceContext->WiimoteContext.LEDState == WIIMOTE_LEDS_FOUR)
 	{
 		WdfTimerStop(WiimoteContext->BatteryLevelLEDUpdateTimer, FALSE);
 	}
