@@ -189,7 +189,10 @@ namespace HIDWiimote.ControlCenter.Control_Center
             DeviceInterface.StatusUpdate -= OnStatusUpdate;
             DeviceInterface.DeviceRemoved -= OnDeviceRemoved;
 
-            Disconneted(this, null);
+            if(Disconneted != null)
+            {
+                Disconneted(this, null);
+            }
         }
 
         private void OnStatusUpdate(object sender, UserModeLib.Status StatusUpdate)
