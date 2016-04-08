@@ -32,21 +32,26 @@ namespace HIDWiimote.ControlCenter.Main_Windows
 
         private void OnNewWiimoteDeviceInterfaceFound(object sender, UserModeLib.WiimoteDeviceInterface NewInterface)
         {
-            WiimoteDevice NewWiimoteDevice = new WiimoteDevice(NewInterface);
+            Application.Current.Dispatcher.Invoke(() => {
+                WiimoteDevice NewWiimoteDevice = new WiimoteDevice(NewInterface);
 
-            NewWiimoteDevice.Disconneted += OnWiimoteDeviceDisconneted;
-            ConnectedWiimoteDevices.Add(NewWiimoteDevice);
-            ConnectedDevicesListBox.Items.Refresh();
+                NewWiimoteDevice.Disconneted += OnWiimoteDeviceDisconneted;
+                ConnectedWiimoteDevices.Add(NewWiimoteDevice);
+                ConnectedDevicesListBox.Items.Refresh();
 
-            NewWiimoteDevice.Initilize();
+                NewWiimoteDevice.Initilize();
+            });
         }
 
         private void OnWiimoteDeviceDisconneted(object sender, EventArgs e)
         {
-            WiimoteDevice DisconnectedWiimoteDevice = sender as WiimoteDevice;
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                WiimoteDevice DisconnectedWiimoteDevice = sender as WiimoteDevice;
 
-            ConnectedWiimoteDevices.Remove(DisconnectedWiimoteDevice);
-            ConnectedDevicesListBox.Items.Refresh();
+                ConnectedWiimoteDevices.Remove(DisconnectedWiimoteDevice);
+                ConnectedDevicesListBox.Items.Refresh();
+            });
         }
         
 
