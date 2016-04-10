@@ -62,6 +62,9 @@
                             <DataTrigger Binding="{Binding Path=DataContext, RelativeSource={RelativeSource Self}}" Value="{x:Null}">
                                 <Setter Property="IsEnabled" Value="false"/>
                             </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=DataContext.Initilized, RelativeSource={RelativeSource Self}}" Value="false">
+                                <Setter Property="IsEnabled" Value="false"/>
+                            </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </Border.Style>
