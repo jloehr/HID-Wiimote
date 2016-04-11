@@ -31,7 +31,6 @@ namespace HIDWiimote
 
 		private:
 			void SetLEDState(UCHAR LEDs);
-			void SetExtension(WIIMOTE_EXTENSION Extension);
 		};
 	}
 }

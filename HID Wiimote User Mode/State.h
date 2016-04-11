@@ -34,9 +34,6 @@ namespace HIDWiimote
 			property System::Boolean MouseButtonsSwitched;
 			property System::Boolean TriggerAndShoulderSwitched;
 			property System::Boolean TriggerSplit;
-
-		private:
-			void SetMode(WIIMOTE_DRIVER_MODE Mode);
 		};
 	}
 }
