@@ -29,9 +29,15 @@ namespace HIDWiimote
 			event System::EventHandler^ DeviceRemoved;
 			event System::EventHandler<Status^>^ StatusUpdate;
 
-			//Starts Status Update Reader and returns InitialState
 			State^ Initialize();
 			void Disconnect();
+
+			System::Boolean SetDriverMode(DriverMode NewMode);
+			System::Boolean SetXAxis(System::Boolean Enabled);
+			System::Boolean SetYAxis(System::Boolean Enabled);
+			System::Boolean SetMouseButtonsSwitched(System::Boolean Enabled);
+			System::Boolean SetTriggerAndShoulderSwitched(System::Boolean Enabled);
+			System::Boolean SetTriggerSplit(System::Boolean Enabled);
 
 		private:
 			HANDLE DeviceInterfaceHandle;
@@ -52,7 +58,9 @@ namespace HIDWiimote
 
 			State^ GetState();
 
-			bool SendBufferdIOCTL(DWORD IoControlCode, LPVOID Buffer, DWORD BufferSize, LPOVERLAPPED Overlapped);
+			bool SendBooleanSetting(DWORD IoControlCode, bool Value);
+			bool SendBufferdIOCTL(DWORD IoControlCode, LPVOID InputBuffer, DWORD InputBufferSize, LPVOID OutputBuffer, DWORD OutputBufferSize);
+			bool SendBufferdIOCTL(DWORD IoControlCode, LPVOID InputBuffer, DWORD InputBufferSize, LPVOID OutputBuffer, DWORD OutputBufferSize, LPOVERLAPPED Overlapped);
 
 		};
 	}

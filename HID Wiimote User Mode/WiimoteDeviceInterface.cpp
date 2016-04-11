@@ -66,6 +66,38 @@ namespace HIDWiimote
 			DeviceRemoved(this, nullptr);
 		}
 
+		System::Boolean WiimoteDeviceInterface::SetDriverMode(DriverMode NewMode)
+		{
+			WIIMOTE_DRIVER_MODE Mode = (WIIMOTE_DRIVER_MODE)NewMode;
+
+			return SendBufferdIOCTL(IOCTL_WIIMOTE_SET_MODE, &Mode, sizeof(Mode), nullptr, 0);
+		}
+
+		System::Boolean WiimoteDeviceInterface::SetXAxis(System::Boolean Enabled)
+		{
+			return SendBooleanSetting(IOCTL_WIIMOTE_SET_XAXIS, Enabled);
+		}
+
+		System::Boolean WiimoteDeviceInterface::SetYAxis(System::Boolean Enabled)
+		{
+			return SendBooleanSetting(IOCTL_WIIMOTE_SET_YAXIS, Enabled);
+		}
+
+		System::Boolean WiimoteDeviceInterface::SetMouseButtonsSwitched(System::Boolean Enabled)
+		{
+			return SendBooleanSetting(IOCTL_WIIMOTE_SET_MOUSEBUTTONSWITCHED, Enabled);
+		}
+
+		System::Boolean WiimoteDeviceInterface::SetTriggerAndShoulderSwitched(System::Boolean Enabled)
+		{
+			return SendBooleanSetting(IOCTL_WIIMOTE_SET_TRIGGERAMDSHOULDERSWITCHED, Enabled);
+		}
+
+		System::Boolean WiimoteDeviceInterface::SetTriggerSplit(System::Boolean Enabled)
+		{
+			return SendBooleanSetting(IOCTL_WIIMOTE_SET_TRIGGERSPLIT, Enabled);
+		}
+
 		bool WiimoteDeviceInterface::OpenDevice()
 		{
 			System::IntPtr PointerToNativeString = System::Runtime::InteropServices::Marshal::StringToHGlobalUni(DeviceInterfacePath);
@@ -132,7 +164,7 @@ namespace HIDWiimote
 			{
 				ResetEvent(ReadIo->hEvent);
 
-				if (!SendBufferdIOCTL(IOCTL_WIIMOTE_READ_STATUS, &StatusBuffer, sizeof(StatusBuffer), ReadIo))
+				if (!SendBufferdIOCTL(IOCTL_WIIMOTE_READ_STATUS, nullptr, 0, &StatusBuffer, sizeof(StatusBuffer), ReadIo))
 				{
 					Log::Write("Error sending Read Status Request");
 					Disconnect();
@@ -176,26 +208,49 @@ namespace HIDWiimote
 				return nullptr;
 			}
 
-			OVERLAPPED Overlapped = { 0 };
 			WIIMOTE_STATE_IOCTL_DATA StateData;
 
-			Overlapped.hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
-
-			if (!SendBufferdIOCTL(IOCTL_WIIMOTE_GET_STATE, &StateData, sizeof(StateData), &Overlapped))
+			if (!SendBufferdIOCTL(IOCTL_WIIMOTE_GET_STATE, nullptr, 0, &StateData, sizeof(StateData)))
 			{
-				CloseHandle(Overlapped.hEvent);
 				Log::Write("Error getting State");
 				return nullptr;
 			}
 
-			CloseHandle(Overlapped.hEvent);
-
 			return gcnew State(StateData);
 		}
 
-		bool WiimoteDeviceInterface::SendBufferdIOCTL(DWORD IoControlCode, LPVOID Buffer, DWORD BufferSize, LPOVERLAPPED Overlapped)
+		bool WiimoteDeviceInterface::SendBooleanSetting(DWORD IoControlCode, bool Value)
 		{
-			BOOL Result = DeviceIoControl(DeviceInterfaceHandle, IoControlCode, nullptr, 0, Buffer, BufferSize, nullptr, Overlapped);
+			BOOL Converted = Value;
+
+			return SendBufferdIOCTL(IoControlCode, &Converted, sizeof(Converted), nullptr, 0);
+		}
+
+		bool WiimoteDeviceInterface::SendBufferdIOCTL(DWORD IoControlCode, LPVOID InputBuffer, DWORD InputBufferSize, LPVOID OutputBuffer, DWORD OutputBufferSize)
+		{
+			if (!DeviceIsGood())
+			{
+				return false;
+			}
+
+			OVERLAPPED Overlapped = { 0 };
+			Overlapped.hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
+
+			bool Result = SendBufferdIOCTL(IoControlCode, InputBuffer, InputBufferSize, OutputBuffer, OutputBufferSize, &Overlapped);
+
+			CloseHandle(Overlapped.hEvent);
+
+			return Result;
+		}
+
+		bool WiimoteDeviceInterface::SendBufferdIOCTL(DWORD IoControlCode, LPVOID InputBuffer, DWORD InputBufferSize, LPVOID OutputBuffer, DWORD OutputBufferSize, LPOVERLAPPED Overlapped)
+		{
+			if (!DeviceIsGood())
+			{
+				return false;
+			}
+
+			BOOL Result = DeviceIoControl(DeviceInterfaceHandle, IoControlCode, InputBuffer, InputBufferSize, OutputBuffer, OutputBufferSize, nullptr, Overlapped);
 			if (!Result)
 			{
 				DWORD Error = GetLastError();

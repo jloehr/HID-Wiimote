@@ -62,7 +62,7 @@ namespace HIDWiimote.ControlCenter.Control_Center
             get { return _Mode; }
             set
             {
-                ChangeSetting<UserModeLib.DriverMode>(value, SetMode, SetModeUIEnabled, DummyDelegate<UserModeLib.DriverMode>);
+                ChangeSetting<UserModeLib.DriverMode>(value, SetMode, SetModeUIEnabled, DeviceInterface.SetDriverMode);
             }
         }
 
@@ -118,7 +118,7 @@ namespace HIDWiimote.ControlCenter.Control_Center
             get { return _XAxisEnabled; }
             set
             {
-                ChangeSetting<bool>(value, SetXAxisEnabled, SetXAxisUIEnabled, DummyDelegate<bool>);
+                ChangeSetting<bool>(value, SetXAxisEnabled, SetXAxisUIEnabled, DeviceInterface.SetXAxis);
             }
         }
 
@@ -145,7 +145,7 @@ namespace HIDWiimote.ControlCenter.Control_Center
             get { return _YAxisEnabled; }
             set
             {
-                ChangeSetting<bool>(value, SetYAxisEnabled, SetYAxisUIEnabled, DummyDelegate<bool>);
+                ChangeSetting<bool>(value, SetYAxisEnabled, SetYAxisUIEnabled, DeviceInterface.SetYAxis);
             }
         }
 
@@ -172,7 +172,7 @@ namespace HIDWiimote.ControlCenter.Control_Center
             get { return _MouseButtonsSwitched; }
             set
             {
-                ChangeSetting<bool>(value, SetMouseButtonsSwitched, SetMouseButtonsSwitchedUIEnabled, DummyDelegate<bool>);
+                ChangeSetting<bool>(value, SetMouseButtonsSwitched, SetMouseButtonsSwitchedUIEnabled, DeviceInterface.SetMouseButtonsSwitched);
             }
         }
 
@@ -198,7 +198,7 @@ namespace HIDWiimote.ControlCenter.Control_Center
             get { return _TriggerAndShoulderSwitched; }
             set
             {
-                ChangeSetting<bool>(value, SetTriggerAndShoulderSwitched, SetTriggerAndShoulderSwitchedUIEnabled, DummyDelegate<bool>);
+                ChangeSetting<bool>(value, SetTriggerAndShoulderSwitched, SetTriggerAndShoulderSwitchedUIEnabled, DeviceInterface.SetTriggerAndShoulderSwitched);
             }
         }
 
@@ -224,7 +224,7 @@ namespace HIDWiimote.ControlCenter.Control_Center
             get { return _TriggerSplit; }
             set
             {
-                ChangeSetting<bool>(value, SetTriggerSplit, SetTriggerSplitUIEnabled, DummyDelegate<bool>);
+                ChangeSetting<bool>(value, SetTriggerSplit, SetTriggerSplitUIEnabled, DeviceInterface.SetTriggerSplit);
             }
         }
 
@@ -324,22 +324,18 @@ namespace HIDWiimote.ControlCenter.Control_Center
         }
 
         
-        protected void ChangeSetting<T>(T RequestedValue, Action<T> ValueSetter, Action<bool> UIEnableSetter, Func<T, T> InterfaceDelegate)
+        protected void ChangeSetting<T>(T RequestedValue, Action<T> ValueSetter, Action<bool> UIEnableSetter, Func<T, bool> InterfaceDelegate)
         {
             UIEnableSetter(false);
 
             Task.Factory.StartNew(() => {
-                T ActualNewValue = InterfaceDelegate(RequestedValue);
+                if(InterfaceDelegate(RequestedValue))
+                {
+                    ValueSetter(RequestedValue);
+                }
 
-                ValueSetter(ActualNewValue);
                 UIEnableSetter(true);
             });
-        }
-
-        protected T DummyDelegate<T>(T RequestedValue)
-        {
-            System.Threading.Thread.Sleep(1000);
-            return RequestedValue;
-        }
+        }      
     }
 }
