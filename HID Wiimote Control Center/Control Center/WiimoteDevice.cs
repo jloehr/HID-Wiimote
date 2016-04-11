@@ -11,8 +11,7 @@ namespace HIDWiimote.ControlCenter.Control_Center
         private bool _ModeUIEnabled = true;
         private byte _BatteryLevel = 0;
         private bool[] _LEDState = { false, false, false, false };
-
-        private bool _AccelerometersEnabled = true;
+        
         private bool _XAxisEnabled = false;
         private bool _XAxisUIEnabled = true;
         private bool _YAxisEnabled = false;
