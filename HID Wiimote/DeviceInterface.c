@@ -15,6 +15,11 @@ Abstract:
 
 #include "SettingsInterface.h"
 #include "Device.h"
+#include "WiimoteSettings.h"
+
+typedef VOID DRIVER_MODE_SETTING_SETTER(_In_ PDEVICE_CONTEXT DeviceContext, _In_ WIIMOTE_DRIVER_MODE Value);
+typedef VOID BOOLEAN_SETTING_SETTER(_In_ PDEVICE_CONTEXT DeviceContext, _In_ BOOLEAN Value);
+
 
 // {7D180E63-2CAC-4112-B3D4-C42275CA497E}
 DEFINE_GUID(GUID_DEVCLASS_HIDWIIMOTE,
@@ -28,6 +33,8 @@ EVT_READ_IO_CONTROL_BUFFER_FILL_BUFFER DeviceInterfaceFillReadBufferCallback;
 
 VOID ProcessGetState(_In_ WDFREQUEST Request, _In_ PDEVICE_INTERFACE_CONTEXT DeviceInterfaceContext);
 VOID ForwardReadStatusRequest(_In_ WDFREQUEST Request, _In_ PDEVICE_INTERFACE_CONTEXT DeviceInterfaceContext);
+VOID ProcessSetDriverModeSetting(_In_ WDFREQUEST Request, _In_ PDEVICE_INTERFACE_CONTEXT DeviceInterfaceContext, _In_ DRIVER_MODE_SETTING_SETTER DriverModeSettingSetter);
+VOID ProcessSetBooleanSetting(_In_ WDFREQUEST Request, _In_ PDEVICE_INTERFACE_CONTEXT DeviceInterfaceContext, _In_ BOOLEAN_SETTING_SETTER BooleanSettingSetter);
 
 VOID FillStateIoControlData(_In_ PWIIMOTE_STATE_IOCTL_DATA StateData, _In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext);
 VOID FillStatusIoControlData(_In_ PWIIMOTE_STATUS_IOCTL_DATA StatusData, _In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext);
@@ -222,6 +229,24 @@ DeviceInterfaceDeviceControlCallback(
 	case IOCTL_WIIMOTE_READ_STATUS:
 		ForwardReadStatusRequest(Request, DeviceInterfaceContext);
 		break;
+	case IOCTL_WIIMOTE_SET_MODE:
+		ProcessSetDriverModeSetting(Request, DeviceInterfaceContext, WiimoteSettingsSetDriverMode);
+		break;
+	case IOCTL_WIIMOTE_SET_XAXIS:
+		ProcessSetBooleanSetting(Request, DeviceInterfaceContext, WiimoteSettingsSetXAxisEnabled);
+		break;
+	case IOCTL_WIIMOTE_SET_YAXIS:
+		ProcessSetBooleanSetting(Request, DeviceInterfaceContext, WiimoteSettingsSetYAxisEnabled);
+		break;
+	case IOCTL_WIIMOTE_SET_MOUSEBUTTONSWITCHED:
+		ProcessSetBooleanSetting(Request, DeviceInterfaceContext, WiimoteSettingsSetMouseButtonsSwitched);
+		break;
+	case IOCTL_WIIMOTE_SET_TRIGGERAMDSHOULDERSWITCHED:
+		ProcessSetBooleanSetting(Request, DeviceInterfaceContext, WiimoteSettingsSetTriggerAndShoulderSwitched);
+		break;
+	case IOCTL_WIIMOTE_SET_TRIGGERSPLIT:
+		ProcessSetBooleanSetting(Request, DeviceInterfaceContext, WiimoteSettingsSetTriggerSplit);
+		break;
 	default:
 		Trace("Devcice Interface recieved unknown IOCTL: %#010x", IoControlCode);
 		WdfRequestComplete(Request, STATUS_NOT_IMPLEMENTED);
@@ -301,4 +326,48 @@ FillStatusIoControlData(
 	StatusData->Extension = WiimoteContext->Extension;
 	StatusData->BatteryLevel = WiimoteContext->BatteryLevel;
 	StatusData->LEDs = WiimoteContext->LEDState;
+}
+VOID ProcessSetDriverModeSetting(
+	_In_ WDFREQUEST Request, 
+	_In_ PDEVICE_INTERFACE_CONTEXT DeviceInterfaceContext, 
+	_In_ DRIVER_MODE_SETTING_SETTER DriverModeSettingSetter
+	)
+{
+	NTSTATUS Status;
+	PWIIMOTE_DRIVER_MODE RequestedMode;
+
+	Status = WdfRequestRetrieveInputBuffer(Request, sizeof(WIIMOTE_DRIVER_MODE), &RequestedMode, NULL);
+	if (!NT_SUCCESS(Status))
+	{
+		TraceStatus("Error retrieving Driver Mode Io Control Mode Input Buffer", Status);
+		WdfRequestComplete(Request, Status);
+		return;
+	}
+
+	DriverModeSettingSetter(DeviceInterfaceContext->Parent, *RequestedMode);
+
+	WdfRequestCompleteWithInformation(Request, STATUS_SUCCESS, sizeof(WIIMOTE_DRIVER_MODE));
+}
+
+VOID ProcessSetBooleanSetting(
+	_In_ WDFREQUEST Request, 
+	_In_ PDEVICE_INTERFACE_CONTEXT DeviceInterfaceContext, 
+	_In_ BOOLEAN_SETTING_SETTER BooleanSettingSetter
+	)
+{
+	NTSTATUS Status;
+	PBOOLEAN RequestedValue;
+
+	Status = WdfRequestRetrieveInputBuffer(Request, sizeof(BOOLEAN), &RequestedValue, NULL);
+	if (!NT_SUCCESS(Status))
+	{
+		TraceStatus("Error retrieving Driver Mode Io Control Mode Input Buffer", Status);
+		WdfRequestComplete(Request, Status);
+		return;
+	}
+
+	BooleanSettingSetter(DeviceInterfaceContext->Parent, *RequestedValue);
+
+	WdfRequestCompleteWithInformation(Request, STATUS_SUCCESS, sizeof(BOOLEAN));
+
 }

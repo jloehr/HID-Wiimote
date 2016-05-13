@@ -13,6 +13,7 @@ Abstract:
 
 #include "Device.h"
 #include "Bluetooth.h"
+#include "WiimoteSettings.h"
 
 EVT_WDF_TIMER BatteryLevelLEDUpdateTimerExpired;
 
@@ -30,8 +31,7 @@ WiimotePrepare(
 
 	RtlSecureZeroMemory(&(WiimoteContext->State), sizeof(WiimoteContext->State));
 
-	//Create Timer to request StatusInformation
-
+	// Create Timer to request StatusInformation
 	WDF_TIMER_CONFIG_INIT_PERIODIC(&TimerConfig, BatteryLevelLEDUpdateTimerExpired, WIIMOTE_STATUSINFORMATION_INTERVAL);
 	WDF_OBJECT_ATTRIBUTES_INIT(&TimerAttributes);
 	TimerAttributes.ParentObject = DeviceContext->Device;
@@ -41,6 +41,9 @@ WiimotePrepare(
 	{
 		return Status;
 	}
+
+	// Load Settings from Registry
+	WiimoteSettingsLoad(DeviceContext);
 
 	return Status;
 }

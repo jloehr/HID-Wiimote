@@ -197,6 +197,7 @@
     <ClCompile Include="ReadIoControlBuffer.c" />
     <ClCompile Include="Trace.c" />
     <ClCompile Include="Wiimote.c" />
+    <ClCompile Include="WiimoteSettings.c" />
     <ClCompile Include="WiimoteToHIDParser.c" />
   </ItemGroup>
   <ItemGroup>
@@ -213,6 +214,8 @@
     <ClInclude Include="Trace.h" />
     <ClInclude Include="Wiimote.h" />
     <ClInclude Include="WiimotePublic.h" />
+    <ClInclude Include="WiimoteSettings.h" />
+    <ClInclude Include="WiimoteSettingsPublic.h" />
     <ClInclude Include="WiimoteToHIDParser.h" />
   </ItemGroup>
   <ItemGroup>

@@ -64,6 +64,9 @@
     <ClCompile Include="ReadIoControlBuffer.c">
       <Filter>Utilities</Filter>
     </ClCompile>
+    <ClCompile Include="WiimoteSettings.c">
+      <Filter>Wiimote</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Device.h">
@@ -107,6 +110,12 @@
     </ClInclude>
     <ClInclude Include="ReadIoControlBuffer.h">
       <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="WiimoteSettingsPublic.h">
+      <Filter>Wiimote</Filter>
+    </ClInclude>
+    <ClInclude Include="WiimoteSettings.h">
+      <Filter>Wiimote</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
