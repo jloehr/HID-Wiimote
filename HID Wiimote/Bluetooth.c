@@ -69,7 +69,7 @@ BluetoothPrepare(
 	BluetoothContext->ControlChannelHandle = NULL;
 	BluetoothContext->InterruptChannelHandle = NULL;
 
-	//Get Interfaces
+	// Get Interfaces
 	Status = WdfFdoQueryForInterface(
 		DeviceContext->Device, 
 		&GUID_BTHDDI_PROFILE_DRIVER_INTERFACE, 
@@ -83,7 +83,7 @@ BluetoothPrepare(
         return Status;
     }
 
-	//Get BluetoothAdress
+	// Get BluetoothAdress
 	RtlZeroMemory(&DeviceInfo, sizeof(DeviceInfo));
 	WDF_MEMORY_DESCRIPTOR_INIT_BUFFER(&DeviceInfoMemDescriptor, &DeviceInfo, sizeof(DeviceInfo));
 
@@ -102,6 +102,18 @@ BluetoothPrepare(
     }
 
 	BluetoothContext->DeviceAddress = DeviceInfo.address;
+
+	Status = RtlStringCchPrintfW(BluetoothContext->DeviceAddressStringBuffer, BLUETOOTH_ADDRESS_STRING_SIZE, L"%012I64x", DeviceInfo.address);
+	if (!NT_SUCCESS(Status))
+	{
+		return Status;
+	}
+
+	Status = RtlUnicodeStringInit(&BluetoothContext->DeviceAddressString, BluetoothContext->DeviceAddressStringBuffer);
+	if (!NT_SUCCESS(Status))
+	{
+		return Status;
+	}
 
 	return Status;
 }

@@ -25,7 +25,7 @@ NTSTATUS
 OpenRegistryKey(
 	_In_ PDEVICE_CONTEXT DeviceContext,
 	_In_ ACCESS_MASK Access,
-	_Out_ WDFKEY * Key,
+	_Out_ WDFKEY * DeviceKey,
 	_Out_opt_ BOOLEAN * NewlyCreated
 	);
 
@@ -150,32 +150,51 @@ WiimoteSettingsSetTriggerSplit(
 	SaveULONGValue(DeviceContext, &TriggerSplitValueName, (ULONG)Enabled);
 }
 
+/*
+ Currently the hardware/device key as well as the driver software key is not persistent accross disconnecting Wiimotes.
+ Therefore we need to use the driver/service parameters key, that seems to be persistent, even when the driver is uninstalled.
+ An "DeviceSettings" subkey is used so the parameters key remains clear.
+ For each device the Bluetooth address is used as unique identifier and device key.
+*/
 NTSTATUS
 OpenRegistryKey(
 	_In_ PDEVICE_CONTEXT DeviceContext,
 	_In_ ACCESS_MASK Access,
-	_Out_ WDFKEY * Key,
+	_Out_ WDFKEY * DeviceKey,
 	_Out_opt_ BOOLEAN * NewlyCreated
 	)
 {
 	NTSTATUS Status;
-	WDFKEY DeviceKey;
+	WDFKEY ServiceKey;
+	WDFKEY DeviceSettingsSubkey;
 	ULONG CreateDisposition;
 
-	DECLARE_CONST_UNICODE_STRING(HIDWiimoteSubkey, L"HIDWiimote");
+	DECLARE_CONST_UNICODE_STRING(DeviceSettingsSubkeyName, L"DeviceSettings");
 
-	Status = WdfDeviceOpenRegistryKey(DeviceContext->Device, PLUGPLAY_REGKEY_DEVICE, Access, WDF_NO_OBJECT_ATTRIBUTES, &DeviceKey);
+	// Open the driver/service parameters key "../Services/HIDWiimote/Parameters"
+	Status = WdfDriverOpenParametersRegistryKey(WdfGetDriver(), Access, WDF_NO_OBJECT_ATTRIBUTES, &ServiceKey);
 	if (!NT_SUCCESS(Status))
 	{
-		TraceStatus("Error opening Device Key", Status);
+		TraceStatus("Error opening Service Key", Status);
 		return Status;
 	}
 
-	Status = WdfRegistryCreateKey(DeviceKey, &HIDWiimoteSubkey, Access, REG_OPTION_NON_VOLATILE, &CreateDisposition, WDF_NO_OBJECT_ATTRIBUTES, Key);
+	// Open/create a subkey for all devices "../Services/HIDWiimote/Parameters/DeviceSettings"
+	Status = WdfRegistryCreateKey(ServiceKey, &DeviceSettingsSubkeyName, Access, REG_OPTION_NON_VOLATILE, &CreateDisposition, WDF_NO_OBJECT_ATTRIBUTES, &DeviceSettingsSubkey);
 	if (!NT_SUCCESS(Status))
 	{
-		TraceStatus("Error opening HID Wiimote Subkey", Status);
-		WdfRegistryClose(DeviceKey);
+		TraceStatus("Error opening Device Settings Subkey", Status);
+		WdfRegistryClose(ServiceKey);
+		return Status;
+	}
+
+	// Open/create the device "../Services/HIDWiimote/Parameters/DeviceSettings/XXXXXXXXXXX"
+	Status = WdfRegistryCreateKey(DeviceSettingsSubkey, &DeviceContext->BluetoothContext.DeviceAddressString, Access, REG_OPTION_NON_VOLATILE, &CreateDisposition, WDF_NO_OBJECT_ATTRIBUTES, DeviceKey);
+	if (!NT_SUCCESS(Status))
+	{
+		TraceStatus("Error opening Device Subkey", Status);
+		WdfRegistryClose(ServiceKey);
+		WdfRegistryClose(DeviceSettingsSubkey);
 		return Status;
 	}
 
@@ -184,7 +203,8 @@ OpenRegistryKey(
 		(*NewlyCreated) = (CreateDisposition == REG_CREATED_NEW_KEY) ? TRUE : FALSE;
 	}
 
-	WdfRegistryClose(DeviceKey);
+	WdfRegistryClose(ServiceKey);
+	WdfRegistryClose(DeviceSettingsSubkey);
 
 	return STATUS_SUCCESS;
 }

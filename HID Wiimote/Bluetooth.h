@@ -26,11 +26,16 @@ Abstract:
 #define BUFFER_POOL_TAG '_fuB'
 #define SYNCHRONOUS_CALL_TIMEOUT (-1000000000) // 1 Second
 
+#define BLUETOOTH_ADDRESS_STRING_SIZE 17
+
 typedef struct _BLUETOOTH_DEVICE_CONTEXT 
 {
     BTH_PROFILE_DRIVER_INTERFACE ProfileDriverInterface;
 
     BTH_ADDR DeviceAddress;
+	UNICODE_STRING DeviceAddressString;
+	WCHAR DeviceAddressStringBuffer[BLUETOOTH_ADDRESS_STRING_SIZE];
+
 	L2CAP_CHANNEL_HANDLE ControlChannelHandle;
 	L2CAP_CHANNEL_HANDLE InterruptChannelHandle;
 
