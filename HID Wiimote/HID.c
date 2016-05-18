@@ -66,7 +66,7 @@ HIDCreateQueues(
 	}
 
 	// Create Read Buffer Queue
-	Status = ReadIoControlBufferCreate(&HIDContext->ReadBuffer, DeviceContext->Device, DeviceContext, HIDFillReadBufferCallback, HIDReportSize);
+	Status = ReadIoControlBufferCreate(&HIDContext->ReadBuffer, DeviceContext->Device, DeviceContext, HIDFillReadBufferCallback, sizeof(HID_GAMEPAD_REPORT));
 	if (!NT_SUCCESS(Status))
 	{
 		TraceStatus("Creating HID Read Buffer failed", Status);
@@ -238,7 +238,7 @@ HIDFillReadBufferCallback(
 	PWIIMOTE_DEVICE_CONTEXT WiimoteContext = &(DeviceContext->WiimoteContext);
 	BYTE * RequestBuffer = (PUCHAR)Buffer;
 
-	RequestBuffer[0] = DEFAULT_REPORT_ID;
+	RequestBuffer[0] = GAMEPAD_REPORT_ID;
 #if defined MOUSE_DPAD
 	ParseWiimoteStateAsDPadMouse(WiimoteContext, RequestBuffer + 1);
 #else
