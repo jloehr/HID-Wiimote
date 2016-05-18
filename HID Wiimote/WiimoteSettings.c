@@ -30,10 +30,19 @@ OpenRegistryKey(
 	);
 
 VOID
+LoadWiimoteDriverModeValue(
+	_In_ WDFKEY Key,
+	_In_ PCUNICODE_STRING ValueName,
+	_In_ WIIMOTE_DRIVER_MODE DefaultValue,
+	_Out_ PWIIMOTE_DRIVER_MODE Value
+);
+
+VOID
 LoadBooleanValue(
 	_In_ WDFKEY Key,
 	_In_ PCUNICODE_STRING ValueName,
-	_Inout_ PBOOLEAN Value
+	_In_ BOOLEAN DefaultValue,
+	_Out_ PBOOLEAN Value
 );
 
 VOID
@@ -50,35 +59,21 @@ WiimoteSettingsLoad(
 {
 	NTSTATUS Status;
 	WDFKEY Key;
-	BOOLEAN NewlyCreated;
-	ULONG Value;
 
-	Status = OpenRegistryKey(DeviceContext, KEY_READ, &Key, &NewlyCreated);
+	Status = OpenRegistryKey(DeviceContext, KEY_READ, &Key, NULL);
 	if (!NT_SUCCESS(Status))
 	{
 		Trace("Failed to open Reg Key to load settings.");
 		return;
 	}
 
-	if (NewlyCreated)
-	{
-		Trace("Subkey was created, so nothing to read from.");
-		WdfRegistryClose(Key);
-		return;
-	}
-
 	// Load each Setting
-	Status = WdfRegistryQueryULong(Key, &DriverModeValueName, &Value);
-	if (NT_SUCCESS(Status))
-	{
-		DeviceContext->WiimoteContext.Mode = (WIIMOTE_DRIVER_MODE)Value;
-	}
-
-	LoadBooleanValue(Key, &XAxisEnabledValueName, &DeviceContext->WiimoteContext.Settings.XAxisEnabled);
-	LoadBooleanValue(Key, &YAxisEnabledValueName, &DeviceContext->WiimoteContext.Settings.YAxisEnabled);
-	LoadBooleanValue(Key, &MouseButtonsSwitchedValueName, &DeviceContext->WiimoteContext.Settings.MouseButtonsSwitched);
-	LoadBooleanValue(Key, &TriggerAndShoulderSwitchedValueName, &DeviceContext->WiimoteContext.Settings.TriggerAndShoulderSwitched);
-	LoadBooleanValue(Key, &TriggerSplitValueName, &DeviceContext->WiimoteContext.Settings.TriggerSplit);
+	LoadWiimoteDriverModeValue(Key, &DriverModeValueName, Gamepad, &DeviceContext->WiimoteContext.Mode);
+	LoadBooleanValue(Key, &XAxisEnabledValueName, FALSE, &DeviceContext->WiimoteContext.Settings.XAxisEnabled);
+	LoadBooleanValue(Key, &YAxisEnabledValueName, FALSE, &DeviceContext->WiimoteContext.Settings.YAxisEnabled);
+	LoadBooleanValue(Key, &MouseButtonsSwitchedValueName, FALSE, &DeviceContext->WiimoteContext.Settings.MouseButtonsSwitched);
+	LoadBooleanValue(Key, &TriggerAndShoulderSwitchedValueName, FALSE, &DeviceContext->WiimoteContext.Settings.TriggerAndShoulderSwitched);
+	LoadBooleanValue(Key, &TriggerSplitValueName, TRUE, &DeviceContext->WiimoteContext.Settings.TriggerSplit);
 
 	// Close Key
 	WdfRegistryClose(Key);
@@ -210,9 +205,25 @@ OpenRegistryKey(
 }
 
 VOID
+LoadWiimoteDriverModeValue(
+	_In_ WDFKEY Key,
+	_In_ PCUNICODE_STRING ValueName,
+	_In_ WIIMOTE_DRIVER_MODE DefaultValue,
+	_Out_ PWIIMOTE_DRIVER_MODE Value
+)
+{
+	NTSTATUS Status;
+	ULONG ValueBuffer;
+
+	Status = WdfRegistryQueryULong(Key, ValueName, &ValueBuffer);
+	(*Value) = NT_SUCCESS(Status) ? (WIIMOTE_DRIVER_MODE)ValueBuffer : DefaultValue;
+}
+
+VOID
 LoadBooleanValue(
 	_In_ WDFKEY Key,
 	_In_ PCUNICODE_STRING ValueName,
+	_In_ BOOLEAN DefaultValue,
 	_Out_ PBOOLEAN Value
 )
 {
@@ -220,10 +231,7 @@ LoadBooleanValue(
 	ULONG ValueBuffer;
 
 	Status = WdfRegistryQueryULong(Key, ValueName, &ValueBuffer);
-	if (NT_SUCCESS(Status))
-	{
-		(*Value) = (BOOLEAN)ValueBuffer;
-	}
+	(*Value) = NT_SUCCESS(Status) ? (BOOLEAN)ValueBuffer : DefaultValue;
 }
 
 VOID
