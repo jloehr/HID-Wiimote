@@ -33,9 +33,6 @@ NTSTATUS HIDPrepare(
 	NTSTATUS Status = STATUS_SUCCESS;
 
 	Status = GetVendorAndProductID(DeviceContext->IoTarget, &(DeviceContext->HIDContext.VendorID), &(DeviceContext->HIDContext.ProductID));
-
-	Trace("IOCTL_WIIMOTE_ADDRESSES: %x", IOCTL_WIIMOTE_ADDRESSES);
-
 	if(!NT_SUCCESS(Status))
 	{
 		return Status;
