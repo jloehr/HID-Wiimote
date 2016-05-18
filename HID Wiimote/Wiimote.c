@@ -30,6 +30,10 @@ WiimotePrepare(
 	WiimoteContext = &(DeviceContext->WiimoteContext);
 
 	RtlSecureZeroMemory(&(WiimoteContext->State), sizeof(WiimoteContext->State));
+	WiimoteContext->Extension = None;
+
+	// Load Settings from Registry
+	WiimoteSettingsLoad(DeviceContext);
 
 	// Create Timer to request StatusInformation
 	WDF_TIMER_CONFIG_INIT_PERIODIC(&TimerConfig, BatteryLevelLEDUpdateTimerExpired, WIIMOTE_STATUSINFORMATION_INTERVAL);
@@ -41,9 +45,6 @@ WiimotePrepare(
 	{
 		return Status;
 	}
-
-	// Load Settings from Registry
-	WiimoteSettingsLoad(DeviceContext);
 
 	return Status;
 }
@@ -82,7 +83,6 @@ SetLEDs(
 	}
 
 	return Status;
-
 }
 
 NTSTATUS
@@ -291,9 +291,6 @@ WiimoteStart(
 	)
 {
 	NTSTATUS Status = STATUS_SUCCESS;
-
-	DeviceContext->WiimoteContext.Mode = Gamepad;
-	DeviceContext->WiimoteContext.Extension = None;
 
 	//Set LEDs
 	Status = SetLEDs(DeviceContext, WIIMOTE_LEDS_ALL);
