@@ -12,7 +12,8 @@ Abstract:
 #pragma once
 
 #include "HIDWiimote.h"
+#include "HIDDescriptors.h"
 
-VOID ParseWiimoteState( _In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext, _Out_writes_all_(9) PUCHAR RequestBuffer);
-VOID ParseWiimoteStateAsDPadMouse(_In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext, _Out_writes_all_(4) PUCHAR RequestBuffer);
-VOID ParseWiimoteStateAsIRMouse(_In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext, _Out_writes_all_(3) PUCHAR RequestBuffer);
+VOID ParseWiimoteStateAsGamepad(_In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext, _Inout_updates_all_(BufferSize) PVOID Buffer, _In_ size_t BufferSize, _Out_ PSIZE_T BytesWritten);
+VOID ParseWiimoteStateAsDPadMouse(_In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext, _Inout_updates_all_(BufferSize) PVOID Buffer, _In_ size_t BufferSize, _Out_ PSIZE_T BytesWritten);
+VOID ParseWiimoteStateAsIRMouse(_In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext, _Inout_updates_all_(BufferSize) PVOID Buffer, _In_ size_t BufferSize, _Out_ PSIZE_T BytesWritten);

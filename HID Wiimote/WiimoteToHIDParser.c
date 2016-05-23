@@ -18,47 +18,47 @@ VOID
 ParseBooleanAxis(
 	_In_ BOOLEAN MinimumValue,
 	_In_ BOOLEAN MaximumValue,
-	_Inout_updates_(1) PUCHAR ReportByte,
+	_Out_ PUCHAR AxisValue,
 	_In_ UCHAR LeastSignificantBitPosition,
 	_In_ BYTE Bits,
 	_In_ BOOLEAN Signed
-	)
+)
 {
 	BYTE MinValue = (Signed ? 0x81 : 0x00) >> (8 - Bits);
 	BYTE MaxValue = (Signed ? 0x7F : 0xFF) >> (8 - Bits);
 	BYTE NullValue = (Signed ? 0x00 : 0x7F) >> (8 - Bits);
 
-	if(MinimumValue)
+	if (MinimumValue)
 	{
-		(*ReportByte) |= (MinValue << LeastSignificantBitPosition);
+		(*AxisValue) |= (MinValue << LeastSignificantBitPosition);
 	}
-	else if(MaximumValue)
+	else if (MaximumValue)
 	{
-		(*ReportByte) |= (MaxValue << LeastSignificantBitPosition);
+		(*AxisValue) |= (MaxValue << LeastSignificantBitPosition);
 	}
 	else
 	{
-		(*ReportByte) |= (NullValue << LeastSignificantBitPosition);
+		(*AxisValue) |= (NullValue << LeastSignificantBitPosition);
 	}
 }
 
 VOID
 ParseButton(
 	_In_ BOOLEAN ButtonValue,
-	_Inout_updates_(1) PUCHAR ReportByte,
+	_Out_ PUCHAR ButtonBitField,
 	_In_ UCHAR LeastSignificantBitPosition
-	)
+)
 {
-	if(ButtonValue)
+	if (ButtonValue)
 	{
-		(*ReportByte) |= (0x01 << LeastSignificantBitPosition);
+		(*ButtonBitField) |= (0x01 << LeastSignificantBitPosition);
 	}
 }
 
 VOID
 ParseAnalogAxis(
 	_In_ BYTE RawValue,
-	_Out_writes_all_(1) PUCHAR ReportByte,
+	_Out_ PUCHAR AxisValue,
 	_In_ BOOLEAN Signed,
 	_In_ BOOLEAN Invert
 )
@@ -72,11 +72,11 @@ ParseAnalogAxis(
 	{
 		CHAR Value = ((CHAR)RawValue) - 0x80;
 
-		ReportByte[0] = (0x00 | Value);
+		(*AxisValue) = (0x00 | Value);
 	}
 	else
 	{
-		ReportByte[0] = RawValue;
+		(*AxisValue) = RawValue;
 	}
 
 }
@@ -84,7 +84,7 @@ ParseAnalogAxis(
 VOID
 ParseAccelerometer(
 	_In_ BYTE RawValue,
-	_Out_writes_all_(2) PUCHAR ReportByte,
+	_Out_ PUCHAR AxisValue,
 	_In_ BOOLEAN Invert
 )
 {
@@ -93,24 +93,24 @@ ParseAccelerometer(
 	// For a range of 63 6 bits are used.
 
 	// Normally 0x80 (128) is the middle of the 8 bit range, so cap the accelerometer data to a range of 32 around 128.
-	if(RawValue < (0x80 - 0x20))
+	if (RawValue < (0x80 - 0x20))
 	{
 		RawValue = 0x80 - 0x20;
-	} 
-	else if(RawValue > (0x80 + 0x1F))
+	}
+	else if (RawValue > (0x80 + 0x1F))
 	{
 		RawValue = 0x80 + 0x1F;
-	} 
-	
+	}
+
 	RawValue -= (0x80 - 0x20);
-	if(Invert)
+	if (Invert)
 	{
 		RawValue = 0x3F - RawValue;
 	}
 	RawValue &= 0x3F;
 	RawValue = RawValue << 2;
 
-	ReportByte[0] = RawValue;
+	(*AxisValue) = RawValue;
 }
 
 VOID
@@ -124,15 +124,15 @@ ParseTrigger(
 
 VOID
 ParseDPad(
-_In_ BOOLEAN Up,
-_In_ BOOLEAN Right,
-_In_ BOOLEAN Down,
-_In_ BOOLEAN Left,
-_Out_writes_all_(1) PUCHAR ReportByte
+	_In_ BOOLEAN Up,
+	_In_ BOOLEAN Right,
+	_In_ BOOLEAN Down,
+	_In_ BOOLEAN Left,
+	_Out_ PUCHAR HatswitchBitField
 )
 {
 	/*
-		Up			1		0000 0001			0000 0000			
+		Up			1		0000 0001			0000 0000
 		Up-Right	2		0000 0010			0000 0001
 		Right		3		0000 0011			0000 0010
 		Down-Right	4		0000 0100			0000 0011
@@ -153,7 +153,7 @@ _Out_writes_all_(1) PUCHAR ReportByte
 			{ 8, 1, 2 },
 			{ 7, 0, 3 },
 			{ 6, 5, 4 },
-		};
+	};
 
 	//BOOLEAN is a UCHAR in C
 	//so make sure its numerical value is 1, some may have other values due to bit operations.
@@ -162,14 +162,14 @@ _Out_writes_all_(1) PUCHAR ReportByte
 	Left = Left ? 1 : 0;
 	Right = Right ? 1 : 0;
 
-	ReportByte[0] = ValueLookUpTable[Down + 1 - Up][Right + 1 - Left];
+	(*HatswitchBitField) = ValueLookUpTable[Down + 1 - Up][Right + 1 - Left];
 }
 
 UCHAR
 JoinSensorValue(
 	_In_ USHORT ValueOne,
 	_In_ USHORT ValueTwo
-	)
+)
 {
 	USHORT Value = (ValueOne + ValueTwo);
 	return (UCHAR)(Value / 4);
@@ -181,7 +181,7 @@ ParseBalanceBoardSensors(
 	_In_ UCHAR PositiveValueTwo,
 	_In_ UCHAR NegativeValueOne,
 	_In_ UCHAR NegativeValueTwo
-	)
+)
 {
 	UCHAR PositiveValue = JoinSensorValue(PositiveValueOne, PositiveValueTwo);
 	UCHAR NegativeValue = JoinSensorValue(NegativeValueOne, NegativeValueTwo);
@@ -197,12 +197,12 @@ GetCalibratedBoardValue(
 	_In_reads_(3) PUSHORT CalibrationData)
 {
 	/*
-	Calibration - return range 0 - 255 
+	Calibration - return range 0 - 255
 	-----------
 	0		0
 		...
 	1		128
-		...	
+		...
 	2		255
 
 	*/
@@ -234,7 +234,7 @@ BOOLEAN AccumulateIRPoint(
 	_In_ PWIIMOTE_IR_POINT Point,
 	_Inout_ PUINT16 X,
 	_Inout_ PUINT16 Y
-	)
+)
 {
 	// X ranges from 0-1023; Y from 0-767; so if Y == 0x3FF (1023) the point data is empty
 	if (Point->Y != 0x3FF)
@@ -251,7 +251,7 @@ BOOLEAN ParseIRPoints(
 	_In_ WIIMOTE_IR_POINT Points[WIIMOTE_IR_POINTS],
 	_Out_ PUINT32 X,
 	_Out_ PUINT32 Y
-	)
+)
 {
 	BYTE ValidPointCount = 0;
 	UINT16 GroupX = 0;
@@ -278,13 +278,12 @@ BOOLEAN ParseIRPoints(
 
 VOID ParseIRCamera(
 	_In_ WIIMOTE_IR_POINT Points[WIIMOTE_IR_POINTS_BUFFER_SIZE][WIIMOTE_IR_POINTS],
-	_Out_writes_all_(4) PUCHAR ReportByte,
+	_Out_ PUSHORT XAxis,
+	_Out_ PUSHORT YAxis,
 	_In_ BYTE XPadding,
 	_In_ BYTE YPadding
-	)
+)
 {
-	UNREFERENCED_PARAMETER(ReportByte);
-
 	BYTE ValidBufferCount = 0;
 	UINT32 X = 0;
 	UINT32 Y = 0;
@@ -321,125 +320,119 @@ VOID ParseIRCamera(
 
 	Y *= 1023;
 	Y /= WIIMOTE_IR_POINT_Y_MAX - 2 * YPadding;
-	
 
-	ReportByte[0] = (0xFF & X);
-	ReportByte[1] = (0xFF & (X >> 8));
-
-	ReportByte[2] = (0xFF & Y);
-	ReportByte[3] = (0xFF & (Y >> 8));
+	(*XAxis) = RtlUshortByteSwap(X);
+	(*YAxis) = RtlUshortByteSwap(Y);
 }
 
 VOID
 ParseWiimoteStateAsStandaloneWiiremote(
 	_In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext,
-	_Inout_updates_(7) PUCHAR RequestBuffer
-	)
+	_Out_ PHID_GAMEPAD_REPORT GamepadReport
+)
 {
 	//Axis
-	ParseBooleanAxis(WiimoteContext->State.CoreButtons.DPad.Up, WiimoteContext->State.CoreButtons.DPad.Down, RequestBuffer, 0, 8, FALSE);
-	ParseBooleanAxis(WiimoteContext->State.CoreButtons.DPad.Right, WiimoteContext->State.CoreButtons.DPad.Left, RequestBuffer + 1, 0, 8, FALSE);
+	ParseBooleanAxis(WiimoteContext->State.CoreButtons.DPad.Up, WiimoteContext->State.CoreButtons.DPad.Down, &GamepadReport->XAxis, 0, 8, FALSE);
+	ParseBooleanAxis(WiimoteContext->State.CoreButtons.DPad.Right, WiimoteContext->State.CoreButtons.DPad.Left, &GamepadReport->YAxis, 0, 8, FALSE);
 
 	//Buttons
-	ParseButton(WiimoteContext->State.CoreButtons.One, RequestBuffer + 2, 0);
-	ParseButton(WiimoteContext->State.CoreButtons.Two, RequestBuffer + 2, 1);
-	ParseButton(WiimoteContext->State.CoreButtons.A, RequestBuffer + 2, 2);
-	ParseButton(WiimoteContext->State.CoreButtons.B, RequestBuffer + 2, 3);
-	ParseButton(WiimoteContext->State.CoreButtons.Plus, RequestBuffer + 2, 4);
-	ParseButton(WiimoteContext->State.CoreButtons.Minus, RequestBuffer + 2, 5);
-	ParseButton(WiimoteContext->State.CoreButtons.Home, RequestBuffer + 2, 6);
-	
+	ParseButton(WiimoteContext->State.CoreButtons.One, &GamepadReport->Buttons[0], 0);
+	ParseButton(WiimoteContext->State.CoreButtons.Two, &GamepadReport->Buttons[0], 1);
+	ParseButton(WiimoteContext->State.CoreButtons.A, &GamepadReport->Buttons[0], 2);
+	ParseButton(WiimoteContext->State.CoreButtons.B, &GamepadReport->Buttons[0], 3);
+	ParseButton(WiimoteContext->State.CoreButtons.Plus, &GamepadReport->Buttons[0], 4);
+	ParseButton(WiimoteContext->State.CoreButtons.Minus, &GamepadReport->Buttons[0], 5);
+	ParseButton(WiimoteContext->State.CoreButtons.Home, &GamepadReport->Buttons[0], 6);
+
 	//Accelerometer
-	ParseAccelerometer(WiimoteContext->State.Accelerometer.Y, RequestBuffer + 5, TRUE);
-	ParseAccelerometer(WiimoteContext->State.Accelerometer.X, RequestBuffer + 6, TRUE);
+	ParseAccelerometer(WiimoteContext->State.Accelerometer.Y, &GamepadReport->RXAxis, TRUE);
+	ParseAccelerometer(WiimoteContext->State.Accelerometer.X, &GamepadReport->RYAxis, TRUE);
 	//ParseAccelerometer(WiimoteContext->State.Accelerometer.Z, RequestBuffer + 3, 4);
 	
-	//RtlCopyMemory(RequestBuffer + 2, WiimoteContext->State.AccelerometerRaw, 3);
-
 }
 
 VOID
 ParseWiimoteStateAsNunchuckExtension(
 	_In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext,
-	_Inout_updates_(9) PUCHAR RequestBuffer
-	)
+	_Out_ PHID_GAMEPAD_REPORT GamepadReport
+)
 {
 	//AnalogStick as Axis
-	ParseAnalogAxis(WiimoteContext->NunchuckState.AnalogStick.X, RequestBuffer, FALSE, FALSE);
-	ParseAnalogAxis(WiimoteContext->NunchuckState.AnalogStick.Y, RequestBuffer + 1, FALSE, TRUE);
+	ParseAnalogAxis(WiimoteContext->NunchuckState.AnalogStick.X, &GamepadReport->XAxis, FALSE, FALSE);
+	ParseAnalogAxis(WiimoteContext->NunchuckState.AnalogStick.Y, &GamepadReport->YAxis, FALSE, TRUE);
 
 	//Buttons
-	ParseButton(WiimoteContext->State.CoreButtons.A, RequestBuffer + 2, 0);
-	ParseButton(WiimoteContext->State.CoreButtons.B, RequestBuffer + 2, 1);
-	ParseButton(WiimoteContext->NunchuckState.Buttons.C, RequestBuffer + 2, 2);
-	ParseButton(WiimoteContext->NunchuckState.Buttons.Z, RequestBuffer + 2, 3);
-	ParseButton(WiimoteContext->State.CoreButtons.One, RequestBuffer + 2, 4);
-	ParseButton(WiimoteContext->State.CoreButtons.Two, RequestBuffer + 2, 5);
-	ParseButton(WiimoteContext->State.CoreButtons.Plus, RequestBuffer + 2, 6);
-	ParseButton(WiimoteContext->State.CoreButtons.Minus, RequestBuffer + 2, 7);
-	ParseButton(WiimoteContext->State.CoreButtons.Home, RequestBuffer + 3, 0);
+	ParseButton(WiimoteContext->State.CoreButtons.A, &GamepadReport->Buttons[0], 0);
+	ParseButton(WiimoteContext->State.CoreButtons.B, &GamepadReport->Buttons[0], 1);
+	ParseButton(WiimoteContext->NunchuckState.Buttons.C, &GamepadReport->Buttons[0], 2);
+	ParseButton(WiimoteContext->NunchuckState.Buttons.Z, &GamepadReport->Buttons[0], 3);
+	ParseButton(WiimoteContext->State.CoreButtons.One, &GamepadReport->Buttons[0], 4);
+	ParseButton(WiimoteContext->State.CoreButtons.Two, &GamepadReport->Buttons[0], 5);
+	ParseButton(WiimoteContext->State.CoreButtons.Plus, &GamepadReport->Buttons[0], 6);
+	ParseButton(WiimoteContext->State.CoreButtons.Minus, &GamepadReport->Buttons[0], 7);
+	ParseButton(WiimoteContext->State.CoreButtons.Home, &GamepadReport->Buttons[0], 0);
 
 	//Accelerometer
-	ParseAccelerometer(WiimoteContext->State.Accelerometer.X, RequestBuffer + 5, TRUE);
-	ParseAccelerometer(WiimoteContext->State.Accelerometer.Y, RequestBuffer + 6, TRUE);
+	ParseAccelerometer(WiimoteContext->State.Accelerometer.X, &GamepadReport->RXAxis, TRUE);
+	ParseAccelerometer(WiimoteContext->State.Accelerometer.Y, &GamepadReport->RYAxis, TRUE);
 
 	//DPad
 	ParseDPad(
-		WiimoteContext->State.CoreButtons.DPad.Up, 
-		WiimoteContext->State.CoreButtons.DPad.Right, 
-		WiimoteContext->State.CoreButtons.DPad.Down, 
-		WiimoteContext->State.CoreButtons.DPad.Left, 
-		RequestBuffer + 8);
+		WiimoteContext->State.CoreButtons.DPad.Up,
+		WiimoteContext->State.CoreButtons.DPad.Right,
+		WiimoteContext->State.CoreButtons.DPad.Down,
+		WiimoteContext->State.CoreButtons.DPad.Left,
+		&GamepadReport->Hatswitch);
 }
 
 VOID
 ParseWiimoteStateAsBalanceBoard(
 	_In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext,
-	_Inout_updates_(3) PUCHAR RequestBuffer
-	)
+	_Out_ PHID_GAMEPAD_REPORT GamepadReport
+)
 {
 	UCHAR TopRight = GetCalibratedBoardValue(WiimoteContext->BalanceBoardState.Sensor.TopRight, WiimoteContext->BalanceBoardState.Calibration.TopRight);
 	UCHAR BottomRight = GetCalibratedBoardValue(WiimoteContext->BalanceBoardState.Sensor.BottomRight, WiimoteContext->BalanceBoardState.Calibration.BottomRight);
 	UCHAR TopLeft = GetCalibratedBoardValue(WiimoteContext->BalanceBoardState.Sensor.TopLeft, WiimoteContext->BalanceBoardState.Calibration.TopLeft);
 	UCHAR BottomLeft = GetCalibratedBoardValue(WiimoteContext->BalanceBoardState.Sensor.BottomLeft, WiimoteContext->BalanceBoardState.Calibration.BottomLeft);
 
-	RequestBuffer[0] = ParseBalanceBoardSensors(BottomRight, TopRight, TopLeft, BottomLeft);
-	RequestBuffer[1] = ParseBalanceBoardSensors(BottomLeft, BottomRight, TopLeft, TopRight);
+	GamepadReport->XAxis = ParseBalanceBoardSensors(BottomRight, TopRight, TopLeft, BottomLeft);
+	GamepadReport->YAxis = ParseBalanceBoardSensors(BottomLeft, BottomRight, TopLeft, TopRight);
 
 	// Balance Board has only a single button, that is reported as "A"
-	ParseButton(WiimoteContext->State.CoreButtons.A, RequestBuffer + 2, 0);
+	ParseButton(WiimoteContext->State.CoreButtons.A, &GamepadReport->Buttons[0], 0);
 }
 
 VOID
 ParseWiimoteStateAsClassicControllerExtension(
-_In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext,
-_Inout_updates_(9) PUCHAR RequestBuffer
+	_In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext,
+	_Out_ PHID_GAMEPAD_REPORT GamepadReport
 )
 {
 	//LeftAnalogStick as Axis
-	ParseAnalogAxis(WiimoteContext->ClassicControllerState.LeftAnalogStick.X, RequestBuffer, FALSE, FALSE);
-	ParseAnalogAxis(WiimoteContext->ClassicControllerState.LeftAnalogStick.Y, RequestBuffer + 1, FALSE, TRUE);
+	ParseAnalogAxis(WiimoteContext->ClassicControllerState.LeftAnalogStick.X, &GamepadReport->XAxis, FALSE, FALSE);
+	ParseAnalogAxis(WiimoteContext->ClassicControllerState.LeftAnalogStick.Y, &GamepadReport->YAxis, FALSE, TRUE);
 
 	//Buttons
-	ParseButton(WiimoteContext->State.CoreButtons.A || WiimoteContext->ClassicControllerState.Buttons.A, RequestBuffer + 2, 0);
-	ParseButton(WiimoteContext->State.CoreButtons.B || WiimoteContext->ClassicControllerState.Buttons.B, RequestBuffer + 2, 1);
-	ParseButton(WiimoteContext->ClassicControllerState.Buttons.Y, RequestBuffer + 2, 2);
-	ParseButton(WiimoteContext->ClassicControllerState.Buttons.X, RequestBuffer + 2, 3);
-	ParseButton(WiimoteContext->ClassicControllerState.Buttons.L, RequestBuffer + 2, 4);
-	ParseButton(WiimoteContext->ClassicControllerState.Buttons.R, RequestBuffer + 2, 5);
-	ParseButton(WiimoteContext->ClassicControllerState.Buttons.ZL, RequestBuffer + 2, 6);
-	ParseButton(WiimoteContext->ClassicControllerState.Buttons.ZR, RequestBuffer + 2, 7);
-	ParseButton(WiimoteContext->State.CoreButtons.Plus || WiimoteContext->ClassicControllerState.Buttons.Plus, RequestBuffer + 3, 0);
-	ParseButton(WiimoteContext->State.CoreButtons.Minus || WiimoteContext->ClassicControllerState.Buttons.Minus, RequestBuffer + 3, 1);
-	ParseButton(WiimoteContext->State.CoreButtons.Home || WiimoteContext->ClassicControllerState.Buttons.Home, RequestBuffer + 3, 2);
-	ParseButton(WiimoteContext->State.CoreButtons.One || WiimoteContext->ClassicControllerState.Buttons.LH, RequestBuffer + 3, 3);
-	ParseButton(WiimoteContext->State.CoreButtons.Two || WiimoteContext->ClassicControllerState.Buttons.RH, RequestBuffer + 3, 4);
+	ParseButton(WiimoteContext->State.CoreButtons.A || WiimoteContext->ClassicControllerState.Buttons.A, &GamepadReport->Buttons[0], 0);
+	ParseButton(WiimoteContext->State.CoreButtons.B || WiimoteContext->ClassicControllerState.Buttons.B, &GamepadReport->Buttons[0], 1);
+	ParseButton(WiimoteContext->ClassicControllerState.Buttons.Y, &GamepadReport->Buttons[0], 2);
+	ParseButton(WiimoteContext->ClassicControllerState.Buttons.X, &GamepadReport->Buttons[0], 3);
+	ParseButton(WiimoteContext->ClassicControllerState.Buttons.L, &GamepadReport->Buttons[0], 4);
+	ParseButton(WiimoteContext->ClassicControllerState.Buttons.R, &GamepadReport->Buttons[0], 5);
+	ParseButton(WiimoteContext->ClassicControllerState.Buttons.ZL, &GamepadReport->Buttons[0], 6);
+	ParseButton(WiimoteContext->ClassicControllerState.Buttons.ZR, &GamepadReport->Buttons[0], 7);
+	ParseButton(WiimoteContext->State.CoreButtons.Plus || WiimoteContext->ClassicControllerState.Buttons.Plus, &GamepadReport->Buttons[1], 0);
+	ParseButton(WiimoteContext->State.CoreButtons.Minus || WiimoteContext->ClassicControllerState.Buttons.Minus, &GamepadReport->Buttons[1], 1);
+	ParseButton(WiimoteContext->State.CoreButtons.Home || WiimoteContext->ClassicControllerState.Buttons.Home, &GamepadReport->Buttons[1], 2);
+	ParseButton(WiimoteContext->State.CoreButtons.One || WiimoteContext->ClassicControllerState.Buttons.LH, &GamepadReport->Buttons[1], 3);
+	ParseButton(WiimoteContext->State.CoreButtons.Two || WiimoteContext->ClassicControllerState.Buttons.RH, &GamepadReport->Buttons[1], 4);
 
 	//Right Analog Stick as Second Axis
-	ParseTrigger(WiimoteContext->ClassicControllerState.LeftTrigger, RequestBuffer + 4);
-	ParseAnalogAxis(WiimoteContext->ClassicControllerState.RightAnalogStick.X, RequestBuffer + 5, FALSE, FALSE);
-	ParseAnalogAxis(WiimoteContext->ClassicControllerState.RightAnalogStick.Y, RequestBuffer + 6, FALSE, TRUE);
-	ParseTrigger(WiimoteContext->ClassicControllerState.RightTrigger, RequestBuffer + 7);
+	ParseTrigger(WiimoteContext->ClassicControllerState.LeftTrigger, &GamepadReport->ZAxis);
+	ParseAnalogAxis(WiimoteContext->ClassicControllerState.RightAnalogStick.X, &GamepadReport->RXAxis, FALSE, FALSE);
+	ParseAnalogAxis(WiimoteContext->ClassicControllerState.RightAnalogStick.Y, &GamepadReport->RYAxis, FALSE, TRUE);
+	ParseTrigger(WiimoteContext->ClassicControllerState.RightTrigger, &GamepadReport->RZAxis);
 
 	//DPad
 	ParseDPad(
@@ -447,38 +440,38 @@ _Inout_updates_(9) PUCHAR RequestBuffer
 		WiimoteContext->State.CoreButtons.DPad.Right || WiimoteContext->ClassicControllerState.Buttons.DPad.Right,
 		WiimoteContext->State.CoreButtons.DPad.Down || WiimoteContext->ClassicControllerState.Buttons.DPad.Down,
 		WiimoteContext->State.CoreButtons.DPad.Left || WiimoteContext->ClassicControllerState.Buttons.DPad.Left,
-		RequestBuffer + 8);
+		&GamepadReport->Hatswitch);
 }
 
 VOID
 ParseWiimoteStateAsGuitarExtension(
 	_In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext,
-	_Inout_updates_(9) PUCHAR RequestBuffer
-	)
+	_Out_ PHID_GAMEPAD_REPORT GamepadReport
+)
 {
 	// LeftAnalogStick as Axis
-	ParseAnalogAxis(WiimoteContext->GuitarState.AnalogStick.X, RequestBuffer, FALSE, FALSE);
-	ParseAnalogAxis(WiimoteContext->GuitarState.AnalogStick.Y, RequestBuffer + 1, FALSE, TRUE);
+	ParseAnalogAxis(WiimoteContext->GuitarState.AnalogStick.X, &GamepadReport->XAxis, FALSE, FALSE);
+	ParseAnalogAxis(WiimoteContext->GuitarState.AnalogStick.Y, &GamepadReport->YAxis, FALSE, TRUE);
 
 	// Buttons
-	ParseButton(WiimoteContext->GuitarState.Buttons.Green, RequestBuffer + 2, 0);
-	ParseButton(WiimoteContext->GuitarState.Buttons.Red, RequestBuffer + 2, 1);
-	ParseButton(WiimoteContext->GuitarState.Buttons.Yellow, RequestBuffer + 2, 2);
-	ParseButton(WiimoteContext->GuitarState.Buttons.Blue, RequestBuffer + 2, 3);
-	ParseButton(WiimoteContext->GuitarState.Buttons.Orange, RequestBuffer + 2, 4);
-	ParseButton(WiimoteContext->GuitarState.Buttons.Up, RequestBuffer + 2, 5);
-	ParseButton(WiimoteContext->GuitarState.Buttons.Down, RequestBuffer + 2, 6);
-	ParseButton(WiimoteContext->State.CoreButtons.Plus || WiimoteContext->GuitarState.Buttons.Plus, RequestBuffer + 3, 0);
-	ParseButton(WiimoteContext->State.CoreButtons.Minus || WiimoteContext->GuitarState.Buttons.Minus, RequestBuffer + 3, 1);
-	ParseButton(WiimoteContext->State.CoreButtons.One, RequestBuffer + 3, 2);
-	ParseButton(WiimoteContext->State.CoreButtons.Two, RequestBuffer + 3, 3);
-	ParseButton(WiimoteContext->State.CoreButtons.A, RequestBuffer + 3, 4);
-	ParseButton(WiimoteContext->State.CoreButtons.B, RequestBuffer + 3, 5);
-	ParseButton(WiimoteContext->State.CoreButtons.Home, RequestBuffer + 3, 6);
+	ParseButton(WiimoteContext->GuitarState.Buttons.Green, &GamepadReport->Buttons[0], 0);
+	ParseButton(WiimoteContext->GuitarState.Buttons.Red, &GamepadReport->Buttons[0], 1);
+	ParseButton(WiimoteContext->GuitarState.Buttons.Yellow, &GamepadReport->Buttons[0], 2);
+	ParseButton(WiimoteContext->GuitarState.Buttons.Blue, &GamepadReport->Buttons[0], 3);
+	ParseButton(WiimoteContext->GuitarState.Buttons.Orange, &GamepadReport->Buttons[0], 4);
+	ParseButton(WiimoteContext->GuitarState.Buttons.Up, &GamepadReport->Buttons[0], 5);
+	ParseButton(WiimoteContext->GuitarState.Buttons.Down, &GamepadReport->Buttons[0], 6);
+	ParseButton(WiimoteContext->State.CoreButtons.Plus || WiimoteContext->GuitarState.Buttons.Plus, &GamepadReport->Buttons[1], 0);
+	ParseButton(WiimoteContext->State.CoreButtons.Minus || WiimoteContext->GuitarState.Buttons.Minus, &GamepadReport->Buttons[1], 1);
+	ParseButton(WiimoteContext->State.CoreButtons.One, &GamepadReport->Buttons[1], 2);
+	ParseButton(WiimoteContext->State.CoreButtons.Two, &GamepadReport->Buttons[1], 3);
+	ParseButton(WiimoteContext->State.CoreButtons.A, &GamepadReport->Buttons[1], 4);
+	ParseButton(WiimoteContext->State.CoreButtons.B, &GamepadReport->Buttons[1], 5);
+	ParseButton(WiimoteContext->State.CoreButtons.Home, &GamepadReport->Buttons[1], 6);
 
 	// Analog Bars
-	ParseAnalogAxis(WiimoteContext->GuitarState.WhammyBar, RequestBuffer + 5, FALSE, FALSE);
-	ParseAnalogAxis(WiimoteContext->GuitarState.TouchBar, RequestBuffer + 6, FALSE, TRUE);
+	ParseAnalogAxis(WiimoteContext->GuitarState.WhammyBar, &GamepadReport->RXAxis, FALSE, FALSE);
+	ParseAnalogAxis(WiimoteContext->GuitarState.TouchBar, &GamepadReport->RYAxis, FALSE, TRUE);
 
 	// DPad
 	ParseDPad(
@@ -486,69 +479,99 @@ ParseWiimoteStateAsGuitarExtension(
 		WiimoteContext->State.CoreButtons.DPad.Right,
 		WiimoteContext->State.CoreButtons.DPad.Down,
 		WiimoteContext->State.CoreButtons.DPad.Left,
-		RequestBuffer + 8);
+		&GamepadReport->Hatswitch);
 }
 
 
 VOID
-ParseWiimoteState(
-_In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext,
-_Out_writes_all_(9) PUCHAR RequestBuffer
+ParseWiimoteStateAsGamepad(
+	_In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext,
+	_Inout_updates_all_(BufferSize) PVOID Buffer,
+	_In_ size_t BufferSize,
+	_Out_ PSIZE_T BytesWritten
 )
 {
-	RtlSecureZeroMemory(RequestBuffer, 9);
+	PHID_GAMEPAD_REPORT GamepadReport = (PHID_GAMEPAD_REPORT)Buffer;
+	if (BufferSize < sizeof(HID_GAMEPAD_REPORT))
+	{
+		Trace("Gamepad Report Buffer seems to be too small: %d - %d", BufferSize, sizeof(HID_GAMEPAD_REPORT));
+	}
+	//ASSERT(BufferSize < sizeof(HID_GAMEPAD_REPORT));
+	HID_GAMEPAD_REPORT_INIT(GamepadReport);
 
 	switch (WiimoteContext->Extension)
 	{
 	case None:
-		ParseWiimoteStateAsStandaloneWiiremote(WiimoteContext, RequestBuffer);
+		ParseWiimoteStateAsStandaloneWiiremote(WiimoteContext, GamepadReport);
 		break;
 	case Nunchuck:
-		ParseWiimoteStateAsNunchuckExtension(WiimoteContext, RequestBuffer);
+		ParseWiimoteStateAsNunchuckExtension(WiimoteContext, GamepadReport);
 		break;
 	case BalanceBoard:
-		ParseWiimoteStateAsBalanceBoard(WiimoteContext, RequestBuffer);
+		ParseWiimoteStateAsBalanceBoard(WiimoteContext, GamepadReport);
 		break;
 	case ClassicController:
 	case WiiUProController:
-		ParseWiimoteStateAsClassicControllerExtension(WiimoteContext, RequestBuffer);
+		ParseWiimoteStateAsClassicControllerExtension(WiimoteContext, GamepadReport);
 		break;
 	case Guitar:
-		ParseWiimoteStateAsGuitarExtension(WiimoteContext, RequestBuffer);
+		ParseWiimoteStateAsGuitarExtension(WiimoteContext, GamepadReport);
 	default:
 		break;
 	}
+
+	(*BytesWritten) = sizeof(HID_GAMEPAD_REPORT);
 }
 
-VOID ParseWiimoteStateAsDPadMouse( 
-	_In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext, 
-	_Out_writes_all_(4) PUCHAR RequestBuffer
-	)
+VOID ParseWiimoteStateAsDPadMouse(
+	_In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext,
+	_Inout_updates_all_(BufferSize) PVOID Buffer,
+	_In_ size_t BufferSize,
+	_Out_ PSIZE_T BytesWritten
+)
 {
-	RtlSecureZeroMemory(RequestBuffer, 4);
+	PHID_DPADMOUSE_REPORT DPadMouseReport = (PHID_DPADMOUSE_REPORT)Buffer;
+	if (BufferSize < sizeof(HID_DPADMOUSE_REPORT))
+	{
+		Trace("DPadMouse Report Buffer seems to be too small: %d - %d", BufferSize, sizeof(HID_DPADMOUSE_REPORT));
+	}
+	//ASSERT(BufferSize < sizeof(HID_DPADMOUSE_REPORT));
+	HID_DPADMOUSE_REPORT_INIT(DPadMouseReport);
 
 	//Buttons
-	ParseButton(WiimoteContext->State.CoreButtons.One, RequestBuffer, 0);
-	ParseButton(WiimoteContext->State.CoreButtons.Two, RequestBuffer, 1);
-	ParseButton(WiimoteContext->State.CoreButtons.B, RequestBuffer, 2);
+	ParseButton(WiimoteContext->State.CoreButtons.One, &DPadMouseReport->Buttons, 0);
+	ParseButton(WiimoteContext->State.CoreButtons.Two, &DPadMouseReport->Buttons, 1);
+	ParseButton(WiimoteContext->State.CoreButtons.B, &DPadMouseReport->Buttons, 2);
 
 	//Axis
-	ParseBooleanAxis(WiimoteContext->State.CoreButtons.DPad.Up, WiimoteContext->State.CoreButtons.DPad.Down, RequestBuffer + 1, 6, 2, TRUE);
-	ParseBooleanAxis(WiimoteContext->State.CoreButtons.DPad.Right, WiimoteContext->State.CoreButtons.DPad.Left, RequestBuffer + 2, 6, 2, TRUE);
+	ParseBooleanAxis(WiimoteContext->State.CoreButtons.DPad.Up, WiimoteContext->State.CoreButtons.DPad.Down, &DPadMouseReport->X, 6, 2, TRUE);
+	ParseBooleanAxis(WiimoteContext->State.CoreButtons.DPad.Right, WiimoteContext->State.CoreButtons.DPad.Left, &DPadMouseReport->Y, 6, 2, TRUE);
+
+	(*BytesWritten) = sizeof(HID_DPADMOUSE_REPORT);
 }
 
 VOID ParseWiimoteStateAsIRMouse(
 	_In_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext,
-	_Out_writes_all_(3) PUCHAR RequestBuffer
-	)
+	_Inout_updates_all_(BufferSize) PVOID Buffer,
+	_In_ size_t BufferSize,
+	_Out_ PSIZE_T BytesWritten
+)
 {
-	RtlSecureZeroMemory(RequestBuffer, 3);
-	
+	PHID_IRMOUSE_REPORT IRMouseReport = (PHID_IRMOUSE_REPORT)Buffer;
+	if (BufferSize < sizeof(HID_IRMOUSE_REPORT))
+	{
+		Trace("IRMouse Report Buffer seems to be too small: %d - %d", BufferSize, sizeof(HID_IRMOUSE_REPORT));
+	}
+	//ASSERT(BufferSize < sizeof(HID_IRMOUSE_REPORT));
+	HID_IRMOUSE_REPORT_INIT(IRMouseReport);
+
 	//Buttons
-	ParseButton(WiimoteContext->State.CoreButtons.A, RequestBuffer, 0);
-	ParseButton(WiimoteContext->State.CoreButtons.B, RequestBuffer, 1);
-	ParseButton(WiimoteContext->State.CoreButtons.Home, RequestBuffer, 2);
+	ParseButton(WiimoteContext->State.CoreButtons.A, &IRMouseReport->Buttons, 0);
+	ParseButton(WiimoteContext->State.CoreButtons.B, &IRMouseReport->Buttons, 1);
+	ParseButton(WiimoteContext->State.CoreButtons.Home, &IRMouseReport->Buttons, 2);
 
 	//Axis
-	ParseIRCamera(WiimoteContext->IRState.Points, RequestBuffer + 1, 128, 121);
+	ParseIRCamera(WiimoteContext->IRState.Points, &IRMouseReport->X, &IRMouseReport->Y, 128, 121);
+
+	(*BytesWritten) = sizeof(HID_IRMOUSE_REPORT);
 }
