@@ -28,7 +28,7 @@ typedef struct _HID_GAMEPAD_REPORT {
 	UCHAR ReportID;
 	UCHAR XAxis;
 	UCHAR YAxis;
-	USHORT Buttons;
+	UCHAR Buttons[2];
 	UCHAR ZAxis;
 	UCHAR RXAxis;
 	UCHAR RYAxis;
