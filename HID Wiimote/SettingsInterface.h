@@ -13,6 +13,7 @@ Abstract:
 #pragma once
 
 #include "WiimotePublic.h"
+#include "WiimoteSettingsPublic.h"
 
 #include <initguid.h>
 
@@ -30,7 +31,6 @@ typedef struct _WIIMOTE_STATUS_IOCTL_DATA
 
 typedef struct _WIIMOTE_STATE_IOCTL_DATA
 {
-	WIIMOTE_DRIVER_MODE Mode;
 	WIIMOTE_SETTINGS Settings;
 	WIIMOTE_STATUS_IOCTL_DATA Status;
 

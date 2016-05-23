@@ -309,7 +309,6 @@ FillStateIoControlData(
 {
 	RtlZeroMemory(StateData, sizeof(WIIMOTE_STATE_IOCTL_DATA));
 
-	StateData->Mode = WiimoteContext->Mode;
 	StateData->Settings = WiimoteContext->Settings;
 
 	FillStatusIoControlData(&(StateData->Status), WiimoteContext);

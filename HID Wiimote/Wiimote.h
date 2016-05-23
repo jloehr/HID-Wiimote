@@ -14,6 +14,7 @@ Abstract:
 #include "HIDWiimote.h"
 
 #include "WiimotePublic.h"
+#include "WiimoteSettings.h"
 
 #pragma warning(disable:4201) //nameless struct/union
 
@@ -196,13 +197,11 @@ typedef struct _WIIMOTE_IR_STATE
 
 typedef struct _WIIMOTE_DEVICE_CONTEXT
 {
-	WIIMOTE_DRIVER_MODE Mode;
-	WIIMOTE_SETTINGS Settings;
-
 	BYTE CurrentReportMode;
 	BYTE BatteryLevel;
 	BYTE LEDState;
 
+	WIIMOTE_SETTINGS Settings;
 	WIIMOTE_EXTENSION Extension;
 	WIIMTOE_STATE State;
 	WIIMOTE_IR_STATE IRState;

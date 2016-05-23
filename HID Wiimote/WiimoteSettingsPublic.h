@@ -11,8 +11,12 @@ Abstract:
 */
 #pragma once
 
+#include "WiimotePublic.h"
+
 typedef struct _WIIMOTE_SETTINGS
 {
+	WIIMOTE_DRIVER_MODE Mode;
+
 	BOOLEAN XAxisEnabled;
 	BOOLEAN YAxisEnabled;
 	BOOLEAN MouseButtonsSwitched;

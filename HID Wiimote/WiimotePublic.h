@@ -11,8 +11,6 @@ Abstract:
 */
 #pragma once
 
-#include "WiimoteSettingsPublic.h"
-
 // LEDs
 #define WIIMOTE_LEDS_ONE (0x10)
 #define WIIMOTE_LEDS_TWO (0x20)

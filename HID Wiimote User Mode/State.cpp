@@ -25,7 +25,7 @@ namespace HIDWiimote
 		{
 			Status = gcnew UserModeLib::Status(StateData.Status);
 
-			Mode = (UserModeLib::DriverMode)StateData.Mode;
+			Mode = (UserModeLib::DriverMode)StateData.Settings.Mode;
 
 			XAxisEnabled = (StateData.Settings.XAxisEnabled != FALSE);
 			YAxisEnabled = (StateData.Settings.YAxisEnabled != FALSE);
