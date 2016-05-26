@@ -18,7 +18,7 @@ VOID
 ParseBooleanAxis(
 	_In_ BOOLEAN MinimumValue,
 	_In_ BOOLEAN MaximumValue,
-	_Out_ PUCHAR AxisValue,
+	_Inout_ PUCHAR AxisValue,
 	_In_ UCHAR LeastSignificantBitPosition,
 	_In_ BYTE Bits,
 	_In_ BOOLEAN Signed
@@ -45,7 +45,7 @@ ParseBooleanAxis(
 VOID
 ParseButton(
 	_In_ BOOLEAN ButtonValue,
-	_Out_ PUCHAR ButtonBitField,
+	_Inout_ PUCHAR ButtonBitField,
 	_In_ UCHAR LeastSignificantBitPosition
 )
 {
