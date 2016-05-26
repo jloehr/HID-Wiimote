@@ -58,7 +58,7 @@ FORCEINLINE
 HID_IRMOUSE_REPORT_INIT(
 	_Out_ PHID_IRMOUSE_REPORT Report)
 {
-	RtlZeroMemory(Report, sizeof(PHID_IRMOUSE_REPORT));
+	RtlZeroMemory(Report, sizeof(HID_IRMOUSE_REPORT));
 	Report->ReportID = IRMOUSE_REPORT_ID;
 }
 
