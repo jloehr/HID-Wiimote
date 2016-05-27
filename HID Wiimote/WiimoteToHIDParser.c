@@ -65,20 +65,15 @@ ParseAnalogAxis(
 {
 	if (Invert)
 	{
-		RawValue ^= 0xFF;
+		RawValue = ~RawValue;
 	}
 
 	if (Signed)
 	{
-		CHAR Value = ((CHAR)RawValue) - 0x80;
-
-		(*AxisValue) = (0x00 | Value);
+		RawValue ^= 0x80;
 	}
-	else
-	{
-		(*AxisValue) = RawValue;
-	}
-
+		
+	(*AxisValue) = RawValue;
 }
 
 VOID
@@ -93,24 +88,17 @@ ParseAccelerometer(
 	// For a range of 63 6 bits are used.
 
 	// Normally 0x80 (128) is the middle of the 8 bit range, so cap the accelerometer data to a range of 32 around 128.
-	if (RawValue < (0x80 - 0x20))
-	{
-		RawValue = 0x80 - 0x20;
-	}
-	else if (RawValue > (0x80 + 0x1F))
-	{
-		RawValue = 0x80 + 0x1F;
-	}
+	RawValue = max(RawValue, 0x80 - 0x20);
+	RawValue = min(RawValue, 0x80 + 0x1F);
 
 	RawValue -= (0x80 - 0x20);
+
 	if (Invert)
 	{
-		RawValue = 0x3F - RawValue;
+		RawValue = RawValue ^ 0x3F;
 	}
-	RawValue &= 0x3F;
-	RawValue = RawValue << 2;
 
-	(*AxisValue) = RawValue;
+	(*AxisValue) = RawValue << 2;
 }
 
 VOID
@@ -142,11 +130,11 @@ ParseDPad(
 		Up-Left		8		0000 1000			0000 0111
 	*/
 
-	//Thanks to Waterlimon for this solution
-	//See http://www.gamedev.net/topic/667868-direction-booleans-into-single-integer/ for more solutions.
+	// Thanks to Waterlimon for this solution
+	// See http://www.gamedev.net/topic/667868-direction-booleans-into-single-integer/ for more solutions.
 	//
 	// Branchless polynomial version (just for fun):
-	//int64_t x = 3 * (up - down) + left - right;
+	// int64_t x = 3 * (up - down) + left - right;
 	// return x * (x * (x * (x * (x * (x * (x * (x * (-31) - 28) + 938) + 840) - 8519) - 6972) + 24412) + 12880) / 3360;
 	//
 	const BYTE ValueLookUpTable[3][3] = {
