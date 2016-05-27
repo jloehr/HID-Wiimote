@@ -33,7 +33,7 @@ typedef struct _WIIMOTE_WII_REMOTE_STATE
 			BOOLEAN Left;
 			BOOLEAN Right;
 		} DPad;
-	} Buttons;
+	} CoreButtons;
 
 	struct
 	{

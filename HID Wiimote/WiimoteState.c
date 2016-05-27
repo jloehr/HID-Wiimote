@@ -133,18 +133,18 @@ UpdateCoreButtons(
 		return STATUS_INVALID_BUFFER_SIZE;
 	}
 
-	WiiRemoteState->Buttons.A = (ButtonData[1] & 0x08);
-	WiiRemoteState->Buttons.B = (ButtonData[1] & 0x04);
-	WiiRemoteState->Buttons.One = (ButtonData[1] & 0x02);
-	WiiRemoteState->Buttons.Two = (ButtonData[1] & 0x01);
-	WiiRemoteState->Buttons.Minus = (ButtonData[1] & 0x10);
-	WiiRemoteState->Buttons.Plus = (ButtonData[0] & 0x10);
-	WiiRemoteState->Buttons.Home = (ButtonData[1] & 0x80);
+	WiiRemoteState->CoreButtons.A = (ButtonData[1] & 0x08);
+	WiiRemoteState->CoreButtons.B = (ButtonData[1] & 0x04);
+	WiiRemoteState->CoreButtons.One = (ButtonData[1] & 0x02);
+	WiiRemoteState->CoreButtons.Two = (ButtonData[1] & 0x01);
+	WiiRemoteState->CoreButtons.Minus = (ButtonData[1] & 0x10);
+	WiiRemoteState->CoreButtons.Plus = (ButtonData[0] & 0x10);
+	WiiRemoteState->CoreButtons.Home = (ButtonData[1] & 0x80);
 
-	WiiRemoteState->Buttons.DPad.Left = (ButtonData[0] & 0x01);
-	WiiRemoteState->Buttons.DPad.Right = (ButtonData[0] & 0x02);
-	WiiRemoteState->Buttons.DPad.Down = (ButtonData[0] & 0x04);
-	WiiRemoteState->Buttons.DPad.Up = (ButtonData[0] & 0x08);
+	WiiRemoteState->CoreButtons.DPad.Left = (ButtonData[0] & 0x01);
+	WiiRemoteState->CoreButtons.DPad.Right = (ButtonData[0] & 0x02);
+	WiiRemoteState->CoreButtons.DPad.Down = (ButtonData[0] & 0x04);
+	WiiRemoteState->CoreButtons.DPad.Up = (ButtonData[0] & 0x08);
 
 	return STATUS_SUCCESS;
 }
