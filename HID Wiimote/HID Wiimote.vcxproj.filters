@@ -67,6 +67,9 @@
     <ClCompile Include="WiimoteSettings.c">
       <Filter>Wiimote</Filter>
     </ClCompile>
+    <ClCompile Include="WiimoteState.c">
+      <Filter>Wiimote</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Device.h">
@@ -115,6 +118,9 @@
       <Filter>Wiimote</Filter>
     </ClInclude>
     <ClInclude Include="WiimoteSettings.h">
+      <Filter>Wiimote</Filter>
+    </ClInclude>
+    <ClInclude Include="WiimoteState.h">
       <Filter>Wiimote</Filter>
     </ClInclude>
   </ItemGroup>

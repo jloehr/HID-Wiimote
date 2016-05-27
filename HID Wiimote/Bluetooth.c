@@ -393,7 +393,7 @@ L2CAPCallback(
 		Trace("Disconnect");
 		Trace("Parameter: %u; %u", Parameters->Parameters.Disconnect.Reason, Parameters->Parameters.Disconnect.CloseNow);
 	
-		WiimoteResetToNullState(DeviceContext);
+		WiimoteReset(DeviceContext);
 		SignalDeviceIsGone(DeviceContext);
 
 		//WDF_DEVICE_STATE_INIT (&NewDeviceState);
