@@ -235,7 +235,7 @@ HIDFillReadBufferCallback(
 	PWIIMOTE_DEVICE_CONTEXT WiimoteContext = &(DeviceContext->WiimoteContext);
 	(*BytesWritten) = 0;
 
-	switch (DeviceContext->WiimoteContext.Settings.Mode)
+	switch (WiimoteContext->Settings.Mode)
 	{
 	case Gamepad:
 		ParseWiimoteStateAsGamepad(WiimoteContext, Buffer, BufferSize, BytesWritten);
@@ -243,15 +243,15 @@ HIDFillReadBufferCallback(
 	case PassThrough:
 		break;
 	case IRMouse:
-		ParseWiimoteStateAsIRMouse(WiimoteContext, Buffer, BufferSize, BytesWritten);
+		ParseWiimoteStateAsIRMouse(&(WiimoteContext->State), Buffer, BufferSize, BytesWritten);
 		break;
 	case DPadMouse:
-		ParseWiimoteStateAsDPadMouse(WiimoteContext, Buffer, BufferSize, BytesWritten);
+		ParseWiimoteStateAsDPadMouse(&(WiimoteContext->State), Buffer, BufferSize, BytesWritten);
 		break;
 	case GamepadAndIRMouse:
 		if (!DeviceContext->HIDContext.GamepadAndIRMouseReportToggleFlag)
 		{
-			ParseWiimoteStateAsIRMouse(WiimoteContext, Buffer, BufferSize, BytesWritten);
+			ParseWiimoteStateAsIRMouse(&(WiimoteContext->State), Buffer, BufferSize, BytesWritten);
 			DeviceContext->HIDContext.GamepadAndIRMouseReportToggleFlag = !DeviceContext->HIDContext.GamepadAndIRMouseReportToggleFlag;
 
 			ReadIoControlBufferDispatchRequest(&(DeviceContext->HIDContext.ReadBuffer));
