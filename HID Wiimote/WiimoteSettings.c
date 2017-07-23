@@ -68,7 +68,8 @@ WiimoteSettingsLoad(
 	}
 
 	// Load each Setting
-	LoadWiimoteDriverModeValue(Key, &DriverModeValueName, Gamepad, &DeviceContext->WiimoteContext.Settings.Mode);
+	DeviceContext->WiimoteContext.Settings.Mode = Gamepad;
+	//LoadWiimoteDriverModeValue(Key, &DriverModeValueName, Gamepad, &DeviceContext->WiimoteContext.Settings.Mode);
 	LoadBooleanValue(Key, &XAxisEnabledValueName, FALSE, &DeviceContext->WiimoteContext.Settings.XAxisEnabled);
 	LoadBooleanValue(Key, &YAxisEnabledValueName, FALSE, &DeviceContext->WiimoteContext.Settings.YAxisEnabled);
 	LoadBooleanValue(Key, &MouseButtonsSwitchedValueName, FALSE, &DeviceContext->WiimoteContext.Settings.MouseButtonsSwitched);
@@ -85,7 +86,7 @@ WiimoteSettingsSetDriverMode(
 	_In_ WIIMOTE_DRIVER_MODE DriverMode
 	)
 {
-	DeviceContext->WiimoteContext.Settings.Mode = DriverMode;
+	//DeviceContext->WiimoteContext.Settings.Mode = DriverMode;
 
 	SaveULONGValue(DeviceContext, &DriverModeValueName, (ULONG)DriverMode);
 
