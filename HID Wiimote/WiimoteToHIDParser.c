@@ -316,6 +316,7 @@ VOID ParseIRCamera(
 VOID
 ParseWiimoteStateAsStandaloneWiiremote(
 	_In_ PWIIMOTE_STATE WiimoteState,
+	_In_ PWIIMOTE_SETTINGS WiimoteSettings,
 	_Out_ PHID_GAMEPAD_REPORT GamepadReport
 )
 {
@@ -333,8 +334,10 @@ ParseWiimoteStateAsStandaloneWiiremote(
 	ParseButton(WiimoteState->WiiRemoteState.CoreButtons.Home, &GamepadReport->Buttons[0], 6);
 
 	//Accelerometer
-	ParseAccelerometer(WiimoteState->WiiRemoteState.Accelerometer.Y, &GamepadReport->RXAxis, TRUE);
-	ParseAccelerometer(WiimoteState->WiiRemoteState.Accelerometer.X, &GamepadReport->RYAxis, TRUE);
+	if(WiimoteSettings->XAxisEnabled)
+		ParseAccelerometer(WiimoteState->WiiRemoteState.Accelerometer.Y, &GamepadReport->RXAxis, TRUE);
+	if (WiimoteSettings->YAxisEnabled)
+		ParseAccelerometer(WiimoteState->WiiRemoteState.Accelerometer.X, &GamepadReport->RYAxis, TRUE);
 	//ParseAccelerometer(WiimoteState->Accelerometer.Z, RequestBuffer + 3, 4);
 	
 }
@@ -342,6 +345,7 @@ ParseWiimoteStateAsStandaloneWiiremote(
 VOID
 ParseWiimoteStateAsNunchuckExtension(
 	_In_ PWIIMOTE_STATE WiimoteState,
+	_In_ PWIIMOTE_SETTINGS WiimoteSettings,
 	_Out_ PHID_GAMEPAD_REPORT GamepadReport
 )
 {
@@ -361,8 +365,10 @@ ParseWiimoteStateAsNunchuckExtension(
 	ParseButton(WiimoteState->WiiRemoteState.CoreButtons.Home, &GamepadReport->Buttons[0], 0);
 
 	//Accelerometer
-	ParseAccelerometer(WiimoteState->WiiRemoteState.Accelerometer.X, &GamepadReport->RXAxis, TRUE);
-	ParseAccelerometer(WiimoteState->WiiRemoteState.Accelerometer.Y, &GamepadReport->RYAxis, TRUE);
+	if (WiimoteSettings->XAxisEnabled)
+		ParseAccelerometer(WiimoteState->WiiRemoteState.Accelerometer.X, &GamepadReport->RXAxis, TRUE);
+	if (WiimoteSettings->YAxisEnabled)
+		ParseAccelerometer(WiimoteState->WiiRemoteState.Accelerometer.Y, &GamepadReport->RYAxis, TRUE);
 
 	//DPad
 	ParseDPad(
@@ -481,6 +487,7 @@ ParseWiimoteStateAsGamepad(
 {
 	PHID_GAMEPAD_REPORT GamepadReport = (PHID_GAMEPAD_REPORT)Buffer;
 	PWIIMOTE_STATE WiimoteState = &(WiimoteContext->State);
+	PWIIMOTE_SETTINGS WiimoteSettings = &(WiimoteContext->Settings);
 	if (BufferSize < sizeof(HID_GAMEPAD_REPORT))
 	{
 		Trace("Gamepad Report Buffer seems to be too small: %d - %d", BufferSize, sizeof(HID_GAMEPAD_REPORT));
@@ -491,10 +498,10 @@ ParseWiimoteStateAsGamepad(
 	switch (WiimoteContext->Extension)
 	{
 	case None:
-		ParseWiimoteStateAsStandaloneWiiremote(WiimoteState, GamepadReport);
+		ParseWiimoteStateAsStandaloneWiiremote(WiimoteState, WiimoteSettings, GamepadReport);
 		break;
 	case Nunchuck:
-		ParseWiimoteStateAsNunchuckExtension(WiimoteState, GamepadReport);
+		ParseWiimoteStateAsNunchuckExtension(WiimoteState, WiimoteSettings, GamepadReport);
 		break;
 	case BalanceBoard:
 		ParseWiimoteStateAsBalanceBoard(WiimoteState, GamepadReport);
