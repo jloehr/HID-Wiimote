@@ -21,6 +21,11 @@ namespace HIDWiimote
 {
 	namespace UserModeLib
 	{
+		Status::Status()
+		{
+			SetLEDState(0x00);
+		}
+
 		Status::Status(const WIIMOTE_STATUS_IOCTL_DATA & StatusData)
 		{
 			BatteryLevel = StatusData.BatteryLevel;

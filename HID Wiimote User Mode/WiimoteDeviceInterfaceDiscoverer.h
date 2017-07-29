@@ -12,6 +12,7 @@ Abstract:
 */
 #pragma once
 
+#include "IWiimoteDeviceInterface.h"
 #include "WiimoteDeviceInterface.h"
 #include "WiimoteDeviceInterfaceEnumerator.h"
 
@@ -28,7 +29,7 @@ namespace HIDWiimote
 			void Start();
 			void Stop();
 
-			event System::EventHandler<WiimoteDeviceInterface^>^ NewWiimoteDeviceInterfaceFound;
+			event System::EventHandler<IWiimoteDeviceInterface^>^ NewWiimoteDeviceInterfaceFound;
 
 		private:
 			PWiimoteDeviceInterfaceEnumerator NativeEnumerator;

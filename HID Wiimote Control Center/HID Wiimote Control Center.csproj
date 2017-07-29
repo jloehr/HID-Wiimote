@@ -97,6 +97,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Control Center\DummyDeviceInterface.cs" />
     <Compile Include="Control Center\WiimoteDevice.cs" />
     <Compile Include="Properties\ControlCenter.Designer.cs">
       <AutoGen>True</AutoGen>

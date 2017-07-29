@@ -57,12 +57,12 @@ namespace HIDWiimote.ControlCenter.Control_Center
             }
         }
 
+        private UserModeLib.IWiimoteDeviceInterface DeviceInterface;
         private bool _Initilized = false;
 
         private UserModeLib.Extension _Extension = UserModeLib.Extension.None;
         private byte _BatteryLevel = 0;
         private bool[] _LEDState = { false, false, false, false };
-        private UserModeLib.WiimoteDeviceInterface DeviceInterface;
 
         public Option<UserModeLib.DriverMode> Mode { get; set; }
         public Option<bool> EnableWiimoteXAxisAccelerometer { get; set; }

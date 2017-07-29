@@ -23,6 +23,7 @@ namespace HIDWiimote
 		public ref class Status
 		{
 		public:
+			Status();
 			Status(const WIIMOTE_STATUS_IOCTL_DATA & StatusData);
 
 			property array<System::Boolean>^ LEDState;

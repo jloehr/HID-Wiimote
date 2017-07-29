@@ -28,9 +28,13 @@ namespace HIDWiimote.ControlCenter.Main_Windows
             DeviceInterfaceDiscoverer = new UserModeLib.WiimoteDeviceInterfaceDiscoverer();
             DeviceInterfaceDiscoverer.NewWiimoteDeviceInterfaceFound += OnNewWiimoteDeviceInterfaceFound;
             DeviceInterfaceDiscoverer.Start();
+
+#if DEBUG
+            OnNewWiimoteDeviceInterfaceFound(this, new DummyDeviceInterface());
+#endif
         }
 
-        private void OnNewWiimoteDeviceInterfaceFound(object sender, UserModeLib.WiimoteDeviceInterface NewInterface)
+        private void OnNewWiimoteDeviceInterfaceFound(object sender, UserModeLib.IWiimoteDeviceInterface NewInterface)
         {
             Application.Current.Dispatcher.Invoke(() => {
                 WiimoteDevice NewWiimoteDevice = new WiimoteDevice(NewInterface);
@@ -63,7 +67,6 @@ namespace HIDWiimote.ControlCenter.Main_Windows
                 }
             });
         }
-        
 
         private void OnInstallerClick(object sender, RoutedEventArgs e)
         {

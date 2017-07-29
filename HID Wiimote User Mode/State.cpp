@@ -21,6 +21,12 @@ namespace HIDWiimote
 {
 	namespace UserModeLib
 	{
+		State::State()
+		{
+			Status = gcnew UserModeLib::Status();	
+			Mode = DriverMode::PassThrough;
+		}
+
 		State::State(const WIIMOTE_STATE_IOCTL_DATA & StateData)
 		{
 			Status = gcnew UserModeLib::Status(StateData.Status);

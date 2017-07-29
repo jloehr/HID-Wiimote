@@ -25,6 +25,7 @@ namespace HIDWiimote
 		public ref class State
 		{
 		public:
+			State();
 			State(const WIIMOTE_STATE_IOCTL_DATA & StateData);
 
 			property DriverMode Mode;

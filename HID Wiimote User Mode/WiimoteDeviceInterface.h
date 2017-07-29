@@ -12,25 +12,24 @@ Abstract:
 */
 #pragma once
 
-#include "Status.h"
-#include "State.h"
+#include "IWiimoteDeviceInterface.h"
 
 namespace HIDWiimote
 {
 	namespace UserModeLib
 	{
-		public ref class WiimoteDeviceInterface
+		public ref class WiimoteDeviceInterface : IWiimoteDeviceInterface
 		{
 		public:
 			WiimoteDeviceInterface(System::String^ DeviceInterfacePath);
 
 			property System::String^ DeviceInterfacePath;
 
-			event System::EventHandler^ DeviceRemoved;
-			event System::EventHandler<Status^>^ StatusUpdate;
+			virtual event System::EventHandler^ DeviceRemoved;
+			virtual event System::EventHandler<Status^>^ StatusUpdate;
 
-			State^ Initialize();
-			void Disconnect();
+			virtual State^ Initialize();
+			virtual void Disconnect();
 
 			virtual System::Boolean SetDriverMode(DriverMode NewMode);
 			virtual System::Boolean SetEnableWiimoteXAxisAccelerometer(System::Boolean Enabled);
