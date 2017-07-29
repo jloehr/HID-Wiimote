@@ -57,7 +57,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PreBuildEvent>
-      <Command>cscript.exe Version.wsf //Job:GenerateVersionStringFiles "$(SolutionDir)Additional Package Content\Readme.txt"</Command>
+      <Command>cscript.exe Version.wsf //Job:GenerateVersionStringFiles "$(SolutionDir)HID Wiimote Package\Readme.txt"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

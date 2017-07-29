@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HID Wiimote", "HID Wiimote\HID Wiimote.vcxproj", "{785D88E1-E758-4966-80FA-AEF74681FEF1}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -15,13 +15,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HID Wiimote Package", "HID 
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HID Miniport", "HID Miniport\HID Miniport.vcxproj", "{3BAFF0EB-1B25-4E8E-8189-267B6686D7BC}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Additional Package Content", "Additional Package Content", "{7EAA057D-3F5C-42FA-8FDB-48BD40126BED}"
-	ProjectSection(SolutionItems) = preProject
-		Additional Package Content\DPInst.xml = Additional Package Content\DPInst.xml
-		Additional Package Content\EULA.txt = Additional Package Content\EULA.txt
-		Additional Package Content\Readme.txt = Additional Package Content\Readme.txt
-	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BuildAndZip", "BuildAndZip\BuildAndZip.vcxproj", "{0C56BAEE-4F6C-4590-9E48-EFBF80099FEB}"
 	ProjectSection(ProjectDependencies) = postProject
