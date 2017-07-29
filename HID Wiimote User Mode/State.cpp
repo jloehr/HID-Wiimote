@@ -27,11 +27,11 @@ namespace HIDWiimote
 
 			Mode = (UserModeLib::DriverMode)StateData.Settings.Mode;
 
-			XAxisEnabled = (StateData.Settings.XAxisEnabled != FALSE);
-			YAxisEnabled = (StateData.Settings.YAxisEnabled != FALSE);
-			MouseButtonsSwitched = (StateData.Settings.MouseButtonsSwitched != FALSE);
-			TriggerAndShoulderSwitched = (StateData.Settings.TriggerAndShoulderSwitched != FALSE);
-			TriggerSplit = (StateData.Settings.TriggerSplit != FALSE);
+			EnableWiimoteXAxisAccelerometer = (StateData.Settings.EnableWiimoteXAxisAccelerometer != FALSE);
+			EnableWiimoteYAxisAccelerometer = (StateData.Settings.EnableWiimoteYAxisAcceleromenter != FALSE);
+			SwitchMouseButtons = (StateData.Settings.SwitchMouseButtons != FALSE);
+			SwitchTriggerAndShoulder = (StateData.Settings.SwitchTriggerAndShoulder != FALSE);
+			SplitTrigger = (StateData.Settings.SplitTriggerAxis != FALSE);
 		}
 	}
 }

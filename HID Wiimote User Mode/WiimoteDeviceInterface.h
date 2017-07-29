@@ -32,12 +32,12 @@ namespace HIDWiimote
 			State^ Initialize();
 			void Disconnect();
 
-			System::Boolean SetDriverMode(DriverMode NewMode);
-			System::Boolean SetXAxis(System::Boolean Enabled);
-			System::Boolean SetYAxis(System::Boolean Enabled);
-			System::Boolean SetMouseButtonsSwitched(System::Boolean Enabled);
-			System::Boolean SetTriggerAndShoulderSwitched(System::Boolean Enabled);
-			System::Boolean SetTriggerSplit(System::Boolean Enabled);
+			virtual System::Boolean SetDriverMode(DriverMode NewMode);
+			virtual System::Boolean SetEnableWiimoteXAxisAccelerometer(System::Boolean Enabled);
+			virtual System::Boolean SetEnableWiimoteYAxisAccelerometer(System::Boolean Enabled);
+			virtual System::Boolean SetSwitchMouseButtons(System::Boolean Enabled);
+			virtual System::Boolean SetSwitchTriggerAndShoulder(System::Boolean Enabled);
+			virtual System::Boolean SetSplitTrigger(System::Boolean Enabled);
 
 		private:
 			HANDLE DeviceInterfaceHandle;

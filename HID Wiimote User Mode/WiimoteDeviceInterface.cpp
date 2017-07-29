@@ -73,29 +73,29 @@ namespace HIDWiimote
 			return SendBufferdIOCTL(IOCTL_WIIMOTE_SET_MODE, &Mode, sizeof(Mode), nullptr, 0);
 		}
 
-		System::Boolean WiimoteDeviceInterface::SetXAxis(System::Boolean Enabled)
+		System::Boolean WiimoteDeviceInterface::SetEnableWiimoteXAxisAccelerometer(System::Boolean Enabled)
 		{
-			return SendBooleanSetting(IOCTL_WIIMOTE_SET_XAXIS, Enabled);
+			return SendBooleanSetting(IOCTL_WIIMOTE_SET_ENABLE_WIIMOTE_XAXIS_ACCELEROMETER, Enabled);
 		}
 
-		System::Boolean WiimoteDeviceInterface::SetYAxis(System::Boolean Enabled)
+		System::Boolean WiimoteDeviceInterface::SetEnableWiimoteYAxisAccelerometer(System::Boolean Enabled)
 		{
-			return SendBooleanSetting(IOCTL_WIIMOTE_SET_YAXIS, Enabled);
+			return SendBooleanSetting(IOCTL_WIIMOTE_SET_ENABLE_WIIMOTE_YAXIS_ACCELEROMETER, Enabled);
 		}
 
-		System::Boolean WiimoteDeviceInterface::SetMouseButtonsSwitched(System::Boolean Enabled)
+		System::Boolean WiimoteDeviceInterface::SetSwitchMouseButtons(System::Boolean Enabled)
 		{
-			return SendBooleanSetting(IOCTL_WIIMOTE_SET_MOUSEBUTTONSWITCHED, Enabled);
+			return SendBooleanSetting(IOCTL_WIIMOTE_SET_SWITCH_MOUSEBUTTONS, Enabled);
 		}
 
-		System::Boolean WiimoteDeviceInterface::SetTriggerAndShoulderSwitched(System::Boolean Enabled)
+		System::Boolean WiimoteDeviceInterface::SetSwitchTriggerAndShoulder(System::Boolean Enabled)
 		{
-			return SendBooleanSetting(IOCTL_WIIMOTE_SET_TRIGGERAMDSHOULDERSWITCHED, Enabled);
+			return SendBooleanSetting(IOCTL_WIIMOTE_SET_SWITCH_TRIGGERANDSHOULDER, Enabled);
 		}
 
-		System::Boolean WiimoteDeviceInterface::SetTriggerSplit(System::Boolean Enabled)
+		System::Boolean WiimoteDeviceInterface::SetSplitTrigger(System::Boolean Enabled)
 		{
-			return SendBooleanSetting(IOCTL_WIIMOTE_SET_TRIGGERSPLIT, Enabled);
+			return SendBooleanSetting(IOCTL_WIIMOTE_SET_SPLIT_TRIGGERAXIS, Enabled);
 		}
 
 		bool WiimoteDeviceInterface::OpenDevice()

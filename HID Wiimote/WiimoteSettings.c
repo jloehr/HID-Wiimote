@@ -15,11 +15,11 @@ Abstract:
 #include "Device.h"
 
 DECLARE_CONST_UNICODE_STRING(DriverModeValueName, L"DriverMode");
-DECLARE_CONST_UNICODE_STRING(XAxisEnabledValueName, L"XAxisEnbaled");
-DECLARE_CONST_UNICODE_STRING(YAxisEnabledValueName, L"YAxisEnbaled");
-DECLARE_CONST_UNICODE_STRING(MouseButtonsSwitchedValueName, L"MouseButtonsSwitched");
-DECLARE_CONST_UNICODE_STRING(TriggerAndShoulderSwitchedValueName, L"TriggerAndShoulderSwitched");
-DECLARE_CONST_UNICODE_STRING(TriggerSplitValueName, L"TriggerSplit");
+DECLARE_CONST_UNICODE_STRING(EnableWiimoteXAxisAccelerometerValueName, L"EnableWiimoteXAxisAccelerometer");
+DECLARE_CONST_UNICODE_STRING(EnableWiimoteYAxisAccelerometerValueName, L"EnableWiimoteYAxisAccelerometer");
+DECLARE_CONST_UNICODE_STRING(SwitchMouseButtonsValueName, L"SwitchMouseButtons");
+DECLARE_CONST_UNICODE_STRING(SwitchTriggerAndShoulderValueName, L"SwitchTriggerAndShoulder");
+DECLARE_CONST_UNICODE_STRING(SplitTriggerAxisValueName, L"SplitTriggerAxis");
 
 NTSTATUS
 OpenRegistryKey(
@@ -70,11 +70,11 @@ WiimoteSettingsLoad(
 	// Load each Setting
 	DeviceContext->WiimoteContext.Settings.Mode = Gamepad;
 	//LoadWiimoteDriverModeValue(Key, &DriverModeValueName, Gamepad, &DeviceContext->WiimoteContext.Settings.Mode);
-	LoadBooleanValue(Key, &XAxisEnabledValueName, FALSE, &DeviceContext->WiimoteContext.Settings.XAxisEnabled);
-	LoadBooleanValue(Key, &YAxisEnabledValueName, FALSE, &DeviceContext->WiimoteContext.Settings.YAxisEnabled);
-	LoadBooleanValue(Key, &MouseButtonsSwitchedValueName, FALSE, &DeviceContext->WiimoteContext.Settings.MouseButtonsSwitched);
-	LoadBooleanValue(Key, &TriggerAndShoulderSwitchedValueName, FALSE, &DeviceContext->WiimoteContext.Settings.TriggerAndShoulderSwitched);
-	LoadBooleanValue(Key, &TriggerSplitValueName, TRUE, &DeviceContext->WiimoteContext.Settings.TriggerSplit);
+	LoadBooleanValue(Key, &EnableWiimoteXAxisAccelerometerValueName, FALSE, &DeviceContext->WiimoteContext.Settings.EnableWiimoteXAxisAccelerometer);
+	LoadBooleanValue(Key, &EnableWiimoteYAxisAccelerometerValueName, FALSE, &DeviceContext->WiimoteContext.Settings.EnableWiimoteYAxisAcceleromenter);
+	LoadBooleanValue(Key, &SwitchMouseButtonsValueName, FALSE, &DeviceContext->WiimoteContext.Settings.SwitchMouseButtons);
+	LoadBooleanValue(Key, &SwitchTriggerAndShoulderValueName, FALSE, &DeviceContext->WiimoteContext.Settings.SwitchTriggerAndShoulder);
+	LoadBooleanValue(Key, &SplitTriggerAxisValueName, TRUE, &DeviceContext->WiimoteContext.Settings.SplitTriggerAxis);
 
 	// Close Key
 	WdfRegistryClose(Key);
@@ -95,58 +95,58 @@ WiimoteSettingsSetDriverMode(
 }
 
 VOID
-WiimoteSettingsSetXAxisEnabled(
+WiimoteSettingsSetEnableWiimoteXAxisAccelerometer(
 	_In_ PDEVICE_CONTEXT DeviceContext,
 	_In_ BOOLEAN Enabled
 	)
 {
-	DeviceContext->WiimoteContext.Settings.XAxisEnabled = Enabled;
+	DeviceContext->WiimoteContext.Settings.EnableWiimoteXAxisAccelerometer = Enabled;
 
-	SaveULONGValue(DeviceContext, &XAxisEnabledValueName, (ULONG)Enabled);
+	SaveULONGValue(DeviceContext, &EnableWiimoteXAxisAccelerometerValueName, (ULONG)Enabled);
 }
 
 VOID
-WiimoteSettingsSetYAxisEnabled(
+WiimoteSettingsSetEnableWiimoteYAxisAccelerometer(
 	_In_ PDEVICE_CONTEXT DeviceContext,
 	_In_ BOOLEAN Enabled
 	)
 {
-	DeviceContext->WiimoteContext.Settings.YAxisEnabled = Enabled;
+	DeviceContext->WiimoteContext.Settings.EnableWiimoteYAxisAcceleromenter = Enabled;
 
-	SaveULONGValue(DeviceContext, &YAxisEnabledValueName, (ULONG)Enabled);
+	SaveULONGValue(DeviceContext, &EnableWiimoteYAxisAccelerometerValueName, (ULONG)Enabled);
 }
 
 VOID
-WiimoteSettingsSetMouseButtonsSwitched(
+WiimoteSettingsSetSwitchMouseButtons(
 	_In_ PDEVICE_CONTEXT DeviceContext,
 	_In_ BOOLEAN Enabled
 	)
 {
-	DeviceContext->WiimoteContext.Settings.MouseButtonsSwitched = Enabled;
+	DeviceContext->WiimoteContext.Settings.SwitchMouseButtons = Enabled;
 
-	SaveULONGValue(DeviceContext, &MouseButtonsSwitchedValueName, (ULONG)Enabled);
+	SaveULONGValue(DeviceContext, &SwitchMouseButtonsValueName, (ULONG)Enabled);
 }
 
 VOID
-WiimoteSettingsSetTriggerAndShoulderSwitched(
+WiimoteSettingsSetSwitchTriggerAndShoulder(
 	_In_ PDEVICE_CONTEXT DeviceContext,
 	_In_ BOOLEAN Enabled
 	)
 {
-	DeviceContext->WiimoteContext.Settings.TriggerAndShoulderSwitched = Enabled;
+	DeviceContext->WiimoteContext.Settings.SwitchTriggerAndShoulder = Enabled;
 
-	SaveULONGValue(DeviceContext, &TriggerAndShoulderSwitchedValueName, (ULONG)Enabled);
+	SaveULONGValue(DeviceContext, &SwitchTriggerAndShoulderValueName, (ULONG)Enabled);
 }
 
 VOID
-WiimoteSettingsSetTriggerSplit(
+WiimoteSettingsSetSplitTriggerAxis(
 	_In_ PDEVICE_CONTEXT DeviceContext,
 	_In_ BOOLEAN Enabled
 	)
 {
-	DeviceContext->WiimoteContext.Settings.TriggerSplit = Enabled;
+	DeviceContext->WiimoteContext.Settings.SplitTriggerAxis = Enabled;
 
-	SaveULONGValue(DeviceContext, &TriggerSplitValueName, (ULONG)Enabled);
+	SaveULONGValue(DeviceContext, &SplitTriggerAxisValueName, (ULONG)Enabled);
 }
 
 /*

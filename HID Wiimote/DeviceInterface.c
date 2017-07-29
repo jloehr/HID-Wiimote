@@ -232,20 +232,20 @@ DeviceInterfaceDeviceControlCallback(
 	case IOCTL_WIIMOTE_SET_MODE:
 		ProcessSetDriverModeSetting(Request, DeviceInterfaceContext, WiimoteSettingsSetDriverMode);
 		break;
-	case IOCTL_WIIMOTE_SET_XAXIS:
-		ProcessSetBooleanSetting(Request, DeviceInterfaceContext, WiimoteSettingsSetXAxisEnabled);
+	case IOCTL_WIIMOTE_SET_ENABLE_WIIMOTE_XAXIS_ACCELEROMETER:
+		ProcessSetBooleanSetting(Request, DeviceInterfaceContext, WiimoteSettingsSetEnableWiimoteXAxisAccelerometer);
 		break;
-	case IOCTL_WIIMOTE_SET_YAXIS:
-		ProcessSetBooleanSetting(Request, DeviceInterfaceContext, WiimoteSettingsSetYAxisEnabled);
+	case IOCTL_WIIMOTE_SET_ENABLE_WIIMOTE_YAXIS_ACCELEROMETER:
+		ProcessSetBooleanSetting(Request, DeviceInterfaceContext, WiimoteSettingsSetEnableWiimoteYAxisAccelerometer);
 		break;
-	case IOCTL_WIIMOTE_SET_MOUSEBUTTONSWITCHED:
-		ProcessSetBooleanSetting(Request, DeviceInterfaceContext, WiimoteSettingsSetMouseButtonsSwitched);
+	case IOCTL_WIIMOTE_SET_SWITCH_MOUSEBUTTONS:
+		ProcessSetBooleanSetting(Request, DeviceInterfaceContext, WiimoteSettingsSetSwitchMouseButtons);
 		break;
-	case IOCTL_WIIMOTE_SET_TRIGGERAMDSHOULDERSWITCHED:
-		ProcessSetBooleanSetting(Request, DeviceInterfaceContext, WiimoteSettingsSetTriggerAndShoulderSwitched);
+	case IOCTL_WIIMOTE_SET_SWITCH_TRIGGERANDSHOULDER:
+		ProcessSetBooleanSetting(Request, DeviceInterfaceContext, WiimoteSettingsSetSwitchTriggerAndShoulder);
 		break;
-	case IOCTL_WIIMOTE_SET_TRIGGERSPLIT:
-		ProcessSetBooleanSetting(Request, DeviceInterfaceContext, WiimoteSettingsSetTriggerSplit);
+	case IOCTL_WIIMOTE_SET_SPLIT_TRIGGERAXIS:
+		ProcessSetBooleanSetting(Request, DeviceInterfaceContext, WiimoteSettingsSetSplitTriggerAxis);
 		break;
 	default:
 		Trace("Devcice Interface recieved unknown IOCTL: %#010x", IoControlCode);

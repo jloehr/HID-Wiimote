@@ -17,10 +17,10 @@ typedef struct _WIIMOTE_SETTINGS
 {
 	WIIMOTE_DRIVER_MODE Mode;
 
-	BOOLEAN XAxisEnabled;
-	BOOLEAN YAxisEnabled;
-	BOOLEAN MouseButtonsSwitched;
-	BOOLEAN TriggerAndShoulderSwitched;
-	BOOLEAN TriggerSplit;
+	BOOLEAN EnableWiimoteXAxisAccelerometer;
+	BOOLEAN EnableWiimoteYAxisAcceleromenter;
+	BOOLEAN SwitchMouseButtons;
+	BOOLEAN SwitchTriggerAndShoulder;
+	BOOLEAN SplitTriggerAxis;
 
 } WIIMOTE_SETTINGS, *PWIIMOTE_SETTINGS;

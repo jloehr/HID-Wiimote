@@ -28,31 +28,31 @@ WiimoteSettingsSetDriverMode(
 	);
 
 VOID
-WiimoteSettingsSetXAxisEnabled(
+WiimoteSettingsSetEnableWiimoteXAxisAccelerometer(
 	_In_ PDEVICE_CONTEXT DeviceContext,
 	_In_ BOOLEAN Enabled
 	);
 
 VOID
-WiimoteSettingsSetYAxisEnabled(
+WiimoteSettingsSetEnableWiimoteYAxisAccelerometer(
 	_In_ PDEVICE_CONTEXT DeviceContext,
 	_In_ BOOLEAN Enabled
 	);
 
 VOID
-WiimoteSettingsSetMouseButtonsSwitched(
+WiimoteSettingsSetSwitchMouseButtons(
 	_In_ PDEVICE_CONTEXT DeviceContext,
 	_In_ BOOLEAN Enabled
 	);
 
 VOID
-WiimoteSettingsSetTriggerAndShoulderSwitched(
+WiimoteSettingsSetSwitchTriggerAndShoulder(
 	_In_ PDEVICE_CONTEXT DeviceContext,
 	_In_ BOOLEAN Enabled
 	);
 
 VOID
-WiimoteSettingsSetTriggerSplit(
+WiimoteSettingsSetSplitTriggerAxis(
 	_In_ PDEVICE_CONTEXT DeviceContext,
 	_In_ BOOLEAN Enabled
 	);

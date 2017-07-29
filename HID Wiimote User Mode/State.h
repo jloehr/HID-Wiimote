@@ -29,11 +29,11 @@ namespace HIDWiimote
 
 			property DriverMode Mode;
 			property Status^ Status;
-			property System::Boolean XAxisEnabled;
-			property System::Boolean YAxisEnabled;
-			property System::Boolean MouseButtonsSwitched;
-			property System::Boolean TriggerAndShoulderSwitched;
-			property System::Boolean TriggerSplit;
+			property System::Boolean EnableWiimoteXAxisAccelerometer;
+			property System::Boolean EnableWiimoteYAxisAccelerometer;
+			property System::Boolean SwitchMouseButtons;
+			property System::Boolean SwitchTriggerAndShoulder;
+			property System::Boolean SplitTrigger;
 		};
 	}
 }

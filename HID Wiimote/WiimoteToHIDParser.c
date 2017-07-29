@@ -334,9 +334,9 @@ ParseWiimoteStateAsStandaloneWiiremote(
 	ParseButton(WiimoteState->WiiRemoteState.CoreButtons.Home, &GamepadReport->Buttons[0], 6);
 
 	//Accelerometer
-	if(WiimoteSettings->XAxisEnabled)
+	if(WiimoteSettings->EnableWiimoteXAxisAccelerometer)
 		ParseAccelerometer(WiimoteState->WiiRemoteState.Accelerometer.Y, &GamepadReport->RXAxis, TRUE);
-	if (WiimoteSettings->YAxisEnabled)
+	if (WiimoteSettings->EnableWiimoteYAxisAcceleromenter)
 		ParseAccelerometer(WiimoteState->WiiRemoteState.Accelerometer.X, &GamepadReport->RYAxis, TRUE);
 	//ParseAccelerometer(WiimoteState->Accelerometer.Z, RequestBuffer + 3, 4);
 	
@@ -365,9 +365,9 @@ ParseWiimoteStateAsNunchuckExtension(
 	ParseButton(WiimoteState->WiiRemoteState.CoreButtons.Home, &GamepadReport->Buttons[0], 0);
 
 	//Accelerometer
-	if (WiimoteSettings->XAxisEnabled)
+	if (WiimoteSettings->EnableWiimoteXAxisAccelerometer)
 		ParseAccelerometer(WiimoteState->WiiRemoteState.Accelerometer.X, &GamepadReport->RXAxis, TRUE);
-	if (WiimoteSettings->YAxisEnabled)
+	if (WiimoteSettings->EnableWiimoteYAxisAcceleromenter)
 		ParseAccelerometer(WiimoteState->WiiRemoteState.Accelerometer.Y, &GamepadReport->RYAxis, TRUE);
 
 	//DPad
