@@ -247,6 +247,12 @@ DeviceInterfaceDeviceControlCallback(
 	case IOCTL_WIIMOTE_SET_SPLIT_TRIGGERAXIS:
 		ProcessSetBooleanSetting(Request, DeviceInterfaceContext, WiimoteSettingsSetSplitTriggerAxis);
 		break;
+	case IOCTL_WIIMOTE_SET_MAP_TRIGGER_AS_AXIS:
+		ProcessSetBooleanSetting(Request, DeviceInterfaceContext, WiimoteSettingsSetMapTriggerAsAxis);
+		break;
+	case IOCTL_WIIMOTE_SET_MAP_TRIGGER_AS_BUTTONS:
+		ProcessSetBooleanSetting(Request, DeviceInterfaceContext, WiimoteSettingsSetMapTriggerAsButtons);
+		break;
 	default:
 		Trace("Devcice Interface recieved unknown IOCTL: %#010x", IoControlCode);
 		WdfRequestComplete(Request, STATUS_NOT_IMPLEMENTED);

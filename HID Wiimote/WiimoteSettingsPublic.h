@@ -22,5 +22,7 @@ typedef struct _WIIMOTE_SETTINGS
 	BOOLEAN SwitchMouseButtons;
 	BOOLEAN SwitchTriggerAndShoulder;
 	BOOLEAN SplitTriggerAxis;
+	BOOLEAN MapTriggerAsAxis;
+	BOOLEAN MapTriggerAsButtons;
 
 } WIIMOTE_SETTINGS, *PWIIMOTE_SETTINGS;

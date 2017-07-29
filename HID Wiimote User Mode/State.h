@@ -34,6 +34,8 @@ namespace HIDWiimote
 			property System::Boolean SwitchMouseButtons;
 			property System::Boolean SwitchTriggerAndShoulder;
 			property System::Boolean SplitTrigger;
+			property System::Boolean MapTriggerAsAxis;
+			property System::Boolean MapTriggerAsButtons;
 		};
 	}
 }

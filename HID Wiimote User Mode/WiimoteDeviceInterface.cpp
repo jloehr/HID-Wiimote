@@ -98,6 +98,16 @@ namespace HIDWiimote
 			return SendBooleanSetting(IOCTL_WIIMOTE_SET_SPLIT_TRIGGERAXIS, Enabled);
 		}
 
+		System::Boolean WiimoteDeviceInterface::SetMapTriggerAsAxis(System::Boolean Enabled)
+		{
+			return SendBooleanSetting(IOCTL_WIIMOTE_SET_MAP_TRIGGER_AS_AXIS, Enabled);
+		}
+
+		System::Boolean WiimoteDeviceInterface::SetMapTriggerAsButtons(System::Boolean Enabled)
+		{
+			return SendBooleanSetting(IOCTL_WIIMOTE_SET_MAP_TRIGGER_AS_BUTTONS, Enabled);
+		}
+
 		bool WiimoteDeviceInterface::OpenDevice()
 		{
 			System::IntPtr PointerToNativeString = System::Runtime::InteropServices::Marshal::StringToHGlobalUni(DeviceInterfacePath);

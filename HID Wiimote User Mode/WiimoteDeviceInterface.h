@@ -38,6 +38,8 @@ namespace HIDWiimote
 			virtual System::Boolean SetSwitchMouseButtons(System::Boolean Enabled);
 			virtual System::Boolean SetSwitchTriggerAndShoulder(System::Boolean Enabled);
 			virtual System::Boolean SetSplitTrigger(System::Boolean Enabled);
+			virtual System::Boolean SetMapTriggerAsAxis(System::Boolean Enabled);
+			virtual System::Boolean SetMapTriggerAsButtons(System::Boolean Enabled);
 
 		private:
 			HANDLE DeviceInterfaceHandle;

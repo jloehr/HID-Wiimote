@@ -20,6 +20,8 @@ DECLARE_CONST_UNICODE_STRING(EnableWiimoteYAxisAccelerometerValueName, L"EnableW
 DECLARE_CONST_UNICODE_STRING(SwitchMouseButtonsValueName, L"SwitchMouseButtons");
 DECLARE_CONST_UNICODE_STRING(SwitchTriggerAndShoulderValueName, L"SwitchTriggerAndShoulder");
 DECLARE_CONST_UNICODE_STRING(SplitTriggerAxisValueName, L"SplitTriggerAxis");
+DECLARE_CONST_UNICODE_STRING(MapTriggerAsAxisValueName, L"MapTriggerAsAxis");
+DECLARE_CONST_UNICODE_STRING(MapTriggerAsButtonsValueName, L"MapTriggerAsButtons");
 
 NTSTATUS
 OpenRegistryKey(
@@ -75,6 +77,8 @@ WiimoteSettingsLoad(
 	LoadBooleanValue(Key, &SwitchMouseButtonsValueName, FALSE, &DeviceContext->WiimoteContext.Settings.SwitchMouseButtons);
 	LoadBooleanValue(Key, &SwitchTriggerAndShoulderValueName, FALSE, &DeviceContext->WiimoteContext.Settings.SwitchTriggerAndShoulder);
 	LoadBooleanValue(Key, &SplitTriggerAxisValueName, TRUE, &DeviceContext->WiimoteContext.Settings.SplitTriggerAxis);
+	LoadBooleanValue(Key, &MapTriggerAsAxisValueName, FALSE, &DeviceContext->WiimoteContext.Settings.MapTriggerAsAxis);
+	LoadBooleanValue(Key, &MapTriggerAsButtonsValueName, TRUE, &DeviceContext->WiimoteContext.Settings.MapTriggerAsButtons);
 
 	// Close Key
 	WdfRegistryClose(Key);
@@ -147,6 +151,28 @@ WiimoteSettingsSetSplitTriggerAxis(
 	DeviceContext->WiimoteContext.Settings.SplitTriggerAxis = Enabled;
 
 	SaveULONGValue(DeviceContext, &SplitTriggerAxisValueName, (ULONG)Enabled);
+}
+
+VOID
+WiimoteSettingsSetMapTriggerAsAxis(
+	_In_ PDEVICE_CONTEXT DeviceContext,
+	_In_ BOOLEAN Enabled
+)
+{
+	DeviceContext->WiimoteContext.Settings.MapTriggerAsAxis = Enabled;
+
+	SaveULONGValue(DeviceContext, &MapTriggerAsAxisValueName, (ULONG)Enabled);
+}
+
+VOID
+WiimoteSettingsSetMapTriggerAsButtons(
+	_In_ PDEVICE_CONTEXT DeviceContext,
+	_In_ BOOLEAN Enabled
+)
+{
+	DeviceContext->WiimoteContext.Settings.MapTriggerAsButtons = Enabled;
+
+	SaveULONGValue(DeviceContext, &MapTriggerAsButtonsValueName, (ULONG)Enabled);
 }
 
 /*

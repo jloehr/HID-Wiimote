@@ -32,6 +32,8 @@ namespace HIDWiimote
 			SwitchMouseButtons = (StateData.Settings.SwitchMouseButtons != FALSE);
 			SwitchTriggerAndShoulder = (StateData.Settings.SwitchTriggerAndShoulder != FALSE);
 			SplitTrigger = (StateData.Settings.SplitTriggerAxis != FALSE);
+			MapTriggerAsAxis = (StateData.Settings.MapTriggerAsAxis != FALSE);
+			MapTriggerAsButtons = (StateData.Settings.MapTriggerAsButtons != FALSE);
 		}
 	}
 }

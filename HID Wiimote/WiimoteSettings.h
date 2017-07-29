@@ -56,3 +56,15 @@ WiimoteSettingsSetSplitTriggerAxis(
 	_In_ PDEVICE_CONTEXT DeviceContext,
 	_In_ BOOLEAN Enabled
 	);
+
+VOID
+WiimoteSettingsSetMapTriggerAsAxis(
+	_In_ PDEVICE_CONTEXT DeviceContext,
+	_In_ BOOLEAN Enabled
+);
+
+VOID
+WiimoteSettingsSetMapTriggerAsButtons(
+	_In_ PDEVICE_CONTEXT DeviceContext,
+	_In_ BOOLEAN Enabled
+);
