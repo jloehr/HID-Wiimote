@@ -280,7 +280,7 @@ UpdateClassicController(
 	ClassicControllerState->LeftTrigger |= 0xFF & ((0xE0 & ClassicControllerData[3]) >> 3);
 	ClassicControllerState->RightTrigger = 0xFF & ((0x1F & ClassicControllerData[3]) << 2);
 
-	//Not Supported Input
+	//Unsupported Input
 	ClassicControllerState->Buttons.LH = FALSE;
 	ClassicControllerState->Buttons.RH = FALSE;
 
@@ -317,7 +317,7 @@ UpdateWiiUProController(
 	ClassicControllerState->RightAnalogStick.X = 0xFF & ((WiiUProControllerData[2] >> 4) | (WiiUProControllerData[3] << 4));
 	ClassicControllerState->RightAnalogStick.Y = 0xFF & ((WiiUProControllerData[6] >> 4) | (WiiUProControllerData[7] << 4));
 
-	//Not Supported Input
+	//Unsupported Input
 	ClassicControllerState->LeftTrigger = ClassicControllerState->Buttons.ZL ? 0xFF : 0x00;
 	ClassicControllerState->RightTrigger = ClassicControllerState->Buttons.ZR ? 0xFF : 0x00;
 
