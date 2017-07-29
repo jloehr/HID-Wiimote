@@ -50,7 +50,7 @@
   <PropertyGroup Label="UserMacros">
     <ZipTool>$(SolutionDir)BuildTools\7za\7za.exe</ZipTool>
     <ZipDir>$(SolutionDir)Zip</ZipDir>
-    <ZipName>$(SolutionName.replace(' ','-'))-$(ControlCenterVersion)_$(Configuration.replace(" Release", "").replace("dows", "").replace(", ", "-").replace(" ", "-"))_$(PlatformArchitecture)Bit.zip</ZipName>
+    <ZipName>$(SolutionName.replace(' ','-'))-$(ControlCenterVersion)_$(PlatformArchitecture)Bit.zip</ZipName>
     <ZipPath>$(ZipDir)\$(ZipName)</ZipPath>
     <PackageDir>$(SolutionDir)$(PlatformShortName)\$(Configuration.replace(" ",""))\HID Wiimote Package</PackageDir>
   </PropertyGroup>
