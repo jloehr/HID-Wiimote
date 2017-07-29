@@ -6,45 +6,95 @@ namespace HIDWiimote.ControlCenter.Control_Center
 {
     public class WiimoteDevice : INotifyPropertyChanged
     {
+        public class Option<Type> : INotifyPropertyChanged
+        {
+            private Type _Value;
+            private bool _UIEnabled = true;
+            private Func<Type, bool> InterfaceDelegate;
+
+            public event PropertyChangedEventHandler PropertyChanged;
+
+            public Option(Func<Type, bool> InterfaceDelegate)
+            {
+                this.InterfaceDelegate = InterfaceDelegate;
+            }
+
+            public Type Value
+            {
+                get { return _Value; }
+                set { ChangeValue(value); }
+            }
+
+            public bool UIEnabled
+            {
+                get { return _UIEnabled; }
+                protected set { _UIEnabled = value; OnPropertyChanged("UIEnabled"); }
+            }
+
+            public void SetValue(Type Value)
+            {
+                _Value = Value;
+                OnPropertyChanged("Value");
+            }
+
+            protected void ChangeValue(Type RequestedValue)
+            {
+                UIEnabled = false;
+
+                Task.Factory.StartNew(() => {
+                    if ((InterfaceDelegate == null) || (InterfaceDelegate(RequestedValue)))
+                    {
+                        SetValue(RequestedValue);
+                    }
+
+                    UIEnabled = true;
+                });
+            }
+
+            protected void OnPropertyChanged(string PropertyName)
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(PropertyName));
+            }
+        }
+
+        private bool _Initilized = false;
+
         private UserModeLib.Extension _Extension = UserModeLib.Extension.None;
-        private UserModeLib.DriverMode _Mode = UserModeLib.DriverMode.Gamepad;
-        private bool _ModeUIEnabled = true;
         private byte _BatteryLevel = 0;
         private bool[] _LEDState = { false, false, false, false };
-        
-        private bool _XAxisEnabled = false;
-        private bool _XAxisUIEnabled = true;
-        private bool _YAxisEnabled = false;
-        private bool _YAxisUIEnabled = true;
-        private bool _MouseButtonsSwitched = false;
-        private bool _MouseButtonsSwitchedUIEnabled = true;
-        private bool _TriggerAndShoulderSwitched = false;
-        private bool _TriggerAndShoulderSwitchedUIEnabled = true;
-        private bool _TriggerSplit = false;
-        private bool _TriggerSplitUIEnabled = true;
-
         private UserModeLib.WiimoteDeviceInterface DeviceInterface;
-        private bool _Initilized = false;
+
+        public Option<UserModeLib.DriverMode> Mode { get; set; }
+        public Option<bool> EnableWiimoteXAxisAccelerometer { get; set; }
+        public Option<bool> EnableWiimoteYAxisAccelerometer { get; set; }
+        public Option<bool> SwitchMouseButtons { get; set; }
+        public Option<bool> SwitchTriggerAndShoulder { get; set; }
+        public Option<bool> SplitTriggerAxis { get; set; }
+        public Option<bool> MapTriggerAsAxis { get; set; }
+        public Option<bool> MapTriggerAsButtons { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler Disconneted;
         
-        public WiimoteDevice(UserModeLib.WiimoteDeviceInterface DeviceInterface)
+        public WiimoteDevice(UserModeLib.IWiimoteDeviceInterface DeviceInterface)
         {
             this.DeviceInterface = DeviceInterface;
 
             DeviceInterface.StatusUpdate += OnStatusUpdate;
             DeviceInterface.DeviceRemoved += OnDeviceRemoved;
-        }
 
-        public WiimoteDevice(UserModeLib.Extension Extension, UserModeLib.DriverMode Mode, byte BatteryLevel, bool[] LEDState)
-        {
-            this.Extension = Extension;
-            this.Mode = Mode;
-            this.BatteryLevel = BatteryLevel;
-            this.LEDState = LEDState;
+            Mode = new Option<UserModeLib.DriverMode>(DeviceInterface.SetDriverMode);
 
-            this.Initilized = true;
+            EnableWiimoteXAxisAccelerometer = new Option<bool>(DeviceInterface.SetEnableWiimoteXAxisAccelerometer);
+            EnableWiimoteYAxisAccelerometer = new Option<bool>(DeviceInterface.SetEnableWiimoteYAxisAccelerometer);
+            SwitchMouseButtons = new Option<bool>(DeviceInterface.SetSwitchMouseButtons);
+            SwitchTriggerAndShoulder = new Option<bool>(DeviceInterface.SetSwitchTriggerAndShoulder);
+            SplitTriggerAxis = new Option<bool>(DeviceInterface.SetSplitTrigger);
+            MapTriggerAsAxis = new Option<bool>(DeviceInterface.SetMapTriggerAsAxis);
+            MapTriggerAsButtons = new Option<bool>(DeviceInterface.SetMapTriggerAsButtons);
+
+            EnableWiimoteXAxisAccelerometer.PropertyChanged += OnEnableAccelerometerAxisChanged;
+            EnableWiimoteYAxisAccelerometer.PropertyChanged += OnEnableAccelerometerAxisChanged;
         }
 
         public UserModeLib.Extension Extension
@@ -55,32 +105,6 @@ namespace HIDWiimote.ControlCenter.Control_Center
                 _Extension = value;
                 OnPropertyChanged("Extension");
             }
-        }
-
-        public UserModeLib.DriverMode Mode
-        {
-            get { return _Mode; }
-            set
-            {
-                ChangeSetting<UserModeLib.DriverMode>(value, SetMode, SetModeUIEnabled, DeviceInterface.SetDriverMode);
-            }
-        }
-
-        private void SetMode(UserModeLib.DriverMode Value)
-        {
-            _Mode = Value;
-            OnPropertyChanged("Mode");
-        }
-
-        public bool ModeUIEnabled
-        {
-            get { return _ModeUIEnabled; }
-        }
-
-        private void SetModeUIEnabled(bool Value)
-        {
-            _ModeUIEnabled = Value;
-            OnPropertyChanged("ModeUIEnabled");
         }
 
         public byte BatteryLevel
@@ -103,146 +127,23 @@ namespace HIDWiimote.ControlCenter.Control_Center
             }
         }
 
-        public bool AccelerometersEnabled
+        public bool EnableAccelerometers
         {
-            get { return XAxisEnabled || YAxisEnabled; }
+            get { return EnableWiimoteXAxisAccelerometer.Value || EnableWiimoteYAxisAccelerometer.Value; }
             set
             {
-                XAxisEnabled = value;
-                YAxisEnabled = value;
+                EnableWiimoteXAxisAccelerometer.Value = value;
+                EnableWiimoteYAxisAccelerometer.Value = value;
+                OnPropertyChanged("EnableAccelerometers");
             }
         }
 
-        public bool XAxisEnabled
+        private void OnEnableAccelerometerAxisChanged(object sender, PropertyChangedEventArgs e)
         {
-            get { return _XAxisEnabled; }
-            set
+            if (e.PropertyName == "Value")
             {
-                ChangeSetting<bool>(value, SetXAxisEnabled, SetXAxisUIEnabled, DeviceInterface.SetXAxis);
+                OnPropertyChanged("EnableAccelerometers");
             }
-        }
-
-        private void SetXAxisEnabled(bool Value)
-        {
-            _XAxisEnabled = Value;
-            OnPropertyChanged("XAxisEnabled");
-            OnPropertyChanged("AccelerometersEnabled");
-        }
-
-        public bool XAxisUIEnabled
-        {
-            get { return _XAxisUIEnabled; }
-        }
-
-        private void SetXAxisUIEnabled(bool Value)
-        {
-            _XAxisUIEnabled = Value;
-            OnPropertyChanged("XAxisUIEnabled");
-        }
-
-        public bool YAxisEnabled
-        {
-            get { return _YAxisEnabled; }
-            set
-            {
-                ChangeSetting<bool>(value, SetYAxisEnabled, SetYAxisUIEnabled, DeviceInterface.SetYAxis);
-            }
-        }
-
-        private void SetYAxisEnabled(bool Value)
-        {
-            _YAxisEnabled = Value;
-            OnPropertyChanged("YAxisEnabled");
-            OnPropertyChanged("AccelerometersEnabled");
-        }
-
-        public bool YAxisUIEnabled
-        {
-            get { return _YAxisUIEnabled; }
-        }
-
-        private void SetYAxisUIEnabled(bool Value)
-        {
-            _YAxisUIEnabled = Value;
-            OnPropertyChanged("YAxisUIEnabled");
-        }
-
-        public bool MouseButtonsSwitched
-        {
-            get { return _MouseButtonsSwitched; }
-            set
-            {
-                ChangeSetting<bool>(value, SetMouseButtonsSwitched, SetMouseButtonsSwitchedUIEnabled, DeviceInterface.SetMouseButtonsSwitched);
-            }
-        }
-
-        private void SetMouseButtonsSwitched(bool Value)
-        {
-            _MouseButtonsSwitched = Value;
-            OnPropertyChanged("MouseButtonsSwitched");
-        }
-
-        public bool MouseButtonsSwitchedUIEnabled
-        {
-            get { return _MouseButtonsSwitchedUIEnabled; }
-        }
-
-        private void SetMouseButtonsSwitchedUIEnabled(bool Value)
-        {
-            _MouseButtonsSwitchedUIEnabled = Value;
-            OnPropertyChanged("MouseButtonsSwitchedUIEnabled");
-        }
-
-        public bool TriggerAndShoulderSwitched
-        {
-            get { return _TriggerAndShoulderSwitched; }
-            set
-            {
-                ChangeSetting<bool>(value, SetTriggerAndShoulderSwitched, SetTriggerAndShoulderSwitchedUIEnabled, DeviceInterface.SetTriggerAndShoulderSwitched);
-            }
-        }
-
-        private void SetTriggerAndShoulderSwitched(bool Value)
-        {
-            _TriggerAndShoulderSwitched = Value;
-            OnPropertyChanged("TriggerAndShoulderSwitched");
-        }
-
-        public bool TriggerAndShoulderSwitchedUIEnabled
-        {
-            get { return _TriggerAndShoulderSwitchedUIEnabled; }
-        }
-
-        private void SetTriggerAndShoulderSwitchedUIEnabled(bool Value)
-        {
-            _TriggerAndShoulderSwitchedUIEnabled = Value;
-            OnPropertyChanged("TriggerAndShoulderSwitchedUIEnabled");
-        }
-
-        public bool TriggerSplit
-        {
-            get { return _TriggerSplit; }
-            set
-            {
-                ChangeSetting<bool>(value, SetTriggerSplit, SetTriggerSplitUIEnabled, DeviceInterface.SetTriggerSplit);
-            }
-        }
-
-        private void SetTriggerSplit(bool Value)
-        {
-            _TriggerSplit = Value;
-            OnPropertyChanged("TriggerSplit");
-        }
-
-        public bool TriggerSplitUIEnabled
-        {
-            get { return _TriggerSplitUIEnabled; }
-        }
-
-        private void SetTriggerSplitUIEnabled(bool Value)
-        {
-            _TriggerSplitUIEnabled = Value;
-            OnPropertyChanged("TriggerSplitUIEnabled");
         }
 
         public bool Initilized
@@ -257,11 +158,7 @@ namespace HIDWiimote.ControlCenter.Control_Center
 
         protected void OnPropertyChanged(string PropertyName)
         {
-            PropertyChangedEventHandler Handler = PropertyChanged;
-            if (Handler != null)
-            {
-                Handler(this, new PropertyChangedEventArgs(PropertyName));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(PropertyName));
         }
 
         public void Disconnect()
@@ -293,10 +190,7 @@ namespace HIDWiimote.ControlCenter.Control_Center
             DeviceInterface.StatusUpdate -= OnStatusUpdate;
             DeviceInterface.DeviceRemoved -= OnDeviceRemoved;
 
-            if(Disconneted != null)
-            {
-                Disconneted(this, null);
-            }
+            Disconneted?.Invoke(this, null);
         }
 
         private void OnStatusUpdate(object sender, UserModeLib.Status StatusUpdate)
@@ -306,12 +200,15 @@ namespace HIDWiimote.ControlCenter.Control_Center
 
         protected void ApplyState(UserModeLib.State State)
         {
-            SetMode(State.Mode);
-            SetXAxisEnabled(State.XAxisEnabled);
-            SetYAxisEnabled(State.YAxisEnabled);
-            SetMouseButtonsSwitched(State.MouseButtonsSwitched);
-            SetTriggerAndShoulderSwitched(State.TriggerAndShoulderSwitched);
-            SetTriggerSplit(State.TriggerSplit);           
+            Mode.SetValue(State.Mode);
+
+            EnableWiimoteXAxisAccelerometer.SetValue(State.EnableWiimoteXAxisAccelerometer);
+            EnableWiimoteYAxisAccelerometer.SetValue(State.EnableWiimoteYAxisAccelerometer);
+            SwitchMouseButtons.SetValue(State.SwitchMouseButtons);
+            SwitchTriggerAndShoulder.SetValue(State.SwitchTriggerAndShoulder);
+            SplitTriggerAxis.SetValue(State.SplitTrigger);
+            MapTriggerAsAxis.SetValue(State.MapTriggerAsAxis);
+            MapTriggerAsButtons.SetValue(State.MapTriggerAsButtons);
 
             ApplyStatus(State.Status);
         }
@@ -321,21 +218,6 @@ namespace HIDWiimote.ControlCenter.Control_Center
             Extension = Status.Extension;
             BatteryLevel = Status.BatteryLevel;
             LEDState = Status.LEDState;
-        }
-
-        
-        protected void ChangeSetting<T>(T RequestedValue, Action<T> ValueSetter, Action<bool> UIEnableSetter, Func<T, bool> InterfaceDelegate)
-        {
-            UIEnableSetter(false);
-
-            Task.Factory.StartNew(() => {
-                if(InterfaceDelegate(RequestedValue))
-                {
-                    ValueSetter(RequestedValue);
-                }
-
-                UIEnableSetter(true);
-            });
-        }      
+        } 
     }
 }

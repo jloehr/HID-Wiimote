@@ -48,8 +48,8 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel>
-                            <Label FontWeight="Bold" Content="{Binding Extension, Converter={StaticResource ExtensionToStringConverter}, Mode=OneWay}"/>
-                            <Label FontStyle="Italic" Padding="5, 0, 5, 5" Content="{Binding Mode, Converter={StaticResource ModeToStringConverter}, Mode=OneWay}" Visibility="Hidden" />
+                            <Label FontWeight="Bold" Content="{Binding Extension, Converter={StaticResource ExtensionToStringConverter}, Mode=OneWay}" />
+                            <Label FontStyle="Italic" Padding="5, 0, 5, 5" DataContext="{Binding Mode}" Content="{Binding Value, Converter={StaticResource ModeToStringConverter}, Mode=OneWay}" Visibility="Hidden" />
                             <user:LEDDisplay />
                         </StackPanel>
                     </DataTemplate>
@@ -83,7 +83,7 @@
                             </Grid.ColumnDefinitions>
                             <StackPanel Grid.Column="0" Orientation="Horizontal">
                                 <Label Content="Mode: " VerticalContentAlignment="Bottom" IsEnabled="False" Visibility="Hidden" />
-                                <ComboBox Width="150" VerticalAlignment="Bottom" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedValue="{Binding Mode, Mode=TwoWay}" ItemsSource="{Binding WiimoteDeviceModeTypeDescriptions, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ControlCenterWindow}}}" IsEnabled="{Binding ModeUIEnabled}" Visibility="Hidden" />
+                                <ComboBox Width="150" VerticalAlignment="Bottom" DisplayMemberPath="Value" SelectedValuePath="Key" DataContext="{Binding Mode}" SelectedValue="{Binding Value, Mode=TwoWay}" ItemsSource="{Binding WiimoteDeviceModeTypeDescriptions, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ControlCenterWindow}}}" IsEnabled="{Binding UIEnabled}" Visibility="Hidden" />
                             </StackPanel>
                             <StackPanel Grid.Column="1" HorizontalAlignment="Right" Margin="10" VerticalAlignment="Center" Orientation="Horizontal" >
                                 <Rectangle Width="16" Height="24" Margin="2" HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -116,16 +116,19 @@
                     <StackPanel Grid.Row="1">
                         <Separator Margin="5" />
                         <Label Content="Wiimote:" FontStyle="Italic" Margin="10,0,0,0" FontSize="16" />
-                        <CheckBox Content="Accelerometer" Margin="10,10,0,0" IsChecked="{Binding AccelerometersEnabled}" />
-                        <CheckBox Content="X-Axis" Margin="20,5,0,0" IsChecked="{Binding XAxisEnabled}" IsEnabled="{Binding XAxisUIEnabled}" />
-                        <CheckBox Content="Y-Axis" Margin="20,5,0,0"  IsChecked="{Binding YAxisEnabled}" IsEnabled="{Binding YAxisUIEnabled}" />
-                        <CheckBox Content="Switch Mouse Buttons" Margin="10,10,0,0" IsChecked="{Binding MouseButtonsSwitched}" IsEnabled="{Binding MouseButtonsSwitchedUIEnabled}" Visibility="Hidden" />
+                        <CheckBox Content="Accelerometer" Margin="10,10,0,0" IsChecked="{Binding EnableAccelerometers}" />
+                        <CheckBox Content="X-Axis" Margin="20,5,0,0" DataContext="{Binding EnableWiimoteXAxisAccelerometer}" IsChecked="{Binding Value}" IsEnabled="{Binding UIEnabled}" />
+                        <CheckBox Content="Y-Axis" Margin="20,5,0,0" DataContext="{Binding EnableWiimoteYAxisAccelerometer}"   IsChecked="{Binding Value}" IsEnabled="{Binding UIEnabled}" />
+                        <CheckBox Content="Switch Mouse Buttons" Margin="10,10,0,0" DataContext="{Binding SwitchMouseButtons}" IsChecked="{Binding Value}" IsEnabled="{Binding UIEnabled}" Visibility="Hidden" />
                     </StackPanel>
                     <StackPanel Grid.Row="2">
                         <Separator Margin="5" />
-                        <Label Content="Classic Controller Extension:" FontStyle="Italic" Margin="10,0,0,0" FontSize="16" />
-                        <CheckBox Content="Switch Trigger and Shoulder" Margin="10,10,0,0" IsChecked="{Binding TriggerAndShoulderSwitched}" IsEnabled="{Binding TriggerAndShoulderSwitchedUIEnabled}" />
-                        <CheckBox Content="Split Trigger" Margin="10,10,0,0" IsChecked="{Binding TriggerSplit}" IsEnabled="{Binding TriggerSplitUIEnabled}" />
+                        <Label Content="Classic Controller Extension/Wii U Pro Controller:" FontStyle="Italic" Margin="10,0,0,0" FontSize="16" />
+                        <CheckBox Content="Switch Trigger and Bumper" Margin="10,10,0,0" DataContext="{Binding SwitchTriggerAndShoulder}" IsChecked="{Binding Value}" IsEnabled="{Binding UIEnabled}" />
+                        <CheckBox Content="Split Trigger Axis" Margin="10,10,0,0" DataContext="{Binding SplitTriggerAxis}" IsChecked="{Binding Value}" IsEnabled="{Binding UIEnabled}" />
+                        <TextBlock Text="Trigger Mapping" Margin="10,10,0,0"/>
+                        <CheckBox Content="Trigger As Axis" Margin="20,5,0,0" DataContext="{Binding MapTriggerAsAxis}" IsChecked="{Binding Value}" IsEnabled="{Binding UIEnabled}" />
+                        <CheckBox Content="Trigger As Buttons" Margin="20,5,0,0" DataContext="{Binding MapTriggerAsButtons}" IsChecked="{Binding Value}" IsEnabled="{Binding UIEnabled}" />
                     </StackPanel>
                 </Grid>
             </Border>
