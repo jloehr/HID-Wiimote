@@ -704,7 +704,7 @@ ProcessRegisterReadReport(
 
 	Trace("ProcessRegisterReadReport");
 
-	WiimoteStateUpdate(DeviceContext, ReadBuffer + 1, ReadBufferSize - 1);
+	WiimoteStateUpdate(DeviceContext, ReadBuffer, ReadBufferSize);
 
 	BYTE Error = 0x0F & (ReadBuffer[3]);
 	Trace("Error Flag: %#04x", Error);
@@ -741,7 +741,7 @@ _In_ size_t ReadBufferSize
 
 	Trace("ProcessAcknowledgementReport");
 
-	WiimoteStateUpdate(DeviceContext, ReadBuffer + 1, ReadBufferSize - 1);
+	WiimoteStateUpdate(DeviceContext, ReadBuffer, ReadBufferSize);
 
 	BYTE Report = ReadBuffer[3];
 	BYTE Result = ReadBuffer[4];
