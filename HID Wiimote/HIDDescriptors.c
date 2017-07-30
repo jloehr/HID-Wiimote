@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) 2016 Julian Löhr
+Copyright (C) 2017 Julian Löhr
 All rights reserved.
 
 Filename:
@@ -89,6 +89,7 @@ CONST HID_REPORT_DESCRIPTOR HIDReportDescriptor[] = {
 				   |		   Wiimote			 |
 				   |-----------------------------|
 */	
+	0xc0                           // END_COLLECTION
 /*
 	0x06, 0x00, 0xff,              //   USAGE_PAGE (Vendor Defined)
 	0x09, 0x01,                    //   USAGE (Vendor Ussage 1)
