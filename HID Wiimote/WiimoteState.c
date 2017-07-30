@@ -278,6 +278,8 @@ UpdateClassicController(
 	ClassicControllerState->LeftTrigger = 0xFF & ((0x60 & ClassicControllerData[2]) >> 2);
 	ClassicControllerState->LeftTrigger |= 0xFF & ((0xE0 & ClassicControllerData[3]) >> 5);
 	ClassicControllerState->RightTrigger = 0xFF & (0x1F & ClassicControllerData[3]);
+
+	return STATUS_SUCCESS;
 }
 
 NTSTATUS
