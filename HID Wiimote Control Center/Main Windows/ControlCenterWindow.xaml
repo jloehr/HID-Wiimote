@@ -13,6 +13,7 @@
                                           WiimoteString="{x:Static res:ControlCenter.ExtensionString_Wiimote}"
                                           NunchuckString="{x:Static res:ControlCenter.ExtensionString_Nunchuck}"
                                           ClassicControllerString="{x:Static res:ControlCenter.ExtensionString_ClassicController}"
+                                          ClassicControllerProString="{x:Static res:ControlCenter.ExtensionString_ClassicControllerPro}"
                                           WiiUProControllerString="{x:Static res:ControlCenter.ExtensionString_WiiUProController}"
                                           BalanceBoardString="{x:Static res:ControlCenter.ExtensionString_BalanceBoard}"
                                           GuitarHeroString="{x:Static res:ControlCenter.ExtensionString_GuitarHero}"/>

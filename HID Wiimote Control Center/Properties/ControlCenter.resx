@@ -121,7 +121,10 @@
     <value>Balance Board</value>
   </data>
   <data name="ExtensionString_ClassicController" xml:space="preserve">
-    <value>Classic Controller (Pro)</value>
+    <value>Classic Controller</value>
+  </data>
+  <data name="ExtensionString_ClassicControllerPro" xml:space="preserve">
+    <value>Classic Controller Pro</value>
   </data>
   <data name="ExtensionString_GuitarHero" xml:space="preserve">
     <value>Guitar Hero</value>

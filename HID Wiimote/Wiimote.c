@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) 2016 Julian Löhr
+Copyright (C) 2017 Julian Löhr
 All rights reserved.
 
 Filename:
@@ -14,6 +14,9 @@ Abstract:
 #include "Device.h"
 #include "Bluetooth.h"
 #include "WiimoteSettings.h"
+
+#define WIIMOTE_EXTENSION_TYPE_SUBTYPE(Type, Subtype) (Subtype << 16 | Type)
+#define WIIMOTE_EXTENSION_TYPE(Type) WIIMOTE_EXTENSION_TYPE_SUBTYPE(Type, 0x0000)
 
 EVT_WDF_TIMER BatteryLevelLEDUpdateTimerExpired;
 
@@ -596,20 +599,17 @@ ProcessExtensionRegister(
 	UNREFERENCED_PARAMETER(ErrorFlag);
 	UNREFERENCED_PARAMETER(ReadAddress);
 
-	USHORT ExtensionType = 0;
-	ExtensionType |= ReadBuffer[4] << 8;
-	ExtensionType |= ReadBuffer[5];
-
-	Trace("Extension Type: %#06x", ExtensionType);
+	UINT32 ExtensionType = ReadBuffer[0] << 24 | ReadBuffer[1] << 16 | ReadBuffer[4] << 8 | ReadBuffer[5];
+	Trace("Extension Type: %#010x", ExtensionType);
 
 	switch (ExtensionType)
 	{
-	case 0x0000: // Nunchuck
+	case WIIMOTE_EXTENSION_TYPE(0x0000): // Nunchuck
 		Trace("Nunchuck Extension");
 		DeviceContext->WiimoteContext.Extension = Nunchuck;
 		DeviceContext->WiimoteContext.CurrentReportMode = 0x35;
 		break;
-	case 0x0402: // Balance Board
+	case WIIMOTE_EXTENSION_TYPE(0x0402): // Balance Board
 		Trace("Balance Board");
 		DeviceContext->WiimoteContext.Extension = BalanceBoard;
 		DeviceContext->WiimoteContext.CurrentReportMode = 0x32;
@@ -617,22 +617,27 @@ ProcessExtensionRegister(
 		// Get Calibration Data
 		ReadFromRegister(DeviceContext, 0xA40024, 24);
 		break;
-	case 0x0101: // Classic Controler (Pro)
+	case WIIMOTE_EXTENSION_TYPE_SUBTYPE(0x0101, 0x0000): // Classic Controler
 		Trace("Classic Controller (Pro) Extension");
 		DeviceContext->WiimoteContext.Extension = ClassicController;
 		DeviceContext->WiimoteContext.CurrentReportMode = 0x32;
 		break;
-	case 0x0120: // Wii U Pro Controller
+	case WIIMOTE_EXTENSION_TYPE_SUBTYPE(0x0101, 0x0100): // Classic Controler Pro
+		Trace("Classic Controller Pro Extension");
+		DeviceContext->WiimoteContext.Extension = ClassicControllerPro;
+		DeviceContext->WiimoteContext.CurrentReportMode = 0x32;
+		break;
+	case WIIMOTE_EXTENSION_TYPE(0x0120): // Wii U Pro Controller
 		Trace("Wii U Pro Controller");
 		DeviceContext->WiimoteContext.Extension = WiiUProController;
 		DeviceContext->WiimoteContext.CurrentReportMode = 0x34;
 		break;
-	case 0x0103: // Guitar Hero Guitar
+	case WIIMOTE_EXTENSION_TYPE(0x0103): // Guitar Hero Guitar
 		Trace("Guitar Hero Guitar");
 		DeviceContext->WiimoteContext.Extension = Guitar;
 		DeviceContext->WiimoteContext.CurrentReportMode = 0x32;
 		break;
-	case 0xFFFF: // Error
+	case 0xFFFFFFFF: // Error
 		Trace("Error");
 		DeviceContext->WiimoteContext.Extension = None;
 		DeviceContext->WiimoteContext.CurrentReportMode = 0x31;
@@ -643,7 +648,7 @@ ProcessExtensionRegister(
 		}
 		break;
 	default:
-		Trace("No supported Extension!");
+		Trace("Unsupported Extension!");
 		return Status;
 	}
 

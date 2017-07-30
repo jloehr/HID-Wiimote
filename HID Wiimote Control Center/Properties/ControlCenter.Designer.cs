@@ -70,11 +70,20 @@ namespace HIDWiimote.ControlCenter.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Classic Controller (Pro).
+        ///   Looks up a localized string similar to Classic Controller.
         /// </summary>
         public static string ExtensionString_ClassicController {
             get {
                 return ResourceManager.GetString("ExtensionString_ClassicController", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Classic Controller Pro.
+        /// </summary>
+        public static string ExtensionString_ClassicControllerPro {
+            get {
+                return ResourceManager.GetString("ExtensionString_ClassicControllerPro", resourceCulture);
             }
         }
         

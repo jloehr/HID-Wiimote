@@ -121,6 +121,7 @@ namespace HIDWiimote.ControlCenter.Main_Windows
         public string WiimoteString { get; set; }
         public string NunchuckString { get; set; }
         public string ClassicControllerString { get; set; }
+        public string ClassicControllerProString { get; set; }
         public string WiiUProControllerString { get; set; }
         public string BalanceBoardString { get; set; }
         public string GuitarHeroString { get; set; }
@@ -139,6 +140,8 @@ namespace HIDWiimote.ControlCenter.Main_Windows
                     return BalanceBoardString;
                 case UserModeLib.Extension.ClassicController:
                     return ClassicControllerString;
+                case UserModeLib.Extension.ClassicControllerPro:
+                    return ClassicControllerProString;
                 case UserModeLib.Extension.WiiUProController:
                     return WiiUProControllerString;
                 case UserModeLib.Extension.Guitar:

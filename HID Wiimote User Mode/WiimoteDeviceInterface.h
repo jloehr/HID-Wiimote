@@ -1,13 +1,13 @@
 /*
 
-Copyright (C) 2016 Julian Löhr
+Copyright (C) 2017 Julian Löhr
 All rights reserved.
 
 Filename:
 	WiimoteDeviceInterface.h
 
 Abstract:
-	Public managed class that represents a HID Wiimote Device Interface
+	Internal managed class that represents a HID Wiimote Device Interface
 
 */
 #pragma once
@@ -18,7 +18,7 @@ namespace HIDWiimote
 {
 	namespace UserModeLib
 	{
-		public ref class WiimoteDeviceInterface : IWiimoteDeviceInterface
+		private ref class WiimoteDeviceInterface : IWiimoteDeviceInterface
 		{
 		public:
 			WiimoteDeviceInterface(System::String^ DeviceInterfacePath);

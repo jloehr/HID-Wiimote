@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) 2016 Julian Löhr
+Copyright (C) 2017 Julian Löhr
 All rights reserved.
 
 Filename:
@@ -19,11 +19,13 @@ NTSTATUS UpdateExtension(_Inout_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext, _In_rea
 NTSTATUS UpdateNunchuck(_Inout_ PWIIMOTE_NUNCHUCK_STATE NunchuckState, _In_reads_bytes_(6) PUCHAR NunchuckData, _In_ size_t NunchuckDataSize);
 NTSTATUS UpdateBalanceBoard(_Inout_ PWIIMOTE_BALANCE_BOARD_STATE BalanceBoardState, _In_reads_bytes_(8) PUCHAR BalanceBoardData, _In_ size_t BalanceBoardDataSize);
 NTSTATUS UpdateClassicController(_Inout_ PWIIMOTE_CLASSIC_CONTROLLER_STATE ClassicControllerState, _In_reads_bytes_(6) PUCHAR ClassicControllerData, _In_ size_t ClassicControllerDataSize);
+NTSTATUS UpdateClassicControllerPro(_Inout_ PWIIMOTE_CLASSIC_CONTROLLER_STATE ClassicControllerState, _In_reads_bytes_(6) PUCHAR ClassicControllerProData, _In_ size_t ClassicControllerProDataSize);
 NTSTATUS UpdateWiiUProController(_Inout_ PWIIMOTE_DEVICE_CONTEXT WiimoteContext, _Inout_ PWIIMOTE_CLASSIC_CONTROLLER_STATE ClassicControllerState, _In_reads_bytes_(11) PUCHAR WiiUProControllerData, _In_ size_t WiiUProControllerDataSize);
 NTSTATUS UpdateGuitar(_Inout_ PWIIMOTE_GUITAR_STATE GuitarState, _In_reads_bytes_(6) PUCHAR GuitarData, _In_ size_t GuitarDataSize);
 NTSTATUS UpdateIRCamera(_In_ PWIIMOTE_IR_STATE IRState, _In_reads_bytes_(10) PUCHAR IRData, _In_ size_t IRDataSize, _Out_ PBOOLEAN IRDataIsValid);
 
 VOID UpdateClassicControllerButtons(_Inout_ PWIIMOTE_CLASSIC_CONTROLLER_STATE ClassicControllerState, _In_reads_bytes_(2) PUCHAR ButtonData);
+VOID UpdateClassicControllerAxes(_Inout_ PWIIMOTE_CLASSIC_CONTROLLER_STATE ClassicControllerState, _In_reads_bytes_(2) PUCHAR ButtoInputDatanData);
 BOOLEAN UpdateIRCameraPoint(_In_ PWIIMOTE_IR_POINT IRPointData1, _In_ PWIIMOTE_IR_POINT IRPointData2, _In_reads_bytes_(5) PUCHAR IRData);
 
 VOID WiimoteStateResetToNullState(
@@ -189,6 +191,8 @@ NTSTATUS UpdateExtension(
 		return UpdateBalanceBoard(&(WiimoteContext->State.BalanceBoardState), Data, DataSize);
 	case ClassicController:
 		return UpdateClassicController(&(WiimoteContext->State.ClassicControllerState), Data, DataSize);
+	case ClassicControllerPro:
+		return UpdateClassicControllerPro(&(WiimoteContext->State.ClassicControllerState), Data, DataSize);
 	case WiiUProController:
 		return UpdateWiiUProController(WiimoteContext, &(WiimoteContext->State.ClassicControllerState), Data, DataSize);
 	case Guitar:
@@ -256,7 +260,7 @@ UpdateClassicController(
 	_Inout_ PWIIMOTE_CLASSIC_CONTROLLER_STATE ClassicControllerState,
 	_In_reads_bytes_(6) PUCHAR ClassicControllerData,
 	_In_ size_t ClassicControllerDataSize
-	)
+)
 {
 	if (ClassicControllerDataSize < 6)
 	{
@@ -264,26 +268,40 @@ UpdateClassicController(
 		return STATUS_INVALID_BUFFER_SIZE;
 	}
 
-	//Buttons
+	// Buttons
 	UpdateClassicControllerButtons(ClassicControllerState, ClassicControllerData + 4);
 
-	//Analog Sticks
-	ClassicControllerState->LeftAnalogStick.X = 0xFF & ((0x3F & ClassicControllerData[0]) << 2);
-	ClassicControllerState->LeftAnalogStick.Y = 0xFF & ((0x3F & ClassicControllerData[1]) << 2);
+	// Axes
+	UpdateClassicControllerAxes(ClassicControllerState, ClassicControllerData);
 
-	ClassicControllerState->RightAnalogStick.X = 0xFF & ((0xC0 & ClassicControllerData[0]));
-	ClassicControllerState->RightAnalogStick.X |= 0xFF & ((0xC0 & ClassicControllerData[1]) >> 2);
-	ClassicControllerState->RightAnalogStick.X |= 0xFF & ((0x80 & ClassicControllerData[2]) >> 4);
-	ClassicControllerState->RightAnalogStick.Y = 0xFF & ((0x1F & ClassicControllerData[2]) << 3);
+	// Trigger
+	ClassicControllerState->LeftTrigger = 0xFF & ((0x60 & ClassicControllerData[2]) >> 2);
+	ClassicControllerState->LeftTrigger |= 0xFF & ((0xE0 & ClassicControllerData[3]) >> 5);
+	ClassicControllerState->RightTrigger = 0xFF & (0x1F & ClassicControllerData[3]);
+}
 
-	//Trigger
-	ClassicControllerState->LeftTrigger = 0xFF & ((0x60 & ClassicControllerData[2]));
-	ClassicControllerState->LeftTrigger |= 0xFF & ((0xE0 & ClassicControllerData[3]) >> 3);
-	ClassicControllerState->RightTrigger = 0xFF & ((0x1F & ClassicControllerData[3]) << 2);
+NTSTATUS
+UpdateClassicControllerPro(
+	_Inout_ PWIIMOTE_CLASSIC_CONTROLLER_STATE ClassicControllerState,
+	_In_reads_bytes_(6) PUCHAR ClassicControllerProData,
+	_In_ size_t ClassicControllerProDataSize
+	)
+{
+	if (ClassicControllerProDataSize < 6)
+	{
+		Trace("Data Buffer too small to read Classic Controller Pro Data");
+		return STATUS_INVALID_BUFFER_SIZE;
+	}
 
-	//Unsupported Input
-	ClassicControllerState->Buttons.LH = FALSE;
-	ClassicControllerState->Buttons.RH = FALSE;
+	//Buttons
+	UpdateClassicControllerButtons(ClassicControllerState, ClassicControllerProData + 4);
+
+	// Axes
+	UpdateClassicControllerAxes(ClassicControllerState, ClassicControllerProData);
+
+	//Trigger 
+	ClassicControllerState->LeftTrigger = 0xFF;
+	ClassicControllerState->RightTrigger = 0xFF;
 
 	return STATUS_SUCCESS;
 }
@@ -319,8 +337,8 @@ UpdateWiiUProController(
 	ClassicControllerState->RightAnalogStick.Y = 0xFF & ((WiiUProControllerData[6] >> 4) | (WiiUProControllerData[7] << 4));
 
 	//Unsupported Input
-	ClassicControllerState->LeftTrigger = ClassicControllerState->Buttons.ZL ? 0xFF : 0x00;
-	ClassicControllerState->RightTrigger = ClassicControllerState->Buttons.ZR ? 0xFF : 0x00;
+	ClassicControllerState->LeftTrigger = 0xFF;
+	ClassicControllerState->RightTrigger = 0xFF;
 
 	//Battery Level
 	switch (WiiUProControllerData[10] & 0xF0)
@@ -374,6 +392,25 @@ UpdateClassicControllerButtons(
 	ClassicControllerState->Buttons.ZL = InvertedButtonData[1] & 0x80;
 	ClassicControllerState->Buttons.R = InvertedButtonData[0] & 0x02;
 	ClassicControllerState->Buttons.ZR = InvertedButtonData[1] & 0x04;
+
+	ClassicControllerState->Buttons.LH = FALSE;
+	ClassicControllerState->Buttons.RH = FALSE;
+}
+
+VOID 
+UpdateClassicControllerAxes(
+	_Inout_ PWIIMOTE_CLASSIC_CONTROLLER_STATE ClassicControllerState,
+	_In_reads_bytes_(3) PUCHAR InputData
+)
+{
+	//Analog Sticks
+	ClassicControllerState->LeftAnalogStick.X = 0xFF & ((0x3F & InputData[0]) << 2);
+	ClassicControllerState->LeftAnalogStick.Y = 0xFF & ((0x3F & InputData[1]) << 2);
+
+	ClassicControllerState->RightAnalogStick.X = 0xFF & ((0xC0 & InputData[0]));
+	ClassicControllerState->RightAnalogStick.X |= 0xFF & ((0xC0 & InputData[1]) >> 2);
+	ClassicControllerState->RightAnalogStick.X |= 0xFF & ((0x80 & InputData[2]) >> 4);
+	ClassicControllerState->RightAnalogStick.Y = 0xFF & ((0x1F & InputData[2]) << 3);
 }
 
 NTSTATUS

@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) 2016 Julian Löhr
+Copyright (C) 2017 Julian Löhr
 All rights reserved.
 
 Filename:
@@ -507,6 +507,7 @@ ParseWiimoteStateAsGamepad(
 		ParseWiimoteStateAsBalanceBoard(WiimoteState, GamepadReport);
 		break;
 	case ClassicController:
+	case ClassicControllerPro:
 	case WiiUProController:
 		ParseWiimoteStateAsClassicControllerExtension(WiimoteState, GamepadReport);
 		break;

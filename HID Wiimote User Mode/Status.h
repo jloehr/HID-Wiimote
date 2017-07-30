@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) 2016 Julian Löhr
+Copyright (C) 2017 Julian Löhr
 All rights reserved.
 
 Filename:
@@ -18,7 +18,7 @@ namespace HIDWiimote
 {
 	namespace UserModeLib
 	{
-		public enum class Extension { None, Nunchuck, BalanceBoard, ClassicController, WiiUProController, Guitar };
+		public enum class Extension { None, Nunchuck, BalanceBoard, ClassicController, ClassicControllerPro, WiiUProController, Guitar };
 
 		public ref class Status
 		{
