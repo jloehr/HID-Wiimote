@@ -101,13 +101,48 @@ ParseAccelerometer(
 	(*AxisValue) = RawValue << 2;
 }
 
-VOID
-ParseTrigger(
-	_In_ BYTE TriggerValue,
-	_Out_ BYTE ReportByte[1]
+BYTE
+GetTriggerValue(
+	_In_ BYTE Trigger,
+	_In_ BOOLEAN Button
 )
 {
-	ReportByte[0] = TriggerValue;
+	if (Trigger == 0xFF)
+	{
+		return (Button ? 0x7C : 0x00);
+	}
+	else
+	{
+		return (Trigger << 2);
+	}
+}
+
+VOID
+ParseTrigger(
+	_In_ BYTE TriggerLValue,
+	_In_ BYTE TriggerRValue,
+	_In_ BOOLEAN ButtonRValue,
+	_In_ BOOLEAN ButtonLValue,
+	_In_ BOOLEAN ButtonZRValue,
+	_In_ BOOLEAN ButtonZLValue,
+	_In_ BOOLEAN SplitAxis,
+	_In_ BOOLEAN SwitchButtons,
+	_Out_ BYTE ReportZByte[1],
+	_Out_ BYTE ReportRZByte[1]
+)
+{
+	TriggerLValue = GetTriggerValue(TriggerLValue, (SwitchButtons) ? ButtonZLValue : ButtonLValue);
+	TriggerRValue = GetTriggerValue(TriggerRValue, (SwitchButtons) ? ButtonZRValue : ButtonRValue);
+
+	if (SplitAxis)
+	{
+		*ReportZByte = TriggerLValue << 1;
+		*ReportRZByte = TriggerRValue << 1;
+	}
+	else
+	{
+		*ReportZByte = 0x80 - TriggerLValue + TriggerRValue;
+	}
 }
 
 VOID
@@ -400,6 +435,7 @@ ParseWiimoteStateAsBalanceBoard(
 VOID
 ParseWiimoteStateAsClassicControllerExtension(
 	_In_ PWIIMOTE_STATE WiimoteState,
+	_In_ PWIIMOTE_SETTINGS WiimoteSettings,
 	_Out_ PHID_GAMEPAD_REPORT GamepadReport
 )
 {
@@ -412,10 +448,16 @@ ParseWiimoteStateAsClassicControllerExtension(
 	ParseButton(WiimoteState->WiiRemoteState.CoreButtons.B || WiimoteState->ClassicControllerState.Buttons.B, &GamepadReport->Buttons[0], 1);
 	ParseButton(WiimoteState->ClassicControllerState.Buttons.Y, &GamepadReport->Buttons[0], 2);
 	ParseButton(WiimoteState->ClassicControllerState.Buttons.X, &GamepadReport->Buttons[0], 3);
-	ParseButton(WiimoteState->ClassicControllerState.Buttons.L, &GamepadReport->Buttons[0], 4);
-	ParseButton(WiimoteState->ClassicControllerState.Buttons.R, &GamepadReport->Buttons[0], 5);
-	ParseButton(WiimoteState->ClassicControllerState.Buttons.ZL, &GamepadReport->Buttons[0], 6);
-	ParseButton(WiimoteState->ClassicControllerState.Buttons.ZR, &GamepadReport->Buttons[0], 7);
+	if (WiimoteSettings->SwitchTriggerAndShoulder || WiimoteSettings->MapTriggerAsButtons)
+	{
+		ParseButton(WiimoteState->ClassicControllerState.Buttons.L, &GamepadReport->Buttons[0], 4);
+		ParseButton(WiimoteState->ClassicControllerState.Buttons.R, &GamepadReport->Buttons[0], 5);
+	}
+	if (!WiimoteSettings->SwitchTriggerAndShoulder || WiimoteSettings->MapTriggerAsButtons)
+	{
+		ParseButton(WiimoteState->ClassicControllerState.Buttons.ZL, &GamepadReport->Buttons[0], 6);
+		ParseButton(WiimoteState->ClassicControllerState.Buttons.ZR, &GamepadReport->Buttons[0], 7);
+	}
 	ParseButton(WiimoteState->WiiRemoteState.CoreButtons.Plus || WiimoteState->ClassicControllerState.Buttons.Plus, &GamepadReport->Buttons[1], 0);
 	ParseButton(WiimoteState->WiiRemoteState.CoreButtons.Minus || WiimoteState->ClassicControllerState.Buttons.Minus, &GamepadReport->Buttons[1], 1);
 	ParseButton(WiimoteState->WiiRemoteState.CoreButtons.Home || WiimoteState->ClassicControllerState.Buttons.Home, &GamepadReport->Buttons[1], 2);
@@ -423,10 +465,26 @@ ParseWiimoteStateAsClassicControllerExtension(
 	ParseButton(WiimoteState->WiiRemoteState.CoreButtons.Two || WiimoteState->ClassicControllerState.Buttons.RH, &GamepadReport->Buttons[1], 4);
 
 	//Right Analog Stick as Second Axis
-	ParseTrigger(WiimoteState->ClassicControllerState.LeftTrigger, &GamepadReport->ZAxis);
 	ParseAnalogAxis(WiimoteState->ClassicControllerState.RightAnalogStick.X, &GamepadReport->RXAxis, FALSE, FALSE);
 	ParseAnalogAxis(WiimoteState->ClassicControllerState.RightAnalogStick.Y, &GamepadReport->RYAxis, FALSE, TRUE);
-	ParseTrigger(WiimoteState->ClassicControllerState.RightTrigger, &GamepadReport->RZAxis);
+
+	if (WiimoteSettings->MapTriggerAsAxis)
+	{
+		ParseTrigger(
+			WiimoteState->ClassicControllerState.LeftTrigger,
+			WiimoteState->ClassicControllerState.RightTrigger,
+			WiimoteState->ClassicControllerState.Buttons.R,
+			WiimoteState->ClassicControllerState.Buttons.L,
+			WiimoteState->ClassicControllerState.Buttons.ZR,
+			WiimoteState->ClassicControllerState.Buttons.ZL,
+			WiimoteSettings->SplitTriggerAxis,
+			WiimoteSettings->SwitchTriggerAndShoulder,
+			&GamepadReport->ZAxis, 
+			&GamepadReport->RZAxis
+			);
+
+	}
+	
 
 	//DPad
 	ParseDPad(
@@ -509,7 +567,7 @@ ParseWiimoteStateAsGamepad(
 	case ClassicController:
 	case ClassicControllerPro:
 	case WiiUProController:
-		ParseWiimoteStateAsClassicControllerExtension(WiimoteState, GamepadReport);
+		ParseWiimoteStateAsClassicControllerExtension(WiimoteState, WiimoteSettings, GamepadReport);
 		break;
 	case Guitar:
 		ParseWiimoteStateAsGuitarExtension(WiimoteState, GamepadReport);
