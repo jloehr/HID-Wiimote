@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) 2016 Julian Löhr
+Copyright (C) 2017 Julian Löhr
 All rights reserved.
 
 Filename:
@@ -105,6 +105,7 @@ WiimoteSettingsSetEnableWiimoteXAxisAccelerometer(
 	)
 {
 	DeviceContext->WiimoteContext.Settings.EnableWiimoteXAxisAccelerometer = Enabled;
+	HIDWiimoteStateUpdated(DeviceContext);
 
 	SaveULONGValue(DeviceContext, &EnableWiimoteXAxisAccelerometerValueName, (ULONG)Enabled);
 }
@@ -116,6 +117,7 @@ WiimoteSettingsSetEnableWiimoteYAxisAccelerometer(
 	)
 {
 	DeviceContext->WiimoteContext.Settings.EnableWiimoteYAxisAcceleromenter = Enabled;
+	HIDWiimoteStateUpdated(DeviceContext);
 
 	SaveULONGValue(DeviceContext, &EnableWiimoteYAxisAccelerometerValueName, (ULONG)Enabled);
 }
@@ -127,6 +129,7 @@ WiimoteSettingsSetSwitchMouseButtons(
 	)
 {
 	DeviceContext->WiimoteContext.Settings.SwitchMouseButtons = Enabled;
+	HIDWiimoteStateUpdated(DeviceContext);
 
 	SaveULONGValue(DeviceContext, &SwitchMouseButtonsValueName, (ULONG)Enabled);
 }
@@ -138,6 +141,7 @@ WiimoteSettingsSetSwitchTriggerAndShoulder(
 	)
 {
 	DeviceContext->WiimoteContext.Settings.SwitchTriggerAndShoulder = Enabled;
+	HIDWiimoteStateUpdated(DeviceContext);
 
 	SaveULONGValue(DeviceContext, &SwitchTriggerAndShoulderValueName, (ULONG)Enabled);
 }
@@ -149,6 +153,7 @@ WiimoteSettingsSetSplitTriggerAxis(
 	)
 {
 	DeviceContext->WiimoteContext.Settings.SplitTriggerAxis = Enabled;
+	HIDWiimoteStateUpdated(DeviceContext);
 
 	SaveULONGValue(DeviceContext, &SplitTriggerAxisValueName, (ULONG)Enabled);
 }
@@ -160,6 +165,7 @@ WiimoteSettingsSetMapTriggerAsAxis(
 )
 {
 	DeviceContext->WiimoteContext.Settings.MapTriggerAsAxis = Enabled;
+	HIDWiimoteStateUpdated(DeviceContext);
 
 	SaveULONGValue(DeviceContext, &MapTriggerAsAxisValueName, (ULONG)Enabled);
 }
@@ -171,6 +177,7 @@ WiimoteSettingsSetMapTriggerAsButtons(
 )
 {
 	DeviceContext->WiimoteContext.Settings.MapTriggerAsButtons = Enabled;
+	HIDWiimoteStateUpdated(DeviceContext);
 
 	SaveULONGValue(DeviceContext, &MapTriggerAsButtonsValueName, (ULONG)Enabled);
 }
