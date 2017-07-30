@@ -89,6 +89,7 @@ CONST HID_REPORT_DESCRIPTOR HIDReportDescriptor[] = {
 				   |		   Wiimote			 |
 				   |-----------------------------|
 */	
+/*
 	0x06, 0x00, 0xff,              //   USAGE_PAGE (Vendor Defined)
 	0x09, 0x01,                    //   USAGE (Vendor Ussage 1)
 	0x91, 0x00,                    //   OUTPUT (Data,Ary,Abs)
@@ -208,6 +209,7 @@ CONST HID_REPORT_DESCRIPTOR HIDReportDescriptor[] = {
 |								Y-Axis								|
 |--------|-------|--------|-------|--------|-------|--------|-------|
 */
+/*
 	0x05, 0x01,                    // USAGE_PAGE (Generic Desktop)
 	0x09, 0x02,                    // USAGE (Mouse)
 	0xa1, 0x01,                    // COLLECTION (Application)
@@ -261,6 +263,7 @@ CONST HID_REPORT_DESCRIPTOR HIDReportDescriptor[] = {
 |xxxxxxxxxxxxxxxxxxxxxxxxxxxxx Padding	xxxxxxxxxxxxxxxxxxxxxxxxxxxx|
 |--------|-------|--------|-------|--------|-------|--------|-------|
 */	
+/*
 	0x05, 0x01,                    // USAGE_PAGE (Generic Desktop)
 	0x09, 0x02,                    // USAGE (Mouse)
 	0xa1, 0x01,                    // COLLECTION (Application)
@@ -289,6 +292,7 @@ CONST HID_REPORT_DESCRIPTOR HIDReportDescriptor[] = {
 	0x75, 0x08,                    //   REPORT_SIZE (8)
 	0x81, 0x03,                    //   INPUT (Cnst,Var,Abs)
 	0xc0                           // END_COLLECTION
+*/
 };
 
 
