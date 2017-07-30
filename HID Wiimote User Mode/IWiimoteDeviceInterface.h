@@ -1,3 +1,15 @@
+/*
+
+Copyright (C) 2017 Julian Löhr
+	All rights reserved.
+
+Filename:
+	IWiimoteDeviceInterface.h
+
+Abstract:
+	Public managed interface that represents a HID Wiimote Device Interface
+
+*/
 #pragma once
 
 #include "Status.h"
