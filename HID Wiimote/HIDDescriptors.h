@@ -43,6 +43,12 @@ HID_GAMEPAD_REPORT_INIT(
 {
 	RtlZeroMemory(Report, sizeof(HID_GAMEPAD_REPORT));
 	Report->ReportID = GAMEPAD_REPORT_ID;
+	Report->XAxis = 0x7F;
+	Report->YAxis = 0x7F;
+	Report->ZAxis = 0x7F;
+	Report->RXAxis = 0x7F;
+	Report->RYAxis = 0x7F;
+	Report->RZAxis = 0x7F;
 }
 
 typedef struct _HID_IRMOUSE_REPORT
