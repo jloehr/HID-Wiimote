@@ -38,24 +38,44 @@
                 <ColumnDefinition/>
                 <ColumnDefinition Width="3.5*"/>
             </Grid.ColumnDefinitions>
-            <ListBox x:Name="ConnectedDevicesListBox" HorizontalContentAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" UseLayoutRounding="False" BorderThickness="1,1,0,1" Padding="0,0,-1,0" >
-                <ListBox.ItemContainerStyle>
+            <Border BorderThickness="1,1,0,1" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" Margin="0,0,-1,0" >
+                <ListBox x:Name="ConnectedDevicesListBox" HorizontalContentAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" UseLayoutRounding="False" BorderThickness="0" >
+                    <ListBox.Style>
+                        <Style
+                            TargetType="ListBox"
+                            BasedOn="{StaticResource {x:Type ListBox}}">
+                            <Style.Triggers>
+                                <!-- Use ListBox.HasItems instead of Binding -->
+                                <Trigger Property="HasItems" Value="False">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate>
+                                                <TextBlock Text="No Wii Remotes connected" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10,0,0" Opacity="0.8" FontWeight="Bold" />
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListBox.Style>
+                    <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem" >
                         <Setter Property="Background" Value="#FFDDDDDD" />
                         <Setter Property="Margin" Value="0, 0, 0, 2" />
                         <Setter Property="BorderThickness" Value="1, 1, 0, 1" />
                     </Style>
                 </ListBox.ItemContainerStyle>
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel>
-                            <Label FontWeight="Bold" Content="{Binding Extension, Converter={StaticResource ExtensionToStringConverter}, Mode=OneWay}" />
-                            <Label FontStyle="Italic" Padding="5, 0, 5, 5" DataContext="{Binding Mode}" Content="{Binding Value, Converter={StaticResource ModeToStringConverter}, Mode=OneWay}" Visibility="Hidden" />
-                            <user:LEDDisplay />
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <Label FontWeight="Bold" Content="{Binding Extension, Converter={StaticResource ExtensionToStringConverter}, Mode=OneWay}" />
+                                <Label FontStyle="Italic" Padding="5, 0, 5, 5" DataContext="{Binding Mode}" Content="{Binding Value, Converter={StaticResource ModeToStringConverter}, Mode=OneWay}" Visibility="Hidden" />
+                                <user:LEDDisplay />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Border>
             <Border Grid.Column="1" BorderThickness="1" BorderBrush="Black" DataContext="{Binding SelectedItem, ElementName=ConnectedDevicesListBox}" >
                 <Border.Style>
                     <Style TargetType="Border">
