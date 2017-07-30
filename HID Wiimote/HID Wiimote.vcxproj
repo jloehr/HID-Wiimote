@@ -205,18 +205,16 @@
     <ClInclude Include="Bluetooth.h" />
     <ClInclude Include="Device.h" />
     <ClInclude Include="DeviceInterface.h" />
+    <ClInclude Include="DeviceInterfacePublic.h" />
     <ClInclude Include="Driver.h" />
     <ClInclude Include="HID.h" />
     <ClInclude Include="HIDDescriptors.h" />
     <ClInclude Include="HIDWiimote.h" />
     <ClInclude Include="ReadIoControlBuffer.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="SettingsInterface.h" />
     <ClInclude Include="Trace.h" />
     <ClInclude Include="Wiimote.h" />
-    <ClInclude Include="WiimotePublic.h" />
     <ClInclude Include="WiimoteSettings.h" />
-    <ClInclude Include="WiimoteSettingsPublic.h" />
     <ClInclude Include="WiimoteState.h" />
     <ClInclude Include="WiimoteToHIDParser.h" />
   </ItemGroup>

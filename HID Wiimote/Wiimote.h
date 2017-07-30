@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) 2016 Julian Löhr
+Copyright (C) 2017 Julian Löhr
 All rights reserved.
 
 Filename:
@@ -13,8 +13,8 @@ Abstract:
 
 #include "HIDWiimote.h"
 
+#include "DeviceInterfacePublic.h"
 #include "WiimoteState.h"
-#include "WiimotePublic.h"
 #include "WiimoteSettings.h"
 
 #define WIIMOTE_STATUSINFORMATION_INTERVAL (60000) // 60 Second

@@ -14,7 +14,7 @@ Abstract:
 
 #include "Status.h"
 
-#include "../HID Wiimote/SettingsInterface.h"
+#include "../HID Wiimote/DeviceInterfacePublic.h"
 
 namespace HIDWiimote
 {

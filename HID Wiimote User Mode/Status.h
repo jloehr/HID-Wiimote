@@ -12,7 +12,7 @@ Abstract:
 */
 #pragma once
 
-#include "../HID Wiimote/SettingsInterface.h"
+#include "../HID Wiimote/DeviceInterfacePublic.h"
 
 namespace HIDWiimote
 {

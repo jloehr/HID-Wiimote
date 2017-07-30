@@ -105,23 +105,17 @@
     <ClInclude Include="DeviceInterface.h">
       <Filter>Device</Filter>
     </ClInclude>
-    <ClInclude Include="SettingsInterface.h">
-      <Filter>Device</Filter>
-    </ClInclude>
-    <ClInclude Include="WiimotePublic.h">
-      <Filter>Wiimote</Filter>
-    </ClInclude>
     <ClInclude Include="ReadIoControlBuffer.h">
       <Filter>Utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="WiimoteSettingsPublic.h">
-      <Filter>Wiimote</Filter>
     </ClInclude>
     <ClInclude Include="WiimoteSettings.h">
       <Filter>Wiimote</Filter>
     </ClInclude>
     <ClInclude Include="WiimoteState.h">
       <Filter>Wiimote</Filter>
+    </ClInclude>
+    <ClInclude Include="DeviceInterfacePublic.h">
+      <Filter>Device</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

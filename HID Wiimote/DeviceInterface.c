@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) 2016 Julian Löhr
+Copyright (C) 2017 Julian Löhr
 All rights reserved.
 
 Filename:
@@ -13,9 +13,8 @@ Abstract:
 */
 #include "DeviceInterface.h"
 
-#include "SettingsInterface.h"
 #include "Device.h"
-#include "WiimoteSettings.h"
+#include "DeviceInterfacePublic.h"
 
 typedef VOID DRIVER_MODE_SETTING_SETTER(_In_ PDEVICE_CONTEXT DeviceContext, _In_ WIIMOTE_DRIVER_MODE Value);
 typedef VOID BOOLEAN_SETTING_SETTER(_In_ PDEVICE_CONTEXT DeviceContext, _In_ BOOLEAN Value);
@@ -374,5 +373,4 @@ VOID ProcessSetBooleanSetting(
 	BooleanSettingSetter(DeviceInterfaceContext->Parent, *RequestedValue);
 
 	WdfRequestCompleteWithInformation(Request, STATUS_SUCCESS, sizeof(BOOLEAN));
-
 }

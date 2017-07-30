@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) 2016 Julian Löhr
+Copyright (C) 2017 Julian Löhr
 All rights reserved.
 
 Filename:
@@ -13,8 +13,7 @@ Abstract:
 
 #include "HIDWiimote.h"
 
-#include "WiimoteSettingsPublic.h"
-#include "WiimotePublic.h"
+#include "DeviceInterfacePublic.h"
 
 VOID
 WiimoteSettingsLoad(

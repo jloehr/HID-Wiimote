@@ -15,7 +15,7 @@ Abstract:
 
 #pragma comment(lib, "setupapi.lib")
 
-#include "../HID Wiimote/SettingsInterface.h"
+#include "../HID Wiimote/DeviceInterfacePublic.h"
 
 #include "Log.h"
 

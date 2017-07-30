@@ -15,7 +15,7 @@ Abstract:
 
 #include "Log.h"
 
-#include "../HID Wiimote/SettingsInterface.h"
+#include "../HID Wiimote/DeviceInterfacePublic.h"
 
 namespace HIDWiimote
 {
