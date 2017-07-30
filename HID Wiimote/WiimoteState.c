@@ -51,6 +51,7 @@ VOID WiimoteStateResetToNullState(
 	HIDWiimoteStateUpdated(DeviceContext);
 }
 
+
 NTSTATUS WiimoteStateUpdate(
 	_In_ PDEVICE_CONTEXT DeviceContext,
 	_In_reads_bytes_(DataSize) PUCHAR Data,
@@ -67,7 +68,7 @@ NTSTATUS WiimoteStateUpdate(
 	if (ReportID != 0x3D)
 	{
 		Status = UpdateCoreButtons(WiiRemoteState, Data + 1, DataSize - 1);
-		if (NT_SUCCESS(Status))
+		if (!NT_SUCCESS(Status))
 		{
 			return Status;
 		}
@@ -78,7 +79,7 @@ NTSTATUS WiimoteStateUpdate(
 	{
 	case 0x31: // Accelerometer
 		Status = UpdateAccelerometer(WiiRemoteState, Data + 3, DataSize - 3);
-		if (NT_SUCCESS(Status))
+		if (!NT_SUCCESS(Status))
 		{
 			return Status;
 		}
@@ -86,26 +87,26 @@ NTSTATUS WiimoteStateUpdate(
 	case 0x32: // 8 Byte Extension
 	case 0x34: // 19 Byte Extension
 		Status = UpdateExtension(WiimoteContext, Data + 3, DataSize - 3);
-		if (NT_SUCCESS(Status))
+		if (!NT_SUCCESS(Status))
 		{
 			return Status;
 		}
 		break;
 	case 0x35: // Accelerometer & 16 Byte Extension
 		Status = UpdateAccelerometer(WiiRemoteState, Data + 3, DataSize - 3);
-		if (NT_SUCCESS(Status))
+		if (!NT_SUCCESS(Status))
 		{
 			return Status;
 		}
 		Status = UpdateExtension(WiimoteContext, Data + 6, DataSize - 6);
-		if (NT_SUCCESS(Status))
+		if (!NT_SUCCESS(Status))
 		{
 			return Status;
 		}
 		break;
 	case 0x36: // 10 Byte IR & 9 Byte Extension
 		Status = UpdateIRCamera(&(WiimoteContext->State.IRState), Data + 3, DataSize - 3, &ForwardUpdateToHID);
-		if (NT_SUCCESS(Status))
+		if (!NT_SUCCESS(Status))
 		{
 			return Status;
 		}
