@@ -233,10 +233,10 @@
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
-    <FilesToPackage Include="..\HID Wiimote Control Center\bin\$(PlatformShortName)\Debug\HID Wiimote Control Center.exe"  Condition="'$(Configuration)'=='Windows 7, 8, 8.1, 10 Debug'" />
-    <FilesToPackage Include="..\HID Wiimote Control Center\bin\$(PlatformShortName)\Release\HID Wiimote Control Center.exe"  Condition="'$(Configuration)'=='Windows 7, 8, 8.1, 10 Release'" />
-    <FilesToPackage Include="..\HID Wiimote User Mode\$(PlatformShortName)\Debug\HID Wiimote User Mode.dll"  Condition="'$(Configuration)'=='Windows 7, 8, 8.1, 10 Debug'" />
-    <FilesToPackage Include="..\HID Wiimote User Mode\$(PlatformShortName)\Release\HID Wiimote User Mode.dll"  Condition="'$(Configuration)'=='Windows 7, 8, 8.1, 10 Release'" />
+    <FilesToPackage Include="..\HID Wiimote Control Center\bin\$(PlatformShortName)\Debug\HID Wiimote Control Center.exe" Condition="'$(Configuration)'=='Windows 7, 8, 8.1, 10 Debug'" />
+    <FilesToPackage Include="..\HID Wiimote Control Center\bin\$(PlatformShortName)\Release\HID Wiimote Control Center.exe" Condition="'$(Configuration)'=='Windows 7, 8, 8.1, 10 Release'" />
+    <FilesToPackage Include="..\HID Wiimote User Mode\$(PlatformShortName)\Debug\HID Wiimote User Mode.dll" Condition="'$(Configuration)'=='Windows 7, 8, 8.1, 10 Debug'" />
+    <FilesToPackage Include="..\HID Wiimote User Mode\$(PlatformShortName)\Release\HID Wiimote User Mode.dll" Condition="'$(Configuration)'=='Windows 7, 8, 8.1, 10 Release'" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HID Miniport\HID Miniport.vcxproj">
@@ -245,6 +245,13 @@
     <ProjectReference Include="..\HID Wiimote\HID Wiimote.vcxproj">
       <Project>{785d88e1-e758-4966-80fa-aef74681fef1}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="DPInst.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="EULA.txt" />
+    <Text Include="Readme.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
