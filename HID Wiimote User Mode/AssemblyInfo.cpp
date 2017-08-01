@@ -34,6 +34,8 @@ using namespace System::Security::Permissions;
 
 [assembly:AssemblyVersionAttribute(CONTROL_CENTER_VERSION_STRING)];
 
+[assembly:AssemblyKeyFileAttribute("../HID Wiimote.snk")];
+
 [assembly:ComVisible(false)];
 
 [assembly:CLSCompliantAttribute(true)];

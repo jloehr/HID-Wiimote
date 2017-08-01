@@ -221,8 +221,14 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup Label="UserMacros">
+    <SignTool>C:\Program Files (x86)\Windows Kits\10\bin\x86\signtool.exe</SignTool>
+  </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>copy /y "$(SolutionDir)ReleaseVersioning\VersionStrings.cs" "$(SolutionDir)HID Wiimote Control Center\Properties\VersionStrings.cs"</PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent Condition="Exists('$(SignTool)')">"$(SignTool)" sign /a "$(TargetName)$(TargetExt)"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
