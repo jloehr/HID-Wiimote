@@ -1,4 +1,16 @@
-﻿namespace HIDWiimote.ControlCenter.Setup.InstallStepAction
+﻿/*
+
+Copyright (C) 2017 Julian Löhr
+All rights reserved.
+
+Filename:
+	CreateRegistryUninstallKey.cs
+
+Abstract:
+	Install Task to create the Uninstaller Registry Key
+
+*/
+namespace HIDWiimote.ControlCenter.Setup.InstallStepAction
 {
     class CreateRegistryUninstallKey : IInstallStepAction
     {

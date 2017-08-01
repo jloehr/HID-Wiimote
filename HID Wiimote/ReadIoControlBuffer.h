@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) 2016 Julian Löhr
+Copyright (C) 2017 Julian Löhr
 All rights reserved.
 
 Filename:

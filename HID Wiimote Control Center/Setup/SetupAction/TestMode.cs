@@ -1,4 +1,16 @@
-﻿using System;
+﻿/*
+
+Copyright (C) 2017 Julian Löhr
+All rights reserved.
+
+Filename:
+	TestMode.cs
+
+Abstract:
+	Setup Action to enable and disable Windows Test Mode
+
+*/
+using System;
 using System.Diagnostics;
 
 namespace HIDWiimote.ControlCenter.Setup.SetupAction

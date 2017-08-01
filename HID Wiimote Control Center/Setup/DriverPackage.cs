@@ -1,4 +1,16 @@
-﻿using HIDWiimote.ControlCenter.Setup.InstallStepAction;
+﻿/*
+
+Copyright (C) 2017 Julian Löhr
+All rights reserved.
+
+Filename:
+	DriverPackage.cs
+
+Abstract:
+	Let's one install and uninstall a driver package and quiery its install state 
+
+*/
+using HIDWiimote.ControlCenter.Setup.InstallStepAction;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

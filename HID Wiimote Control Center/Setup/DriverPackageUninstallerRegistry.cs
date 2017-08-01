@@ -1,4 +1,16 @@
-﻿using Microsoft.Win32;
+﻿/*
+
+Copyright (C) 2017 Julian Löhr
+All rights reserved.
+
+Filename:
+	DriverPackageUninstallerRegistry.cs
+
+Abstract:
+	Let's one create and retrieve the uninstaller registry entry and quiery its state 
+
+*/
+using Microsoft.Win32;
 
 namespace HIDWiimote.ControlCenter
 {

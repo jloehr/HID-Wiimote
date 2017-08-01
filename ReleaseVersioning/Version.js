@@ -1,3 +1,16 @@
+/*
+
+Copyright (C) 2017 Julian Löhr
+All rights reserved.
+
+Filename:
+	Version.js
+
+Abstract:
+	Small script to generate various files containing the current version string.
+
+*/
+
 var FSO = new ActiveXObject("Scripting.FileSystemObject");
 
 var ForReading = 1;

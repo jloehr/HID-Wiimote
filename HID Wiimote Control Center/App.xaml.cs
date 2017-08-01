@@ -1,4 +1,16 @@
-﻿using System;
+﻿/*
+
+Copyright (C) 2017 Julian Löhr
+All rights reserved.
+
+Filename:
+	App.cs
+
+Abstract:
+	App class
+
+*/
+using System;
 using System.Windows;
 
 namespace HIDWiimote.ControlCenter

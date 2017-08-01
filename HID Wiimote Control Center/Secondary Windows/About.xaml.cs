@@ -1,4 +1,16 @@
-﻿using System.Diagnostics;
+﻿/*
+
+Copyright (C) 2017 Julian Löhr
+All rights reserved.
+
+Filename:
+	About.xaml.cs
+
+Abstract:
+	Window with some additional info
+
+*/
+using System.Diagnostics;
 using System.Windows;
 
 namespace HIDWiimote.ControlCenter.Secondary_Windows

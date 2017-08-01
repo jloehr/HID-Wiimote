@@ -1,10 +1,21 @@
-﻿using HIDWiimote.ControlCenter.Control_Center;
+﻿/*
+
+Copyright (C) 2017 Julian Löhr
+All rights reserved.
+
+Filename:
+	ControlCenterWindow.xaml.cs
+
+Abstract:
+	Main Window for the Application
+
+*/
+using HIDWiimote.ControlCenter.Control_Center;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
-using System.Windows.Media;
 
 namespace HIDWiimote.ControlCenter.Main_Windows
 {

@@ -1,4 +1,16 @@
-﻿using System;
+﻿/*
+
+Copyright (C) 2017 Julian Löhr
+All rights reserved.
+
+Filename:
+	WiimoteDevice.cs
+
+Abstract:
+	Instance of a single Wii Remote Device used for data binding on UI
+
+*/
+using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
 

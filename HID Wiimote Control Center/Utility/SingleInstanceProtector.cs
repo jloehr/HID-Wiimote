@@ -1,4 +1,16 @@
-﻿using System;
+﻿/*
+
+Copyright (C) 2017 Julian Löhr
+All rights reserved.
+
+Filename:
+	SingleInstanceProtector.cs
+
+Abstract:
+    Single program instance protector
+
+*/
+using System;
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.InteropServices;

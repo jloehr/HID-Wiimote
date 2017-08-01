@@ -1,8 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿/*
+
+Copyright (C) 2017 Julian Löhr
+All rights reserved.
+
+Filename:
+	DummyDeviceInterface.cs
+
+Abstract:
+	Dummy Implementation of the Device Interface for simpler UI debugging
+
+*/
+using System;
 using HIDWiimote.UserModeLib;
 using System.Threading;
 

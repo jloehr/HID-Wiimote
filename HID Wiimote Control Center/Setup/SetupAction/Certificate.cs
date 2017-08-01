@@ -1,4 +1,16 @@
-﻿using System.Security.Cryptography.X509Certificates;
+﻿/*
+
+Copyright (C) 2017 Julian Löhr
+All rights reserved.
+
+Filename:
+	Certificate.cs
+
+Abstract:
+	Setup Action to install and uninstall a certificate
+
+*/
+using System.Security.Cryptography.X509Certificates;
 
 namespace HIDWiimote.ControlCenter.Setup.SetupAction
 {

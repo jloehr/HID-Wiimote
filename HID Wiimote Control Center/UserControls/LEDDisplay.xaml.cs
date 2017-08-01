@@ -1,4 +1,16 @@
-﻿using System;
+﻿/*
+
+Copyright (C) 2017 Julian Löhr
+All rights reserved.
+
+Filename:
+	LEDDisplay.cs
+
+Abstract:
+	User Control for displaying the Wii Remote LEDs
+
+*/
+using System;
 using System.Globalization;
 using System.Windows.Controls;
 using System.Windows.Data;

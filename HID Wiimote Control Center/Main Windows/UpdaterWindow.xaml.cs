@@ -1,4 +1,16 @@
-﻿using HIDWiimote.ControlCenter.Setup;
+﻿/*
+
+Copyright (C) 2017 Julian Löhr
+All rights reserved.
+
+Filename:
+	InstallerWindow.xaml.cs
+
+Abstract:
+	Window for the updating process
+
+*/
+using HIDWiimote.ControlCenter.Setup;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

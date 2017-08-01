@@ -1,4 +1,16 @@
-﻿using System.Diagnostics;
+﻿/*
+
+Copyright (C) 2017 Julian Löhr
+All rights reserved.
+
+Filename:
+	RunDPInstall.cs
+
+Abstract:
+	Install Task to run dpinst.exe
+
+*/
+using System.Diagnostics;
 
 namespace HIDWiimote.ControlCenter.Setup.InstallStepAction
 {

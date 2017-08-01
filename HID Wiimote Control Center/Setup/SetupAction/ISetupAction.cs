@@ -1,4 +1,16 @@
-﻿namespace HIDWiimote.ControlCenter.Setup.SetupAction
+﻿/*
+
+Copyright (C) 2017 Julian Löhr
+All rights reserved.
+
+Filename:
+	ISetupAction.cs
+
+Abstract:
+	Setup Action Interface
+
+*/
+namespace HIDWiimote.ControlCenter.Setup.SetupAction
 {
     public interface ISetupAction
     {

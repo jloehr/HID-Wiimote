@@ -1,4 +1,16 @@
-﻿namespace HIDWiimote.ControlCenter.Setup.InstallStepAction
+﻿/*
+
+Copyright (C) 2017 Julian Löhr
+All rights reserved.
+
+Filename:
+	CopyFile.cs
+
+Abstract:
+	Install Task to copy some files
+
+*/
+namespace HIDWiimote.ControlCenter.Setup.InstallStepAction
 {
     class CopyFile : IInstallStepAction
     {

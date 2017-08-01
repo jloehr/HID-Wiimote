@@ -1,4 +1,16 @@
-﻿namespace HIDWiimote.ControlCenter.Setup.InstallStepAction
+﻿/*
+
+Copyright (C) 2017 Julian Löhr
+All rights reserved.
+
+Filename:
+	TextResourceToFile.cs
+
+Abstract:
+	Install Task to write some string to a file
+
+*/
+namespace HIDWiimote.ControlCenter.Setup.InstallStepAction
 {
     class TextResourceToFile : IInstallStepAction
     {
