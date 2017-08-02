@@ -19,27 +19,31 @@ ParseBooleanAxis(
 	_In_ BOOLEAN MinimumValue,
 	_In_ BOOLEAN MaximumValue,
 	_Inout_ PUCHAR AxisValue,
+	_In_ BOOLEAN Signed
+)
+{
+	BYTE MinValue = (Signed ? 0x81 : 0x00);
+	BYTE MaxValue = (Signed ? 0x7F : 0xFF);
+	BYTE NullValue = (Signed ? 0x00 : 0x7F);
+
+	(*AxisValue) = MinimumValue ? MinValue : MaximumValue ? MaxValue : NullValue;
+}
+
+
+VOID
+ParseBooleanNonByteAxis(
+	_In_ BOOLEAN MinimumValue,
+	_In_ BOOLEAN MaximumValue,
+	_Inout_ PUCHAR AxisValue,
 	_In_ UCHAR LeastSignificantBitPosition,
 	_In_ BYTE Bits,
 	_In_ BOOLEAN Signed
 )
 {
-	BYTE MinValue = (Signed ? 0x81 : 0x00) >> (8 - Bits);
-	BYTE MaxValue = (Signed ? 0x7F : 0xFF) >> (8 - Bits);
-	BYTE NullValue = (Signed ? 0x00 : 0x7F) >> (8 - Bits);
+	UCHAR Value;
+	ParseBooleanAxis(MinimumValue, MaximumValue, &Value, Signed);
 
-	if (MinimumValue)
-	{
-		(*AxisValue) |= (MinValue << LeastSignificantBitPosition);
-	}
-	else if (MaximumValue)
-	{
-		(*AxisValue) |= (MaxValue << LeastSignificantBitPosition);
-	}
-	else
-	{
-		(*AxisValue) |= (NullValue << LeastSignificantBitPosition);
-	}
+	(*AxisValue) |= (Value >> (8 - Bits)) << LeastSignificantBitPosition;
 }
 
 VOID
@@ -356,8 +360,8 @@ ParseWiimoteStateAsStandaloneWiiremote(
 )
 {
 	//Axis
-	ParseBooleanAxis(WiimoteState->WiiRemoteState.CoreButtons.DPad.Up, WiimoteState->WiiRemoteState.CoreButtons.DPad.Down, &GamepadReport->XAxis, 0, 8, FALSE);
-	ParseBooleanAxis(WiimoteState->WiiRemoteState.CoreButtons.DPad.Right, WiimoteState->WiiRemoteState.CoreButtons.DPad.Left, &GamepadReport->YAxis, 0, 8, FALSE);
+	ParseBooleanAxis(WiimoteState->WiiRemoteState.CoreButtons.DPad.Up, WiimoteState->WiiRemoteState.CoreButtons.DPad.Down, &GamepadReport->XAxis, FALSE);
+	ParseBooleanAxis(WiimoteState->WiiRemoteState.CoreButtons.DPad.Right, WiimoteState->WiiRemoteState.CoreButtons.DPad.Left, &GamepadReport->YAxis, FALSE);
 
 	//Buttons
 	ParseButton(WiimoteState->WiiRemoteState.CoreButtons.One, &GamepadReport->Buttons[0], 0);
@@ -599,8 +603,8 @@ VOID ParseWiimoteStateAsDPadMouse(
 	ParseButton(WiimoteState->WiiRemoteState.CoreButtons.B, &DPadMouseReport->Buttons, 2);
 
 	//Axis
-	ParseBooleanAxis(WiimoteState->WiiRemoteState.CoreButtons.DPad.Up, WiimoteState->WiiRemoteState.CoreButtons.DPad.Down, &DPadMouseReport->X, 6, 2, TRUE);
-	ParseBooleanAxis(WiimoteState->WiiRemoteState.CoreButtons.DPad.Right, WiimoteState->WiiRemoteState.CoreButtons.DPad.Left, &DPadMouseReport->Y, 6, 2, TRUE);
+	ParseBooleanNonByteAxis(WiimoteState->WiiRemoteState.CoreButtons.DPad.Up, WiimoteState->WiiRemoteState.CoreButtons.DPad.Down, &DPadMouseReport->X, 6, 2, TRUE);
+	ParseBooleanNonByteAxis(WiimoteState->WiiRemoteState.CoreButtons.DPad.Right, WiimoteState->WiiRemoteState.CoreButtons.DPad.Left, &DPadMouseReport->Y, 6, 2, TRUE);
 
 	(*BytesWritten) = sizeof(HID_DPADMOUSE_REPORT);
 }
