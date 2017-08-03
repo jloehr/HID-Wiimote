@@ -235,11 +235,14 @@ namespace HIDWiimote.ControlCenter.Properties {
         /// <summary>
         ///   Looks up a localized string similar to cd &quot;{{InstallDir}}&quot;
         ///START /WAIT dpinst.exe /q /u &quot;{{InfFileName}}&quot;
-        ///echo %ERRORLEVEL%
-        ///REG DELETE &quot;HKLM\Software\Microsoft\Windows\CurrentVersion\Uninstall\HID Wiimote&quot; /f
-        ///del dpinst.exe
-        ///del &quot;{{InfFileName}}&quot;
-        ///del &quot;%~f0&quot;.
+        ///IF ERRORLEVEL 1 (
+        ///	ECHO dpinst.exe failed: %ERRORLEVEL%
+        ///) ELSE (
+        ///	REG DELETE &quot;HKLM\Software\Microsoft\Windows\CurrentVersion\Uninstall\HID Wiimote&quot; /f
+        ///	del dpinst.exe
+        ///	del &quot;{{InfFileName}}&quot;
+        ///	del &quot;%~f0&quot;
+        ///).
         /// </summary>
         public static string UninstallerContent {
             get {
