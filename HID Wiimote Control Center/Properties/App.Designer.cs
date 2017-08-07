@@ -62,10 +62,10 @@ namespace HIDWiimote.ControlCenter.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to There is a newer Device Driver already installed.
-        ///Please use the Control Center that comes with that Driver Package.
+        ///Please use the Control Center that came with it.
         ///
-        ///Installed Device Driver: {0}
-        ///Compatible Device Driver: {1}.
+        ///Compatible Device Driver: {0}
+        ///Installed Device Driver: {1}.
         /// </summary>
         internal static string NewerInstalledDialog_MainMessage {
             get {
@@ -142,8 +142,8 @@ namespace HIDWiimote.ControlCenter.Properties {
         ///
         ///Note: This Control Center is only compatible with the updated driver.
         ///
-        ///Installed Device Driver: {0}
-        ///New Device Driver: {1}.
+        ///New Device Driver: {0}
+        ///Installed Device Driver: {1}.
         /// </summary>
         internal static string UpdaterDialog_MainMessage {
             get {

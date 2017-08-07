@@ -55,7 +55,7 @@ namespace HIDWiimote.ControlCenter
                     break;
                 case DeviceDriverUninstallerRegistry.DeviceDriverState.NewerInstalled:
                     // Show Notice & shutdown
-                    MessageBox.Show(string.Format(HIDWiimote.ControlCenter.Properties.App.NewerInstalledDialog_MainMessage, InstalledDeviceDriverVersionString, VersionStrings.DeviceDriverVersion), "HID Wiimote Control Center", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                    MessageBox.Show(string.Format(HIDWiimote.ControlCenter.Properties.App.NewerInstalledDialog_MainMessage, VersionStrings.DeviceDriverVersion, InstalledDeviceDriverVersionString), "HID Wiimote Control Center", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                     Shutdown();
                     return;
             }

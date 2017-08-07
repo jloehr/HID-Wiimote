@@ -48,7 +48,7 @@ namespace HIDWiimote.ControlCenter.Main_Windows
         private bool AskForUpdate()
         {
             string InstalledVersion = DeviceDriverUninstallerRegistry.GetInstalledVersionString(); 
-            MessageBoxResult Result = MessageBox.Show(string.Format(HIDWiimote.ControlCenter.Properties.App.UpdaterDialog_MainMessage, InstalledVersion, VersionStrings.DeviceDriverVersion), "HID Wiimote Updater", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            MessageBoxResult Result = MessageBox.Show(string.Format(HIDWiimote.ControlCenter.Properties.App.UpdaterDialog_MainMessage, VersionStrings.DeviceDriverVersion, InstalledVersion), "HID Wiimote Updater", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
             return (Result == MessageBoxResult.Yes);
         }

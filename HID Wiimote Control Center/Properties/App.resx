@@ -119,10 +119,10 @@
   </resheader>
   <data name="NewerInstalledDialog_MainMessage" xml:space="preserve">
     <value>There is a newer Device Driver already installed.
-Please use the Control Center that comes with that Driver Package.
+Please use the Control Center that came with it.
 
-Installed Device Driver: {0}
-Compatible Device Driver: {1}</value>
+Compatible Device Driver: {0}
+Installed Device Driver: {1}</value>
   </data>
   <data name="UpdaterDialog_MainMessage" xml:space="preserve">
     <value>This Control Center comes with an driver update.
@@ -130,8 +130,8 @@ Would you like to update the HID Wiimote Device Driver?
 
 Note: This Control Center is only compatible with the updated driver.
 
-Installed Device Driver: {0}
-New Device Driver: {1}</value>
+New Device Driver: {0}
+Installed Device Driver: {1}</value>
   </data>
   <data name="Updater_InstallDeviceDriverMessage" xml:space="preserve">
     <value>Install new Device Driver</value>
