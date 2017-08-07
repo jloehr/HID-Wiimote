@@ -115,10 +115,10 @@
     <Compile Include="Secondary Windows\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Setup\DriverPackage.cs" />
+    <Compile Include="Setup\DeviceDriver.cs" />
     <Compile Include="Setup\SetupAction\Certificate.cs" />
-    <Compile Include="Setup\SetupAction\DriverPackage.cs" />
-    <Compile Include="Setup\DriverPackageUninstallerRegistry.cs" />
+    <Compile Include="Setup\SetupAction\DeviceDriver.cs" />
+    <Compile Include="Setup\DeviceDriverUninstallerRegistry.cs" />
     <Compile Include="Main Windows\InstallerWindow.xaml.cs">
       <DependentUpon>InstallerWindow.xaml</DependentUpon>
     </Compile>
@@ -187,6 +187,7 @@
     <EmbeddedResource Include="Properties\App.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>App.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">

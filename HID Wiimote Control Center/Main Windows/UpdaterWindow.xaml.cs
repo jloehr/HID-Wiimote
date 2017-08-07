@@ -39,15 +39,16 @@ namespace HIDWiimote.ControlCenter.Main_Windows
                 return;
             }
 
-            TaskList.Add(new UpdaterTask(HIDWiimote.ControlCenter.Properties.App.Updater_RemoveDPMessage, RemoveOldDriverPackage));
-            TaskList.Add(new UpdaterTask(HIDWiimote.ControlCenter.Properties.App.Updater_InstallDPMessage, InstallNewDriverPackage));
+            TaskList.Add(new UpdaterTask(HIDWiimote.ControlCenter.Properties.App.Updater_RemoveDeviceDriverPMessage, RemoveOldDeviceDriver));
+            TaskList.Add(new UpdaterTask(HIDWiimote.ControlCenter.Properties.App.Updater_InstallDeviceDriverMessage, InstallNewDeviceDriver));
 
             InitializeComponent();
         }
 
         private bool AskForUpdate()
         {
-            MessageBoxResult Result = MessageBox.Show(HIDWiimote.ControlCenter.Properties.App.UpdaterDialog_MainMessage, "HID Wiimote Updater", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            string InstalledVersion = DeviceDriverUninstallerRegistry.GetInstalledVersionString(); 
+            MessageBoxResult Result = MessageBox.Show(string.Format(HIDWiimote.ControlCenter.Properties.App.UpdaterDialog_MainMessage, InstalledVersion, VersionStrings.DeviceDriverVersion), "HID Wiimote Updater", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
             return (Result == MessageBoxResult.Yes);
         }
@@ -76,7 +77,7 @@ namespace HIDWiimote.ControlCenter.Main_Windows
                 CloseButton.IsEnabled = true;
                 if (ErrorMessage.Length != 0)
                 {
-                    MessageBox.Show(ErrorMessage, HIDWiimote.ControlCenter.Properties.App.Update_RemoveDPErrorDialog_Title + CompletedUpdaterTask.DisplayMessage, MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(ErrorMessage, HIDWiimote.ControlCenter.Properties.App.Update_RemoveDeviceDriverErrorDialog_Title + CompletedUpdaterTask.DisplayMessage, MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 return;
             }
@@ -97,44 +98,44 @@ namespace HIDWiimote.ControlCenter.Main_Windows
             NextTask.StartTask(UpdaterTaskComplete);
         }
 
-        private bool RemoveOldDriverPackage()
+        private bool RemoveOldDeviceDriver()
         {
             try
             {
-                DriverPackage.Uninstall();
+                DeviceDriver.Uninstall();
             }
             catch (Exception e)
             {
-                ErrorMessage = HIDWiimote.ControlCenter.Properties.App.Updater_RemoveDPException + "\n\n" + e.Message;
+                ErrorMessage = HIDWiimote.ControlCenter.Properties.App.Updater_RemoveDeviceDriverException + "\n\n" + e.Message;
                 return false;
             }
 
-            bool UninstallCheck = (DriverPackageUninstallerRegistry.GetUninstallString().Length == 0);
+            bool UninstallCheck = (DeviceDriverUninstallerRegistry.GetUninstallString().Length == 0);
             if (!UninstallCheck)
             {
-                ErrorMessage = HIDWiimote.ControlCenter.Properties.App.Updater_RemoveDPCheckFailed;
+                ErrorMessage = HIDWiimote.ControlCenter.Properties.App.Updater_RemoveDeviceDriverCheckFailed;
                 return false;
             }
 
             return true;
         }
 
-        private bool InstallNewDriverPackage()
+        private bool InstallNewDeviceDriver()
         {
             try
             {
-                DriverPackage.Install();
+                DeviceDriver.Install();
             }
             catch (Exception e)
             {
-                ErrorMessage = HIDWiimote.ControlCenter.Properties.App.Updater_InstallDPException + "\n\n" + e.Message;
+                ErrorMessage = HIDWiimote.ControlCenter.Properties.App.Updater_InstallDeviceDriverException + "\n\n" + e.Message;
                 return false;
             }
 
-            bool InstallCheck = (DriverPackageUninstallerRegistry.GetUninstallString().Length != 0);
+            bool InstallCheck = (DeviceDriverUninstallerRegistry.GetUninstallString().Length != 0);
             if (!InstallCheck)
             {
-                ErrorMessage = HIDWiimote.ControlCenter.Properties.App.Updater_InstallDPCheckFailed;
+                ErrorMessage = HIDWiimote.ControlCenter.Properties.App.Updater_InstallDeviceDriverCheckFailed;
                 return false;
             }
 

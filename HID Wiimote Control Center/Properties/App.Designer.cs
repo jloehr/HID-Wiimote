@@ -61,26 +61,11 @@ namespace HIDWiimote.ControlCenter.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Compatible Driver Package.
-        /// </summary>
-        internal static string NewerInstalledDialog_CompatibleDriverPackage {
-            get {
-                return ResourceManager.GetString("NewerInstalledDialog_CompatibleDriverPackage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Installed Driver Package.
-        /// </summary>
-        internal static string NewerInstalledDialog_InstalledDriverPackage {
-            get {
-                return ResourceManager.GetString("NewerInstalledDialog_InstalledDriverPackage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to There is a newer Driver Package already installed.
-        ///Please use the Control Center that comes with that Driver Package..
+        ///   Looks up a localized string similar to There is a newer Device Driver already installed.
+        ///Please use the Control Center that comes with that Driver Package.
+        ///
+        ///Installed Device Driver: {0}
+        ///Compatible Device Driver: {1}.
         /// </summary>
         internal static string NewerInstalledDialog_MainMessage {
             get {
@@ -91,71 +76,74 @@ namespace HIDWiimote.ControlCenter.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Error while: .
         /// </summary>
-        internal static string Update_RemoveDPErrorDialog_Title {
+        internal static string Update_RemoveDeviceDriverErrorDialog_Title {
             get {
-                return ResourceManager.GetString("Update_RemoveDPErrorDialog_Title", resourceCulture);
+                return ResourceManager.GetString("Update_RemoveDeviceDriverErrorDialog_Title", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The new Driver Package was not successfully installed. Please try again..
+        ///   Looks up a localized string similar to The new Device Driver was not successfully installed. Please try again..
         /// </summary>
-        internal static string Updater_InstallDPCheckFailed {
+        internal static string Updater_InstallDeviceDriverCheckFailed {
             get {
-                return ResourceManager.GetString("Updater_InstallDPCheckFailed", resourceCulture);
+                return ResourceManager.GetString("Updater_InstallDeviceDriverCheckFailed", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An error occured while trying to install the new Driver Package..
+        ///   Looks up a localized string similar to An error occured while trying to install the new Device Driver..
         /// </summary>
-        internal static string Updater_InstallDPException {
+        internal static string Updater_InstallDeviceDriverException {
             get {
-                return ResourceManager.GetString("Updater_InstallDPException", resourceCulture);
+                return ResourceManager.GetString("Updater_InstallDeviceDriverException", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Install new Driver Package.
+        ///   Looks up a localized string similar to Install new Device Driver.
         /// </summary>
-        internal static string Updater_InstallDPMessage {
+        internal static string Updater_InstallDeviceDriverMessage {
             get {
-                return ResourceManager.GetString("Updater_InstallDPMessage", resourceCulture);
+                return ResourceManager.GetString("Updater_InstallDeviceDriverMessage", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The old Driver Package was not successfully removed. Please try again or remove it via &quot;Programs and Features&quot;..
+        ///   Looks up a localized string similar to The old Device Driver was not successfully removed. Please try again or remove it via &quot;Programs and Features&quot;..
         /// </summary>
-        internal static string Updater_RemoveDPCheckFailed {
+        internal static string Updater_RemoveDeviceDriverCheckFailed {
             get {
-                return ResourceManager.GetString("Updater_RemoveDPCheckFailed", resourceCulture);
+                return ResourceManager.GetString("Updater_RemoveDeviceDriverCheckFailed", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An error occured while trying to uninstall the old Driver Package..
+        ///   Looks up a localized string similar to An error occured while trying to uninstall the old Device Driver..
         /// </summary>
-        internal static string Updater_RemoveDPException {
+        internal static string Updater_RemoveDeviceDriverException {
             get {
-                return ResourceManager.GetString("Updater_RemoveDPException", resourceCulture);
+                return ResourceManager.GetString("Updater_RemoveDeviceDriverException", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove old Driver Package.
+        ///   Looks up a localized string similar to Remove old Device Driver.
         /// </summary>
-        internal static string Updater_RemoveDPMessage {
+        internal static string Updater_RemoveDeviceDriverPMessage {
             get {
-                return ResourceManager.GetString("Updater_RemoveDPMessage", resourceCulture);
+                return ResourceManager.GetString("Updater_RemoveDeviceDriverPMessage", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This Driver Package comes with a Driver Update.
-        ///Would you like to update the HID Wiimote Driver?
+        ///   Looks up a localized string similar to This Control Center comes with an driver update.
+        ///Would you like to update the HID Wiimote Device Driver?
         ///
-        ///Note: This Control Center is only compatible with the updated Driver Package..
+        ///Note: This Control Center is only compatible with the updated driver.
+        ///
+        ///Installed Device Driver: {0}
+        ///New Device Driver: {1}.
         /// </summary>
         internal static string UpdaterDialog_MainMessage {
             get {

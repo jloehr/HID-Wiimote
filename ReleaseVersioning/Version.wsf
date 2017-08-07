@@ -7,7 +7,7 @@
 
             var Versions = GetVersionsFromReadme(WScript.arguments(0));
 
-            GenerateDriverPackageVersionPropsSheet(Versions, "Version.props");
+            GenerateVersionPropsSheet(Versions, "Version.props");
             GenerateVersionStringClass(Versions, "VersionStrings.cs");
             GenerateVersionStringHeaderFile(Versions, "VersionStrings.h");
         </script>

@@ -26,7 +26,7 @@ namespace HIDWiimote.ControlCenter.Secondary_Windows
         }
         private void OnInitialized(object sender, System.EventArgs e)
         {
-            DriverPackageHeader.Content += VersionStrings.DriverPackageVersion;
+            DeviceDriverHeader.Content += VersionStrings.DeviceDriverVersion;
             ControlCenterHeader.Content += VersionStrings.ControlCenterVersion;
         }
 

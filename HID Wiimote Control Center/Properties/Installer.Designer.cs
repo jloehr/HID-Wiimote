@@ -144,27 +144,27 @@ namespace HIDWiimote.ControlCenter.Properties {
         /// <summary>
         ///   Looks up a localized string similar to PnP Device Driver for the Wii Remote..
         /// </summary>
-        public static string DriverPackage_Description {
+        public static string DeviceDriver_Description {
             get {
-                return ResourceManager.GetString("DriverPackage_Description", resourceCulture);
+                return ResourceManager.GetString("DeviceDriver_Description", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to An entry in &quot;Programs and Features&quot; is added for uninstall..
         /// </summary>
-        public static string DriverPackage_SmallDescription {
+        public static string DeviceDriver_SmallDescription {
             get {
-                return ResourceManager.GetString("DriverPackage_SmallDescription", resourceCulture);
+                return ResourceManager.GetString("DeviceDriver_SmallDescription", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Driver Package.
+        ///   Looks up a localized string similar to Device Driver.
         /// </summary>
-        public static string DriverPackage_Title {
+        public static string DeviceDriver_Title {
             get {
-                return ResourceManager.GetString("DriverPackage_Title", resourceCulture);
+                return ResourceManager.GetString("DeviceDriver_Title", resourceCulture);
             }
         }
         

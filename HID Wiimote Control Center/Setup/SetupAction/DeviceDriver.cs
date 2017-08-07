@@ -4,30 +4,30 @@ Copyright (C) 2017 Julian Löhr
 All rights reserved.
 
 Filename:
-	DriverPackage.cs
+	DeviceDriver.cs
 
 Abstract:
-	Setup Action to install and uninstall the driver package
+	Setup Action to install and uninstall the device driver
 
 */
 namespace HIDWiimote.ControlCenter.Setup.SetupAction
 {
 
-    class DriverPackage : ISetupAction
+    class DeviceDriver : ISetupAction
     {
         public bool IsSetUp()
         {
-            return Setup.DriverPackage.IsInstalled();
+            return Setup.DeviceDriver.IsInstalled();
         }
 
         public void TrySetUp()
         {
-            Setup.DriverPackage.Install();
+            Setup.DeviceDriver.Install();
         }
 
         public void TryRevert()
         {
-            Setup.DriverPackage.Uninstall();
+            Setup.DeviceDriver.Uninstall();
         }
     }
 }

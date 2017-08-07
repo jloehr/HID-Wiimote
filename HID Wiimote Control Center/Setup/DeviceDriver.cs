@@ -4,10 +4,10 @@ Copyright (C) 2017 Julian Löhr
 All rights reserved.
 
 Filename:
-	DriverPackage.cs
+	DeviceDriver.cs
 
 Abstract:
-	Let's one install and uninstall a driver package and quiery its install state 
+	Let's one install and uninstall the device driver and query its install state 
 
 */
 using HIDWiimote.ControlCenter.Setup.InstallStepAction;
@@ -17,7 +17,7 @@ using System.Diagnostics;
 
 namespace HIDWiimote.ControlCenter.Setup
 {
-    static class DriverPackage
+    static class DeviceDriver
     {
         const string InstallDir = @"%ProgramFiles%\DIFX\HID Wiimote";
         const string UninstallFileName = "Uninstall.bat";
@@ -28,9 +28,9 @@ namespace HIDWiimote.ControlCenter.Setup
 
         public static bool IsInstalled()
         {
-            DriverPackageUninstallerRegistry.DriverPackageState DPState = DriverPackageUninstallerRegistry.GetDriverPackageState(VersionStrings.DriverPackageVersion);
+            DeviceDriverUninstallerRegistry.DeviceDriverState DPState = DeviceDriverUninstallerRegistry.GetDeviceDriverState(VersionStrings.DeviceDriverVersion);
 
-            return (DPState != DriverPackageUninstallerRegistry.DriverPackageState.NoneInstalled);
+            return (DPState != DeviceDriverUninstallerRegistry.DeviceDriverState.NoneInstalled);
         }
 
         public static void Install()
@@ -76,7 +76,7 @@ namespace HIDWiimote.ControlCenter.Setup
 
         public static void Uninstall()
         {
-            string UninstallerString = DriverPackageUninstallerRegistry.GetUninstallString();
+            string UninstallerString = DeviceDriverUninstallerRegistry.GetUninstallString();
             Process Uninstall = Process.Start("cmd.exe", "/C \"" + UninstallerString + "\"");
             Uninstall.WaitForExit();
         }

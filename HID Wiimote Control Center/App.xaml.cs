@@ -36,26 +36,26 @@ namespace HIDWiimote.ControlCenter
                 return;
             }
 
-            string InstalledDriverPackageVersionString;
-            DriverPackageUninstallerRegistry.DriverPackageState DPState = DriverPackageUninstallerRegistry.GetDriverPackageState(VersionStrings.DriverPackageVersion, out InstalledDriverPackageVersionString);
+            string InstalledDeviceDriverVersionString;
+            DeviceDriverUninstallerRegistry.DeviceDriverState DPState = DeviceDriverUninstallerRegistry.GetDeviceDriverState(VersionStrings.DeviceDriverVersion, out InstalledDeviceDriverVersionString);
 
             switch (DPState)
             {
-                case DriverPackageUninstallerRegistry.DriverPackageState.NoneInstalled:
+                case DeviceDriverUninstallerRegistry.DeviceDriverState.NoneInstalled:
                     // Installer Window
                     StartupUri = new Uri("Main Windows\\InstallerWindow.xaml", UriKind.Relative);
                     break;
-                case DriverPackageUninstallerRegistry.DriverPackageState.OlderInstalled:
+                case DeviceDriverUninstallerRegistry.DeviceDriverState.OlderInstalled:
                     // Update Windows
                     StartupUri = new Uri("Main Windows\\UpdaterWindow.xaml", UriKind.Relative);
                     break;
-                case DriverPackageUninstallerRegistry.DriverPackageState.CurrentInstalled:
+                case DeviceDriverUninstallerRegistry.DeviceDriverState.CurrentInstalled:
                     // Control Center
                     StartupUri = new Uri("Main Windows\\ControlCenterWindow.xaml", UriKind.Relative);
                     break;
-                case DriverPackageUninstallerRegistry.DriverPackageState.NewerInstalled:
+                case DeviceDriverUninstallerRegistry.DeviceDriverState.NewerInstalled:
                     // Show Notice & shutdown
-                    MessageBox.Show(HIDWiimote.ControlCenter.Properties.App.NewerInstalledDialog_MainMessage + "\n\n" + HIDWiimote.ControlCenter.Properties.App.NewerInstalledDialog_CompatibleDriverPackage + ": " + VersionStrings.DriverPackageVersion + "\n" + HIDWiimote.ControlCenter.Properties.App.NewerInstalledDialog_InstalledDriverPackage + ": " + InstalledDriverPackageVersionString, "HID Wiimote Control Center", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                    MessageBox.Show(string.Format(HIDWiimote.ControlCenter.Properties.App.NewerInstalledDialog_MainMessage, InstalledDeviceDriverVersionString, VersionStrings.DeviceDriverVersion), "HID Wiimote Control Center", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                     Shutdown();
                     return;
             }

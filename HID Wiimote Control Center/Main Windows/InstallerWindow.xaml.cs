@@ -54,14 +54,14 @@ namespace HIDWiimote.ControlCenter.Main_Windows
                 ));
 
             ActionList.Add(new InstallerAction(
-                HIDWiimote.ControlCenter.Properties.Installer.DriverPackage_Title,
+                HIDWiimote.ControlCenter.Properties.Installer.DeviceDriver_Title,
                 true,
-                HIDWiimote.ControlCenter.Properties.Installer.DriverPackage_Description,
-                HIDWiimote.ControlCenter.Properties.Installer.DriverPackage_SmallDescription,
+                HIDWiimote.ControlCenter.Properties.Installer.DeviceDriver_Description,
+                HIDWiimote.ControlCenter.Properties.Installer.DeviceDriver_SmallDescription,
                 string.Empty,
                 HIDWiimote.ControlCenter.Properties.Installer.ButtonUninstall,
                 HIDWiimote.ControlCenter.Properties.Installer.ButtonInstall,
-                new Setup.SetupAction.DriverPackage()
+                new Setup.SetupAction.DeviceDriver()
                 ));
 
             InitializeComponent();

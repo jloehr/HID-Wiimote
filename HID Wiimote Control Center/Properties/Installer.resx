@@ -144,14 +144,14 @@
   <data name="Certificate_Title" xml:space="preserve">
     <value>Certificate</value>
   </data>
-  <data name="DriverPackage_Description" xml:space="preserve">
+  <data name="DeviceDriver_Description" xml:space="preserve">
     <value>PnP Device Driver for the Wii Remote.</value>
   </data>
-  <data name="DriverPackage_SmallDescription" xml:space="preserve">
+  <data name="DeviceDriver_SmallDescription" xml:space="preserve">
     <value>An entry in "Programs and Features" is added for uninstall.</value>
   </data>
-  <data name="DriverPackage_Title" xml:space="preserve">
-    <value>Driver Package</value>
+  <data name="DeviceDriver_Title" xml:space="preserve">
+    <value>Device Driver</value>
   </data>
   <data name="InstallerAction_ExceptionDialogMessage" xml:space="preserve">
     <value>An error occurred while trying to run the following action: </value>

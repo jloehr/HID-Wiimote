@@ -25,7 +25,7 @@ namespace HIDWiimote.ControlCenter.Setup.InstallStepAction
 
         public bool Do()
         {
-            return DriverPackageUninstallerRegistry.CreateHIDWiimoteUninstallKey(UninstallString, DPInstPath);
+            return DeviceDriverUninstallerRegistry.CreateHIDWiimoteUninstallKey(UninstallString, DPInstPath);
         }
 
         public void Undo()

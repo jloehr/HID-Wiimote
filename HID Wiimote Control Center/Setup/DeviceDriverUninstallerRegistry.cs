@@ -4,7 +4,7 @@ Copyright (C) 2017 Julian Löhr
 All rights reserved.
 
 Filename:
-	DriverPackageUninstallerRegistry.cs
+	DeviceDriverUninstallerRegistry.cs
 
 Abstract:
 	Let's one create and retrieve the uninstaller registry entry and quiery its state 
@@ -14,7 +14,7 @@ using Microsoft.Win32;
 
 namespace HIDWiimote.ControlCenter
 {
-    static class DriverPackageUninstallerRegistry
+    static class DeviceDriverUninstallerRegistry
     {
         private static string UninstallKey = "Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\HID Wiimote\\";
 
@@ -74,15 +74,15 @@ namespace HIDWiimote.ControlCenter
             }
         }
 
-        public enum DriverPackageState { NoneInstalled, OlderInstalled, CurrentInstalled, NewerInstalled };
+        public enum DeviceDriverState { NoneInstalled, OlderInstalled, CurrentInstalled, NewerInstalled };
 
-        public static DriverPackageState GetDriverPackageState(string AppVersionString)
+        public static DeviceDriverState GetDeviceDriverState(string AppVersionString)
         {
             string InstalledVersionString;
-            return GetDriverPackageState(AppVersionString, out InstalledVersionString);
+            return GetDeviceDriverState(AppVersionString, out InstalledVersionString);
         }
 
-        public static DriverPackageState GetDriverPackageState(string AppVersionString, out string InstalledVersionString)
+        public static DeviceDriverState GetDeviceDriverState(string AppVersionString, out string InstalledVersionString)
         {
             InstalledVersionString = "";
 #if !DEBUG
@@ -90,14 +90,14 @@ namespace HIDWiimote.ControlCenter
 
             if (UninstallerKey == null)
             {
-                return DriverPackageState.NoneInstalled;
+                return DeviceDriverState.NoneInstalled;
             }
 
             InstalledVersionString = UninstallerKey.GetValue("DisplayVersion") as string;
 
             if (AppVersionString == InstalledVersionString)
             {
-                return DriverPackageState.CurrentInstalled;
+                return DeviceDriverState.CurrentInstalled;
             }
 
             Version AppVersion = new Version(AppVersionString);
@@ -105,13 +105,19 @@ namespace HIDWiimote.ControlCenter
 
             if (AppVersion.IsNewer(InstalledVersion))
             {
-                return DriverPackageState.OlderInstalled;
+                return DeviceDriverState.OlderInstalled;
             }
 
-            return DriverPackageState.NewerInstalled;
+            return DeviceDriverState.NewerInstalled;
 #else
-            return DriverPackageState.CurrentInstalled;
+            return DeviceDriverState.CurrentInstalled;
 #endif
+        }
+
+        public static string GetInstalledVersionString()
+        {
+            RegistryKey UninstallerKey = GetHIDWiimoteUninstallKey();
+            return UninstallerKey.GetValue("DisplayVersion") as string;
         }
 
         public static string GetUninstallString()
@@ -134,9 +140,9 @@ namespace HIDWiimote.ControlCenter
                 return false;
             }
 
-            UninstallerKey.SetValue("DisplayName", "HID Wiimote " + VersionStrings.DriverPackageVersion, RegistryValueKind.String);
+            UninstallerKey.SetValue("DisplayName", "HID Wiimote " + VersionStrings.DeviceDriverVersion, RegistryValueKind.String);
             UninstallerKey.SetValue("DisplayIcon", DPInstPath + ",0", RegistryValueKind.String);
-            UninstallerKey.SetValue("DisplayVersion", VersionStrings.DriverPackageVersion, RegistryValueKind.String);
+            UninstallerKey.SetValue("DisplayVersion", VersionStrings.DeviceDriverVersion, RegistryValueKind.String);
             UninstallerKey.SetValue("Publisher", "Julian Löhr", RegistryValueKind.String);
             UninstallerKey.SetValue("UninstallString", UninstallCommnad, RegistryValueKind.String);
             UninstallerKey.SetValue("HelpLink", "https://www.julianloehr.de/educational-work/hid-wiimote/", RegistryValueKind.String);

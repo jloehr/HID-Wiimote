@@ -45,7 +45,7 @@ function GetVersionsFromReadme(ReadmePath)
     // First Line of Readme is either
     // HID Wiimote u.v.w.x
     // or
-    // HID Wiimote u.v.w.x (Driver Package a.b.c.d)
+    // HID Wiimote u.v.w.x (Device Driver a.b.c.d)
 
     var ReadmeFile = FSO.OpenTextFile(ReadmePath, ForReading);
     if (ReadmeFile == null)
@@ -75,11 +75,11 @@ function GetVersionsFromReadme(ReadmePath)
     if (FirstLineParts.length > 3)
     {
         VersionString = FirstLineParts[FirstLineParts.length - 1].slice(0, -1);
-        Versions.DriverPackage = ParseVersionString(VersionString);
+        Versions.DeviceDriver = ParseVersionString(VersionString);
     }
     else
     {
-        Versions.DriverPackage = Versions.ControlCenter;
+        Versions.DeviceDriver = Versions.ControlCenter;
     }
     
 
@@ -101,14 +101,14 @@ function UpdateFile(FilePath, NewContent)
     }
 }
 
-function GenerateDriverPackageVersionPropsSheet(Versions, OutputPath)
+function GenerateVersionPropsSheet(Versions, OutputPath)
 {
     var FileContent = "";
     FileContent += '<?xml version="1.0" encoding="utf-8"?>' + "\n";
     FileContent += '<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">' + "\n";
     FileContent += '  <PropertyGroup Label="UserMacros">' + "\n";
     FileContent += '    <ControlCenterVersion>' + Versions.ControlCenter.String + '</ControlCenterVersion>' + "\n";
-    FileContent += '    <DriverPackageVersion>' + Versions.DriverPackage.String + '</DriverPackageVersion>' + "\n";
+    FileContent += '    <DeviceDriverVersion>' + Versions.DeviceDriver.String + '</DeviceDriverVersion>' + "\n";
     FileContent += '  </PropertyGroup>' + "\n";
     FileContent += '</Project>' + "\n";
 
@@ -124,7 +124,7 @@ function GenerateVersionStringClass(Versions, OutputPath)
     FileContent += "    internal static class VersionStrings\n";
     FileContent += "    {\n";
     FileContent += "        public const string ControlCenterVersion = \"" + Versions.ControlCenter.String + "\";\n";
-    FileContent += "        public const string DriverPackageVersion = \"" + Versions.DriverPackage.String + "\";\n";
+    FileContent += "        public const string DeviceDriverVersion = \"" + Versions.DeviceDriver.String + "\";\n";
     FileContent += "    }\n";
     FileContent += "}\n";
 
@@ -139,8 +139,8 @@ function GenerateVersionStringHeaderFile(Versions, OutputPath)
     FileContent += "\n";
     FileContent += "#define CONTROL_CENTER_VERSION " + Versions.ControlCenter.Major + "," + Versions.ControlCenter.Minor + "," + Versions.ControlCenter.Build + "," + Versions.ControlCenter.Revision + "\n";
     FileContent += "#define CONTROL_CENTER_VERSION_STRING \"" + Versions.ControlCenter.String + "\"\n";
-    FileContent += "#define DRIVER_PACKAGE_VERSION " + Versions.DriverPackage.Major + "," + Versions.DriverPackage.Minor + "," + Versions.DriverPackage.Build + "," + Versions.DriverPackage.Revision + "\n";
-    FileContent += "#define DRIVER_PACKAGE_VERSION_STRING \"" + Versions.DriverPackage.String + "\"\n";
+    FileContent += "#define DEVICE_DRIVER_VERSION " + Versions.DeviceDriver.Major + "," + Versions.DeviceDriver.Minor + "," + Versions.DeviceDriver.Build + "," + Versions.DeviceDriver.Revision + "\n";
+    FileContent += "#define DEVICE_DRIVER_VERSION_STRING \"" + Versions.DeviceDriver.String + "\"\n";
     FileContent += "\n";
 
     UpdateFile(OutputPath, FileContent);

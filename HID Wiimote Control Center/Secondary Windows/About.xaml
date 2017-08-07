@@ -20,7 +20,7 @@
                     <Setter Property="FontWeight" Value="Bold" />
                 </Style>
             </StackPanel.Resources>
-            <Label Style="{StaticResource Header}" x:Name="DriverPackageHeader" Content="HID Wiimote " />
+            <Label Style="{StaticResource Header}" x:Name="DeviceDriverHeader" Content="HID Wiimote " />
             <Label Style="{StaticResource Header}" x:Name="ControlCenterHeader" Content="HID Wiimote Control Center " />
         </StackPanel>
         <StackPanel Grid.Row="1">
