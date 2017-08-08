@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) 2013 Julian Löhr
+Copyright (C) 2017 Julian Löhr
 All rights reserved.
 
 Filename:
@@ -10,7 +10,6 @@ Abstract:
 	Contains the entry code for the Kernel Mode driver.
 
 */
-
 #include "Driver.h"
 
 NTSTATUS

@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) 2013 Julian Löhr
+Copyright (C) 2017 Julian Löhr
 All rights reserved.
 
 Filename:
@@ -11,8 +11,7 @@ Abstract:
 	Contains common includes and declarations.
 
 */
-#ifndef _HIDWIIMOTE_H_
-#define _HIDWIIMOTE_H_
+#pragma once
 
 #include <initguid.h>
 #include <ntddk.h>
@@ -23,9 +22,9 @@ Abstract:
 //#define MOUSE_DPAD
 //#define MOUSE_IR
 
-
 //Forward Declarations
 typedef struct _DEVICE_CONTEXT DEVICE_CONTEXT, * PDEVICE_CONTEXT;
+typedef struct _DEVICE_INTERFACE_CONTEXT DEVICE_INTERFACE_CONTEXT, *PDEVICE_INTERFACE_CONTEXT;
 typedef struct _WIIMOTE_DEVICE_CONTEXT WIIMOTE_DEVICE_CONTEXT, * PWIIMOTE_DEVICE_CONTEXT;
 typedef struct _BLUETOOTH_DEVICE_CONTEXT BLUETOOTH_DEVICE_CONTEXT, * PBLUETOOTH_DEVICE_CONTEXT;
 typedef struct _HID_DEVICE_CONTEXT HID_DEVICE_CONTEXT, * PHID_DEVICE_CONTEXT;
@@ -39,5 +38,3 @@ typedef struct _HID_MINIPORT_ADDRESSES
 	PNOTIFY_PRESENCE HidNotifyPresence;
 
 } HID_MINIPORT_ADDRESSES, * PHID_MINIPORT_ADDRESSES;
-
-#endif

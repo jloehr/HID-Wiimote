@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) 2013 Julian Löhr
+Copyright (C) 2017 Julian Löhr
 All rights reserved.
 
 Filename:
@@ -10,8 +10,7 @@ Abstract:
 	Header file for Bluetooth.c
 */
 
-#ifndef _BLUETOOTH_H_
-#define _BLUETOOTH_H_
+#pragma once
 
 #include "HIDWiimote.h"
 
@@ -27,11 +26,16 @@ Abstract:
 #define BUFFER_POOL_TAG '_fuB'
 #define SYNCHRONOUS_CALL_TIMEOUT (-1000000000) // 1 Second
 
+#define BLUETOOTH_ADDRESS_STRING_SIZE 17
+
 typedef struct _BLUETOOTH_DEVICE_CONTEXT 
 {
     BTH_PROFILE_DRIVER_INTERFACE ProfileDriverInterface;
 
     BTH_ADDR DeviceAddress;
+	UNICODE_STRING DeviceAddressString;
+	WCHAR DeviceAddressStringBuffer[BLUETOOTH_ADDRESS_STRING_SIZE];
+
 	L2CAP_CHANNEL_HANDLE ControlChannelHandle;
 	L2CAP_CHANNEL_HANDLE InterruptChannelHandle;
 
@@ -40,23 +44,16 @@ typedef struct _BLUETOOTH_DEVICE_CONTEXT
 } BLUETOOTH_DEVICE_CONTEXT, * PBLUETOOTH_DEVICE_CONTEXT;
 
 typedef struct _BRB_L2CA_OPEN_CHANNEL * PBRB_L2CA_OPEN_CHANNEL;
-typedef struct _BRB_L2CA_CLOSE_CHANNEL  * PBRB_L2CA_CLOSE_CHANNEL;
-typedef struct _BRB_L2CA_ACL_TRANSFER  * PBRB_L2CA_ACL_TRANSFER;
+typedef struct _BRB_L2CA_CLOSE_CHANNEL * PBRB_L2CA_CLOSE_CHANNEL;
+typedef struct _BRB_L2CA_ACL_TRANSFER * PBRB_L2CA_ACL_TRANSFER;
 
 NTSTATUS GetVendorAndProductID(_In_ WDFIOTARGET IoTarget, _Out_ USHORT * VendorID, _Out_ USHORT * ProductID);
 
-NTSTATUS PrepareBluetooth(_In_ PDEVICE_CONTEXT DeviceContext);
-NTSTATUS OpenChannels(_In_ PDEVICE_CONTEXT DeviceContext);
-EVT_WDF_REQUEST_COMPLETION_ROUTINE ControlChannelCompletion;
-EVT_WDF_REQUEST_COMPLETION_ROUTINE InterruptChannelCompletion;
-VOID L2CAPCallback(_In_  PVOID Context, _In_  INDICATION_CODE Indication, _In_  PINDICATION_PARAMETERS Parameters);
+NTSTATUS BluetoothPrepare(_In_ PDEVICE_CONTEXT DeviceContext);
+NTSTATUS BluetoothOpenChannels(_In_ PDEVICE_CONTEXT DeviceContext);
+NTSTATUS BluetoothCloseChannels(_In_ PDEVICE_CONTEXT DeviceContext);
 
-NTSTATUS CloseChannels(_In_ PDEVICE_CONTEXT DeviceContext);
+NTSTATUS BluetoothCreateRequestAndBuffer(_In_ WDFDEVICE Device, _In_ WDFIOTARGET IoTarget, _In_ SIZE_T BufferSize, _Outptr_ WDFREQUEST * Request, _Outptr_ WDFMEMORY * Memory, _Outptr_opt_result_buffer_(BufferSize) PVOID * Buffer);
+NTSTATUS BluetoothTransferToDevice(_In_ PDEVICE_CONTEXT DeviceContext, _In_ WDFREQUEST Request, _In_ WDFMEMORY Memory, _In_ BOOLEAN Synchronous);
 
-NTSTATUS CreateRequestAndBuffer(_In_ WDFDEVICE Device, _In_ WDFIOTARGET IoTarget, _In_ SIZE_T BufferSize, _Outptr_ WDFREQUEST * Request, _Outptr_ WDFMEMORY * Memory, _Outptr_opt_result_buffer_(BufferSize) PVOID * Buffer);
-NTSTATUS TransferToDevice(_In_ PDEVICE_CONTEXT DeviceContext, _In_ WDFREQUEST Request, _In_ WDFMEMORY Memory, _In_ BOOLEAN Synchronous);
-EVT_WDF_REQUEST_COMPLETION_ROUTINE TransferToDeviceCompletion;
-
-NTSTATUS StartContiniousReader(_In_ PDEVICE_CONTEXT DeviceContext);
-EVT_WDF_REQUEST_COMPLETION_ROUTINE ReadFromDeviceCompletion;
-#endif
+NTSTATUS BluetoothStartContiniousReader(_In_ PDEVICE_CONTEXT DeviceContext);

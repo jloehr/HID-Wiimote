@@ -1,0 +1,10 @@
+cd "{{InstallDir}}"
+START /WAIT dpinst.exe /q /u "{{InfFileName}}"
+IF ERRORLEVEL 1 (
+	ECHO dpinst.exe failed: %ERRORLEVEL%
+) ELSE (
+	REG DELETE "HKLM\Software\Microsoft\Windows\CurrentVersion\Uninstall\HID Wiimote" /f
+	del dpinst.exe
+	del "{{InfFileName}}"
+	del "%~f0"
+)

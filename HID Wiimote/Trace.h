@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) 2013 Julian Löhr
+Copyright (C) 2017 Julian Löhr
 All rights reserved.
 
 Filename:
@@ -11,8 +11,7 @@ Abstract:
 	Contains declarations and configuration for Tracing.
 
 */
-#ifndef _TRACE_H_
-#define _TRACE_H_
+#pragma once
 
 #include <ntddk.h>
 
@@ -20,6 +19,7 @@ Abstract:
 #include <ntstrsafe.h>
 
 #define PRINTBYTE_POOL_TAG '_BrP'
+#define NTSTATUS_FORMAT_IDENTIFIER "%#010x"
 
 VOID
 Trace(
@@ -28,9 +28,13 @@ Trace(
     );
 
 VOID
+TraceStatus(
+	_In_ PCCHAR  DebugMessage,
+	_In_ NTSTATUS Status
+	);
+
+VOID
 PrintBytes(
 	_In_reads_(Size) PCUCHAR Data,
 	_In_ SIZE_T Size
 	);
-
-#endif

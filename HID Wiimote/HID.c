@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) 2013 Julian Löhr
+Copyright (C) 2017 Julian Löhr
 All rights reserved.
 
 Filename:
@@ -10,33 +10,29 @@ Abstract:
 	Contains IOQueues and HID specific functions.
 	Handles all HID Requests and translates the Wiimote State into HID reports.
 */
-
 #include "HID.h"
+
 #include "Device.h"
 #include "Bluetooth.h"
 #include "HIDDescriptors.h"
 #include "WiimoteToHIDParser.h"
 
-//Forward Declarations
+EVT_WDF_IO_QUEUE_IO_INTERNAL_DEVICE_CONTROL HIDInternalDeviceControlCallback;
+EVT_READ_IO_CONTROL_BUFFER_FILL_BUFFER HIDFillReadBufferCallback;
+
 VOID ProcessGetDeviceDescriptor(_In_ WDFREQUEST Request);
 VOID ProcessGetReportDescriptor(_In_ WDFREQUEST Request);
 VOID ProcessGetDeviceAttributes(_In_ WDFREQUEST Request,_In_ PHID_DEVICE_CONTEXT HIDContext);
 VOID ForwardReadReportRequest(_In_ WDFREQUEST Request, _In_ PDEVICE_CONTEXT DeviceContext);
-NTSTATUS CompletePendingReadReportRequest(_In_ PDEVICE_CONTEXT DeviceContext, _In_ WDFREQUEST Request);
 VOID ProcessAddresses(_In_ WDFREQUEST Request, _In_ PDEVICE_CONTEXT DeviceContext);
 
-NTSTATUS PrepareHID(
+NTSTATUS HIDPrepare(
 	_In_ PDEVICE_CONTEXT DeviceContext
 	)
 {
 	NTSTATUS Status = STATUS_SUCCESS;
 
-	DeviceContext->HIDContext.PerformReadReportInstant = FALSE;
-
 	Status = GetVendorAndProductID(DeviceContext->IoTarget, &(DeviceContext->HIDContext.VendorID), &(DeviceContext->HIDContext.ProductID));
-
-	Trace("IOCTL_WIIMOTE_ADDRESSES: %x", IOCTL_WIIMOTE_ADDRESSES);
-
 	if(!NT_SUCCESS(Status))
 	{
 		return Status;
@@ -46,35 +42,31 @@ NTSTATUS PrepareHID(
 }
 
 NTSTATUS 
-CreateQueues(
+HIDCreateQueues(
 	_In_ WDFDEVICE Device, 
-	_In_ PHID_DEVICE_CONTEXT HIDContext
+	_In_ PDEVICE_CONTEXT DeviceContext
 	)
 {
 	NTSTATUS Status;
 	WDF_IO_QUEUE_CONFIG QueueConfig;
+	PHID_DEVICE_CONTEXT HIDContext = &DeviceContext->HIDContext;
 
-	//Create Default Queue
+	// Create Default Queue
 	WDF_IO_QUEUE_CONFIG_INIT_DEFAULT_QUEUE(&QueueConfig, WdfIoQueueDispatchParallel);
-	QueueConfig.EvtIoInternalDeviceControl = InternalDeviceControlCallback;
+	QueueConfig.EvtIoInternalDeviceControl = HIDInternalDeviceControlCallback;
 
 	Status = WdfIoQueueCreate(Device, &QueueConfig, WDF_NO_OBJECT_ATTRIBUTES, &(HIDContext->DefaultIOQueue));
-
 	if(!NT_SUCCESS(Status))
 	{
-		Trace("Creating DefaultIOQueue Failed: 0x%x", Status);
+		TraceStatus("Creating DefaultIOQueue failed", Status);
 		return Status;
 	}
 
-	//Create Read Buffer Queue
-	WDF_IO_QUEUE_CONFIG_INIT(&QueueConfig, WdfIoQueueDispatchManual);
-    QueueConfig.PowerManaged = WdfFalse;
-
-	Status = WdfIoQueueCreate(Device, &QueueConfig, WDF_NO_OBJECT_ATTRIBUTES, &(HIDContext->ReadBufferQueue));
-	
-	if(!NT_SUCCESS(Status))
+	// Create Read Buffer Queue
+	Status = ReadIoControlBufferCreate(&HIDContext->ReadBuffer, DeviceContext->Device, DeviceContext, HIDFillReadBufferCallback, sizeof(HID_GAMEPAD_REPORT));
+	if (!NT_SUCCESS(Status))
 	{
-		Trace("Creating ReadBufferQueue Failed: 0x%x", Status);
+		TraceStatus("Creating HID Read Buffer failed", Status);
 		return Status;
 	}
 
@@ -90,7 +82,7 @@ GetHIDContext(
 }
 
 VOID
-InternalDeviceControlCallback(
+HIDInternalDeviceControlCallback(
 	_In_ WDFQUEUE Queue,
     _In_ WDFREQUEST Request,
     _In_ size_t OutputBufferLength,
@@ -107,15 +99,12 @@ InternalDeviceControlCallback(
 	case IOCTL_HID_GET_DEVICE_DESCRIPTOR:
 		ProcessGetDeviceDescriptor(Request);
 		break;
-
 	case IOCTL_HID_GET_DEVICE_ATTRIBUTES:
 		ProcessGetDeviceAttributes(Request, GetHIDContext(Queue));
 		break;
-
 	case IOCTL_HID_GET_REPORT_DESCRIPTOR:
 		ProcessGetReportDescriptor(Request);
 		break;
-
 	case IOCTL_HID_READ_REPORT:
 		ForwardReadReportRequest(Request, GetDeviceContext(WdfIoQueueGetDevice(Queue)));
 		break;
@@ -174,8 +163,6 @@ ProcessGetDeviceAttributes(
 		return;
 	}
 
-
-
 	// Fill out
 	DeviceAttributes->Size = (ULONG)DeviceAttributesSize;
 	DeviceAttributes->VendorID = HIDContext->VendorID;
@@ -215,129 +202,75 @@ ProcessGetReportDescriptor(
 	WdfRequestCompleteWithInformation(Request, Status, ReportDescriptorSize);
 }
 
-
 VOID 
 ForwardReadReportRequest(
 	_In_ WDFREQUEST Request,
 	_In_ PDEVICE_CONTEXT DeviceContext
 	)
 {
-	NTSTATUS Status;
-	PHID_DEVICE_CONTEXT HIDContext = &(DeviceContext->HIDContext);
-
-	//Trace("ForwardReadReportRequest");
-
-	if(HIDContext->PerformReadReportInstant)
-	{
-		CompletePendingReadReportRequest(DeviceContext, Request);
-	}
-	else
-	{
-		Status = WdfRequestForwardToIoQueue(Request, HIDContext->ReadBufferQueue);
-		if(!NT_SUCCESS(Status))
-		{
-			WdfRequestComplete(Request, Status);
-			return;
-		}
-	}
+	ReadIoControlBufferForwardRequest(&DeviceContext->HIDContext.ReadBuffer, Request);
 }
 
-NTSTATUS
-FlushQueue(
-	_In_ WDFQUEUE Queue
-	)
-{
-	NTSTATUS Status = STATUS_SUCCESS;
-	WDFREQUEST TmpRequest;
-
-	while(NT_SUCCESS(Status = (WdfIoQueueRetrieveNextRequest(Queue, &TmpRequest))))
-	{
-		WdfRequestComplete(TmpRequest, STATUS_DEVICE_REMOVED);
-	}
-
-	if(Status == STATUS_NO_MORE_ENTRIES)
-	{
-		Status = STATUS_SUCCESS;
-	}
-
-	return Status;
-
-}
 
 NTSTATUS 
-ReleaseHID(
+HIDRelease(
 	_In_ PDEVICE_CONTEXT DeviceContext
 	)
 {
 	NTSTATUS Status = STATUS_SUCCESS;
 	PHID_DEVICE_CONTEXT HIDContext = &(DeviceContext->HIDContext);
 
-	Status = FlushQueue(HIDContext->ReadBufferQueue);
+	ReadIoControlBufferFlush(&HIDContext->ReadBuffer);
 
 	return Status;
 }
 
-NTSTATUS 
-CompletePendingReadReportRequest(
-	_In_ PDEVICE_CONTEXT DeviceContext,
-	_In_ WDFREQUEST Request
-	)
+VOID 
+HIDFillReadBufferCallback(
+	_In_ PDEVICE_CONTEXT DeviceContext, 
+	_Inout_updates_all_(BufferSize) PVOID Buffer,
+	_In_ size_t BufferSize, 
+	_Out_ PSIZE_T BytesWritten)
 {
-	NTSTATUS Status = STATUS_SUCCESS;
-	PHID_DEVICE_CONTEXT HIDContext = &(DeviceContext->HIDContext);
 	PWIIMOTE_DEVICE_CONTEXT WiimoteContext = &(DeviceContext->WiimoteContext);
-	BYTE * RequestBuffer;
-	CONST size_t ReportSize = HIDReportSize;
+	(*BytesWritten) = 0;
 
-	HIDContext->PerformReadReportInstant = FALSE;
-
-	Status = WdfRequestRetrieveOutputBuffer(Request, ReportSize, (PVOID *)&RequestBuffer, NULL);
-	if(!NT_SUCCESS(Status))
+	switch (WiimoteContext->Settings.Mode)
 	{
-		WdfRequestComplete(Request, Status);
-		return Status;
+	case Gamepad:
+		ParseWiimoteStateAsGamepad(WiimoteContext, Buffer, BufferSize, BytesWritten);
+		break;
+	case PassThrough:
+		break;
+	case IRMouse:
+		ParseWiimoteStateAsIRMouse(&(WiimoteContext->State), Buffer, BufferSize, BytesWritten);
+		break;
+	case DPadMouse:
+		ParseWiimoteStateAsDPadMouse(&(WiimoteContext->State), Buffer, BufferSize, BytesWritten);
+		break;
+	case GamepadAndIRMouse:
+		if (!DeviceContext->HIDContext.GamepadAndIRMouseReportToggleFlag)
+		{
+			ParseWiimoteStateAsIRMouse(&(WiimoteContext->State), Buffer, BufferSize, BytesWritten);
+			DeviceContext->HIDContext.GamepadAndIRMouseReportToggleFlag = !DeviceContext->HIDContext.GamepadAndIRMouseReportToggleFlag;
+
+			ReadIoControlBufferDispatchRequest(&(DeviceContext->HIDContext.ReadBuffer));
+		}
+		else
+		{
+			ParseWiimoteStateAsGamepad(WiimoteContext, Buffer, BufferSize, BytesWritten);
+			DeviceContext->HIDContext.GamepadAndIRMouseReportToggleFlag = !DeviceContext->HIDContext.GamepadAndIRMouseReportToggleFlag;
+		}
+		break;
 	}
-
-	RequestBuffer[0] = DEFAULT_REPORT_ID;
-#if defined MOUSE_DPAD
-	ParseWiimoteStateAsDPadMouse(WiimoteContext, RequestBuffer + 1);
-#else
-#if defined MOUSE_IR
-	ParseWiimoteStateAsIRMouse(WiimoteContext, RequestBuffer + 1);
-#else 
-	ParseWiimoteState(WiimoteContext, RequestBuffer + 1);
-#endif
-#endif
-
-	WdfRequestCompleteWithInformation(Request, Status, ReportSize);
-
-	return Status;
-
 }
 
-NTSTATUS 
-WiimoteStateUpdated(
+VOID 
+HIDWiimoteStateUpdated(
 	_In_ PDEVICE_CONTEXT DeviceContext
 	)
 {
-	NTSTATUS Status = STATUS_SUCCESS;
-	PHID_DEVICE_CONTEXT HIDContext = &(DeviceContext->HIDContext);
-	WDFREQUEST Request;
-
-	Status = WdfIoQueueRetrieveNextRequest(HIDContext->ReadBufferQueue, &Request);
-	
-	if(NT_SUCCESS(Status))
-	{
-		CompletePendingReadReportRequest(DeviceContext, Request);
-	}
-	else if (Status == STATUS_NO_MORE_ENTRIES) 
-	{	
-		Trace("Read Buffer Queue was emptry!");
-		HIDContext->PerformReadReportInstant = TRUE;
-		Status = STATUS_SUCCESS;
-	} 
-
-	return Status;
+	ReadIoControlBufferDispatchRequest(&(DeviceContext->HIDContext.ReadBuffer));
 }
 
 VOID
@@ -354,7 +287,7 @@ ProcessAddresses(
 	Status = WdfRequestRetrieveInputBuffer(Request, sizeof(HID_MINIPORT_ADDRESSES), (PVOID *)&Addresses, NULL);
 	if(!NT_SUCCESS(Status))
 	{
-		Trace("Couldn't retrieve Input Buffer: 0x%x", Status);
+		TraceStatus("Couldn't retrieve Input Buffer", Status);
 		WdfRequestComplete(Request, STATUS_SUCCESS);
 		return;
 	}

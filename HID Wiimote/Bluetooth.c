@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) 2013 Julian Löhr
+Copyright (C) 2017 Julian Löhr
 All rights reserved.
 
 Filename:
@@ -11,9 +11,16 @@ Abstract:
 	Like establishing the connection, reading and writing,
 	closing the connection to the device and Bluetooth error handling.
 */
-
 #include "Bluetooth.h"
+
 #include "Device.h"
+
+EVT_WDF_REQUEST_COMPLETION_ROUTINE ControlChannelCompletion;
+EVT_WDF_REQUEST_COMPLETION_ROUTINE InterruptChannelCompletion;
+VOID L2CAPCallback(_In_  PVOID Context, _In_  INDICATION_CODE Indication, _In_  PINDICATION_PARAMETERS Parameters);
+
+EVT_WDF_REQUEST_COMPLETION_ROUTINE TransferToDeviceCompletion;
+EVT_WDF_REQUEST_COMPLETION_ROUTINE ReadFromDeviceCompletion;
 
 NTSTATUS 
 GetVendorAndProductID(
@@ -50,7 +57,7 @@ GetVendorAndProductID(
 }
 
 NTSTATUS 
-PrepareBluetooth(
+BluetoothPrepare(
 	_In_ PDEVICE_CONTEXT DeviceContext
 	)
 {
@@ -62,7 +69,7 @@ PrepareBluetooth(
 	BluetoothContext->ControlChannelHandle = NULL;
 	BluetoothContext->InterruptChannelHandle = NULL;
 
-	//Get Interfaces
+	// Get Interfaces
 	Status = WdfFdoQueryForInterface(
 		DeviceContext->Device, 
 		&GUID_BTHDDI_PROFILE_DRIVER_INTERFACE, 
@@ -76,7 +83,7 @@ PrepareBluetooth(
         return Status;
     }
 
-	//Get BluetoothAdress
+	// Get BluetoothAdress
 	RtlZeroMemory(&DeviceInfo, sizeof(DeviceInfo));
 	WDF_MEMORY_DESCRIPTOR_INIT_BUFFER(&DeviceInfoMemDescriptor, &DeviceInfo, sizeof(DeviceInfo));
 
@@ -95,6 +102,18 @@ PrepareBluetooth(
     }
 
 	BluetoothContext->DeviceAddress = DeviceInfo.address;
+
+	Status = RtlStringCchPrintfW(BluetoothContext->DeviceAddressStringBuffer, BLUETOOTH_ADDRESS_STRING_SIZE, L"%012I64x", DeviceInfo.address);
+	if (!NT_SUCCESS(Status))
+	{
+		return Status;
+	}
+
+	Status = RtlUnicodeStringInit(&BluetoothContext->DeviceAddressString, BluetoothContext->DeviceAddressStringBuffer);
+	if (!NT_SUCCESS(Status))
+	{
+		return Status;
+	}
 
 	return Status;
 }
@@ -145,7 +164,7 @@ CreateBuffer(
 }
 
 NTSTATUS
-CreateRequestAndBuffer(
+BluetoothCreateRequestAndBuffer(
 	_In_ WDFDEVICE Device,
 	_In_ WDFIOTARGET IoTarget,
 	_In_ SIZE_T BufferSize,
@@ -374,7 +393,7 @@ L2CAPCallback(
 		Trace("Disconnect");
 		Trace("Parameter: %u; %u", Parameters->Parameters.Disconnect.Reason, Parameters->Parameters.Disconnect.CloseNow);
 	
-		ResetToNullState(DeviceContext);
+		WiimoteReset(DeviceContext);
 		SignalDeviceIsGone(DeviceContext);
 
 		//WDF_DEVICE_STATE_INIT (&NewDeviceState);
@@ -471,7 +490,7 @@ ControlChannelCompletion(
 
 	Status = Params->IoStatus.Status;
 	
-	Trace("Control Channel Result: 0x%x", Status);
+	TraceStatus("Control Channel Result", Status);
 
 	if(!NT_SUCCESS(Status))
 	{
@@ -514,7 +533,7 @@ InterruptChannelCompletion(
 
 	Status = Params->IoStatus.Status;
 	
-	Trace("Interrupt Channel Result: 0x%x", Status);
+	TraceStatus("Interrupt Channel Result", Status);
 
 	if(!NT_SUCCESS(Status))
 	{
@@ -535,11 +554,11 @@ InterruptChannelCompletion(
 	CleanUpCompletedRequest(Request, IoTarget, Context);
 	
 	// Start Wiimote functionality
-	StartWiimote(DeviceContext);
+	WiimoteStart(DeviceContext);
 }
 
 NTSTATUS
-OpenChannels(
+BluetoothOpenChannels(
 	_In_ PDEVICE_CONTEXT DeviceContext
 	)
 {
@@ -579,7 +598,7 @@ CloseChannel(
 }
 
 NTSTATUS
-CloseChannels(
+BluetoothCloseChannels(
 	_In_ PDEVICE_CONTEXT DeviceContext
 	)
 {	
@@ -595,7 +614,7 @@ CloseChannels(
 }
 
 NTSTATUS 
-TransferToDevice(
+BluetoothTransferToDevice(
 	_In_ PDEVICE_CONTEXT DeviceContext, 
 	_In_ WDFREQUEST Request, 
 	_In_ WDFMEMORY Memory,
@@ -689,7 +708,7 @@ ReadFromDevice(
 	Status = SendBRB(DeviceContext, Request, (PBRB)BRB, ReadFromDeviceCompletion);
 	if(!NT_SUCCESS(Status))
 	{
-		Trace("SendBRB Failed 0x%x", Status);
+		TraceStatus("SendBRB Failed", Status);
 		return Status;
 	}
 
@@ -718,7 +737,7 @@ ReadFromDeviceCompletion(
 
 	Status = Params->IoStatus.Status;
 
-	//Trace("ReadFromDeviceCompletion Result: %#02X", Status);
+	//TraceStatus("ReadFromDeviceCompletion Result", Status);
 
 	if(!NT_SUCCESS(Status))
 	{
@@ -733,7 +752,7 @@ ReadFromDeviceCompletion(
 	//Trace("BufferSize: %d - RemainingBufferSize: %d", BRB->BufferSize, BRB->RemainingBufferSize);
 
 	//Call Wiimote Read Callback
-	Status = ProcessReport(DeviceContext, ReadBuffer, (ReadBufferSize - BRB->RemainingBufferSize));
+	Status = WiimoteProcessReport(DeviceContext, ReadBuffer, (ReadBufferSize - BRB->RemainingBufferSize));
 	if(!NT_SUCCESS(Status))
 	{
 		WdfObjectDelete(Request);
@@ -762,7 +781,7 @@ ReadFromDeviceCompletion(
 }
 
 NTSTATUS
-StartContiniousReader(
+BluetoothStartContiniousReader(
 	_In_ PDEVICE_CONTEXT DeviceContext
 	)
 {
@@ -778,10 +797,10 @@ StartContiniousReader(
 	Trace("StartContiniousReader");
 
 	//Create Report And Buffer
-	Status = CreateRequestAndBuffer(DeviceContext->Device, DeviceContext->IoTarget, ReadBufferSize, &Request, &Memory, &ReadBuffer);
+	Status = BluetoothCreateRequestAndBuffer(DeviceContext->Device, DeviceContext->IoTarget, ReadBufferSize, &Request, &Memory, &ReadBuffer);
 	if(!NT_SUCCESS(Status))
 	{
-		Trace("CreateRequestAndBuffer Failed: 0x%x", Status);
+		TraceStatus("CreateRequestAndBuffer Failed", Status);
 		return Status;
 	}
 

@@ -158,21 +158,13 @@
     <Inf2CatUseLocalTime>true</Inf2CatUseLocalTime>
   </PropertyGroup>
   <ItemGroup>
-    <FilesToPackage Include="$(WindowsSdkDir)Redist\DIFx\dpinst\MultiLin\$(PlatformShortName)\dpinst.exe" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|Win32'">
-      <PackageRelativeDirectory>
-      </PackageRelativeDirectory>
+    <FilesToPackage Include="DIFx\$(PlatformShortName)\dpinst.exe" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|Win32'">
     </FilesToPackage>
-    <FilesToPackage Include="$(WindowsSdkDir)Redist\DIFx\dpinst\MultiLin\$(PlatformShortName)\dpinst.exe" Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|Win32'">
-      <PackageRelativeDirectory>
-      </PackageRelativeDirectory>
+    <FilesToPackage Include="DIFx\$(PlatformShortName)\dpinst.exe" Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|Win32'">
     </FilesToPackage>
-    <FilesToPackage Include="$(WindowsSdkDir)Redist\DIFx\dpinst\MultiLin\$(PlatformShortName)\dpinst.exe" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|x64'">
-      <PackageRelativeDirectory>
-      </PackageRelativeDirectory>
+    <FilesToPackage Include="DIFx\$(PlatformShortName)\dpinst.exe" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|x64'">
     </FilesToPackage>
-    <FilesToPackage Include="$(WindowsSdkDir)Redist\DIFx\dpinst\MultiLin\$(PlatformShortName)\dpinst.exe" Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|x64'">
-      <PackageRelativeDirectory>
-      </PackageRelativeDirectory>
+    <FilesToPackage Include="DIFx\$(PlatformShortName)\dpinst.exe" Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|x64'">
     </FilesToPackage>
     <FilesToPackage Include="..\$(Platform)\$(ConfigurationName)\HIDMiniport.pdb" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Debug|x64'">
       <PackageRelativeDirectory>Debug</PackageRelativeDirectory>
@@ -193,70 +185,58 @@
       <PackageRelativeDirectory>Debug</PackageRelativeDirectory>
     </FilesToPackage>
     <FilesToPackage Include="@(Inf->'%(CopyOutput)')" Condition="'@(Inf)'!=''" />
-    <FilesToPackage Include="..\Additional Package Content\DPInst.xml" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|x64'">
+    <FilesToPackage Include="DPInst.xml" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|x64'">
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
-    <FilesToPackage Include="..\Additional Package Content\DPInst.xml" Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|x64'">
+    <FilesToPackage Include="DPInst.xml" Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|x64'">
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
-    <FilesToPackage Include="..\Additional Package Content\DPInst.xml" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|Win32'">
+    <FilesToPackage Include="DPInst.xml" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|Win32'">
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
-    <FilesToPackage Include="..\Additional Package Content\DPInst.xml" Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|Win32'">
+    <FilesToPackage Include="DPInst.xml" Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|Win32'">
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
-    <FilesToPackage Include="..\Additional Package Content\EULA.txt" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|x64'">
+    <FilesToPackage Include="EULA.txt" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|x64'">
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
-    <FilesToPackage Include="..\Additional Package Content\EULA.txt" Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|x64'">
+    <FilesToPackage Include="EULA.txt" Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|x64'">
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
-    <FilesToPackage Include="..\Additional Package Content\EULA.txt" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|Win32'">
+    <FilesToPackage Include="EULA.txt" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|Win32'">
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
-    <FilesToPackage Include="..\Additional Package Content\EULA.txt" Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|Win32'">
+    <FilesToPackage Include="EULA.txt" Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|Win32'">
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
-    <FilesToPackage Include="..\Additional Package Content\Readme.txt" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|x64'">
+    <FilesToPackage Include="Readme.txt" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|x64'">
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
-    <FilesToPackage Include="..\Additional Package Content\Readme.txt" Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|x64'">
+    <FilesToPackage Include="Readme.txt" Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|x64'">
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
-    <FilesToPackage Include="..\Additional Package Content\Readme.txt" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|Win32'">
+    <FilesToPackage Include="Readme.txt" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|Win32'">
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
-    <FilesToPackage Include="..\Additional Package Content\Readme.txt" Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|Win32'">
+    <FilesToPackage Include="Readme.txt" Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|Win32'">
       <PackageRelativeDirectory>
       </PackageRelativeDirectory>
     </FilesToPackage>
-    <FilesToPackage Include="..\TinyInstaller\bin\Release\TinyInstaller.exe" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|x64'">
-      <PackageRelativeDirectory>
-      </PackageRelativeDirectory>
-    </FilesToPackage>
-    <FilesToPackage Include="..\TinyInstaller\bin\Release\TinyInstaller.exe" Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|x64'">
-      <PackageRelativeDirectory>
-      </PackageRelativeDirectory>
-    </FilesToPackage>
-    <FilesToPackage Include="..\TinyInstaller\bin\Release\TinyInstaller.exe" Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|Win32'">
-      <PackageRelativeDirectory>
-      </PackageRelativeDirectory>
-    </FilesToPackage>
-    <FilesToPackage Include="..\TinyInstaller\bin\Release\TinyInstaller.exe" Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|Win32'">
-      <PackageRelativeDirectory>
-      </PackageRelativeDirectory>
-    </FilesToPackage>
+    <FilesToPackage Include="..\HID Wiimote Control Center\bin\$(PlatformShortName)\Debug\HID Wiimote Control Center.exe" Condition="'$(Configuration)'=='Windows 7, 8, 8.1, 10 Debug'" />
+    <FilesToPackage Include="..\HID Wiimote Control Center\bin\$(PlatformShortName)\Release\HID Wiimote Control Center.exe" Condition="'$(Configuration)'=='Windows 7, 8, 8.1, 10 Release'" />
+    <FilesToPackage Include="..\HID Wiimote User Mode\$(PlatformShortName)\Debug\HID Wiimote User Mode.dll" Condition="'$(Configuration)'=='Windows 7, 8, 8.1, 10 Debug'" />
+    <FilesToPackage Include="..\HID Wiimote User Mode\$(PlatformShortName)\Release\HID Wiimote User Mode.dll" Condition="'$(Configuration)'=='Windows 7, 8, 8.1, 10 Release'" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HID Miniport\HID Miniport.vcxproj">
@@ -265,6 +245,13 @@
     <ProjectReference Include="..\HID Wiimote\HID Wiimote.vcxproj">
       <Project>{785d88e1-e758-4966-80fa-aef74681fef1}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="DPInst.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="EULA.txt" />
+    <Text Include="Readme.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

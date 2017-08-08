@@ -1,0 +1,15 @@
+<package>
+    <job id="GenerateVersionStringFiles" >
+        <script language="JScript" src="Version.js" />
+        <script language="JScript">
+            // Arg 0: Readme file path
+            WScript.Echo("Generating Version String Files...");
+
+            var Versions = GetVersionsFromReadme(WScript.arguments(0));
+
+            GenerateVersionPropsSheet(Versions, "Version.props");
+            GenerateVersionStringClass(Versions, "VersionStrings.cs");
+            GenerateVersionStringHeaderFile(Versions, "VersionStrings.h");
+        </script>
+    </job>
+</package>

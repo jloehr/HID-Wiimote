@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) 2013 Julian Löhr
+Copyright (C) 2017 Julian Löhr
 All rights reserved.
 
 Filename:
@@ -10,11 +10,11 @@ Abstract:
 	Header file for Device.c
 
 */
-#ifndef _DEVICE_H_
-#define _DEVICE_H_
+#pragma once
 
 #include "HIDWiimote.h"
 
+#include "DeviceInterface.h"
 #include "Wiimote.h"
 #include "Bluetooth.h"
 #include "HID.h"
@@ -24,6 +24,7 @@ typedef struct _DEVICE_CONTEXT
 	WDFDEVICE Device;
 	WDFIOTARGET IoTarget;
 
+	PDEVICE_INTERFACE_CONTEXT SettingsInterfaceContext;
 	BLUETOOTH_DEVICE_CONTEXT BluetoothContext;
 	HID_DEVICE_CONTEXT HIDContext;
 	WIIMOTE_DEVICE_CONTEXT WiimoteContext;
@@ -45,6 +46,3 @@ EVT_WDF_DEVICE_RELEASE_HARDWARE ReleaseHardware;
 
 VOID SetHIDMiniportAddresses(_In_ PDEVICE_CONTEXT DeviceContext, _In_ PHID_MINIPORT_ADDRESSES Addresses);
 NTSTATUS SignalDeviceIsGone(_In_ PDEVICE_CONTEXT DeviceContext);
-
-
-#endif

@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) 2013 Julian Löhr
+Copyright (C) 2017 Julian Löhr
 All rights reserved.
 
 Filename:
@@ -9,8 +9,6 @@ Filename:
 Abstract:
 	Contains all system callbacks regarding a devices pnp and power states.
 */
-
-
 #include "Device.h"
 
 NTSTATUS
@@ -59,15 +57,22 @@ DeviceAdd(
 	DevContext->Device = Device;
 
 	// Create IO Queue
-	Status = CreateQueues(Device, &(DevContext->HIDContext));
+	Status = HIDCreateQueues(Device, DevContext);
 	if(!NT_SUCCESS(Status))
 	{
 		Trace("Device Added Error On CreateQueues Result: 0x%x", Status);
 		return Status;
 	}
-	
-	Trace("Device Added Result: %#02X", Status);
 
+	// Create Settings Device Interface
+	Status = DeviceInterfaceCreate(DevContext);
+	if (!NT_SUCCESS(Status))
+	{
+		TraceStatus("Error Creating Device Interface", Status);
+		return Status;
+	}
+
+	TraceStatus("Device Added Result", Status);
 	return Status;
 }
 
@@ -90,28 +95,27 @@ PrepareHardware(
 	DeviceContext->IoTarget = WdfDeviceGetIoTarget(Device);
 
 	//Initialize Bluetooth
-	Status = PrepareBluetooth(DeviceContext);
+	Status = BluetoothPrepare(DeviceContext);
 	if(!NT_SUCCESS(Status))
 	{
 		return Status;
 	}
 	
 	//Initialize HID
-	Status = PrepareHID(DeviceContext);
+	Status = HIDPrepare(DeviceContext);
 	if(!NT_SUCCESS(Status))
 	{
 		return Status;
 	}
 	
 	//Initialize Wiimote
-	Status = PrepareWiimote(DeviceContext);
+	Status = WiimotePrepare(DeviceContext);
 	if(!NT_SUCCESS(Status))
 	{
 		return Status;
 	}
 	
-	Trace("PrepareHardware Result: 0x%x", Status);
-
+	TraceStatus("PrepareHardware Result", Status);
 	return Status;
 }
 
@@ -132,14 +136,13 @@ DeviceD0Entry(
 
 	RtlSecureZeroMemory(&(DeviceContext->HIDMiniportAddresses), sizeof(HID_MINIPORT_ADDRESSES));
 
-	Status = OpenChannels(DeviceContext);
+	Status = BluetoothOpenChannels(DeviceContext);
 	if(!NT_SUCCESS(Status))
 	{
 		return Status;
 	}
 
-	Trace("Device D0 Entry Result: 0x%x", Status);
-
+	TraceStatus("Device D0 Entry Result", Status);
 	return Status;
 }
 
@@ -159,14 +162,20 @@ DeviceD0Exit(
 	DeviceContext = GetDeviceContext(Device);
 
 	//Suspend Wiimote
-	Status = StopWiimote(DeviceContext);
+	Status = WiimoteStop(DeviceContext);
+	if (!NT_SUCCESS(Status))
+	{
+		TraceStatus("Error Stopping Wiimote", Status);
+	}
 
 	//Close BluetoothConnection
-	Status = CloseChannels(DeviceContext);
+	Status = BluetoothCloseChannels(DeviceContext);
+	if (!NT_SUCCESS(Status))
+	{
+		TraceStatus("Error Closing Bluetooth Connections", Status);
+	}
 
-	
-	Trace("Exit D0 Result: 0x%x", Status);
-
+	TraceStatus("Exit D0 Result", Status);
 	return Status;
 }
 
@@ -185,9 +194,19 @@ ReleaseHardware(
 
 	DeviceContext = GetDeviceContext(Device);
 
-	Status = ReleaseHID(DeviceContext);
+	Status = DeviceInterfaceRelease(DeviceContext->SettingsInterfaceContext);
+	if (!NT_SUCCESS(Status))
+	{
+		TraceStatus("Error Releaseing Device Interface", Status);
+	}
+
+	Status = HIDRelease(DeviceContext);
+	if (!NT_SUCCESS(Status))
+	{
+		TraceStatus("Error Releaseing HID", Status);
+	}
 	
-	Trace("Releasee Hardware Result: 0x%x", Status);
+	TraceStatus("Releasee Hardware Result", Status);
 
 	return Status;
 }
@@ -213,7 +232,7 @@ SignalDeviceIsGone(
 	if((DeviceContext->HIDMiniportAddresses.FDO != NULL) && (DeviceContext->HIDMiniportAddresses.HidNotifyPresence != NULL))
 	{
 		Status = (DeviceContext->HIDMiniportAddresses.HidNotifyPresence)((DeviceContext->HIDMiniportAddresses.FDO), FALSE);
-		Trace("Signaling Device is Gone: 0x%x", Status);
+		TraceStatus("Signaling Device is Gone", Status);
 	}
 
 	return Status;

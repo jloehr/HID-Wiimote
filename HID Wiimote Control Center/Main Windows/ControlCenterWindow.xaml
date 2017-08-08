@@ -1,0 +1,158 @@
+﻿<Window x:Class="HIDWiimote.ControlCenter.Main_Windows.ControlCenterWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HIDWiimote.ControlCenter.Main_Windows"
+        xmlns:user="clr-namespace:HIDWiimote.ControlCenter.UserControls"
+        xmlns:res="clr-namespace:HIDWiimote.ControlCenter.Properties"
+        mc:Ignorable="d"
+        Title="HID Wiimote Control Center" Height="600" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Initialized="OnInitialized" Closing="OnClosing">
+    <Window.Resources>
+        <local:ExtensionToStringConverter x:Key="ExtensionToStringConverter" 
+                                          WiimoteString="{x:Static res:ControlCenter.ExtensionString_Wiimote}"
+                                          NunchuckString="{x:Static res:ControlCenter.ExtensionString_Nunchuck}"
+                                          ClassicControllerString="{x:Static res:ControlCenter.ExtensionString_ClassicController}"
+                                          ClassicControllerProString="{x:Static res:ControlCenter.ExtensionString_ClassicControllerPro}"
+                                          WiiUProControllerString="{x:Static res:ControlCenter.ExtensionString_WiiUProController}"
+                                          BalanceBoardString="{x:Static res:ControlCenter.ExtensionString_BalanceBoard}"
+                                          GuitarHeroString="{x:Static res:ControlCenter.ExtensionString_GuitarHero}"/>
+        <local:ModeToStringConverter x:Key="ModeToStringConverter"
+                                     GamepadString="{x:Static res:ControlCenter.ModeString_Gamepad}"
+                                     PassThroughString="{x:Static res:ControlCenter.ModeString_PassThrough}"
+                                     GamepadAndIRMouseString="{x:Static res:ControlCenter.ModeString_GamepadAndIRMouse}"
+                                     IRMouseString="{x:Static res:ControlCenter.ModeString_IRMouse}"
+                                     DPadMouseString="{x:Static res:ControlCenter.ModeString_DPadMouse}" />
+    </Window.Resources>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_Tools">
+                <MenuItem Header="_Installer" Click="OnInstallerClick"/>
+            </MenuItem>
+            <MenuItem Header="_Help">
+                <MenuItem Header="_About" Click="OnAboutClick" />
+            </MenuItem>
+        </Menu>
+        <Grid Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="3.5*"/>
+            </Grid.ColumnDefinitions>
+            <Border BorderThickness="1,1,0,1" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" Margin="0,0,-1,0" >
+                <ListBox x:Name="ConnectedDevicesListBox" HorizontalContentAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" UseLayoutRounding="False" BorderThickness="0" >
+                    <ListBox.Style>
+                        <Style
+                            TargetType="ListBox"
+                            BasedOn="{StaticResource {x:Type ListBox}}">
+                            <Style.Triggers>
+                                <!-- Use ListBox.HasItems instead of Binding -->
+                                <Trigger Property="HasItems" Value="False">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate>
+                                                <TextBlock Text="No Wii Remotes connected" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10,0,0" Opacity="0.8" FontWeight="Bold" />
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListBox.Style>
+                    <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem" >
+                        <Setter Property="Background" Value="#FFDDDDDD" />
+                        <Setter Property="Margin" Value="0, 0, 0, 2" />
+                        <Setter Property="BorderThickness" Value="1, 1, 0, 1" />
+                    </Style>
+                </ListBox.ItemContainerStyle>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <Label FontWeight="Bold" Content="{Binding Extension, Converter={StaticResource ExtensionToStringConverter}, Mode=OneWay}" />
+                                <Label FontStyle="Italic" Padding="5, 0, 5, 5" DataContext="{Binding Mode}" Content="{Binding Value, Converter={StaticResource ModeToStringConverter}, Mode=OneWay}" Visibility="Hidden" />
+                                <user:LEDDisplay />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Border>
+            <Border Grid.Column="1" BorderThickness="1" BorderBrush="Black" DataContext="{Binding SelectedItem, ElementName=ConnectedDevicesListBox}" >
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=DataContext, RelativeSource={RelativeSource Self}}" Value="{x:Null}">
+                                <Setter Property="IsEnabled" Value="false"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=DataContext.Initilized, RelativeSource={RelativeSource Self}}" Value="false">
+                                <Setter Property="IsEnabled" Value="false"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="2*" />
+                        <RowDefinition Height="5*" />
+                        <RowDefinition Height="5*"  />
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Label Content="{Binding Extension, Converter={StaticResource ExtensionToStringConverter}, Mode=OneWay}" FontWeight="Bold" FontSize="29.333" />
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                <Label Content="Mode: " VerticalContentAlignment="Bottom" IsEnabled="False" Visibility="Hidden" />
+                                <ComboBox Width="150" VerticalAlignment="Bottom" DisplayMemberPath="Value" SelectedValuePath="Key" DataContext="{Binding Mode}" SelectedValue="{Binding Value, Mode=TwoWay}" ItemsSource="{Binding WiimoteDeviceModeTypeDescriptions, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ControlCenterWindow}}}" IsEnabled="{Binding UIEnabled}" Visibility="Hidden" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" HorizontalAlignment="Right" Margin="10" VerticalAlignment="Center" Orientation="Horizontal" >
+                                <Rectangle Width="16" Height="24" Margin="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <Rectangle.Fill>
+                                        <DrawingBrush>
+                                            <DrawingBrush.Drawing>
+                                                <DrawingGroup>
+                                                    <DrawingGroup.Children>
+                                                        <GeometryDrawing Brush="#00FFFFFF" Geometry="F1M16,24L0,24 0,0 0,24z" />
+                                                        <GeometryDrawing Brush="#FFF6F6F6" Geometry="F1M1,4L1,23 15,23 15,4 12,3 12,1 4,1 4,3z" />
+                                                        <GeometryDrawing Brush="#FF414141" Geometry="F1M3,5L3,22 13,22 13,5 11,4 11,2 5,2 5,4z" />
+                                                    </DrawingGroup.Children>
+                                                </DrawingGroup>
+                                            </DrawingBrush.Drawing>
+                                        </DrawingBrush>
+                                    </Rectangle.Fill>
+                                </Rectangle>
+                                <StackPanel>
+                                    <ProgressBar Width="100" Height="20" Maximum="255" Value="{Binding BatteryLevel}" Background="{DynamicResource FullBar}" Foreground="{DynamicResource EmptyBar}" >
+                                        <ProgressBar.Resources>
+                                            <SolidColorBrush x:Key="EmptyBar" Color="#FFE6E6E6"/>
+                                            <SolidColorBrush x:Key="FullBar" Color="#FF06B025"/>
+                                        </ProgressBar.Resources>
+                                    </ProgressBar>
+                                    <user:LEDDisplay />
+                                </StackPanel>
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
+                    <StackPanel Grid.Row="1">
+                        <Separator Margin="5" />
+                        <Label Content="Wiimote:" FontStyle="Italic" Margin="10,0,0,0" FontSize="16" />
+                        <CheckBox Content="Accelerometer" Margin="10,10,0,0" IsChecked="{Binding EnableAccelerometers}" HorizontalAlignment="Left" />
+                        <CheckBox Content="X-Axis" Margin="20,5,0,0" DataContext="{Binding EnableWiimoteXAxisAccelerometer}" IsChecked="{Binding Value}" IsEnabled="{Binding UIEnabled}" HorizontalAlignment="Left" />
+                        <CheckBox Content="Y-Axis" Margin="20,5,0,0" DataContext="{Binding EnableWiimoteYAxisAccelerometer}"   IsChecked="{Binding Value}" IsEnabled="{Binding UIEnabled}" HorizontalAlignment="Left" />
+                        <CheckBox Content="Switch Mouse Buttons" Margin="10,10,0,0" DataContext="{Binding SwitchMouseButtons}" IsChecked="{Binding Value}" IsEnabled="{Binding UIEnabled}" HorizontalAlignment="Left" Visibility="Hidden" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="2">
+                        <Separator Margin="5" />
+                        <Label Content="Classic Controller Extension/Wii U Pro Controller:" FontStyle="Italic" Margin="10,0,0,0" FontSize="16" />
+                        <CheckBox Content="Switch Trigger and Bumper" Margin="10,10,0,0" DataContext="{Binding SwitchTriggerAndShoulder}" IsChecked="{Binding Value}" IsEnabled="{Binding UIEnabled}" HorizontalAlignment="Left" />
+                        <CheckBox Content="Split Trigger Axis" Margin="10,10,0,0" DataContext="{Binding SplitTriggerAxis}" IsChecked="{Binding Value}" IsEnabled="{Binding UIEnabled}" HorizontalAlignment="Left" />
+                        <TextBlock Text="Trigger Mapping" Margin="10,10,0,0"/>
+                        <CheckBox Content="Trigger As Axis" Margin="20,5,0,0" DataContext="{Binding MapTriggerAsAxis}" IsChecked="{Binding Value}" IsEnabled="{Binding UIEnabled}" HorizontalAlignment="Left" />
+                        <CheckBox Content="Trigger As Buttons" Margin="20,5,0,0" DataContext="{Binding MapTriggerAsButtons}" IsChecked="{Binding Value}" IsEnabled="{Binding UIEnabled}" HorizontalAlignment="Left" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+    </DockPanel>
+</Window>

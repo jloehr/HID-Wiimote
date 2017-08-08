@@ -6,4 +6,17 @@
       <Extensions>inf;inv;inx;mof;mc;</Extensions>
     </Filter>
   </ItemGroup>
+  <ItemGroup>
+    <Xml Include="DPInst.xml">
+      <Filter>Driver Files</Filter>
+    </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="EULA.txt">
+      <Filter>Driver Files</Filter>
+    </Text>
+    <Text Include="Readme.txt">
+      <Filter>Driver Files</Filter>
+    </Text>
+  </ItemGroup>
 </Project>

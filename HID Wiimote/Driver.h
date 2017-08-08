@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) 2013 Julian Löhr
+Copyright (C) 2017 Julian Löhr
 All rights reserved.
 
 Filename:
@@ -10,13 +10,10 @@ Abstract:
 	Header file for Driver.c
 
 */
-#ifndef _DRIVER_H_
-#define _DRIVER_H_
+#pragma once
 
 #include "HIDWiimote.h"
 
 #include "Device.h"
 
 DRIVER_INITIALIZE DriverEntry;
-
-#endif
