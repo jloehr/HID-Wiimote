@@ -29,7 +29,7 @@
                 <Hyperlink NavigateUri="https://github.com/jloehr/HID-Wiimote" ToolTip="https://github.com/jloehr/HID-Wiimote" RequestNavigate="HyperlinkRequestNavigate"><Run Text="Source Code"/></Hyperlink>
             </TextBlock>
             <TextBlock   TextWrapping="Wrap" Margin="0,0,0,10" >
-                <Run Text="© 2016 " /><Hyperlink NavigateUri="https://www.julianloehr.de/" ToolTip="https://www.julianloehr.de/" RequestNavigate="HyperlinkRequestNavigate"><Run Text="Julian Löhr" /></Hyperlink>
+                <Run Text="© 2017 " /><Hyperlink NavigateUri="https://www.julianloehr.de/" ToolTip="https://www.julianloehr.de/" RequestNavigate="HyperlinkRequestNavigate"><Run Text="Julian Löhr" /></Hyperlink>
             </TextBlock>
         </StackPanel>
         <StackPanel Grid.Row="2">
