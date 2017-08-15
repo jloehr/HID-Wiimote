@@ -632,7 +632,9 @@ ProcessExtensionRegister(
 		DeviceContext->WiimoteContext.Extension = WiiUProController;
 		DeviceContext->WiimoteContext.CurrentReportMode = 0x34;
 		break;
-	case WIIMOTE_EXTENSION_TYPE(0x0103): // Guitar Hero Guitar
+	case WIIMOTE_EXTENSION_TYPE_SUBTYPE(0x0103, 0x0000): // Guitar Hero Guitar
+	case WIIMOTE_EXTENSION_TYPE_SUBTYPE(0x0103, 0x0100): // Guitar Hero Drum Kit
+	case WIIMOTE_EXTENSION_TYPE_SUBTYPE(0x0103, 0x0300): // DJ Hero Turntables
 		Trace("Guitar Hero Guitar");
 		DeviceContext->WiimoteContext.Extension = Guitar;
 		DeviceContext->WiimoteContext.CurrentReportMode = 0x32;
