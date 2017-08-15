@@ -429,8 +429,8 @@ UpdateGuitar(
 	}
 
 	BYTE ButtonData[2] = { 0 };
-	ButtonData[0] = ~GuitarData[0];
-	ButtonData[1] = ~GuitarData[1];
+	ButtonData[0] = ~GuitarData[4];
+	ButtonData[1] = ~GuitarData[5];
 
 	// Buttons
 	GuitarState->Buttons.Green = ButtonData[1] & 0x10;
@@ -448,8 +448,8 @@ UpdateGuitar(
 	GuitarState->AnalogStick.Y = 0xFF & ((0x3F & GuitarData[1]) << 2);
 
 	// Analog Bars
-	GuitarState->WhammyBar = 0xFF & ((0x1F & GuitarData[0]) << 3);
-	GuitarState->TouchBar = 0xFF & ((0x1F & GuitarData[1]) << 3);
+	GuitarState->WhammyBar = 0xFF & ((0x1F & GuitarData[2]) << 3);
+	GuitarState->TouchBar = 0xFF & ((0x1F & GuitarData[3]) << 3);
 
 	return STATUS_SUCCESS;
 }
