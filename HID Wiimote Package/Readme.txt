@@ -1,4 +1,4 @@
-HID Wiimote 0.3.0.0
+HID Wiimote 0.3.0.1
 
 HID Wiimote is a Windows Device Driver for the Nintendo Wii Remote.
 
@@ -10,6 +10,12 @@ This software is provided free of charge. If you have paid for this, please clai
 If you like this project and really want to pay for it, see my homepage (https://julianloehr.de) for donations.
 
 -- Changelog --
+
+-- 0.3.0.1 --
+
+- Fix #24 & Fix #31: Fix Guitar Hero Buttons, Whammy and Touch bar
+- Fix not detecting certain GH Accessories
+- Change default settings for new unknown devices to have accelerometer and trigger axis enabled
 
 -- 0.3.0.0 --
 
