@@ -72,12 +72,12 @@ WiimoteSettingsLoad(
 	// Load each Setting
 	DeviceContext->WiimoteContext.Settings.Mode = Gamepad;
 	//LoadWiimoteDriverModeValue(Key, &DriverModeValueName, Gamepad, &DeviceContext->WiimoteContext.Settings.Mode);
-	LoadBooleanValue(Key, &EnableWiimoteXAxisAccelerometerValueName, FALSE, &DeviceContext->WiimoteContext.Settings.EnableWiimoteXAxisAccelerometer);
-	LoadBooleanValue(Key, &EnableWiimoteYAxisAccelerometerValueName, FALSE, &DeviceContext->WiimoteContext.Settings.EnableWiimoteYAxisAcceleromenter);
+	LoadBooleanValue(Key, &EnableWiimoteXAxisAccelerometerValueName, TRUE, &DeviceContext->WiimoteContext.Settings.EnableWiimoteXAxisAccelerometer);
+	LoadBooleanValue(Key, &EnableWiimoteYAxisAccelerometerValueName, TRUE, &DeviceContext->WiimoteContext.Settings.EnableWiimoteYAxisAcceleromenter);
 	LoadBooleanValue(Key, &SwitchMouseButtonsValueName, FALSE, &DeviceContext->WiimoteContext.Settings.SwitchMouseButtons);
 	LoadBooleanValue(Key, &SwitchTriggerAndShoulderValueName, FALSE, &DeviceContext->WiimoteContext.Settings.SwitchTriggerAndShoulder);
 	LoadBooleanValue(Key, &SplitTriggerAxisValueName, TRUE, &DeviceContext->WiimoteContext.Settings.SplitTriggerAxis);
-	LoadBooleanValue(Key, &MapTriggerAsAxisValueName, FALSE, &DeviceContext->WiimoteContext.Settings.MapTriggerAsAxis);
+	LoadBooleanValue(Key, &MapTriggerAsAxisValueName, TRUE, &DeviceContext->WiimoteContext.Settings.MapTriggerAsAxis);
 	LoadBooleanValue(Key, &MapTriggerAsButtonsValueName, TRUE, &DeviceContext->WiimoteContext.Settings.MapTriggerAsButtons);
 
 	// Close Key
