@@ -35,8 +35,8 @@ namespace HIDWiimote
 
 			EnableWiimoteXAxisAccelerometer = (StateData.Settings.EnableWiimoteXAxisAccelerometer != FALSE);
 			EnableWiimoteYAxisAccelerometer = (StateData.Settings.EnableWiimoteYAxisAcceleromenter != FALSE);
-			SwitchMouseButtons = (StateData.Settings.SwitchMouseButtons != FALSE);
-			SwitchTriggerAndShoulder = (StateData.Settings.SwitchTriggerAndShoulder != FALSE);
+			SwapMouseButtons = (StateData.Settings.SwapMouseButtons != FALSE);
+			SwapTriggerAndShoulder = (StateData.Settings.SwapTriggerAndShoulder != FALSE);
 			SplitTrigger = (StateData.Settings.SplitTriggerAxis != FALSE);
 			MapTriggerAsAxis = (StateData.Settings.MapTriggerAsAxis != FALSE);
 			MapTriggerAsButtons = (StateData.Settings.MapTriggerAsButtons != FALSE);

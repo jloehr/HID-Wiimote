@@ -130,13 +130,13 @@ ParseTrigger(
 	_In_ BOOLEAN ButtonZRValue,
 	_In_ BOOLEAN ButtonZLValue,
 	_In_ BOOLEAN SplitAxis,
-	_In_ BOOLEAN SwitchButtons,
+	_In_ BOOLEAN SwapButtons,
 	_Out_ BYTE ReportZByte[1],
 	_Out_ BYTE ReportRZByte[1]
 )
 {
-	TriggerLValue = GetTriggerValue(TriggerLValue, (SwitchButtons) ? ButtonZLValue : ButtonLValue);
-	TriggerRValue = GetTriggerValue(TriggerRValue, (SwitchButtons) ? ButtonZRValue : ButtonRValue);
+	TriggerLValue = GetTriggerValue(TriggerLValue, (SwapButtons) ? ButtonZLValue : ButtonLValue);
+	TriggerRValue = GetTriggerValue(TriggerRValue, (SwapButtons) ? ButtonZRValue : ButtonRValue);
 
 	if (SplitAxis)
 	{
@@ -452,12 +452,12 @@ ParseWiimoteStateAsClassicControllerExtension(
 	ParseButton(WiimoteState->WiiRemoteState.CoreButtons.B || WiimoteState->ClassicControllerState.Buttons.B, &GamepadReport->Buttons[0], 1);
 	ParseButton(WiimoteState->ClassicControllerState.Buttons.Y, &GamepadReport->Buttons[0], 2);
 	ParseButton(WiimoteState->ClassicControllerState.Buttons.X, &GamepadReport->Buttons[0], 3);
-	if (WiimoteSettings->SwitchTriggerAndShoulder || WiimoteSettings->MapTriggerAsButtons)
+	if (WiimoteSettings->SwapTriggerAndShoulder || WiimoteSettings->MapTriggerAsButtons)
 	{
 		ParseButton(WiimoteState->ClassicControllerState.Buttons.L, &GamepadReport->Buttons[0], 4);
 		ParseButton(WiimoteState->ClassicControllerState.Buttons.R, &GamepadReport->Buttons[0], 5);
 	}
-	if (!WiimoteSettings->SwitchTriggerAndShoulder || WiimoteSettings->MapTriggerAsButtons)
+	if (!WiimoteSettings->SwapTriggerAndShoulder || WiimoteSettings->MapTriggerAsButtons)
 	{
 		ParseButton(WiimoteState->ClassicControllerState.Buttons.ZL, &GamepadReport->Buttons[0], 6);
 		ParseButton(WiimoteState->ClassicControllerState.Buttons.ZR, &GamepadReport->Buttons[0], 7);
@@ -482,7 +482,7 @@ ParseWiimoteStateAsClassicControllerExtension(
 			WiimoteState->ClassicControllerState.Buttons.ZR,
 			WiimoteState->ClassicControllerState.Buttons.ZL,
 			WiimoteSettings->SplitTriggerAxis,
-			WiimoteSettings->SwitchTriggerAndShoulder,
+			WiimoteSettings->SwapTriggerAndShoulder,
 			&GamepadReport->ZAxis, 
 			&GamepadReport->RZAxis
 			);

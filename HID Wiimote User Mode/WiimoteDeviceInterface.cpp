@@ -83,12 +83,12 @@ namespace HIDWiimote
 			return SendBooleanSetting(IOCTL_WIIMOTE_SET_ENABLE_WIIMOTE_YAXIS_ACCELEROMETER, Enabled);
 		}
 
-		System::Boolean WiimoteDeviceInterface::SetSwitchMouseButtons(System::Boolean Enabled)
+		System::Boolean WiimoteDeviceInterface::SetSwapMouseButtons(System::Boolean Enabled)
 		{
 			return SendBooleanSetting(IOCTL_WIIMOTE_SET_SWITCH_MOUSEBUTTONS, Enabled);
 		}
 
-		System::Boolean WiimoteDeviceInterface::SetSwitchTriggerAndShoulder(System::Boolean Enabled)
+		System::Boolean WiimoteDeviceInterface::SetSwapTriggerAndShoulder(System::Boolean Enabled)
 		{
 			return SendBooleanSetting(IOCTL_WIIMOTE_SET_SWITCH_TRIGGERANDSHOULDER, Enabled);
 		}

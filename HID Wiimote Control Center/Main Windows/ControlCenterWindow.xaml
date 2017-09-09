@@ -140,12 +140,12 @@
                         <CheckBox Content="Accelerometer" Margin="10,10,0,0" IsChecked="{Binding EnableAccelerometers}" HorizontalAlignment="Left" />
                         <CheckBox Content="X-Axis" Margin="20,5,0,0" DataContext="{Binding EnableWiimoteXAxisAccelerometer}" IsChecked="{Binding Value}" IsEnabled="{Binding UIEnabled}" HorizontalAlignment="Left" />
                         <CheckBox Content="Y-Axis" Margin="20,5,0,0" DataContext="{Binding EnableWiimoteYAxisAccelerometer}"   IsChecked="{Binding Value}" IsEnabled="{Binding UIEnabled}" HorizontalAlignment="Left" />
-                        <CheckBox Content="Switch Mouse Buttons" Margin="10,10,0,0" DataContext="{Binding SwitchMouseButtons}" IsChecked="{Binding Value}" IsEnabled="{Binding UIEnabled}" HorizontalAlignment="Left" Visibility="Hidden" />
+                        <CheckBox Content="Swap Mouse Buttons" Margin="10,10,0,0" DataContext="{Binding SwapMouseButtons}" IsChecked="{Binding Value}" IsEnabled="{Binding UIEnabled}" HorizontalAlignment="Left" Visibility="Hidden" />
                     </StackPanel>
                     <StackPanel Grid.Row="2">
                         <Separator Margin="5" />
                         <Label Content="Classic Controller Extension/Wii U Pro Controller:" FontStyle="Italic" Margin="10,0,0,0" FontSize="16" />
-                        <CheckBox Content="Switch Trigger and Bumper" Margin="10,10,0,0" DataContext="{Binding SwitchTriggerAndShoulder}" IsChecked="{Binding Value}" IsEnabled="{Binding UIEnabled}" HorizontalAlignment="Left" />
+                        <CheckBox Content="Swap Trigger and Bumper" Margin="10,10,0,0" DataContext="{Binding SwapTriggerAndShoulder}" IsChecked="{Binding Value}" IsEnabled="{Binding UIEnabled}" HorizontalAlignment="Left" />
                         <CheckBox Content="Split Trigger Axis" Margin="10,10,0,0" DataContext="{Binding SplitTriggerAxis}" IsChecked="{Binding Value}" IsEnabled="{Binding UIEnabled}" HorizontalAlignment="Left" />
                         <TextBlock Text="Trigger Mapping" Margin="10,10,0,0"/>
                         <CheckBox Content="Trigger As Axis" Margin="20,5,0,0" DataContext="{Binding MapTriggerAsAxis}" IsChecked="{Binding Value}" IsEnabled="{Binding UIEnabled}" HorizontalAlignment="Left" />

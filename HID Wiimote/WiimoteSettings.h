@@ -39,13 +39,13 @@ WiimoteSettingsSetEnableWiimoteYAxisAccelerometer(
 	);
 
 VOID
-WiimoteSettingsSetSwitchMouseButtons(
+WiimoteSettingsSetSwapMouseButtons(
 	_In_ PDEVICE_CONTEXT DeviceContext,
 	_In_ BOOLEAN Enabled
 	);
 
 VOID
-WiimoteSettingsSetSwitchTriggerAndShoulder(
+WiimoteSettingsSetSwapTriggerAndShoulder(
 	_In_ PDEVICE_CONTEXT DeviceContext,
 	_In_ BOOLEAN Enabled
 	);

@@ -34,8 +34,8 @@ namespace HIDWiimote
 			virtual System::Boolean SetDriverMode(DriverMode NewMode);
 			virtual System::Boolean SetEnableWiimoteXAxisAccelerometer(System::Boolean Enabled);
 			virtual System::Boolean SetEnableWiimoteYAxisAccelerometer(System::Boolean Enabled);
-			virtual System::Boolean SetSwitchMouseButtons(System::Boolean Enabled);
-			virtual System::Boolean SetSwitchTriggerAndShoulder(System::Boolean Enabled);
+			virtual System::Boolean SetSwapMouseButtons(System::Boolean Enabled);
+			virtual System::Boolean SetSwapTriggerAndShoulder(System::Boolean Enabled);
 			virtual System::Boolean SetSplitTrigger(System::Boolean Enabled);
 			virtual System::Boolean SetMapTriggerAsAxis(System::Boolean Enabled);
 			virtual System::Boolean SetMapTriggerAsButtons(System::Boolean Enabled);

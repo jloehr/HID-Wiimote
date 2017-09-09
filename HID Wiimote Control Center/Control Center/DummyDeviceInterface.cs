@@ -60,13 +60,13 @@ namespace HIDWiimote.ControlCenter.Control_Center
             return true;
         }
         
-        public bool SetSwitchMouseButtons(bool Enabled)
+        public bool SetSwapMouseButtons(bool Enabled)
         {
             Thread.Sleep(DummySleep);
             return true;
         }
 
-        public bool SetSwitchTriggerAndShoulder(bool Enabled)
+        public bool SetSwapTriggerAndShoulder(bool Enabled)
         {
             Thread.Sleep(DummySleep);
             return true;

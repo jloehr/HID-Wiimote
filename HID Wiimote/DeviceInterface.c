@@ -238,10 +238,10 @@ DeviceInterfaceDeviceControlCallback(
 		ProcessSetBooleanSetting(Request, DeviceInterfaceContext, WiimoteSettingsSetEnableWiimoteYAxisAccelerometer);
 		break;
 	case IOCTL_WIIMOTE_SET_SWITCH_MOUSEBUTTONS:
-		ProcessSetBooleanSetting(Request, DeviceInterfaceContext, WiimoteSettingsSetSwitchMouseButtons);
+		ProcessSetBooleanSetting(Request, DeviceInterfaceContext, WiimoteSettingsSetSwapMouseButtons);
 		break;
 	case IOCTL_WIIMOTE_SET_SWITCH_TRIGGERANDSHOULDER:
-		ProcessSetBooleanSetting(Request, DeviceInterfaceContext, WiimoteSettingsSetSwitchTriggerAndShoulder);
+		ProcessSetBooleanSetting(Request, DeviceInterfaceContext, WiimoteSettingsSetSwapTriggerAndShoulder);
 		break;
 	case IOCTL_WIIMOTE_SET_SPLIT_TRIGGERAXIS:
 		ProcessSetBooleanSetting(Request, DeviceInterfaceContext, WiimoteSettingsSetSplitTriggerAxis);

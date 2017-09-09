@@ -79,8 +79,8 @@ namespace HIDWiimote.ControlCenter.Control_Center
         public Option<UserModeLib.DriverMode> Mode { get; set; }
         public Option<bool> EnableWiimoteXAxisAccelerometer { get; set; }
         public Option<bool> EnableWiimoteYAxisAccelerometer { get; set; }
-        public Option<bool> SwitchMouseButtons { get; set; }
-        public Option<bool> SwitchTriggerAndShoulder { get; set; }
+        public Option<bool> SwapMouseButtons { get; set; }
+        public Option<bool> SwapTriggerAndShoulder { get; set; }
         public Option<bool> SplitTriggerAxis { get; set; }
         public Option<bool> MapTriggerAsAxis { get; set; }
         public Option<bool> MapTriggerAsButtons { get; set; }
@@ -99,8 +99,8 @@ namespace HIDWiimote.ControlCenter.Control_Center
 
             EnableWiimoteXAxisAccelerometer = new Option<bool>(DeviceInterface.SetEnableWiimoteXAxisAccelerometer);
             EnableWiimoteYAxisAccelerometer = new Option<bool>(DeviceInterface.SetEnableWiimoteYAxisAccelerometer);
-            SwitchMouseButtons = new Option<bool>(DeviceInterface.SetSwitchMouseButtons);
-            SwitchTriggerAndShoulder = new Option<bool>(DeviceInterface.SetSwitchTriggerAndShoulder);
+            SwapMouseButtons = new Option<bool>(DeviceInterface.SetSwapMouseButtons);
+            SwapTriggerAndShoulder = new Option<bool>(DeviceInterface.SetSwapTriggerAndShoulder);
             SplitTriggerAxis = new Option<bool>(DeviceInterface.SetSplitTrigger);
             MapTriggerAsAxis = new Option<bool>(DeviceInterface.SetMapTriggerAsAxis);
             MapTriggerAsButtons = new Option<bool>(DeviceInterface.SetMapTriggerAsButtons);
@@ -216,8 +216,8 @@ namespace HIDWiimote.ControlCenter.Control_Center
 
             EnableWiimoteXAxisAccelerometer.SetValue(State.EnableWiimoteXAxisAccelerometer);
             EnableWiimoteYAxisAccelerometer.SetValue(State.EnableWiimoteYAxisAccelerometer);
-            SwitchMouseButtons.SetValue(State.SwitchMouseButtons);
-            SwitchTriggerAndShoulder.SetValue(State.SwitchTriggerAndShoulder);
+            SwapMouseButtons.SetValue(State.SwapMouseButtons);
+            SwapTriggerAndShoulder.SetValue(State.SwapTriggerAndShoulder);
             SplitTriggerAxis.SetValue(State.SplitTrigger);
             MapTriggerAsAxis.SetValue(State.MapTriggerAsAxis);
             MapTriggerAsButtons.SetValue(State.MapTriggerAsButtons);

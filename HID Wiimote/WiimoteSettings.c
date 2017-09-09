@@ -17,8 +17,8 @@ Abstract:
 DECLARE_CONST_UNICODE_STRING(DriverModeValueName, L"DriverMode");
 DECLARE_CONST_UNICODE_STRING(EnableWiimoteXAxisAccelerometerValueName, L"EnableWiimoteXAxisAccelerometer");
 DECLARE_CONST_UNICODE_STRING(EnableWiimoteYAxisAccelerometerValueName, L"EnableWiimoteYAxisAccelerometer");
-DECLARE_CONST_UNICODE_STRING(SwitchMouseButtonsValueName, L"SwitchMouseButtons");
-DECLARE_CONST_UNICODE_STRING(SwitchTriggerAndShoulderValueName, L"SwitchTriggerAndShoulder");
+DECLARE_CONST_UNICODE_STRING(SwapMouseButtonsValueName, L"SwapMouseButtons");
+DECLARE_CONST_UNICODE_STRING(SwapTriggerAndShoulderValueName, L"SwapTriggerAndShoulder");
 DECLARE_CONST_UNICODE_STRING(SplitTriggerAxisValueName, L"SplitTriggerAxis");
 DECLARE_CONST_UNICODE_STRING(MapTriggerAsAxisValueName, L"MapTriggerAsAxis");
 DECLARE_CONST_UNICODE_STRING(MapTriggerAsButtonsValueName, L"MapTriggerAsButtons");
@@ -74,8 +74,8 @@ WiimoteSettingsLoad(
 	//LoadWiimoteDriverModeValue(Key, &DriverModeValueName, Gamepad, &DeviceContext->WiimoteContext.Settings.Mode);
 	LoadBooleanValue(Key, &EnableWiimoteXAxisAccelerometerValueName, TRUE, &DeviceContext->WiimoteContext.Settings.EnableWiimoteXAxisAccelerometer);
 	LoadBooleanValue(Key, &EnableWiimoteYAxisAccelerometerValueName, TRUE, &DeviceContext->WiimoteContext.Settings.EnableWiimoteYAxisAcceleromenter);
-	LoadBooleanValue(Key, &SwitchMouseButtonsValueName, FALSE, &DeviceContext->WiimoteContext.Settings.SwitchMouseButtons);
-	LoadBooleanValue(Key, &SwitchTriggerAndShoulderValueName, FALSE, &DeviceContext->WiimoteContext.Settings.SwitchTriggerAndShoulder);
+	LoadBooleanValue(Key, &SwapMouseButtonsValueName, FALSE, &DeviceContext->WiimoteContext.Settings.SwapMouseButtons);
+	LoadBooleanValue(Key, &SwapTriggerAndShoulderValueName, FALSE, &DeviceContext->WiimoteContext.Settings.SwapTriggerAndShoulder);
 	LoadBooleanValue(Key, &SplitTriggerAxisValueName, TRUE, &DeviceContext->WiimoteContext.Settings.SplitTriggerAxis);
 	LoadBooleanValue(Key, &MapTriggerAsAxisValueName, TRUE, &DeviceContext->WiimoteContext.Settings.MapTriggerAsAxis);
 	LoadBooleanValue(Key, &MapTriggerAsButtonsValueName, TRUE, &DeviceContext->WiimoteContext.Settings.MapTriggerAsButtons);
@@ -123,27 +123,27 @@ WiimoteSettingsSetEnableWiimoteYAxisAccelerometer(
 }
 
 VOID
-WiimoteSettingsSetSwitchMouseButtons(
+WiimoteSettingsSetSwapMouseButtons(
 	_In_ PDEVICE_CONTEXT DeviceContext,
 	_In_ BOOLEAN Enabled
 	)
 {
-	DeviceContext->WiimoteContext.Settings.SwitchMouseButtons = Enabled;
+	DeviceContext->WiimoteContext.Settings.SwapMouseButtons = Enabled;
 	HIDWiimoteStateUpdated(DeviceContext);
 
-	SaveULONGValue(DeviceContext, &SwitchMouseButtonsValueName, (ULONG)Enabled);
+	SaveULONGValue(DeviceContext, &SwapMouseButtonsValueName, (ULONG)Enabled);
 }
 
 VOID
-WiimoteSettingsSetSwitchTriggerAndShoulder(
+WiimoteSettingsSetSwapTriggerAndShoulder(
 	_In_ PDEVICE_CONTEXT DeviceContext,
 	_In_ BOOLEAN Enabled
 	)
 {
-	DeviceContext->WiimoteContext.Settings.SwitchTriggerAndShoulder = Enabled;
+	DeviceContext->WiimoteContext.Settings.SwapTriggerAndShoulder = Enabled;
 	HIDWiimoteStateUpdated(DeviceContext);
 
-	SaveULONGValue(DeviceContext, &SwitchTriggerAndShoulderValueName, (ULONG)Enabled);
+	SaveULONGValue(DeviceContext, &SwapTriggerAndShoulderValueName, (ULONG)Enabled);
 }
 
 VOID

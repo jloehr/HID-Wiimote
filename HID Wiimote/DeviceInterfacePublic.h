@@ -61,8 +61,8 @@ typedef struct _WIIMOTE_SETTINGS
 
 	BOOLEAN EnableWiimoteXAxisAccelerometer;
 	BOOLEAN EnableWiimoteYAxisAcceleromenter;
-	BOOLEAN SwitchMouseButtons;
-	BOOLEAN SwitchTriggerAndShoulder;
+	BOOLEAN SwapMouseButtons;
+	BOOLEAN SwapTriggerAndShoulder;
 	BOOLEAN SplitTriggerAxis;
 	BOOLEAN MapTriggerAsAxis;
 	BOOLEAN MapTriggerAsButtons;

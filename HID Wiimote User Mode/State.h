@@ -32,8 +32,8 @@ namespace HIDWiimote
 			property Status^ Status;
 			property System::Boolean EnableWiimoteXAxisAccelerometer;
 			property System::Boolean EnableWiimoteYAxisAccelerometer;
-			property System::Boolean SwitchMouseButtons;
-			property System::Boolean SwitchTriggerAndShoulder;
+			property System::Boolean SwapMouseButtons;
+			property System::Boolean SwapTriggerAndShoulder;
 			property System::Boolean SplitTrigger;
 			property System::Boolean MapTriggerAsAxis;
 			property System::Boolean MapTriggerAsButtons;
