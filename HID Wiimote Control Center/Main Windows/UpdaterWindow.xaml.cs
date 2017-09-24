@@ -62,8 +62,14 @@ namespace HIDWiimote.ControlCenter.Main_Windows
         {
             if (TaskList.Count > 0)
             {
-                TaskList[0].StartTask(UpdaterTaskComplete);
+                // Do some delay, so the user can graps the steps
+                Task.Delay(TimeSpan.FromSeconds(0.25)).ContinueWith(DelayTask => { StartTaskQueue(); }, TaskScheduler.FromCurrentSynchronizationContext());
             }
+        }
+
+        private void StartTaskQueue()
+        {
+            TaskList[0].StartTask(UpdaterTaskComplete);
         }
 
         private void UpdaterTaskComplete(Task<bool> CompletedTask, Object State)
@@ -203,7 +209,8 @@ namespace HIDWiimote.ControlCenter.Main_Windows
             {
                 Status = TaskStatus.Running;
                 QueuedTask.ContinueWith(CompleteCallback, this, TaskScheduler.FromCurrentSynchronizationContext());
-                QueuedTask.Start(TaskScheduler.Default);
+                // Do some delay, so the user can graps the steps
+                Task.Delay(TimeSpan.FromSeconds(0.5)).ContinueWith(DelayTask => { QueuedTask.Start(TaskScheduler.Default); });
             }
 
             protected void OnPropertyChanged(string PropertyName)
