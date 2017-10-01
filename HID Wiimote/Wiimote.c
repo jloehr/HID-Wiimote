@@ -599,17 +599,20 @@ ProcessExtensionRegister(
 	UNREFERENCED_PARAMETER(ErrorFlag);
 	UNREFERENCED_PARAMETER(ReadAddress);
 
-	UINT32 ExtensionType = ReadBuffer[0] << 24 | ReadBuffer[1] << 16 | ReadBuffer[4] << 8 | ReadBuffer[5];
+	USHORT ExtensionType = ReadBuffer[4] << 8 | ReadBuffer[5];
+	USHORT SubType = ReadBuffer[0] << 8 | ReadBuffer[1];
+
 	Trace("Extension Type: %#010x", ExtensionType);
+	Trace("Sub Type: %#010x", SubType);
 
 	switch (ExtensionType)
 	{
-	case WIIMOTE_EXTENSION_TYPE(0x0000): // Nunchuck
+	case 0x0000: // Nunchuck
 		Trace("Nunchuck Extension");
 		DeviceContext->WiimoteContext.Extension = Nunchuck;
 		DeviceContext->WiimoteContext.CurrentReportMode = 0x35;
 		break;
-	case WIIMOTE_EXTENSION_TYPE(0x0402): // Balance Board
+	case 0x0402: // Balance Board
 		Trace("Balance Board");
 		DeviceContext->WiimoteContext.Extension = BalanceBoard;
 		DeviceContext->WiimoteContext.CurrentReportMode = 0x32;
@@ -617,29 +620,36 @@ ProcessExtensionRegister(
 		// Get Calibration Data
 		ReadFromRegister(DeviceContext, 0xA40024, 24);
 		break;
-	case WIIMOTE_EXTENSION_TYPE_SUBTYPE(0x0101, 0x0000): // Classic Controler
-		Trace("Classic Controller (Pro) Extension");
-		DeviceContext->WiimoteContext.Extension = ClassicController;
-		DeviceContext->WiimoteContext.CurrentReportMode = 0x32;
+	case 0x0101:
+		switch (SubType)
+		{
+		default:
+		case 0x0000: // Classic Controler
+			Trace("Classic Controller Extension");
+			DeviceContext->WiimoteContext.Extension = ClassicController;
+			DeviceContext->WiimoteContext.CurrentReportMode = 0x32;
+			break;
+		case 0x0100: // Classic Controler Pro
+			Trace("Classic Controller Pro Extension");
+			DeviceContext->WiimoteContext.Extension = ClassicControllerPro;
+			DeviceContext->WiimoteContext.CurrentReportMode = 0x32;
+			break;
+		}
 		break;
-	case WIIMOTE_EXTENSION_TYPE_SUBTYPE(0x0101, 0x0100): // Classic Controler Pro
-		Trace("Classic Controller Pro Extension");
-		DeviceContext->WiimoteContext.Extension = ClassicControllerPro;
-		DeviceContext->WiimoteContext.CurrentReportMode = 0x32;
-		break;
-	case WIIMOTE_EXTENSION_TYPE(0x0120): // Wii U Pro Controller
+	case 0x0120: // Wii U Pro Controller
 		Trace("Wii U Pro Controller");
 		DeviceContext->WiimoteContext.Extension = WiiUProController;
 		DeviceContext->WiimoteContext.CurrentReportMode = 0x34;
 		break;
-	case WIIMOTE_EXTENSION_TYPE_SUBTYPE(0x0103, 0x0000): // Guitar Hero Guitar
-	case WIIMOTE_EXTENSION_TYPE_SUBTYPE(0x0103, 0x0100): // Guitar Hero Drum Kit
-	case WIIMOTE_EXTENSION_TYPE_SUBTYPE(0x0103, 0x0300): // DJ Hero Turntables
+	case 0x0103:
+		// 0x0000: Guitar Hero Guitar
+		// 0x0100: Guitar Hero Drum Kit
+		// 0x0300: DJ Hero Turntables
 		Trace("Guitar Hero Guitar");
 		DeviceContext->WiimoteContext.Extension = Guitar;
 		DeviceContext->WiimoteContext.CurrentReportMode = 0x32;
 		break;
-	case 0xFFFFFFFF: // Error
+	case 0xFFFF: // Error
 		Trace("Error");
 		DeviceContext->WiimoteContext.Extension = None;
 		DeviceContext->WiimoteContext.CurrentReportMode = 0x31;
