@@ -35,6 +35,8 @@ typedef struct _BLUETOOTH_DEVICE_CONTEXT
     BTH_ADDR DeviceAddress;
 	UNICODE_STRING DeviceAddressString;
 	WCHAR DeviceAddressStringBuffer[BLUETOOTH_ADDRESS_STRING_SIZE];
+	UNICODE_STRING DeviceNameString;
+	WCHAR DeviceNameStringBuffer[BTH_MAX_NAME_SIZE];
 
 	L2CAP_CHANNEL_HANDLE ControlChannelHandle;
 	L2CAP_CHANNEL_HANDLE InterruptChannelHandle;

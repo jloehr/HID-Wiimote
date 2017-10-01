@@ -23,6 +23,7 @@ EVT_READ_IO_CONTROL_BUFFER_FILL_BUFFER HIDFillReadBufferCallback;
 VOID ProcessGetDeviceDescriptor(_In_ WDFREQUEST Request);
 VOID ProcessGetReportDescriptor(_In_ WDFREQUEST Request);
 VOID ProcessGetDeviceAttributes(_In_ WDFREQUEST Request,_In_ PHID_DEVICE_CONTEXT HIDContext);
+VOID ProcessGetString(_In_ WDFREQUEST Request, _In_ PDEVICE_CONTEXT DeviceContext);
 VOID ForwardReadReportRequest(_In_ WDFREQUEST Request, _In_ PDEVICE_CONTEXT DeviceContext);
 VOID ProcessAddresses(_In_ WDFREQUEST Request, _In_ PDEVICE_CONTEXT DeviceContext);
 
@@ -104,6 +105,9 @@ HIDInternalDeviceControlCallback(
 		break;
 	case IOCTL_HID_GET_REPORT_DESCRIPTOR:
 		ProcessGetReportDescriptor(Request);
+		break;
+	case IOCTL_HID_GET_STRING:
+		ProcessGetString(Request, GetDeviceContext(WdfIoQueueGetDevice(Queue)));
 		break;
 	case IOCTL_HID_READ_REPORT:
 		ForwardReadReportRequest(Request, GetDeviceContext(WdfIoQueueGetDevice(Queue)));
@@ -200,6 +204,50 @@ ProcessGetReportDescriptor(
 
 	// Complete Request
 	WdfRequestCompleteWithInformation(Request, Status, ReportDescriptorSize);
+}
+
+VOID ProcessGetString(
+	_In_ WDFREQUEST Request,
+	_In_ PDEVICE_CONTEXT DeviceContext
+)
+{
+	NTSTATUS Status;
+	WDF_REQUEST_PARAMETERS Parameters;
+	WDFMEMORY Memory;
+	PUNICODE_STRING String = NULL;
+
+	WDF_REQUEST_PARAMETERS_INIT(&Parameters);
+	WdfRequestGetParameters(Request, &Parameters);
+
+	Status = WdfRequestRetrieveOutputMemory(Request, &Memory);
+	if (!NT_SUCCESS(Status))
+	{
+		WdfRequestComplete(Request, Status);
+		return;
+	}
+
+	switch (((UINT_PTR)Parameters.Parameters.DeviceIoControl.Type3InputBuffer) & 0xFF)
+	{
+	case HID_STRING_ID_IPRODUCT:
+		String = &DeviceContext->BluetoothContext.DeviceNameString;
+		break;
+	case HID_STRING_ID_IMANUFACTURER:
+		WdfRequestComplete(Request, STATUS_NOT_SUPPORTED);
+		return;
+	case HID_STRING_ID_ISERIALNUMBER:
+		String = &DeviceContext->BluetoothContext.DeviceAddressString;
+		break;
+	}
+
+	Status = WdfMemoryCopyFromBuffer(Memory, 0, (PVOID)String->Buffer, String->MaximumLength);
+	if (!NT_SUCCESS(Status))
+	{
+		WdfRequestComplete(Request, Status);
+		return;
+	}
+
+	// Complete Request
+	WdfRequestCompleteWithInformation(Request, Status, String->MaximumLength);
 }
 
 VOID 

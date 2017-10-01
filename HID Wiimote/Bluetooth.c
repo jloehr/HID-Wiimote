@@ -115,6 +115,25 @@ BluetoothPrepare(
 		return Status;
 	}
 
+	size_t NameLength;
+	Status = RtlStringCbLengthA(DeviceInfo.name, BTH_MAX_NAME_SIZE, &NameLength);
+	if (!NT_SUCCESS(Status))
+	{
+		return Status;
+	}
+
+	Status = RtlUTF8ToUnicodeN(BluetoothContext->DeviceNameStringBuffer, BTH_MAX_NAME_SIZE * sizeof(WCHAR), NULL, DeviceInfo.name, (ULONG)NameLength);
+	if (!NT_SUCCESS(Status))
+	{
+		return Status;
+	}
+
+	Status = RtlUnicodeStringInit(&BluetoothContext->DeviceNameString, BluetoothContext->DeviceNameStringBuffer);
+	if (!NT_SUCCESS(Status))
+	{
+		return Status;
+	}
+
 	return Status;
 }
 
