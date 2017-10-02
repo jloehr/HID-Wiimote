@@ -1,4 +1,4 @@
-HID Wiimote 0.3.0.1
+HID Wiimote 0.3.0.2
 
 HID Wiimote is a Windows Device Driver for the Nintendo Wii Remote.
 
@@ -10,6 +10,13 @@ This software is provided free of charge. If you have paid for this, please clai
 If you like this project and really want to pay for it, see my homepage (https://www.julianloehr.de) for donations.
 
 -- Changelog --
+
+-- 0.3.0.2 --
+
+-- Change checking Extension subtype
+-- Add Product and Serial string support
+-- Add minor delay to update process for UX 
+-- Change wording from "Switch" to "Swap"
 
 -- 0.3.0.1 --
 
