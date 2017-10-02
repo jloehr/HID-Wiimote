@@ -15,9 +15,6 @@ Abstract:
 #include "Bluetooth.h"
 #include "WiimoteSettings.h"
 
-#define WIIMOTE_EXTENSION_TYPE_SUBTYPE(Type, Subtype) (Subtype << 16 | Type)
-#define WIIMOTE_EXTENSION_TYPE(Type) WIIMOTE_EXTENSION_TYPE_SUBTYPE(Type, 0x0000)
-
 EVT_WDF_TIMER BatteryLevelLEDUpdateTimerExpired;
 
 NTSTATUS 
