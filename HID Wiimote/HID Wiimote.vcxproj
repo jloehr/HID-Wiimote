@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Windows 10 Universal Debug|Win32">
       <Configuration>Windows 10 Universal Debug</Configuration>
@@ -37,14 +37,11 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{785D88E1-E758-4966-80FA-AEF74681FEF1}</ProjectGuid>
     <TemplateGuid>{1bc93793-694f-48fe-9372-81e2b05556fd}</TemplateGuid>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>
     <Configuration>Win8 Debug</Configuration>
     <Platform Condition="'$(Platform)' == ''">Win32</Platform>
   </PropertyGroup>
   <PropertyGroup Label="Globals">
     <RootNamespace>HID_Wiimote</RootNamespace>
-    <VCTargetsPath Condition="'$(VCTargetsPath11)' != '' and '$(VisualStudioVersion)' == '11.0'">$(VCTargetsPath11)</VCTargetsPath>
   </PropertyGroup>
   <PropertyGroup Label="PropertySheets">
     <ConfigurationType>Driver</ConfigurationType>
@@ -146,11 +143,6 @@
     <IntDir>$(PlatformShortName)\$(ConfigurationName)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup>
-    <ClCompile>
-      <WppEnabled>true</WppEnabled>
-      <WppScanConfigurationData Condition="'%(ClCompile. ScanConfigurationData)'  == ''">trace.h</WppScanConfigurationData>
-      <WppKernelMode>true</WppKernelMode>
-    </ClCompile>
     <Link>
       <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Debug|Win32'">%(AdditionalDependencies);$(DDK_LIB_PATH)\hidclass.lib;$(DDK_LIB_PATH)\ntstrsafe.lib</AdditionalDependencies>
       <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Debug|Win32'">%(AdditionalDependencies);$(DDK_LIB_PATH)\hidclass.lib;$(DDK_LIB_PATH)\ntstrsafe.lib</AdditionalDependencies>

@@ -1,5 +1,5 @@
 ;
-; Copyright (C) 2013 Julian Löhr
+; Copyright (C) 2013 Julian LÃ¶hr
 ; All rights reserved
 ;
 ; File Name:
@@ -17,13 +17,13 @@ ClassGuid={745a17a0-74d3-11d0-b6fe-00a0c90f57da}
 Provider=%ManufacturerName%
 LayoutFile=layout.inf
 CatalogFile=HIDWiimote.cat
-DriverVer= ; TODO: set DriverVer in stampinf property pages
-
+DriverVer= ; Automatically set by StampInf
 
 ; ================= File section =====================
 
 [DestinationDirs]
 DefaultDestDir = 12
+HIDWiimote_Device_CoInstaller_CopyFiles = 11
 
 [SourceDisksNames]
 99 = %DiskName%,,,""
@@ -31,7 +31,7 @@ DefaultDestDir = 12
 [SourceDisksFiles]
 HIDWiimote.sys  = 99,,
 HIDMiniport.sys = 99,,
-
+WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll=99
 
 ; ================= Device section =====================
 
@@ -63,7 +63,6 @@ HKR,,"LowerFilters",0x00010000,"HIDWiimote"
 AddService = HIDWiimote,, HIDWiimote_Service_Inst
 AddService = HIDMiniport, 0x00000002, HIDMiniport_Service_Inst
 
-
 ; ================= HIDWiimote Inst section =====================
 
 [HIDWiimote_Service_Inst]
@@ -73,7 +72,6 @@ StartType      = 3               ; SERVICE_DEMAND_START
 ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
 ServiceBinary  = %12%\HIDWiimote.sys
 LoadOrderGroup = Extended Base
-
 
 ; ================= HIDMiniport Inst section =====================
 
@@ -87,9 +85,6 @@ LoadOrderGroup = PNP Filter
 
 ; ================= Coinstaller section =====================
 
-[DestinationDirs]
-HIDWiimote_Device_CoInstaller_CopyFiles = 11
-
 [HIDWiimote_Device.NT.CoInstallers]
 AddReg=HIDWiimote_Device_CoInstaller_AddReg
 CopyFiles=HIDWiimote_Device_CoInstaller_CopyFiles
@@ -100,18 +95,16 @@ HKR,,CoInstallers32,0x00010000, "WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll,WdfC
 [HIDWiimote_Device_CoInstaller_CopyFiles]
 WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll
 
-[SourceDisksFiles]
-WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll=99 ; make sure the number matches with SourceDisksNames
-
 [HIDWiimote_Device.NT.Wdf]
 KmdfService =  HIDWiimote, HIDWiimote_wdfsect
+
 [HIDWiimote_wdfsect]
 KmdfLibraryVersion = $KMDFVERSION$
 
 ;---------------------------------------------------------------;
 
 [Strings]
-ManufacturerName="Julian Löhr" ; TODO: add ManufacturerName
+ManufacturerName="Julian LÃ¶hr"
 DiskName = "Wiimote Installation Disk"
 HIDWiimote.DeviceDesc = "Wiimote Device"
 HIDWiimote.SVCDESC = "Wiimote Service"
