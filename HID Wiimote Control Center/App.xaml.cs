@@ -36,8 +36,7 @@ namespace HIDWiimote.ControlCenter
                 return;
             }
 
-            string InstalledDeviceDriverVersionString;
-            DeviceDriverUninstallerRegistry.DeviceDriverState DPState = DeviceDriverUninstallerRegistry.GetDeviceDriverState(VersionStrings.DeviceDriverVersion, out InstalledDeviceDriverVersionString);
+            DeviceDriverUninstallerRegistry.DeviceDriverState DPState = DeviceDriverUninstallerRegistry.GetDeviceDriverState(VersionStrings.DeviceDriverVersion, out string InstalledDeviceDriverVersionString);
 
             switch (DPState)
             {

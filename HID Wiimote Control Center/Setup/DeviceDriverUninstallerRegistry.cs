@@ -67,8 +67,7 @@ namespace HIDWiimote.ControlCenter
                     return 0;
                 }
 
-                ushort Result = 0;
-                ushort.TryParse(StringParts[index], out Result);
+                ushort.TryParse(StringParts[index], out ushort Result);
 
                 return Result;
             }
@@ -78,8 +77,7 @@ namespace HIDWiimote.ControlCenter
 
         public static DeviceDriverState GetDeviceDriverState(string AppVersionString)
         {
-            string InstalledVersionString;
-            return GetDeviceDriverState(AppVersionString, out InstalledVersionString);
+            return GetDeviceDriverState(AppVersionString, out string InstalledVersionString);
         }
 
         public static DeviceDriverState GetDeviceDriverState(string AppVersionString, out string InstalledVersionString)
