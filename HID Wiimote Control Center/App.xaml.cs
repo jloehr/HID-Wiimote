@@ -24,11 +24,13 @@ namespace HIDWiimote.ControlCenter
 
         public App()
         {
-            SingleInstanceProtector = new SingleInstanceProtector();
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
         }
 
         private void OnStartup(object sender, StartupEventArgs e)
         {
+            SingleInstanceProtector = new SingleInstanceProtector();
+
             if (!SingleInstanceProtector.IsFirstInstance())
             {
                 SingleInstanceProtector.ShowOtherAppInstance();
@@ -65,6 +67,18 @@ namespace HIDWiimote.ControlCenter
             Current.MainWindow = NewWindow;
             NewWindow.Show();
             CallingWindow.Close();
+        }
+
+        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Exception Exception = e.ExceptionObject as Exception;
+
+            while (Exception != null)
+            {
+                MessageBox.Show("An unhandled exception of type '" + Exception.GetType() + "' occured in '" + Exception.Source + "'.\n\nAdditional information: " + Exception.Message + "\n\nStack trace: \n" + Exception.StackTrace, Exception.GetType().ToString(), MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.None, MessageBoxOptions.DefaultDesktopOnly);
+
+                Exception = Exception.InnerException;
+            }
         }
     }
 }
