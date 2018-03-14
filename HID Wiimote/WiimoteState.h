@@ -167,8 +167,8 @@ typedef struct _WIIMOTE_GUITAR_STATE
 		BOOLEAN Down;
 	} Buttons;
 
-	BYTE WhammyBar;
 	BYTE TouchBar;
+	BYTE WhammyBar;
 
 	struct
 	{

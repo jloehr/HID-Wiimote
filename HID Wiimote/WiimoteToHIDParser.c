@@ -526,8 +526,8 @@ ParseWiimoteStateAsGuitarExtension(
 	ParseButton(WiimoteState->WiiRemoteState.CoreButtons.Home, &GamepadReport->Buttons[1], 6);
 
 	// Analog Bars
-	ParseAnalogAxis(WiimoteState->GuitarState.WhammyBar, &GamepadReport->RXAxis, FALSE, FALSE);
-	ParseAnalogAxis(WiimoteState->GuitarState.TouchBar, &GamepadReport->RYAxis, FALSE, TRUE);
+	ParseAnalogAxis(WiimoteState->GuitarState.WhammyBar, &GamepadReport->ZAxis, FALSE, FALSE);
+	ParseAnalogAxis(WiimoteState->GuitarState.TouchBar, &GamepadReport->RZAxis, FALSE, TRUE);
 
 	// DPad
 	ParseDPad(

@@ -448,8 +448,8 @@ UpdateGuitar(
 	GuitarState->AnalogStick.Y = 0xFF & ((0x3F & GuitarData[1]) << 2);
 
 	// Analog Bars
-	GuitarState->WhammyBar = 0xFF & ((0x1F & GuitarData[2]) << 3);
-	GuitarState->TouchBar = 0xFF & ((0x1F & GuitarData[3]) << 3);
+	GuitarState->TouchBar = 0xFF & ((0x1F & GuitarData[2]) << 3);
+	GuitarState->WhammyBar = 0xFF & ((0x1F & GuitarData[3]) << 3);
 
 	return STATUS_SUCCESS;
 }
