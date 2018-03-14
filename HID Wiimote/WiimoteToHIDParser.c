@@ -401,7 +401,7 @@ ParseWiimoteStateAsNunchuckExtension(
 	ParseButton(WiimoteState->WiiRemoteState.CoreButtons.Two, &GamepadReport->Buttons[0], 5);
 	ParseButton(WiimoteState->WiiRemoteState.CoreButtons.Plus, &GamepadReport->Buttons[0], 6);
 	ParseButton(WiimoteState->WiiRemoteState.CoreButtons.Minus, &GamepadReport->Buttons[0], 7);
-	ParseButton(WiimoteState->WiiRemoteState.CoreButtons.Home, &GamepadReport->Buttons[0], 0);
+	ParseButton(WiimoteState->WiiRemoteState.CoreButtons.Home, &GamepadReport->Buttons[1], 0);
 
 	//Accelerometer
 	if (WiimoteSettings->EnableWiimoteXAxisAccelerometer)
