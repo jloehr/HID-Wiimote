@@ -80,7 +80,7 @@ CONST HID_REPORT_DESCRIPTOR HIDReportDescriptor[] = {
 	0x35, 0x00,                    //   PHYSICAL_MINIMUM (0)
 	0x46, 0x3b, 0x01,              //   PHYSICAL_MAXIMUM (315)
 	0x55, 0x00,                    //   UNIT_EXPONENT (0)
-	0x65, 0x12,                    //   UNIT (SI Rot:Angular Pos)
+	0x65, 0x14,                    //   UNIT (English Rotation: Angular Position)
 	0x75, 0x08,                    //   REPORT_SIZE (8)
 	0x95, 0x01,                    //   REPORT_COUNT (1)
 	0x81, 0x4a,                    //   INPUT (Data,Var,Abs,Wrap,Null)
