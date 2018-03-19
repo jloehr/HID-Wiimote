@@ -639,12 +639,29 @@ ProcessExtensionRegister(
 		DeviceContext->WiimoteContext.CurrentReportMode = 0x34;
 		break;
 	case 0x0103:
-		// 0x0000: Guitar Hero Guitar
-		// 0x0100: Guitar Hero Drum Kit
-		// 0x0300: DJ Hero Turntables
-		Trace("Guitar Hero Guitar");
-		DeviceContext->WiimoteContext.Extension = Guitar;
-		DeviceContext->WiimoteContext.CurrentReportMode = 0x32;
+		switch (SubType)
+		{
+		default:
+			//Trace("Guitar Hero Guitar");
+			//DeviceContext->WiimoteContext.Extension = Guitar;
+			//DeviceContext->WiimoteContext.CurrentReportMode = 0x32;
+			break;
+		case 0x0000:  // 0x0000: Guitar Hero Guitar
+			Trace("Guitar Hero Guitar");
+			DeviceContext->WiimoteContext.Extension = Guitar;
+			DeviceContext->WiimoteContext.CurrentReportMode = 0x32;
+			break;
+		case 0x0100:  // 0x0100: Guitar Hero Drum Kit
+			Trace("Guitar Hero Drums");
+			DeviceContext->WiimoteContext.Extension = Drums;
+			DeviceContext->WiimoteContext.CurrentReportMode = 0x32;
+			break;
+		case 0x0300:  // 0x0300: DJ Hero Turntables
+			Trace("Guitar Hero Guitar");
+			DeviceContext->WiimoteContext.Extension = Guitar;
+			DeviceContext->WiimoteContext.CurrentReportMode = 0x32;
+			break;
+		}
 		break;
 	case 0xFFFF: // Error
 		Trace("Error");

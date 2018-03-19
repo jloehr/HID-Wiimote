@@ -538,6 +538,44 @@ ParseWiimoteStateAsGuitarExtension(
 		&GamepadReport->Hatswitch);
 }
 
+VOID
+ParseWiimoteStateAsDrumsExtension(
+	_In_ PWIIMOTE_STATE WiimoteState,
+	_Out_ PHID_GAMEPAD_REPORT GamepadReport
+)
+{
+	// LeftAnalogStick as Axis
+	ParseAnalogAxis(WiimoteState->DrumsState.AnalogStick.X, &GamepadReport->XAxis, FALSE, FALSE);
+	ParseAnalogAxis(WiimoteState->DrumsState.AnalogStick.Y, &GamepadReport->YAxis, FALSE, TRUE);
+
+	// Buttons
+	ParseButton(WiimoteState->DrumsState.Buttons.Green, &GamepadReport->Buttons[0], 0);
+	ParseButton(WiimoteState->DrumsState.Buttons.Red, &GamepadReport->Buttons[0], 1);
+	ParseButton(WiimoteState->DrumsState.Buttons.Yellow, &GamepadReport->Buttons[0], 2);
+	ParseButton(WiimoteState->DrumsState.Buttons.Blue, &GamepadReport->Buttons[0], 3);
+	ParseButton(WiimoteState->DrumsState.Buttons.Orange, &GamepadReport->Buttons[0], 5);
+	ParseButton(WiimoteState->DrumsState.Buttons.Bass, &GamepadReport->Buttons[0], 4);
+	ParseButton(WiimoteState->WiiRemoteState.CoreButtons.Plus || WiimoteState->DrumsState.Buttons.Plus, &GamepadReport->Buttons[1], 0);
+	ParseButton(WiimoteState->WiiRemoteState.CoreButtons.Minus || WiimoteState->DrumsState.Buttons.Minus, &GamepadReport->Buttons[1], 1);
+	ParseButton(WiimoteState->WiiRemoteState.CoreButtons.One, &GamepadReport->Buttons[1], 2);
+	ParseButton(WiimoteState->WiiRemoteState.CoreButtons.Two, &GamepadReport->Buttons[1], 3);
+	ParseButton(WiimoteState->WiiRemoteState.CoreButtons.A, &GamepadReport->Buttons[1], 4);
+	ParseButton(WiimoteState->WiiRemoteState.CoreButtons.B, &GamepadReport->Buttons[1], 5);
+	ParseButton(WiimoteState->WiiRemoteState.CoreButtons.Home, &GamepadReport->Buttons[1], 6);
+
+	// Analog Bars
+	ParseAnalogAxis(WiimoteState->DrumsState.WhammyBar, &GamepadReport->ZAxis, FALSE, FALSE);
+	ParseAnalogAxis(WiimoteState->DrumsState.TouchBar, &GamepadReport->RZAxis, FALSE, TRUE);
+
+	// DPad
+	ParseDPad(
+		WiimoteState->WiiRemoteState.CoreButtons.DPad.Up,
+		WiimoteState->WiiRemoteState.CoreButtons.DPad.Right,
+		WiimoteState->WiiRemoteState.CoreButtons.DPad.Down,
+		WiimoteState->WiiRemoteState.CoreButtons.DPad.Left,
+		&GamepadReport->Hatswitch);
+}
+
 
 VOID
 ParseWiimoteStateAsGamepad(
@@ -575,6 +613,8 @@ ParseWiimoteStateAsGamepad(
 		break;
 	case Guitar:
 		ParseWiimoteStateAsGuitarExtension(WiimoteState, GamepadReport);
+	case Drums:
+		ParseWiimoteStateAsDrumsExtension(WiimoteState, GamepadReport);
 	default:
 		break;
 	}

@@ -51,7 +51,7 @@ DEFINE_GUID(GUID_DEVINTERFACE_HIDWIIMOTE,
 #define WIIMOTE_LEDS_ALL (WIIMOTE_LEDS_FOUR | WIIMOTE_LEDS_THREE | WIIMOTE_LEDS_TWO | WIIMOTE_LEDS_ONE)
 
 // Enumerations
-typedef enum _WIIMOTE_EXTENSION { None, Nunchuck, BalanceBoard, ClassicController, ClassicControllerPro, WiiUProController, Guitar } WIIMOTE_EXTENSION, *PWIIMOTE_EXTENSION;
+typedef enum _WIIMOTE_EXTENSION { None, Nunchuck, BalanceBoard, ClassicController, ClassicControllerPro, WiiUProController, Guitar, Drums } WIIMOTE_EXTENSION, *PWIIMOTE_EXTENSION;
 typedef enum _WIIMOTE_DRIVER_MODE { Gamepad, PassThrough, IRMouse, DPadMouse, GamepadAndIRMouse } WIIMOTE_DRIVER_MODE, *PWIIMOTE_DRIVER_MODE;
 
 // IOCTL data structs
