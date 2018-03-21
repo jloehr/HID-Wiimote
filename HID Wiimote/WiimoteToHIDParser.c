@@ -613,6 +613,7 @@ ParseWiimoteStateAsGamepad(
 		break;
 	case Guitar:
 		ParseWiimoteStateAsGuitarExtension(WiimoteState, GamepadReport);
+		break;
 	case Drums:
 		ParseWiimoteStateAsDrumsExtension(WiimoteState, GamepadReport);
 	default:
