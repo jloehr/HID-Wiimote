@@ -477,23 +477,17 @@ UpdateDrums(
 	// Buttons
 	DrumsState->Buttons.Green = ButtonData[1] & 0x10;
 	DrumsState->Buttons.Red = ButtonData[1] & 0x40;
-	DrumsState->Buttons.Yellow = ButtonData[1] & 0x08;
-	DrumsState->Buttons.Blue = ButtonData[1] & 0x20;
+	DrumsState->Buttons.Yellow = ButtonData[1] & 0x20;
+	DrumsState->Buttons.Blue = ButtonData[1] & 0x08;
 	DrumsState->Buttons.Orange = ButtonData[1] & 0x80;
 	DrumsState->Buttons.Bass = ButtonData[1] & 0x04;
 
 	DrumsState->Buttons.Plus = ButtonData[0] & 0x04;
 	DrumsState->Buttons.Minus = ButtonData[0] & 0x10;
-	//  DrumsState->Buttons.Up = ButtonData[1] & 0x01;
-	//  DrumsState->Buttons.Down = ButtonData[0] & 0x40;
 
 	// Analog Sticks
 	DrumsState->AnalogStick.X = 0xFF & ((0x3F & DrumsData[0]) << 2);
 	DrumsState->AnalogStick.Y = 0xFF & ((0x3F & DrumsData[1]) << 2);
-
-	// Analog Bars
-	DrumsState->TouchBar = 0xFF & ((0x1F & DrumsData[2]) << 3);
-	DrumsState->WhammyBar = 0xFF & ((0x1F & DrumsData[3]) << 3);
 
 	return STATUS_SUCCESS;
 }
