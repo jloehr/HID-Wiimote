@@ -563,10 +563,6 @@ ParseWiimoteStateAsDrumsExtension(
 	ParseButton(WiimoteState->WiiRemoteState.CoreButtons.B, &GamepadReport->Buttons[1], 5);
 	ParseButton(WiimoteState->WiiRemoteState.CoreButtons.Home, &GamepadReport->Buttons[1], 6);
 
-	// Analog Bars
-	ParseAnalogAxis(WiimoteState->DrumsState.WhammyBar, &GamepadReport->ZAxis, FALSE, FALSE);
-	ParseAnalogAxis(WiimoteState->DrumsState.TouchBar, &GamepadReport->RZAxis, FALSE, TRUE);
-
 	// DPad
 	ParseDPad(
 		WiimoteState->WiiRemoteState.CoreButtons.DPad.Up,
@@ -616,6 +612,7 @@ ParseWiimoteStateAsGamepad(
 		break;
 	case Drums:
 		ParseWiimoteStateAsDrumsExtension(WiimoteState, GamepadReport);
+		break;
 	default:
 		break;
 	}
