@@ -477,8 +477,8 @@ UpdateDrums(
 	// Buttons
 	DrumsState->Buttons.Green = ButtonData[1] & 0x10;
 	DrumsState->Buttons.Red = ButtonData[1] & 0x40;
-	DrumsState->Buttons.Yellow = ButtonData[1] & 0x08;
-	DrumsState->Buttons.Blue = ButtonData[1] & 0x20;
+	DrumsState->Buttons.Yellow = ButtonData[1] & 0x20;
+	DrumsState->Buttons.Blue = ButtonData[1] & 0x08;
 	DrumsState->Buttons.Orange = ButtonData[1] & 0x80;
 	DrumsState->Buttons.Bass = ButtonData[1] & 0x04;
 
