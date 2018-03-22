@@ -178,6 +178,34 @@ typedef struct _WIIMOTE_GUITAR_STATE
 
 } WIIMOTE_GUITAR_STATE, *PWIIMOTE_GUITAR_STATE;
 
+// --- Drums --- //
+typedef struct _WIIMOTE_DRUMS_STATE
+{
+	struct
+	{
+		BOOLEAN Green;
+		BOOLEAN Red;
+		BOOLEAN Yellow;
+		BOOLEAN Blue;
+		BOOLEAN Orange;
+		BOOLEAN Plus;
+		BOOLEAN Minus;
+		BOOLEAN Bass;
+		//  BOOLEAN Up;
+		//  BOOLEAN Down;
+	} Buttons;
+
+	BYTE TouchBar;
+	BYTE WhammyBar;
+
+	struct
+	{
+		BYTE X;
+		BYTE Y;
+	} AnalogStick;
+
+} WIIMOTE_DRUMS_STATE, *PWIIMOTE_DRUMS_STATE;
+
 // --- Wiimote State --- //
 #pragma warning(push)
 #pragma warning(disable:4201) //nameless struct/union
@@ -192,6 +220,8 @@ typedef struct _WIIMOTE_STATE
 		WIIMOTE_BALANCE_BOARD_STATE BalanceBoardState;
 		WIIMOTE_CLASSIC_CONTROLLER_STATE ClassicControllerState;
 		WIIMOTE_GUITAR_STATE GuitarState;
+		WIIMOTE_DRUMS_STATE DrumsState;
+
 
 	};
 

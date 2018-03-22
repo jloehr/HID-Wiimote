@@ -54,4 +54,4 @@ using System.Windows;
 [assembly: AssemblyVersion(HIDWiimote.VersionStrings.ControlCenterVersion)]
 [assembly: AssemblyFileVersion(HIDWiimote.VersionStrings.ControlCenterVersion)]
 
-[assembly: AssemblyKeyFileAttribute("../HID Wiimote.snk")]
+// [assembly: AssemblyKeyFileAttribute("../HID Wiimote.snk")]
