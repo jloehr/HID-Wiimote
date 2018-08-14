@@ -142,7 +142,7 @@ namespace HIDWiimote.ControlCenter
             UninstallerKey.SetValue("DisplayIcon", DPInstPath + ",0", RegistryValueKind.String);
             UninstallerKey.SetValue("DisplayVersion", VersionStrings.DeviceDriverVersion, RegistryValueKind.String);
             UninstallerKey.SetValue("Publisher", "Julian Löhr", RegistryValueKind.String);
-            UninstallerKey.SetValue("UninstallString", UninstallCommnad, RegistryValueKind.String);
+            UninstallerKey.SetValue("UninstallString", string.Format("\"{0}\"", UninstallCommnad), RegistryValueKind.String);
             UninstallerKey.SetValue("HelpLink", "https://www.julianloehr.de/educational-work/hid-wiimote/", RegistryValueKind.String);
 
             return true;
