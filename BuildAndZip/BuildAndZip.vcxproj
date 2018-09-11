@@ -74,29 +74,29 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|x64'">
     <PostBuildEvent>
       <Command>if not exist "$(ZipDir)" mkdir "$(ZipDir)"
-$(ZipTool) d "$(ZipPath)"
-$(ZipTool) a "$(ZipPath)" "$(PackageDir)\*"</Command>
+"$(ZipTool)" d "$(ZipPath)"
+"$(ZipTool)" a "$(ZipPath)" "$(PackageDir)\*"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|x64'">
     <PostBuildEvent>
       <Command>if not exist "$(ZipDir)" mkdir "$(ZipDir)"
-$(ZipTool) d "$(ZipPath)"
-$(ZipTool) a "$(ZipPath)" "$(PackageDir)\*"</Command>
+"$(ZipTool)" d "$(ZipPath)"
+"$(ZipTool)" a "$(ZipPath)" "$(PackageDir)\*"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Windows 7, 8, 8.1, 10 Release|Win32'">
     <PostBuildEvent>
       <Command>if not exist "$(ZipDir)" mkdir "$(ZipDir)"
-$(ZipTool) d "$(ZipPath)"
-$(ZipTool) a "$(ZipPath)" "$(PackageDir)\*"</Command>
+"$(ZipTool)" d "$(ZipPath)"
+"$(ZipTool)" a "$(ZipPath)" "$(PackageDir)\*"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Windows 10 Universal Release|Win32'">
     <PostBuildEvent>
       <Command>if not exist "$(ZipDir)" mkdir "$(ZipDir)"
-$(ZipTool) d "$(ZipPath)"
-$(ZipTool) a "$(ZipPath)" "$(PackageDir)\*"</Command>
+"$(ZipTool)" d "$(ZipPath)"
+"$(ZipTool)" a "$(ZipPath)" "$(PackageDir)\*"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
