@@ -1,0 +1,137 @@
+﻿<UserControl x:Name="userControl" x:Class="HIDWiimote.ControlCenter.UserControls.TaskList"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:HIDWiimote.ControlCenter.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <!-- Bullet Point -->
+        <ControlTemplate x:Key="BulletPoint" x:Name="BulletPoint" TargetType="{x:Type ContentControl}">
+            <BulletDecorator>
+                <BulletDecorator.Bullet>
+                    <Grid Width="16">
+                        <Rectangle  Width="6" Height="6" >
+                            <Rectangle.Fill>
+                                <DrawingBrush>
+                                    <DrawingBrush.Drawing>
+                                        <DrawingGroup>
+                                            <DrawingGroup.Children>
+                                                <GeometryDrawing Brush="#00FFFFFF" Geometry="F1M6,6L0,6 0,0 6,0z" />
+                                                <GeometryDrawing Brush="#FFF6F6F6" Geometry="F1M6,3C6,4.656 4.657,6 3,6 1.343,6 0,4.656 0,3 0,1.343 1.343,0 3,0 4.657,0 6,1.343 6,3" />
+                                                <GeometryDrawing Brush="#FF424242" Geometry="F1M5,3C5,4.104 4.104,5 3,5 1.896,5 1,4.104 1,3 1,1.896 1.896,1 3,1 4.104,1 5,1.896 5,3" />
+                                            </DrawingGroup.Children>
+                                        </DrawingGroup>
+                                    </DrawingBrush.Drawing>
+                                </DrawingBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                    </Grid>
+                </BulletDecorator.Bullet>
+                <ContentPresenter />
+            </BulletDecorator>
+        </ControlTemplate>
+
+        <!-- Arrow -->
+        <ControlTemplate x:Key="Arrow" TargetType="{x:Type ContentControl}">
+            <BulletDecorator>
+                <BulletDecorator.Bullet>
+                    <Rectangle Width="16" Height="16">
+                        <Rectangle.Fill>
+                            <DrawingBrush>
+                                <DrawingBrush.Drawing>
+                                    <DrawingGroup>
+                                        <DrawingGroup.Children>
+                                            <GeometryDrawing Brush="#00FFFFFF" Geometry="F1M16,16L0,16 0,0 16,0z" />
+                                            <GeometryDrawing Brush="#FFF6F6F6" Geometry="F1M11,4L1,4 1,4.748 4.252,8 1,11.252 1,12 11,12 16,8.249 16,7.751z" />
+                                            <GeometryDrawing Brush="#FF414141" Geometry="F1M10.666,5L2.666,5 5.666,8 2.666,11 10.666,11 14.666,8z" />
+                                        </DrawingGroup.Children>
+                                    </DrawingGroup>
+                                </DrawingBrush.Drawing>
+                            </DrawingBrush>
+                        </Rectangle.Fill>
+                    </Rectangle>
+                </BulletDecorator.Bullet>
+                <ContentPresenter />
+            </BulletDecorator>
+        </ControlTemplate>
+
+        <!--Checkmark -->
+        <ControlTemplate x:Key="Checkmark" TargetType="{x:Type ContentControl}">
+            <BulletDecorator>
+                <BulletDecorator.Bullet>
+                    <Rectangle Width="16" Height="16">
+                        <Rectangle.Fill>
+                            <DrawingBrush>
+                                <DrawingBrush.Drawing>
+                                    <DrawingGroup>
+                                        <DrawingGroup.Children>
+                                            <GeometryDrawing Brush="#00FFFFFF" Geometry="F1M16,16L0,16 0,0 16,0z" />
+                                            <GeometryDrawing Brush="#FFF6F6F6" Geometry="F1M5.3818,13L2.3818,7 6.6178,7 6.9998,7.764 9.3818,3 13.6178,3 8.6178,13z" />
+                                            <GeometryDrawing Brush="#FF388A34" Geometry="F1M12,3.9995L8,11.9995 6,11.9995 4,7.9995 6,7.9995 7,9.9995 10,3.9995z" />
+                                        </DrawingGroup.Children>
+                                    </DrawingGroup>
+                                </DrawingBrush.Drawing>
+                            </DrawingBrush>
+                        </Rectangle.Fill>
+                    </Rectangle>
+                </BulletDecorator.Bullet>
+                <ContentPresenter />
+            </BulletDecorator>
+        </ControlTemplate>
+
+        <!-- Error -->
+        <ControlTemplate x:Key="Error" TargetType="{x:Type ContentControl}">
+            <BulletDecorator>
+                <BulletDecorator.Bullet>
+                    <Rectangle Width="16" Height="16">
+                        <Rectangle.Fill>
+                            <DrawingBrush>
+                                <DrawingBrush.Drawing>
+                                    <DrawingGroup>
+                                        <DrawingGroup.Children>
+                                            <GeometryDrawing Brush="#00FFFFFF" Geometry="F1M16,16L0,16 0,0 16,0z" />
+                                            <GeometryDrawing Brush="#FFF6F6F6" Geometry="F1M16,8C16,12.418 12.418,16 8,16 3.582,16 0,12.418 0,8 0,3.582 3.582,0 8,0 12.418,0 16,3.582 16,8" />
+                                            <GeometryDrawing Brush="#FFE41400" Geometry="F1M12.4141,11L11.0001,12.414 8.0001,9.414 5.0001,12.414 3.5861,11 6.5861,8 3.5861,5 5.0001,3.586 8.0001,6.586 11.0001,3.586 12.4141,5 9.4141,8z M8.0001,1C4.1341,1 1.0001,4.135 1.0001,8 1.0001,11.865 4.1341,15 8.0001,15 11.8651,15 15.0001,11.865 15.0001,8 15.0001,4.135 11.8651,1 8.0001,1" />
+                                            <GeometryDrawing Brush="#FFFFFFFF" Geometry="F1M9.4141,8L12.4141,11 11.0001,12.414 8.0001,9.414 5.0001,12.414 3.5861,11 6.5861,8 3.5861,5 5.0001,3.586 8.0001,6.586 11.0001,3.586 12.4141,5z" />
+                                        </DrawingGroup.Children>
+                                    </DrawingGroup>
+                                </DrawingBrush.Drawing>
+                            </DrawingBrush>
+                        </Rectangle.Fill>
+                    </Rectangle>
+                </BulletDecorator.Bullet>
+                <ContentPresenter />
+            </BulletDecorator>
+        </ControlTemplate>
+
+        <!-- Value Converters -->
+        <local:StatusToBulletPointValueConverter x:Key="StatusToBulletPointValueConverter" 
+                                                 BulletPoint="{StaticResource BulletPoint}"
+                                                 Arrow="{StaticResource Arrow}"
+                                                 Checkmark="{StaticResource Checkmark}"
+                                                 Error="{StaticResource Error}" />
+    </UserControl.Resources>
+    <ListBox ItemsSource="{Binding DataContext, ElementName=userControl}">
+        <ListBox.ItemTemplate>
+            <DataTemplate>
+                <ContentControl Template="{Binding Status, Converter={StaticResource StatusToBulletPointValueConverter}}" >
+                    <Label Content="{Binding DisplayMessage}" FontSize="16" />
+                </ContentControl>
+            </DataTemplate>
+        </ListBox.ItemTemplate>
+        <!--ContentControl Template="{StaticResource Checkmark}" >
+            <Label Content="Remove old Driver Package" FontSize="16" />
+        </>
+        <ContentControl Template="{StaticResource Error}" >
+            <Label Content="Extracting Data" FontSize="16" />
+        </ContentControl>
+        <ContentControl Template="{StaticResource Arrow}" >
+            <Label Content="Install new Driver Package" FontSize="16" />
+        </ContentControl>
+        <ContentControl Template="{StaticResource BulletPoint}" >
+            <Label Content="Install other Stuff" FontSize="16" />
+        </ContentControl-->
+    </ListBox>
+</UserControl>

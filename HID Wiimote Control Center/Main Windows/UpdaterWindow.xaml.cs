@@ -1,6 +1,6 @@
-﻿/*
+/*
 
-Copyright (C) 2017 Julian Löhr
+Copyright (C) 2018 Julian Löhr
 All rights reserved.
 
 Filename:
@@ -11,6 +11,7 @@ Abstract:
 
 */
 using HIDWiimote.ControlCenter.Setup;
+using HIDWiimote.ControlCenter.UserControls;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -27,7 +28,7 @@ namespace HIDWiimote.ControlCenter.Main_Windows
     /// </summary>
     public partial class UpdaterWindow : Window
     {
-        List<UpdaterTask> TaskList = new List<UpdaterTask>();
+        List<TaskList.Item> UpdateTasks = new List<TaskList.Item>();
         bool UpdateSuccesfull = false;
         string ErrorMessage;
 
@@ -39,8 +40,8 @@ namespace HIDWiimote.ControlCenter.Main_Windows
                 return;
             }
 
-            TaskList.Add(new UpdaterTask(HIDWiimote.ControlCenter.Properties.App.Updater_RemoveDeviceDriverPMessage, RemoveOldDeviceDriver));
-            TaskList.Add(new UpdaterTask(HIDWiimote.ControlCenter.Properties.App.Updater_InstallDeviceDriverMessage, InstallNewDeviceDriver));
+            UpdateTasks.Add(new TaskList.Item(HIDWiimote.ControlCenter.Properties.App.Updater_RemoveDeviceDriverPMessage, RemoveOldDeviceDriver));
+            UpdateTasks.Add(new TaskList.Item(HIDWiimote.ControlCenter.Properties.App.Updater_InstallDeviceDriverMessage, InstallNewDeviceDriver));
 
             InitializeComponent();
         }
@@ -55,12 +56,12 @@ namespace HIDWiimote.ControlCenter.Main_Windows
 
         private void OnInitialized(object sender, EventArgs e)
         {
-            TaskListBox.ItemsSource = TaskList;
+            TaskListBox.DataContext = UpdateTasks;
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            if (TaskList.Count > 0)
+            if (UpdateTasks.Count > 0)
             {
                 // Do some delay, so the user can graps the steps
                 Task.Delay(TimeSpan.FromSeconds(0.25)).ContinueWith(DelayTask => { StartTaskQueue(); }, TaskScheduler.FromCurrentSynchronizationContext());
@@ -69,17 +70,17 @@ namespace HIDWiimote.ControlCenter.Main_Windows
 
         private void StartTaskQueue()
         {
-            TaskList[0].StartTask(UpdaterTaskComplete);
+            UpdateTasks[0].StartTask(UpdaterTaskComplete);
         }
 
         private void UpdaterTaskComplete(Task<bool> CompletedTask, Object State)
         {
-            UpdaterTask CompletedUpdaterTask = State as UpdaterTask;
+            TaskList.Item CompletedUpdaterTask = State as TaskList.Item;
 
             if ((CompletedTask.Status == TaskStatus.Faulted) || (CompletedTask.Result == false))
             {
                 // Error
-                CompletedUpdaterTask.Status = UpdaterTask.TaskStatus.Error;
+                CompletedUpdaterTask.Status = TaskList.Item.TaskStatus.Error;
                 CloseButton.IsEnabled = true;
                 if (ErrorMessage.Length != 0)
                 {
@@ -89,10 +90,10 @@ namespace HIDWiimote.ControlCenter.Main_Windows
             }
 
 
-            CompletedUpdaterTask.Status = UpdaterTask.TaskStatus.Finished;
-            int TaskIndex = TaskList.IndexOf(CompletedUpdaterTask);
+            CompletedUpdaterTask.Status = TaskList.Item.TaskStatus.Finished;
+            int TaskIndex = UpdateTasks.IndexOf(CompletedUpdaterTask);
 
-            if (TaskIndex == (TaskList.Count - 1))
+            if (TaskIndex == (UpdateTasks.Count - 1))
             {
                 // Last one finished
                 UpdateSuccesfull = true;
@@ -100,7 +101,7 @@ namespace HIDWiimote.ControlCenter.Main_Windows
                 return;
             }
 
-            UpdaterTask NextTask = TaskList[TaskIndex + 1];
+            TaskList.Item NextTask = UpdateTasks[TaskIndex + 1];
             NextTask.StartTask(UpdaterTaskComplete);
         }
 
@@ -158,102 +159,6 @@ namespace HIDWiimote.ControlCenter.Main_Windows
             {
                 this.Close();
             }
-
-        }
-
-        public class UpdaterTask : INotifyPropertyChanged
-        {
-            public enum TaskStatus { Waiting, Running, Finished, Error };
-
-            public event PropertyChangedEventHandler PropertyChanged;
-
-            private string _DisplayMessage;
-            private TaskStatus _Status;
-
-            private Task<bool> QueuedTask;
-
-            public UpdaterTask(string DisplayMessage, Func<bool> QueuedTask)
-            {
-                this.DisplayMessage = DisplayMessage;
-                this.Status = TaskStatus.Waiting;
-                this.QueuedTask = new Task<bool>(QueuedTask);
-            }
-
-            public UpdaterTask(string DisplayMessage, TaskStatus Status)
-            {
-                this.DisplayMessage = DisplayMessage;
-                this.Status = Status;
-            }
-
-            public string DisplayMessage
-            {
-                get { return _DisplayMessage; }
-                set
-                {
-                    _DisplayMessage = value;
-                    OnPropertyChanged("DisplayMessage");
-                }
-            }
-
-            public TaskStatus Status
-            {
-                get { return _Status; }
-                set
-                {
-                    _Status = value;
-                    OnPropertyChanged("Status");
-                }
-            }
-
-            public void StartTask(Action<Task<bool>, Object> CompleteCallback)
-            {
-                Status = TaskStatus.Running;
-                QueuedTask.ContinueWith(CompleteCallback, this, TaskScheduler.FromCurrentSynchronizationContext());
-                // Do some delay, so the user can graps the steps
-                Task.Delay(TimeSpan.FromSeconds(0.5)).ContinueWith(DelayTask => { QueuedTask.Start(TaskScheduler.Default); });
-            }
-
-            protected void OnPropertyChanged(string PropertyName)
-            {
-                PropertyChangedEventHandler Handler = PropertyChanged;
-                if (Handler != null)
-                {
-                    Handler(this, new PropertyChangedEventArgs(PropertyName));
-                }
-            }
         }
     }
-
-    public class StatusToBulletPointValueConverter : IValueConverter
-    {
-        public ControlTemplate BulletPoint { get; set; }
-        public ControlTemplate Arrow { get; set; }
-        public ControlTemplate Checkmark { get; set; }
-        public ControlTemplate Error { get; set; }
-
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            UpdaterWindow.UpdaterTask.TaskStatus Status = (UpdaterWindow.UpdaterTask.TaskStatus)value;
-
-            switch (Status)
-            {
-                case UpdaterWindow.UpdaterTask.TaskStatus.Waiting:
-                    return BulletPoint;
-                case UpdaterWindow.UpdaterTask.TaskStatus.Running:
-                    return Arrow;
-                case UpdaterWindow.UpdaterTask.TaskStatus.Finished:
-                    return Checkmark;
-                case UpdaterWindow.UpdaterTask.TaskStatus.Error:
-                    return Error;
-                default:
-                    return BulletPoint;
-            }
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
 }
