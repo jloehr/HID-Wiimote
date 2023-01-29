@@ -1,15 +1,23 @@
-HID Wiimote 0.3.0.3
+HID Wiimote 0.4.0.0
 
 HID Wiimote is a Windows Device Driver for the Nintendo Wii Remote.
 
 Project Homepage: https://www.julianloehr.de/educational-work/hid-wiimote/
-Supported Windows Versions: 7, 8, 8.1, 10
+Supported Windows Versions: 10 and higher
 
 This software is provided free of charge. If you have paid for this, please claim a refund and report this site to: info@julianloehr.de
 
 If you like this project and really want to pay for it, see my homepage (https://www.julianloehr.de) for donations.
 
 -- Changelog --
+
+-- 0.4.0.0 --
+
+-- Final release
+-- Upgrade to Visual Studio 2022, Windows SDK 11 and Windows WDK 11
+-- Removed support for Windows 7, 8, 8.1, because Windows WDK 11 only allows for Windows 10 and higher
+-- Fix Apps and Features uninstall button not working
+-- Fix zip step if path contains spaces
 
 -- 0.3.0.3 --
 

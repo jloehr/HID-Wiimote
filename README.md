@@ -1,5 +1,7 @@
 # HID Wiimote - A Windows Device Driver for the Nintendo Wii Remote
 
+⚠ This project and repository has been archived, as it hasn't been under any active development for a very long time ⚠
+
 ## Builds
 
 You can get test signed and zipped Driver Packages from the project site:
@@ -14,9 +16,9 @@ The One-Click Build is open `Build` > `Batch Build...`, check only all `BuildAnd
 
 ### Requirements
 
-* Visual Studio 2015 Update 3
-* Windows SDK for Windows 10
-* Windows Driver Kit (WDK 10)
+* Visual Studio 2022
+* Windows SDK for Windows 11
+* Windows Driver Kit (WDK 11)
 
 All can be downloaded on this page: https://developer.microsoft.com/en-us/windows/hardware/windows-driver-kit
 
