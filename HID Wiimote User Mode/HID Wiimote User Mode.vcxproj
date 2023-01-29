@@ -115,7 +115,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
     </ClCompile>
     <PostBuildEvent>
-      <Command>signtool sign /a "$(OutDir)$(TargetName)$(TargetExt)"</Command>
+      <Command>signtool sign /fd SHA256 /a "$(OutDir)$(TargetName)$(TargetExt)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -125,7 +125,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
     </ClCompile>
     <PostBuildEvent>
-      <Command>signtool sign /a "$(OutDir)$(TargetName)$(TargetExt)"</Command>
+      <Command>signtool sign /fd SHA256 /a "$(OutDir)$(TargetName)$(TargetExt)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
